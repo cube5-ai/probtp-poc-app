@@ -1,0 +1,7 @@
+{
+  "projects": {
+    "prod": "probtp-poc-prod"
+  },
+  "targets": {},
+  "etags": {}
+}

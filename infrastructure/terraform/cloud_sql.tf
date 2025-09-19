@@ -1,12 +1,12 @@
-# Cloud SQL PostgreSQL instance
+# Cloud SQL PostgreSQL instance (public IP for POC simplicity)
 resource "google_sql_database_instance" "main" {
   name             = "${local.project_name}-db-${local.environment}"
   database_version = "POSTGRES_15"
   region           = var.region
 
   settings {
-    tier = "db-f1-micro"
-    
+    tier = "db-g1-small"
+
     disk_autoresize       = true
     disk_autoresize_limit = 100
     disk_size             = 20
@@ -19,11 +19,7 @@ resource "google_sql_database_instance" "main" {
     }
 
     ip_configuration {
-      ipv4_enabled = true
-      authorized_networks {
-        value = "0.0.0.0/0"
-        name  = "all"
-      }
+      ipv4_enabled    = true
     }
 
     user_labels = local.common_labels
@@ -31,7 +27,9 @@ resource "google_sql_database_instance" "main" {
 
   deletion_protection = false
 
-  depends_on = [google_project_service.sql_admin_api]
+  depends_on = [
+    google_project_service.sql_admin_api
+  ]
 }
 
 # Database

@@ -39,3 +39,14 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# ai context
+.ai_context/*
+
+# terraform
+.terraform.lock.hcl
+*.tfstate
+*.tfstate.*
+.infrastructure/terraform/terraform.tfvars
+*terraform-provider-google*
+*terraform.tfvars

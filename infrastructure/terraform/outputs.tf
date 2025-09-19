@@ -1,7 +1,7 @@
 # Output values for GCP infrastructure
 output "project_id" {
   description = "GCP Project ID"
-  value       = var.project_id
+  value       = google_project.project.project_id
 }
 
 output "region" {
@@ -16,7 +16,7 @@ output "cloud_run_backend_url" {
 
 output "firebase_hosting_url" {
   description = "Firebase Hosting URL"
-  value       = "https://${var.firebase_project_id != "" ? var.firebase_project_id : var.project_id}.web.app"
+  value       = "https://${var.firebase_project_id != "" ? var.firebase_project_id : google_project.project.project_id}.web.app"
 }
 
 output "cloud_sql_connection_name" {
@@ -24,3 +24,10 @@ output "cloud_sql_connection_name" {
   value       = google_sql_database_instance.main.connection_name
   sensitive   = true
 }
+
+output "artifact_registry_repository" {
+  description = "Artifact Registry repository path"
+  value       = "${google_artifact_registry_repository.containers.location}-docker.pkg.dev/${google_project.project.project_id}/${google_artifact_registry_repository.containers.repository_id}"
+}
+
+# VPC connector not used in POC

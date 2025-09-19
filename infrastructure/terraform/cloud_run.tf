@@ -5,16 +5,12 @@ resource "google_cloud_run_service" "backend" {
 
   template {
     spec {
+      service_account_name = "${google_project.project.number}-compute@developer.gserviceaccount.com"
       containers {
-        image = "gcr.io/${var.project_id}/${local.project_name}-backend:latest"
-        
+        image = "${google_artifact_registry_repository.containers.location}-docker.pkg.dev/${google_project.project.project_id}/${google_artifact_registry_repository.containers.repository_id}/${local.project_name}-backend:${var.backend_image_tag}"
+
         ports {
           container_port = 8000
-        }
-
-        env {
-          name  = "DATABASE_URL"
-          value = "postgresql://${google_sql_user.backend.name}:${google_sql_user.backend.password}@${google_sql_database_instance.main.connection_name}/${google_sql_database.main.name}"
         }
 
         env {
@@ -22,22 +18,54 @@ resource "google_cloud_run_service" "backend" {
           value = local.environment
         }
 
+        # REDIS_URL omitted for POC (no Redis)
+
         env {
-          name  = "REDIS_URL"
-          value = "redis://${google_redis_instance.cache.host}:${google_redis_instance.cache.port}"
+          name  = "DB_INSTANCE_CONNECTION_NAME"
+          value = google_sql_database_instance.main.connection_name
+        }
+
+        env {
+          name  = "DB_NAME"
+          value = google_sql_database.main.name
+        }
+
+        env {
+          name  = "DB_USER"
+          value = google_sql_user.backend.name
+        }
+
+        env {
+          name  = "DB_PASSWORD"
+          value = var.db_password
         }
 
         resources {
           limits = {
             cpu    = "1000m"
-            memory = "512Mi"
+            memory = "2Gi"
           }
         }
       }
+
+      container_concurrency = 100
+
     }
 
     metadata {
+      annotations = {
+        "autoscaling.knative.dev/minScale"         = "0"
+        "autoscaling.knative.dev/maxScale"         = "5"
+        "run.googleapis.com/cloudsql-instances"     = google_sql_database_instance.main.connection_name
+      }
       labels = local.common_labels
+    }
+  }
+
+  # Service-level annotations (not on Revision)
+  metadata {
+    annotations = {
+      "run.googleapis.com/ingress" = "all"
     }
   }
 
@@ -46,7 +74,10 @@ resource "google_cloud_run_service" "backend" {
     latest_revision = true
   }
 
-  depends_on = [google_project_service.cloud_run_api]
+  depends_on = [
+    google_project_service.cloud_run_api,
+    google_artifact_registry_repository.containers
+  ]
 }
 
 # IAM policy for Cloud Run service
