@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
+
 import "./globals.css";
+
 import { cn } from "@/lib/utils";
-import { ThemeProvider } from "@/components/providers";
-import { Toaster } from "sonner";
+
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "ProBTP POC",
@@ -25,15 +28,9 @@ export default function RootLayout({
           GeistMono.variable
         )}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <Providers>
           {children}
-          <Toaster />
-        </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

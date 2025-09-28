@@ -1,9 +1,39 @@
+"use client";
+
+import { useAuth } from "@/contexts/AuthContext";
+
 import HealthStatus from "@/components/HealthStatus";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
 import Footer from "@/components/Footer";
+import Loading from "@/components/common/loading";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
+  const { user, loading, signOut } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !user) {
+      router.push("/signin");
+    }
+  }, [loading, user]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="flex items-center justify-center w-full h-full">
+          <Loading />
+        </div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return null;
+  }
+
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-12">
@@ -26,6 +56,11 @@ export default function Home() {
             <div className="w-full max-w-md">
               <HealthStatus />
             </div>
+          </div>
+
+          {/* Sign Out */}
+          <div className="flex justify-center">
+            <Button onClick={signOut}>Sign Out</Button>
           </div>
         </div>
       </div>
