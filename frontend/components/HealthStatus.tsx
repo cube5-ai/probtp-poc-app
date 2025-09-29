@@ -23,7 +23,9 @@ export default function HealthStatus() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("http://localhost:8000/api/v1/health");
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/api/v1/health"
+      );
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
@@ -88,7 +90,8 @@ export default function HealthStatus() {
           <div className="status-error border rounded-md p-3">
             <p className="text-sm font-medium">Connection Error</p>
             <p className="text-xs text-muted-foreground mt-1">
-              Make sure the backend is running on http://localhost:8000
+              Make sure the backend is running on{" "}
+              {process.env.NEXT_PUBLIC_API_URL}
             </p>
           </div>
         )}

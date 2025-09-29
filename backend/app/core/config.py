@@ -31,6 +31,7 @@ class Settings(BaseSettings):
         "http://localhost:3000",  # Next.js dev server
         "http://localhost:3001",
         "https://your-frontend-domain.com",
+        "https://probtp-poc-frontend.web.app",
     ]
     
     # Environment

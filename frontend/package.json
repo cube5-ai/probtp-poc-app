@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
+    "build:prod": "mv .env.local .env.local.bak && next build --turbopack && mv .env.local.bak .env.local",
     "start": "next start",
     "lint": "eslint"
   },
