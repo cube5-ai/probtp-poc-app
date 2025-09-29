@@ -1,0 +1,40 @@
+[
+  {
+    "explanation": "Le candidat indique que l'information (colonne S1) n'est pas disponible, alors que la vérité terrain fournit la réponse spécifique (Le remboursement est de 100%).",
+    "verdict": "MISSED",
+    "missing_information": [
+      "Le remboursement est de 100%."
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "La colonne S1 n'existe pas dans le tableau fourni.",
+    "ground_truth": "Le remboursement est de 100%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1 ?",
+    "pipeline_name": "mistral_ocr_solo"
+  },
+  {
+    "explanation": "The candidate answer uses a common shorthand (\"-\") which typically signifies 'Not covered' or 'Zero coverage' in a reimbursement context, aligning perfectly with the ground truth's statement \"Non pris en charge\".",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "-",
+    "ground_truth": "Non pris en charge",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Contraception prescrite, non remboursée par la S.S. au niveau de garantie S2 ?",
+    "pipeline_name": "mistral_ocr_solo"
+  },
+  {
+    "explanation": "The candidate answer specifies a reimbursement of 10€ for the flu vaccine, whereas the ground truth indicates a ceiling of 60€ per year per beneficiary for all prescribed vaccines. The candidate answer contradicts the supported reimbursement amount and scope.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [
+      "Tous vaccins 60 € / an / benificiare",
+      "Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Vaccin anti-grippe 10€",
+    "ground_truth": "Le remboursement est de Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Vaccins au niveau de garantie S4 ?",
+    "pipeline_name": "mistral_ocr_solo"
+  }
+]

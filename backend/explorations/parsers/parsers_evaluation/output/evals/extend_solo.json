@@ -1,0 +1,44 @@
+[
+  {
+    "explanation": "The candidate states that the reimbursement information is not specified (\"Non spécifié\"), while the ground truth explicitly states that the reimbursement is 100%. This falls under the MISSED category as the candidate claims the information is unavailable when it is present.",
+    "verdict": "MISSED",
+    "missing_information": [
+      "Le remboursement est de 100%"
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Non spécifié (la case est vide dans le tableau).",
+    "ground_truth": "Le remboursement est de 100%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer \"-\" is semantically equivalent to \"Non pris en charge\" (Not covered) in the context of reimbursement schedules.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "-",
+    "ground_truth": "Non pris en charge",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Contraception prescrite, non remboursée par la S.S. au niveau de garantie S2 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer correctly identifies the amount (60€ for all vaccines) but omits crucial context, including the frequency (per year/per beneficiary) and the explicit conditions for coverage (prescribed vaccine with marketing authorization, and that this amount is a yearly cap). Therefore, it is a partial match.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "60 € / an / benificiare",
+      "conditions: Vaccin prescrit ayant reçu une autorisation de mise sur le marché.",
+      "Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "evidence_quotes": [
+      "Tous vaccins 60 € / an / benificiare",
+      "Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "Tous vaccins 60€.",
+    "ground_truth": "Le remboursement est de Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Vaccins au niveau de garantie S4 ?",
+    "pipeline_name": "extend_solo"
+  }
+]

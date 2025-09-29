@@ -1,0 +1,39 @@
+[
+  {
+    "explanation": "The candidate answer states that the information is absent (\"Le champ est vide, ce qui suggère l'absence d'information\"), while the ground truth explicitly provides the required information (reimbursement is 100%). This scenario perfectly aligns with the 'MISSED' verdict definition.",
+    "verdict": "MISSED",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Le champ est vide, ce qui suggère l'absence d'information de prise en charge/remboursement pour le niveau S1.",
+    "ground_truth": "Le remboursement est de 100%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1 ?",
+    "pipeline_name": "pymupdf4llm_solo"
+  },
+  {
+    "explanation": "The ground truth states the item is \"Non pris en charge\" (Not covered). The candidate answer uses a dash (\"-\"), which is commonly used in benefit tables to indicate no coverage or zero reimbursement, making it contextually equivalent to the ground truth.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "-",
+    "ground_truth": "Non pris en charge",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Contraception prescrite, non remboursée par la S.S. au niveau de garantie S2 ?",
+    "pipeline_name": "pymupdf4llm_solo"
+  },
+  {
+    "explanation": "The candidate answer correctly identifies the item covered (Tous vaccins) and the amount (60 €), but it omits the crucial limitations and conditions specified in the ground truth, notably that the amount is an annual ceiling per beneficiary and requires a prescribed vaccine with marketing authorization.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "/ an / benificiare",
+      "Vaccin prescrit ayant reçu une autorisation de mise sur le marché.",
+      "Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Tous vaccins, 60 €",
+    "ground_truth": "Le remboursement est de Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Vaccins au niveau de garantie S4 ?",
+    "pipeline_name": "pymupdf4llm_solo"
+  }
+]

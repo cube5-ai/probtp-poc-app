@@ -1,0 +1,461 @@
+---
+*Page 1*
+---
+
+Les remboursements sont exprimés, soit en forfait, soit en pourcentage de la base de
+remboursement de la Sécurité sociale, part de la Sécurité sociale incluse.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+|Col1|Col2|Col3|Part S.S.*|S1|S2|S3|S3+|S4|S5/S6|
+|---|---|---|---|---|---|---|---|---|---|
+|**Soins courants **|<br>Honoraires<br>médicaux|Consultations et visites (généralistes et spécialistes)|70 %|<br> <br>100 %|<br> <br>100 %|<br>100 % <br>**(160 % si OPTAM) **|<br>160 % <br>**(200 % si OPTAM) **|<br>200 % <br>**(Frais réels si**<br>**OPTAM) **|<br>200 % <br>**(Frais réels si**<br>**OPTAM) **|
+|**Soins courants **|<br>Honoraires<br>médicaux|Actes techniques médicaux|70 %|70 %|70 %|70 %|70 %|70 %|70 %|
+|**Soins courants **|<br>Honoraires<br>médicaux|Radiologie|70 %|70 %|70 %|70 %|70 %|70 %|70 %|
+|**Soins courants **|<br>Honoraires<br>médicaux|Soins externes|60 % à 70 %|60 % à 70 %|60 % à 70 %|60 % à 70 %|60 % à 70 %|60 % à 70 %|60 % à 70 %|
+|**Soins courants **||Auxiliaires médicaux, soins infirmiers|60 %|100 %|100 %|100 %|160 %|200 %|200 %|
+|**Soins courants **|Honoraires <br>|Transport|55 %|||||||
+|**Soins courants **|~~paramédicaux ~~<br>Séances d’accompagnement psychologique remboursées<br>par la SS <br>60 % <br>100 %|~~paramédicaux ~~<br>Séances d’accompagnement psychologique remboursées<br>par la SS <br>60 % <br>100 %|~~paramédicaux ~~<br>Séances d’accompagnement psychologique remboursées<br>par la SS <br>60 % <br>100 %|~~paramédicaux ~~<br>Séances d’accompagnement psychologique remboursées<br>par la SS <br>60 % <br>100 %|100 %|100 %|100 %|100 %|100 %|
+|**Soins courants **|Analyses et examens de laboratoires|Analyses et examens de laboratoires|60 %|100 %|100 %|100 %|160 %|200 %|200 %|
+|**Soins courants **||<br>Pharmacie remboursée par la S.S.|65 % <br>|100 % <br>|<br>100 %|<br>100 %|<br>100 %|<br>100 %|<br>100 %|
+|**Soins courants **|||~~30 % ~~<br>|~~30 % ~~<br>|~~30 % ~~<br>|~~30 % ~~<br>|~~30 % ~~<br>|~~30 % ~~<br>|~~30 % ~~<br>|
+|**Soins courants **|Médicaments|Médicaments|~~15 % ~~|~~15 % ~~|~~15 % ~~|~~15 % ~~|~~15 % ~~|~~15 % ~~|~~15 % ~~|
+|**Soins courants **|Médicaments|Vaccins non remboursés par la S.S.(1)|-|-|Vaccin anti-grippe|Vaccin anti-grippe|Vaccin anti-grippe|Tous vaccins|Tous vaccins|
+|**Soins courants **|||||15€|15€|15€|60 €|60 €|
+|**Soins courants **||Contraception prescrite, non remboursée par la S.S.|-|-|-|30€/an/bénéf.|40€/an/bénéf.|60€/an/bénéf.|80€/an/bénéf.|
+|**Soins courants **|Matériel|Appareillages orthopédiques et autres prothèses|60 %|100 %|250 %|350 %|500 %|550 %|650 %|
+|**Soins courants **|médical(2)|médical(2)|médical(2)|médical(2)|médical(2)|médical(2)|médical(2)|médical(2)|médical(2)|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+|Hospitalisation|Honoraires|Honoraires, frais de séjour (3)|80 %|100 %|100 %|100 %<br>(160% si OPTAM)|160 %<br>(200% si OPTAM)|200 %<br>(Frais réels si OPTAM)|200 %<br>(Frais réels si OPTAM)|
+|---|---|---|---|---|---|---|---|---|---|
+|**Hospitalisation **|<br> <br> <br>Honoraires|Chambre particulière(3)|-|-|-|50 € / jour|65 € / jour|80 € / jour|100 € / jour|
+|**Hospitalisation **|<br> <br> <br>Honoraires|Lit accompagnant pour enfants de − 12 ans(3) <br>ou bénéficiaires de + 70 ans|-|23 € / jour|23 € / jour|23 € / jour|23 € / jour|23 € / jour|23 € / jour|
+|**Hospitalisation **|<br> <br> <br>Honoraires|Participation forfaitaire pour les actes supérieurs à 120 €|100 % <br>- 1 forfait|100 % du<br>forfait|100 % du<br>forfait|100 % du forfait|100 % du forfait|100 % du forfait|100 % du forfait|
+|**Hospitalisation **|Forfait journalier(3) (4)et forfait urgences(3)(4bis)en établissement hospitalier|Forfait journalier(3) (4)et forfait urgences(3)(4bis)en établissement hospitalier|-|oui|oui|oui|oui|oui|oui|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+|Col1|Col2|Col3|Col4|Col5|Part S.S.*|P1|P2|P3|P3+|P4|P5|P6|
+|---|---|---|---|---|---|---|---|---|---|---|---|---|
+|**Optique **|Équipement<br> (5) (6)|Équipement<br> (5) (6)|Équipement<br> (5) (6)|Équipement<br> (5) (6)|60 %(a)|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|
+|**Optique **|<br> <br> <br> <br> <br>Autre équipement<br>optique (verres et<br>monture) <br><br><br><br>|<br>Équipement combinant des verres 100% Santé et une monture<br>libre(6) (7) <br> <br> <br>|<br>Équipement combinant des verres 100% Santé et une monture<br>libre(6) (7) <br> <br> <br>|<br>Équipement combinant des verres 100% Santé et une monture<br>libre(6) (7) <br> <br> <br>|60 %(b)|Verres : frais réels<br>Monture : forfait<br>équipement libre,<br>sous déduction du<br>prix des verres|Verres : frais réels<br>Monture : forfait<br>équipement libre,<br>sous déduction du<br>prix des verres|<br><br><br> <br>Verres : frais réels<br>Monture : 100 € <br> <br>V<br>|erres : frais réels<br>Monture : 100 €|Verres : frais réels<br>Monture : 100 €|<br>Verres : frais<br>réels <br>Monture : 100 €|<br>Verres : frais<br>réels <br>Monture : 100 €|
+|**Optique **|<br> <br> <br> <br> <br>Autre équipement<br>optique (verres et<br>monture) <br><br><br><br>|<br> <br> <br>Équipement<br>libre(6) (7) (8)|Équipement à<br>verres unifocaux|Si partenaire opticien Sévéane <br> <br> <br>|60 %(c)|100 € <br>(50 € si < 16 ans)|175 €|200 €|300 €|350 €|400 €|420 €|
+|**Optique **|<br> <br> <br> <br> <br>Autre équipement<br>optique (verres et<br>monture) <br><br><br><br>|<br> <br> <br>Équipement<br>libre(6) (7) (8)|Équipement à<br>verres unifocaux|<br> <br> <br>Dans les autres cas|<br> <br> <br>Dans les autres cas|<br> <br> <br>Dans les autres cas|125 €|150 €|200 €|250 €|300 €|350 €|
+|**Optique **|<br> <br> <br> <br> <br>Autre équipement<br>optique (verres et<br>monture) <br><br><br><br>|<br> <br> <br>Équipement<br>libre(6) (7) (8)|Équipement à<br>verres progressifs(9)|<br>Si partenaire opticien Sévéane|<br>Si partenaire opticien Sévéane|200 €|250 €|300 €|400 €|500 €|600 €(10)|700 €(10)|
+|**Optique **|<br> <br> <br> <br> <br>Autre équipement<br>optique (verres et<br>monture) <br><br><br><br>|<br> <br> <br>Équipement<br>libre(6) (7) (8)|Équipement à<br>verres progressifs(9)|Dans les autres cas|Dans les autres cas|Dans les autres cas|200 €|250 €|300 €|400 €|500 €|600 €|
+|**Optique **|<br> <br> <br> <br> <br>Autre équipement<br>optique (verres et<br>monture) <br><br><br><br>|<br> <br> <br>Équipement<br>libre(6) (7) (8)|Supplément forte correction(11)|Supplément forte correction(11)|Supplément forte correction(11)|+ 50 €/verre unifocal<br>si ≥ 16 ans(d)|+ 50 € / verre|+ 50 € / verre|+ 50 € / verre|+ 50 € / verre|+ 50 € / verre|+ 50 € / verre<br>progressif(e)|
+|**Optique **|Lentilles(12)|Lentilles remboursées par la S.S.|Lentilles remboursées par la S.S.|Lentilles remboursées par la S.S.|60 %|100 %|100 % + 120 €|100 % + 120 €|100 % + 150 €|100 % + 200 €|100 % + 200 €|100 % + 250 €|
+|**Optique **|Lentilles(12)|Lentilles non remboursées par la S.S.|Lentilles non remboursées par la S.S.|Lentilles non remboursées par la S.S.|-|-|-|80 €|125 €|150 €|175 €|250 €|
+|**Optique **|Chirurgie réfractive de la vue(13)|Chirurgie réfractive de la vue(13)|Chirurgie réfractive de la vue(13)|Chirurgie réfractive de la vue(13)|-|-|-|**200 € / œil **|300 € / œil|400 € / œil|500 € / œil|500 € / œil|
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+|Dentaire|Soins et prothèses (2) (14)|Col3|Col4|60 %|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|
+|---|---|---|---|---|---|---|---|---|---|---|---|
+|**Dentaire **|<br> <br>Soins dentaires|Inlay/onlay (par acte)|Inlay/onlay (par acte)|60 %|100 %|100 %|125 %|150 %|200 %|250 %|300 %|
+|**Dentaire **|<br> <br>Soins dentaires|Autres soins dentaires pris en charge par la S.S.(15)|Autres soins dentaires pris en charge par la S.S.(15)|60 %|100 %|100 %|100 %|100 %|100 %|300 %|300 %|
+|**Dentaire **|<br> <br>Soins dentaires|Parodontologie non prise en charge<br>par la S.S. (/ an / bénéf.)(12)|Parodontologie non prise en charge<br>par la S.S. (/ an / bénéf.)(12)|-|-|-|200 €|250 €|300 €|350 €|400 €|
+|**Dentaire **|Prothèses<br>dentaires(2)|Prothèses dentaires<br>remboursées par <br>la S.S. :|prothèses à honoraires maîtrisés(16)|<br>60 %|125 %|250 %|350 %|Frais réels|Frais réels|Frais réels|Frais réels|
+|**Dentaire **|Prothèses<br>dentaires(2)|Prothèses dentaires<br>remboursées par <br>la S.S. :|autres prothèses|autres prothèses|125 %|250 %|350 %|450 %|500 %|550 %|600 %|
+|**Dentaire **|<br>Orthodontie|Orthodontie acceptée par la S.S. (par semestre)|Orthodontie acceptée par la S.S. (par semestre)|100 %|125 %|200 %|200 %|275 %|350 %|425%|500 %|
+|**Dentaire **|<br>Orthodontie|Orthodontie adulte non prise en charge<br>par la S.S. (par semestre)(17)|Orthodontie adulte non prise en charge<br>par la S.S. (par semestre)(17)|-|-|-|200 €|300 €|400 €|500 €|600 €|
+|**Dentaire **|Implants<br>(/an/bénéf.)(12)|Si partenaire implantologue Sévéane|Si partenaire implantologue Sévéane|-|-|-|400 €|600 €|800 €|1 000 €|1 200 €|
+|**Dentaire **|Implants<br>(/an/bénéf.)(12)|Dans les autres cas|Dans les autres cas|Dans les autres cas|Dans les autres cas|Dans les autres cas|200 €|300 €|400 €|500 €|600 €|
+
+
+
+
+
+
+
+
+
+
+
+
+|Aides auditives|Équipements auditifs (18)|Col3|Col4|60 %|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|Frais réels|
+|---|---|---|---|---|---|---|---|---|---|---|---|
+|**Aides**<br>**auditives **|<br>Prothèse<br>auditive(2) (18)|<br>Pour les bénéficiaires<br>de> 20 ans|Si partenaire audioprothésiste<br>Sévéane|Si partenaire audioprothésiste<br>Sévéane|400€|1 000€|1 100€|1 200€|1 350€|1 500€|1 700€|
+|**Aides**<br>**auditives **|<br>Prothèse<br>auditive(2) (18)|<br>Pour les bénéficiaires<br>de> 20 ans|Dans les autres cas|Dans les autres cas|400€|950€|950€|950€|1 100€|1 100€|1 300€|
+|**Aides**<br>**auditives **|<br>Prothèse<br>auditive(2) (18)|Pour les bénéficiaires de≤ 20 ans|Pour les bénéficiaires de≤ 20 ans|Pour les bénéficiaires de≤ 20 ans|1 400€|1 400€|1 400€|1 400€|1 400€|1 400€|1 700€|
+|**Aides**<br>**auditives **|Accessoires(20)|Accessoires(20)|Accessoires(20)|Accessoires(20)|100 %|100 %|100 %|100 %|100 %|100 %|100 %|
+
+
+
+
+
+|Prestations complémentaires|Médecines douces agréées (21)(22)<br>ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues<br>non remboursées par la S.S.|-|-|-|2 x 40 €|3 x 40 €|4 x 40 €|4 x 50 €|4 x 60 €|
+|---|---|---|---|---|---|---|---|---|---|
+|**complémentaires **<br>**Prestations **|<br>Cures thermales(23)|<br>65 %|65 %|<br>100 % + 100 €|<br>100 % + 150 €|<br>100 % + 150 €|<br>100 % + 300 €|<br>100 % + 300 €|<br>100 % + 300 €|
+
+
+3
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---
+*Page 2*
+---
+
+**RÉGIME DE FRAIS MÉDICAUX COLLECTIFS ANNEXES DES GARANTIES AU 1** **[er ]** **JANVIER 2025**
+
+
+Gamme Nationale
+**Notes communes à l’ensemble des options**
+
+
+
+**(1)** Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en
+euros : plafond par an et par bénéficiaire
+**(2)** Le remboursement annuel des prestations est plafonné par bénéficiaire
+suivant les modalités définies dans l’article 12.5 du règlement. Au-delà de ce
+plafond, le remboursement est limité au montant du ticket modérateur, sauf au
+titre des garanties à prise en charge renforcée dans le cadre du « 100% Santé ».
+**(3)** Sans limitation de durée et non limité en nombre pour le forfait urgences.
+**(4)** Prise en charge suivant les conditions définies au 6° de l’article R. 871-2 du
+Code de la Sécurité sociale, en application de celui-ci, les forfaits journaliers
+dans les établissements de longue durée, les MAS ou EHPAD sont exclus de
+la prise en charge.
+**(4bis)** Prise en charge suivant les conditions définies de l’article L. 871-1 du
+Code de la Sécurité sociale.
+**(5)** Équipement 100 % Santé « Classe A», pris en charge tel que défini par
+l’arrêté du 3 décembre 2018 portant modification des modalités de prise
+en charge de dispositifs médicaux et prestations associées pour la prise en
+charge d’optique médicale au chapitre 2 du titre II de la liste prévue à l’article
+L. 165-1 (LPP) du Code de la Sécurité sociale, dans la limite des prix limites
+de vente définis par la réglementation. Est également remboursée selon
+les mêmes conditions, la prestation d’appairage pour des verres d’indices
+de réfraction différents, la prestation d’adaptation visuelle et le supplément
+applicable pour les verres avec fi ltre (selon les conditions prévues à l’article
+L. 165-1 du Code de la Sécurité sociale). Pour les équipements combinant
+des verres «100 % Santé» et une monture libre, le remboursement des verres
+se réalise selon les dispositions de l’arrêté du 3 décembre 2018. La prestation
+d’adaptation visuelle est remboursée à hauteur du ticket modérateur
+**(6)** Renouvellement :
+
+- pour les bénéficiaires de 16 ans et plus : après une période minimale de
+
+24 mois après la dernière prise en charge,
+
+- pour les bénéficiaires de moins de 16 ans : après une période minimale de
+
+12 mois après le dernier remboursement d’un équipement.
+Par dérogation, le renouvellement anticipé de ces équipements est possible
+dans les conditions prévues par l’arrêté du 3 décembre 2018 (JO n°0288 du
+13/12/2018 texte n°13).`
+**(7)** Dans le respect des minimums du décret n° 2019-65 du 31 janvier 2019 et
+dans la limite de prix fixés en application de l’article L. 165-3 du Code de la
+Sécurité sociale. Le remboursement de la monture se fait dans la limite des frais
+
+réellement engagés et dans la limite de 100 €.
+**(8)** Avec monture libre ou monture 100% Santé. Le remboursement de la
+monture libre est limité à 100€ par équipement.
+**(9)** Il s’agit d’un équipement remboursé par la Sécurité sociale comportant
+des verres progressifs ou multifocaux
+**(10)** En cas de présence d’un verre unifocal et d’un verre progressif ou
+multifocal dans un même équipement optique, le remboursement total par
+BTP-PRÉVOYANCE et le Régime de base ne peut excéder :
+
+ - 560 €, si l’équipement comporte un verre unifocal mentionné au a) de
+
+l’article 1 [er ] du décret n° 2019-21 du 11 janvier 2019,
+
+ - 610 €, si l’équipement est constitué d’un verre unifocal mentionné au
+
+a) de l’article 1 [er ] du décret n° 2019-21 du 11 janvier 2019 et d’un verre
+progressif ou multifocal, mentionné au f) de l’article 1 [er ] du décret n°
+2019-21 du 11 janvier 2019,
+
+ - 700 €, si l’équipement est constitué d’un verre unifocal et d’un verre
+
+progressif ou multifocal, tous deux mentionnés au c) de l’article 1 [er ] du décret
+n° 2019-21 du 11 janvier 2019,
+
+ - 750 €, si l’équipement est constitué d’un verre unifocal mentionné au
+
+c) de l’article 1 [er ] du décret n° 2019-21 du 11 janvier 2019 et d’un verre
+progressif ou mutlifocal mentionné au f) de l’article 1 [er ] du décret n° 201921 du 11 janvier 2019.
+Ces montants s’entendent y compris les suppléments fortes corrections.
+**(11)** Dispositions applicables pour tous verres optiques sauf les verres des
+
+
+
+**(12)** Montant en euros : forfait par an et par bénéficiaire
+**(13)** Montant en euros : par œil, par bénéficiaire et par an
+**(14)** Soins et prothèses relevant du 100 % Santé depuis le 1 [er ] janvier 2020,
+définis par la réglementation, dans la limite des honoraires de facturation fixés
+par la convention prévue à l’article L. 162-9 ou, en l’absence de convention
+applicable, par le règlement arbitral prévu à l’article L. 162-14-2.
+**(15)** Les soins dentaires s’entendent par les actes codés AXI, END, SDE et
+TDS des codes de regroupement de la CCAM Dentaire
+**(16)** Prothèses hors 100 % Santé, auxquelles s’appliquent des honoraires
+limites de facturation depuis le 1 [er ] janvier 2020. Dans la limite des honoraires
+de facturation fixés par la convention prévue à l’article L. 162-9 ou, en
+l’absence de convention applicable, par le règlement arbitral prévu à
+l’article L. 162-14-2.
+
+**(17)** Prise en charge limitée à 6 semestres consécutifs
+**(18)** Prothèses auditives relevant du « 100% Santé » au 1 [er ] janvier 2022,
+définies par la réglementation, dans la limite des prix limites de vente fixés
+par l’avis du 28 novembre 2018 relatif à la tarification des aides auditives
+visées à l’article L. 165-1 du Code de la Sécurité sociale. Remboursement
+
+d’un équipement par période de quatre ans.
+**(19)** Limité à un appareil par oreille par période de quatre ans, par
+bénéficiaire et selon les conditions précisées dans l’article L. 165-1 du code
+de la Sécurité sociale
+
+**(20)** S’entendent comme pris en charge par la Sécurité sociale, les accessoires
+suivants : écouteur, microphone, embout auriculaire (pour bénéficiaire de moins
+de 2 ans : 4 embouts/an/appareil ; pour bénéficiaire de plus de 2 ans : 1 embout
+/an /appareil), pile sans mercure.
+**(21)** Les médecines douces agrées comprennent les spécialités suivantes :
+
+ - Ostéopathes titulaires du titre dans le respect des lois et décrets
+
+régissant la profession ;
+
+ - Chiropracteurs diplômés par une école en France et membre de l’AFC ;
+
+ - Acupuncteurs inscrits au conseil de l’ordre des médecins ;
+
+ - Diététiciens titulaires du titre dans le respect des lois et décrets
+
+régissant la profession ;
+
+ - Psychologues titulaires d’un diplôme universitaire de psychologie (non
+
+remboursés par la Sécurité sociale)
+Les soins doivent être effectués en France métropolitaine
+**(22)** S’entend par bénéficiaire, en montant maximum par séance et dans la
+limite du nombre de séances indiquées par an et dans la limite d’un plafond
+annuel par famille. Remboursement sur la base de factures acquittées.
+Les plafonds annuels par famille par niveau :
+
+ - P3 : 160 € / an
+
+ - P3+ : 240 € / an
+
+ - P4 : 320 € / an
+
+ - P5 : 450 € / an
+
+ - P6 : 480 € / an
+
+**(23)** Montant en euros : limité à une cure par an et par bénéficiaire
+
+**(a)** La Base de Remboursement Sécurité sociale correspond à 30 % du
+
+Prix Limite de Vente
+
+**(b)** Pour les verres : la Base de Remboursement Sécurité sociale correspond
+à 30% du Prix Limite de Vente ; pour la monture : la Base de Remboursement
+Sécurité sociale est fixée à 0,05 €.
+**(c)** La Base de Remboursement Sécurité sociale est fixée à 0,05 € par verre et à
+0,05 € pour la monture
+**(d)** +75 € / verre unifocal si bénéficiaire âgé de moins de 16 ans
+**(e)** + 140 € / verre unifocal
+
+
+**OPTAM :** le praticien est reconnu en catégorie Option Pratique Tarifaire
+Maîtrisée
+
+
+**BR :** base de remboursement de la Sécurité sociale
+
+**Sévéane :** réseau de soins partenaire PRO BTP
+
+
+
+catégories suivantes : er *** :** la part de Sécurité sociale indiquée est celle du régime général (ne
+
+ - les verres unifocaux listés dans le a) de l’article 1 du décret n° 2019-21
+
+
+
+du 11 janvier 2019 ;
+
+
+
+concerne pas le régime de l’Alsace-Moselle).
+
+
+
+4
+
+
+
+
+---
+*Page 3*
+---
+
+- et les verres multifocaux ou progressifs suivants et listés dans le c) de
+
+l’article 1 [er ] du décret n° 2019-21 du 11 janvier 2019 :
+
+**1.** verres multifocaux ou progressifs sphériques dont la sphère est
+
+comprise entre – 4,00 et + 4,00 dioptries
+
+**2.** verres multifocaux ou progressifs sphéro-cylindriques dont la sphère
+
+est comprise entre – 8,00 et 0,00 dioptries et dont le cylindre est
+inférieur ou égal à + 4,00 dioptries
+
+**3.** verres multifocaux ou progressifs sphéro-cylindriques dont la sphère
+
+est positive et dont la somme S est inférieure ou égale à 8,00 dioptries ;
+
+
+
+5
+
+
+
+
