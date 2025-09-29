@@ -14,7 +14,7 @@
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
@@ -35,6 +35,10 @@ yarn-error.log*
 
 # vercel
 .vercel
+
+# firebase
+.firebase/
+firebase-debug.log
 
 # typescript
 *.tsbuildinfo

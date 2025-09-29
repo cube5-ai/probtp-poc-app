@@ -30,7 +30,7 @@ class Settings(BaseSettings):
     allowed_origins: List[str] = [
         "http://localhost:3000",  # Next.js dev server
         "http://localhost:3001",
-        "https://your-frontend-domain.com",
+        "https://probtp-poc-prod.web.app",
     ]
     
     # Environment
