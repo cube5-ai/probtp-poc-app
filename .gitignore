@@ -17,6 +17,30 @@
 .next/
 /out/
 
+# alembic
+/alembic.ini
+/alembic.sqlite
+/alembic.sqlite-journal
+*/alembic*
+
+*__pycache__*
+
+#Explorations
+*explorations/*_results*
+*/reports/*
+
+*.venv*
+
+**/documents/
+**/parsing_results/
+**/parsers/output/
+
+#Credentials
+**/credentials.json
+**/backend-sa-key.json
+**/firebase_credentials.json
+**/firebase_credentials.json
+
 # production
 /build
 
