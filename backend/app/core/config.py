@@ -26,11 +26,11 @@ class Settings(BaseSettings):
     # Redis
     redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379")
     
-    # CORS
+    # CORS - Production and development origins
     allowed_origins: List[str] = [
         "http://localhost:3000",  # Next.js dev server
-        "http://localhost:3001",
-        "https://probtp-poc-prod.web.app",
+        "http://localhost:3001",  # Alternative dev port
+        "https://probtp-poc-prod.web.app",  # Production frontend
     ]
     
     # Environment
