@@ -20,6 +20,7 @@ app = FastAPI(
 )
 
 # Configure CORS middleware
+print(f"DEBUG: Configured CORS origins: {settings.allowed_origins}")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
@@ -39,4 +40,13 @@ async def root():
         "message": "ProBTP POC API",
         "version": "1.0.0",
         "docs": "/docs",
+    }
+
+
+@app.get("/debug/cors")
+async def debug_cors():
+    """Debug endpoint to check CORS configuration"""
+    return {
+        "allowed_origins": settings.allowed_origins,
+        "environment": settings.environment,
     }
