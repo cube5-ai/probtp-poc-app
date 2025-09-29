@@ -26,14 +26,8 @@ class Settings(BaseSettings):
     # Redis
     redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379")
     
-    # CORS
-    allowed_origins: List[str] = [
-        "http://localhost:3000",  # Next.js dev server
-        "http://localhost:3001",
-        "https://probtp-poc-prod.web.app",  # Firebase hosting main URL
-        "https://probtp-poc-prod.firebaseapp.com",  # Firebase hosting alternative URL
-        "https://probtp-poc-frontend.web.app",  # Legacy URL (if still in use)
-    ]
+    # CORS - Temporarily allow all origins for debugging
+    allowed_origins: List[str] = ["*"]
     
     # Environment
     environment: str = os.getenv("ENVIRONMENT", "development")
