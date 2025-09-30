@@ -1,0 +1,196 @@
+[
+  {
+    "explanation": "The candidate answer states that the information is not specified, but the ground truth explicitly provides the reimbursement percentage as 100%. This falls under the 'MISSED' verdict.",
+    "verdict": "MISSED",
+    "missing_information": [
+      "Le remboursement est de 100%"
+    ],
+    "evidence_quotes": [
+      "100%"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "Non spécifié.",
+    "ground_truth": "Le remboursement est de 100%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer '-' accurately conveys that there is no coverage, which is consistent with the ground truth 'Non pris en charge'.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "-",
+    "ground_truth": "Non pris en charge",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Contraception prescrite, non remboursée par la S.S. au niveau de garantie S2 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer provides the correct amount and item (all vaccines) but omits crucial details about the frequency and beneficiary (per year, per beneficiary) and the conditions (prescribed, marketing authorization, ceiling).",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "/ an / benificiare",
+      "Vaccin prescrit ayant reçu une autorisation de mise sur le marché.",
+      "Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "evidence_quotes": [
+      "Tous vaccins 60 € / an / benificiare",
+      "Vaccin prescrit ayant reçu une autorisation de mise sur le marché.",
+      "Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "Tous vaccins 60 €",
+    "ground_truth": "Le remboursement est de Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Vaccins au niveau de garantie S4 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer perfectly matches the reimbursement percentage provided in the ground truth.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "200 %",
+    "ground_truth": "Le remboursement est de 200%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Auxiliaires médicaux, soins infirmiers au niveau de garantie S4 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer states a reimbursement of '70%', which directly contradicts the ground truth of '200% (Frais réels si OPTAM)'. The candidate provides incorrect information.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [
+      "The correct reimbursement percentage of 200%",
+      "The condition 'Frais réels si OPTAM'"
+    ],
+    "evidence_quotes": [
+      "70%",
+      "200 % **(Frais réels si OPTAM)**"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "70 %",
+    "ground_truth": "Le remboursement est de 200 % **(Frais réels si OPTAM)**.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires médicaux > Radiologie au niveau de garantie S5 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer provides the correct percentage of 500% but omits the important condition 'Par semestre' which is present in the ground truth.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "conditions: Par semestre"
+    ],
+    "evidence_quotes": [
+      "500 %",
+      "Par semestre"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "500 %",
+    "ground_truth": "Le remboursement est de 500 % avec les conditions suivantes: Par semestre.",
+    "question": "Quel est la prise en charge ou le remboursement pour Orthodontie > Orthodontie > prise en charge par la Sécurité sociale au niveau de garantie P6 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer correctly states the reimbursement amount of 150€, which matches the ground truth. However, it omits the important conditions specified in the ground truth: 'forfait par an et par bénéficiaire' (flat rate per year and per beneficiary). This makes the answer directionally correct but incomplete.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "conditions: forfait par an et par bénéficiaire"
+    ],
+    "evidence_quotes": [
+      "150€",
+      "forfait par an et par bénéficiaire"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "150 €",
+    "ground_truth": "Le remboursement est de 150€ avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Optique > Lentilles > Lentilles non remboursées par la S.S. au niveau de garantie P4 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer correctly states the reimbursement amount of 250 €, which matches the ground truth. However, it omits the conditions specified in the ground truth, namely that it is a flat rate per year and per beneficiary.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "conditions: forfait par an et par bénéficiaire"
+    ],
+    "evidence_quotes": [
+      "250 €",
+      "forfait par an et par bénéficiaire"
+    ],
+    "confidence": 0.9,
+    "llm_answer": "250 €",
+    "ground_truth": "Le remboursement est de 250 € avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Parodontologie non prise en charge par la S.S. (/ an / bénéf.) (12) au niveau de garantie p3+ ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer accurately states the reimbursement percentage, which fully matches the ground truth.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [
+      "250 %"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "250 %",
+    "ground_truth": "Le remboursement est de 250 %.",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Inlay/onlay (par acte) au niveau de garantie P5 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer perfectly matches the reimbursement percentage provided in the ground truth.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [
+      "65 %"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "65 %",
+    "ground_truth": "Le remboursement est de 65 %.",
+    "question": "Quel est la prise en charge ou le remboursement pour Prestations > Cures thermales au niveau de garantie P1 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer correctly states the reimbursement for Sévéane partners as 1000€, which matches the ground truth. However, it introduces additional information about 'other cases' (950€) that is not present in the ground truth, making it a hallucination.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [
+      "Si partenaire audioprothésiste Sévéane: 1 000€",
+      "Dans les autres cas: 950€"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "Si partenaire audioprothésiste Sévéane: 1 000€; Dans les autres cas: 950€",
+    "ground_truth": "Le remboursement est de 1000€ avec les conditions suivantes: Si partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P2 ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer states a reimbursement of 1200€, which directly contradicts the ground truth amount of 950€.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [
+      "The correct reimbursement amount of 950€",
+      "The condition 'Si non partenaire audioprothésiste Sévéane'"
+    ],
+    "evidence_quotes": [
+      "950€",
+      "1 200€"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "1 200€",
+    "ground_truth": "Le remboursement est de 950€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P3+ ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  },
+  {
+    "explanation": "The candidate answer correctly states the reimbursement amount of 1400€ but omits the condition regarding Sévéane partner audiologists, which is a crucial detail present in the ground truth.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "conditions: Si non partenaire audioprothésiste Sévéane"
+    ],
+    "evidence_quotes": [
+      "1400€",
+      "Si non partenaire audioprothésiste Sévéane"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "1 400€",
+    "ground_truth": "Le remboursement est de 1400€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de 20 ans ou moins au niveau de garantie P3+ ?",
+    "pipeline_name": "extend_llm_postprocessing_01_pro"
+  }
+]

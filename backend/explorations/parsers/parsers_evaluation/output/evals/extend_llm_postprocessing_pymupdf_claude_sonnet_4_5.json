@@ -1,16 +1,18 @@
 [
   {
-    "explanation": "The ground truth explicitly states that the reimbursement is 100%, but the candidate answer claims that the document does not provide this information.",
+    "explanation": "The candidate answer states that the information is not specified, but the ground truth explicitly provides the reimbursement percentage as 100%. This falls under the 'MISSED' verdict.",
     "verdict": "MISSED",
-    "missing_information": [],
+    "missing_information": [
+      "Le remboursement est de 100%"
+    ],
     "evidence_quotes": [
-      "Le remboursement est de 100%."
+      "100%"
     ],
     "confidence": 1.0,
-    "llm_answer": "Le document ne fournit pas d'information sur la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1.",
+    "llm_answer": "Non spécifié.",
     "ground_truth": "Le remboursement est de 100%.",
     "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer '-' accurately conveys that there is no coverage, which is consistent with the ground truth 'Non pris en charge'.",
@@ -21,143 +23,143 @@
     "llm_answer": "-",
     "ground_truth": "Non pris en charge",
     "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Contraception prescrite, non remboursée par la S.S. au niveau de garantie S2 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer only mentions 'Flu vaccine' and omits the crucial details about the reimbursement amount (60 € / year / beneficiary), the fact that it applies to 'All vaccines', and the conditions for reimbursement, all of which are present in the ground truth.",
+    "explanation": "The candidate answer provides the correct amount and item for reimbursement but omits important details regarding the frequency (per year per beneficiary) and the conditions for reimbursement (prescribed vaccine with marketing authorization, annual ceiling).",
     "verdict": "PARTIAL",
     "missing_information": [
-      "reimbursement amount (60 € / an / benificiare)",
-      "applicability to 'Tous vaccins'",
-      "conditions for reimbursement (Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire)"
+      "/ an / benificiare",
+      "avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché.",
+      "Montant en euros : plafond par an et par bénéficiaire."
     ],
     "evidence_quotes": [
-      "Tous vaccins 60 € / an / benificiare",
-      "Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire."
+      "Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire."
     ],
     "confidence": 1.0,
-    "llm_answer": "Vaccin anti-grippe",
+    "llm_answer": "Tous vaccins 60€",
     "ground_truth": "Le remboursement est de Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire.",
     "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Vaccins au niveau de garantie S4 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer perfectly matches the reimbursement percentage provided in the ground truth.",
+    "explanation": "The candidate answer '200%' perfectly matches the core information provided in the ground truth 'Le remboursement est de 200%'. There are no omissions or additional incorrect details.",
     "verdict": "CORRECT",
     "missing_information": [],
-    "evidence_quotes": [],
+    "evidence_quotes": [
+      "200%",
+      "Le remboursement est de 200%"
+    ],
     "confidence": 1.0,
-    "llm_answer": "200 %",
+    "llm_answer": "200%",
     "ground_truth": "Le remboursement est de 200%.",
     "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Auxiliaires médicaux, soins infirmiers au niveau de garantie S4 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer states a reimbursement of '70%', which directly contradicts the ground truth of '200% (Frais réels si OPTAM)'. The candidate provides incorrect information.",
+    "explanation": "The candidate answer states 70% reimbursement, which directly contradicts the ground truth of 200% (Frais réels si OPTAM).",
     "verdict": "HALLUCINATION",
     "missing_information": [
-      "The correct reimbursement percentage of 200%",
-      "The condition 'Frais réels si OPTAM'"
+      "200% (Frais réels si OPTAM)"
     ],
     "evidence_quotes": [
-      "70%",
       "200 % **(Frais réels si OPTAM)**"
     ],
     "confidence": 1.0,
-    "llm_answer": "70 %",
+    "llm_answer": "70%",
     "ground_truth": "Le remboursement est de 200 % **(Frais réels si OPTAM)**.",
     "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires médicaux > Radiologie au niveau de garantie S5 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer provides the correct percentage of 500% but omits the important condition 'Par semestre' which is present in the ground truth.",
+    "explanation": "The candidate answer correctly identifies the 500% reimbursement but omits the crucial condition 'Par semestre' specified in the ground truth.",
     "verdict": "PARTIAL",
     "missing_information": [
-      "conditions: Par semestre"
+      "conditions suivantes: Par semestre"
     ],
     "evidence_quotes": [
       "500 %",
       "Par semestre"
     ],
     "confidence": 1.0,
-    "llm_answer": "500 %",
+    "llm_answer": "500%",
     "ground_truth": "Le remboursement est de 500 % avec les conditions suivantes: Par semestre.",
     "question": "Quel est la prise en charge ou le remboursement pour Orthodontie > Orthodontie > prise en charge par la Sécurité sociale au niveau de garantie P6 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer correctly states the reimbursement amount of 150€, which matches the ground truth. However, it omits the important conditions specified in the ground truth: 'forfait par an et par bénéficiaire' (flat rate per year and per beneficiary). This makes the answer directionally correct but incomplete.",
-    "verdict": "PARTIAL",
+    "explanation": "The candidate answer states a reimbursement of 125€, which contradicts the ground truth of 150€. It also omits the conditions for reimbursement.",
+    "verdict": "HALLUCINATION",
     "missing_information": [
-      "conditions: forfait par an et par bénéficiaire"
+      "Conditions for reimbursement: flat rate per year and per beneficiary"
     ],
     "evidence_quotes": [
       "150€",
+      "125€"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "125€",
+    "ground_truth": "Le remboursement est de 150€ avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Optique > Lentilles > Lentilles non remboursées par la S.S. au niveau de garantie P4 ?",
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
+  },
+  {
+    "explanation": "The candidate answer provides the correct reimbursement amount but omits the conditions specified in the ground truth, which state it is a flat rate per year and per beneficiary.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "forfait par an et par bénéficiaire"
+    ],
+    "evidence_quotes": [
+      "250 €",
       "forfait par an et par bénéficiaire"
     ],
     "confidence": 1.0,
-    "llm_answer": "150 €",
-    "ground_truth": "Le remboursement est de 150€ avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
-    "question": "Quel est la prise en charge ou le remboursement pour Optique > Lentilles > Lentilles non remboursées par la S.S. au niveau de garantie P4 ?",
-    "pipeline_name": "pymupdf4llm_solo"
-  },
-  {
-    "explanation": "The candidate answer states a reimbursement of 300 €, which directly contradicts the ground truth of 250 €.",
-    "verdict": "HALLUCINATION",
-    "missing_information": [],
-    "evidence_quotes": [
-      "250 €",
-      "300 €"
-    ],
-    "confidence": 1.0,
-    "llm_answer": "300 €",
+    "llm_answer": "250€",
     "ground_truth": "Le remboursement est de 250 € avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
     "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Parodontologie non prise en charge par la S.S. (/ an / bénéf.) (12) au niveau de garantie p3+ ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer accurately states the reimbursement percentage, which fully matches the ground truth.",
+    "explanation": "The candidate answer perfectly matches the reimbursement percentage stated in the ground truth.",
     "verdict": "CORRECT",
     "missing_information": [],
     "evidence_quotes": [
-      "250 %"
+      "250 %",
+      "250%"
     ],
     "confidence": 1.0,
-    "llm_answer": "250 %",
+    "llm_answer": "250%",
     "ground_truth": "Le remboursement est de 250 %.",
     "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Inlay/onlay (par acte) au niveau de garantie P5 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer states a reimbursement of \"100 % + 100 €\", which directly contradicts the ground truth that specifies \"65 %\".",
-    "verdict": "HALLUCINATION",
+    "explanation": "The candidate answer accurately provides the reimbursement percentage, which fully matches the information in the ground truth.",
+    "verdict": "CORRECT",
     "missing_information": [],
     "evidence_quotes": [
-      "Le remboursement est de 65 %.",
-      "100 % + 100 €"
+      "65 %"
     ],
     "confidence": 1.0,
-    "llm_answer": "100 % + 100 €",
+    "llm_answer": "65%",
     "ground_truth": "Le remboursement est de 65 %.",
     "question": "Quel est la prise en charge ou le remboursement pour Prestations > Cures thermales au niveau de garantie P1 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
-    "explanation": "The candidate answer states a reimbursement of 950€, which contradicts the ground truth of 1000€. Additionally, the candidate answer omits the condition regarding a Sévéane partner audiologist, which is present in the ground truth.",
-    "verdict": "HALLUCINATION",
+    "explanation": "The candidate answer provides the correct reimbursement amount but omits the crucial condition regarding the Sévéane audiologist partner, which is present in the ground truth.",
+    "verdict": "PARTIAL",
     "missing_information": [
-      "The reimbursement amount is 1000€",
-      "Condition: If Sévéane partner audiologist"
+      "Condition: Si partenaire audioprothésiste Sévéane."
     ],
     "evidence_quotes": [
-      "1000€",
       "Si partenaire audioprothésiste Sévéane."
     ],
     "confidence": 1.0,
-    "llm_answer": "950€",
+    "llm_answer": "1 000€",
     "ground_truth": "Le remboursement est de 1000€ avec les conditions suivantes: Si partenaire audioprothésiste Sévéane.",
     "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P2 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer states a reimbursement of 1200€, which directly contradicts the ground truth amount of 950€.",
@@ -174,7 +176,7 @@
     "llm_answer": "1 200€",
     "ground_truth": "Le remboursement est de 950€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
     "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P3+ ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer correctly states the reimbursement amount of 1400€ but omits the condition regarding Sévéane partner audiologists, which is a crucial detail present in the ground truth.",
@@ -190,7 +192,7 @@
     "llm_answer": "1 400€",
     "ground_truth": "Le remboursement est de 1400€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
     "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de 20 ans ou moins au niveau de garantie P3+ ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer provides the correct reimbursement percentage but omits important details regarding the frequency (per year per beneficiary) and the specific conditions under which the reimbursement applies, such as not being covered by Social Security and requiring a doctor's prescription.",
@@ -208,7 +210,7 @@
     "llm_answer": "6 % PMSS",
     "ground_truth": "Le remboursement est de 6 % PMSS an / benificiare avec les conditions suivantes: non pris en charge par la Sécurité sociale, prescrits par un médecin dans les conditions prévues par leur autorisation de mise sur le marché.",
     "question": "Quel est la prise en charge ou le remboursement pour Prévention > Vaccins au niveau de garantie Option 1 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer correctly states the reimbursement amount of '1,25 % PMSS' but omits the important conditions for this reimbursement, which are 'prescrite par un médecin, dans la limite d’une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans.'.",
@@ -225,7 +227,7 @@
     "llm_answer": "1,25 % PMSS",
     "ground_truth": "Le remboursement est de 1,25 % PMSS avec les conditions suivantes: prescrite par un médecin, dans la limite d’une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans..",
     "question": "Quel est la prise en charge ou le remboursement pour Prévention > Consultation chez un diététicien au niveau de garantie Base obligatoire ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer correctly states the reimbursement amount of 100€ but omits the crucial condition that this reimbursement is only valid \"Dans le réseau optique Itelis.\"",
@@ -240,7 +242,7 @@
     "llm_answer": "100 €",
     "ground_truth": "Le remboursement est de 100€ avec les conditions suivantes: Dans le réseau optique Itelis.",
     "question": "Quel est la prise en charge ou le remboursement pour Optique > Monture au niveau de garantie Base obligatoire ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer correctly states the reimbursement amount of 200€ but omits crucial details regarding the frequency (per year), the recipient (per beneficiary), and the specific conditions (100% TM guarantee) mentioned in the ground truth.",
@@ -257,7 +259,7 @@
     "llm_answer": "200 €",
     "ground_truth": "Le remboursement est de 200€/an/beneficiare avec les conditions suivantes: Nous garantissons au minimum : 100 % TM.",
     "question": "Quel est la prise en charge ou le remboursement pour Optique > Autres postes optique > Les lentilles de contact correctrices prises en charge ou non par la Sécurité sociale au niveau de garantie Base obligatoire ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer perfectly matches the ground truth regarding the reimbursement percentage and type.",
@@ -270,20 +272,20 @@
     "llm_answer": "500 % BR-MR",
     "ground_truth": "Le remboursement est de 500 % BR-MR.",
     "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Prothèses (Hors 100% Santé) > à tarifs libre (3) (y compris Inlay Onlay) au niveau de garantie Option 1 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer perfectly matches the reimbursement amount and conditions specified in the ground truth.",
     "verdict": "CORRECT",
     "missing_information": [],
     "evidence_quotes": [
-      "60 € par année civile et par bénéficiaire."
+      "60 € par année civile et par bénéficiaire"
     ],
     "confidence": 1.0,
-    "llm_answer": "60 € par année civile et par bénéficiaire.",
+    "llm_answer": "60 € par année civile et par bénéficiaire",
     "ground_truth": "Le remboursement est de 60 € avec les conditions suivantes: Par année civile et par bénéficiaire.",
     "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > homéopathiques non pris en charge par la Sécurité sociale et prescrits par un médecin au niveau de garantie base obligatoire ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer correctly states the reimbursement amount but omits the conditions regarding the annual limit of acts, which are present in the ground truth.",
@@ -298,7 +300,7 @@
     "llm_answer": "616 €",
     "ground_truth": "Le remboursement est de 616 € avec les conditions suivantes: Dans la limite, par année civile et par bénéficiaire, de : 3 acte(s).",
     "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Implantologie dentaire non prise en charge par la Sécurité sociale > Pose de l’implant (phase opératoire) au niveau de garantie base obligatoire ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   },
   {
     "explanation": "The candidate answer correctly states the reimbursement amount and that it's per session, but it omits the crucial information about the annual limit of 3 sessions per beneficiary, which is present in the ground truth.",
@@ -314,6 +316,6 @@
     "llm_answer": "55 € par séance",
     "ground_truth": "Le remboursement est de 55 € avec les conditions suivantes: par séance, Dans la limite, par année civile et par bénéficiaire, de 3 seances.",
     "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médecines non conventionnelles > Forfait actes thérapeutiques pour les actes cités ci-contre, Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie au niveau de garantie Option 1 ?",
-    "pipeline_name": "pymupdf4llm_solo"
+    "pipeline_name": "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5"
   }
 ]

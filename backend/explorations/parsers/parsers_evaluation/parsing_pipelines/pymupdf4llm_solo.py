@@ -2,23 +2,27 @@ import pymupdf4llm
 import pymupdf
 from pathlib import Path
 
+from .pymupdf_lock import pymupdf_lock
+
 
 
 def parse_document(file_path: str) -> dict:
     """
     Parse a document using pymupdf4llm
     Returns a dict with parsed content and metadata
+    Thread-safe: uses shared global lock to prevent concurrent calls to pymupdf4llm.
     """
     try:
 
-        # Use pymupdf4llm to extract markdown-formatted text
-        markdown_result = pymupdf4llm.to_markdown(
-            file_path,
-            page_chunks=True,  # Preserve page boundaries
-            write_images=False,  # Don't extract images to disk
-            image_size_limit=0,  # Skip image extraction
-            table_strategy="lines_strict",  # Better table detection
-        )
+        # Use pymupdf4llm to extract markdown-formatted text (thread-safe)
+        with pymupdf_lock:
+            markdown_result = pymupdf4llm.to_markdown(
+                file_path,
+                page_chunks=True,  # Preserve page boundaries
+                write_images=False,  # Don't extract images to disk
+                image_size_limit=0,  # Skip image extraction
+                table_strategy="lines_strict",  # Better table detection
+            )
 
         # Process the result based on return type
         chunks = []

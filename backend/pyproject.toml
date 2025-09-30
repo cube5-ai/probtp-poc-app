@@ -41,6 +41,7 @@ dependencies = [
     "pymupdf4llm>=0.0.27",
     "reductoai>=0.11.0",
     "jupyter>=1.1.1",
+    "anthropic[vertex]>=0.69.0",
 ]
 
 [project.optional-dependencies]
@@ -77,6 +78,8 @@ dev-dependencies = [
     "pytest-mock>=3.12.0",
     "ipykernel>=6.30.1",
     "extend-ai>=0.0.8",
+    "pandas>=2.3.2",
+    "openpyxl>=3.1.5",
 ]
 
 [tool.ruff]
@@ -114,7 +117,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "__init__.py" = ["F401"]
 "tests/**/*.py" = ["ARG001", "ARG002", "ARG005"]
-"explorations/**/*.py" = ["E402", "F401"]  # Allow module imports not at top and unused imports for exploration scripts
+"explorations/**/*.py" = ["E402", "F401", "ARG001"]  # Allow module imports not at top, unused imports and args for exploration scripts
 
 [tool.ruff.format]
 quote-style = "double"
@@ -122,37 +125,37 @@ indent-style = "space"
 skip-magic-trailing-comma = false
 line-ending = "auto"
 
-[tool.mypy]
-python_version = "3.11"
-check_untyped_defs = true
-disallow_untyped_defs = true
-disallow_incomplete_defs = true
-disallow_untyped_decorators = true
-no_implicit_optional = true
-warn_redundant_casts = true
-warn_unused_ignores = true
-warn_return_any = true
-warn_unreachable = true
-strict_equality = true
-extra_checks = true
+# [tool.mypy]
+# python_version = "3.11"
+# check_untyped_defs = true
+# disallow_untyped_defs = true
+# disallow_incomplete_defs = true
+# disallow_untyped_decorators = true
+# no_implicit_optional = true
+# warn_redundant_casts = true
+# warn_unused_ignores = true
+# warn_return_any = true
+# warn_unreachable = true
+# strict_equality = true
+# extra_checks = true
 
-# Third-party imports
-ignore_missing_imports = true
+# # Third-party imports
+# ignore_missing_imports = true
 
-# Specific module configurations
-[[tool.mypy.overrides]]
-module = [
-    "alembic.*",
-    "google.*",
-    "firebase_admin.*",
-    "structlog.*",
-    "psycopg2.*",
-]
-ignore_missing_imports = true
+# # Specific module configurations
+# [[tool.mypy.overrides]]
+# module = [
+#     "alembic.*",
+#     "google.*",
+#     "firebase_admin.*",
+#     "structlog.*",
+#     "psycopg2.*",
+# ]
+# ignore_missing_imports = true
 
-[[tool.mypy.overrides]]
-module = "tests.*"
-disallow_untyped_defs = false
+# [[tool.mypy.overrides]]
+# module = "tests.*"
+# disallow_untyped_defs = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

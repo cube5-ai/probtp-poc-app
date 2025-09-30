@@ -1,0 +1,167 @@
+[
+  {
+    "explanation": "The candidate answer states that the information is 'Non spécifié' (Not specified), while the ground truth explicitly states that the reimbursement is 100%. This falls under the definition of MISSED.",
+    "verdict": "MISSED",
+    "missing_information": [
+      "Le remboursement est de 100%."
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Non spécifié.",
+    "ground_truth": "Le remboursement est de 100%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer uses a hyphen, which typically signifies 'no coverage' or 'not applicable' in tabular data, matching the meaning of the ground truth (\"Non pris en charge\"). The information extracted is correct.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "-",
+    "ground_truth": "Non pris en charge",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Contraception prescrite, non remboursée par la S.S. au niveau de garantie S2 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer mentions the item and the reimbursement amount (Tous vaccins 60€) but omits critical contextual details present in the ground truth, specifically the annual limit per beneficiary and the condition that the vaccine must be prescribed and have market authorization.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "/ an / benificiare",
+      "plafond par an et par bénéficiaire.",
+      "Vaccin prescrit ayant reçu une autorisation de mise sur le marché."
+    ],
+    "evidence_quotes": [
+      "Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "Tous vaccins 60€.",
+    "ground_truth": "Le remboursement est de Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Vaccins au niveau de garantie S4 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer \"200%\" fully and accurately reflects the information provided in the ground truth, \"Le remboursement est de 200%\".",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "200%",
+    "ground_truth": "Le remboursement est de 200%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Auxiliaires médicaux, soins infirmiers au niveau de garantie S4 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The ground truth provides a specific reimbursement rate of 200% (or actual costs if OPTAM). The candidate answer incorrectly states that the information is unavailable (\"La cellule est vide\"), thus missing the required coverage details found in the ground truth.",
+    "verdict": "MISSED",
+    "missing_information": [
+      "200 % (Frais réels si OPTAM)"
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 200 % **(Frais réels si OPTAM)**."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "La cellule est vide, mais la Part S.S. est de 70%.",
+    "ground_truth": "Le remboursement est de 200 % **(Frais réels si OPTAM)**.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires médicaux > Radiologie au niveau de garantie S5 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer correctly identifies the reimbursement rate (500%) but omits the crucial condition specified in the ground truth, which is that this rate applies \"Per semester\". Therefore, the answer is partially correct.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "Per semester"
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "500%",
+    "ground_truth": "Le remboursement est de 500 % avec les conditions suivantes: Par semestre.",
+    "question": "Quel est la prise en charge ou le remboursement pour Orthodontie > Orthodontie > prise en charge par la Sécurité sociale au niveau de garantie P6 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer only provides the reimbursement amount (150€) but omits the mandatory conditions specified in the ground truth: that this is a fixed allowance per year and per beneficiary. Therefore, the answer is only partial.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire."
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 150€ avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "150€",
+    "ground_truth": "Le remboursement est de 150€ avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Optique > Lentilles > Lentilles non remboursées par la S.S. au niveau de garantie P4 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer states the correct amount (250€) but fails to include the essential context and conditions specified in the ground truth, specifically that this is a fixed annual benefit per beneficiary.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "forfait par an et par bénéficiaire"
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "250€",
+    "ground_truth": "Le remboursement est de 250 € avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Parodontologie non prise en charge par la S.S. (/ an / bénéf.) (12) au niveau de garantie p3+ ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer states the reimbursement is 300%, but the ground truth states the reimbursement is 250%. The candidate answer contradicts the ground truth.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "300%",
+    "ground_truth": "Le remboursement est de 250 %.",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Inlay/onlay (par acte) au niveau de garantie P5 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer \"65%\" accurately reflects the quantitative information provided in the ground truth, \"Le remboursement est de 65 %\". There are no material omissions or additions.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "65%",
+    "ground_truth": "Le remboursement est de 65 %.",
+    "question": "Quel est la prise en charge ou le remboursement pour Prestations > Cures thermales au niveau de garantie P1 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate correctly states the 1000€ reimbursement when using a Sévéane partner, as mentioned in the ground truth. However, the candidate introduces unsupported information about a 950€ reimbursement in 'other cases' (\"Dans les autres cas : 950€\"), which is not present or supported by the ground truth. This material addition constitutes a hallucination.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Si partenaire audioprothésiste Sévéane : 1 000€ ; Dans les autres cas : 950€",
+    "ground_truth": "Le remboursement est de 1000€ avec les conditions suivantes: Si partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P2 ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate introduces a material addition (reimbursement of 1200 … for S&eacute;v&eacute;ane partners) that is not present or supported by the provided ground truth, which only specified the 950 … rate for non-partners.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Si partenaire audioprothésiste Sévéane : 1 200 € ; Dans les autres cas : 950 €.",
+    "ground_truth": "Le remboursement est de 950€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P3+ ?",
+    "pipeline_name": "extend_solo"
+  },
+  {
+    "explanation": "The candidate answer provides the correct reimbursement amount (1 400€) but completely omits the crucial condition stated in the ground truth regarding the Sévéane partner status.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane."
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "1 400€",
+    "ground_truth": "Le remboursement est de 1400€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de 20 ans ou moins au niveau de garantie P3+ ?",
+    "pipeline_name": "extend_solo"
+  }
+]

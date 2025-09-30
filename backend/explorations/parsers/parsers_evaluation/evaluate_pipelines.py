@@ -274,10 +274,12 @@ async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, pr
     """
     answer_prompt = prompt_answer.format(document=data, question=qa["question"])
     answer_resp = await client.aio.models.generate_content(
-        model="gemini-2.5-flash-preview-09-2025",
+        model="gemini-2.5-flash",#-preview-09-2025",
         contents=answer_prompt,
         config=GenerateContentConfig(
-            thinking_config=ThinkingConfig(thinking_budget=0)
+            thinking_config=ThinkingConfig(thinking_budget=0),
+            max_output_tokens=300,
+            temperature=0.
         ),
     )
     candidate_answer = getattr(answer_resp, "text", "").strip()
@@ -289,12 +291,15 @@ async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, pr
         f"<candidate_answer>\n{candidate_answer}\n</candidate_answer>\n"
     )
     eval_resp = await client.aio.models.generate_content(
-        model="gemini-2.5-flash-preview-09-2025",
+        model="gemini-2.5-flash",#-preview-09-2025",
         contents=eval_prompt,
-        config={
-            "response_mime_type": "application/json",
-            "response_schema": EvaluationResult.model_json_schema(),
-        },
+        config=GenerateContentConfig(
+            response_mime_type= "application/json",
+            thinking_config=ThinkingConfig(thinking_budget=300),
+            response_schema= EvaluationResult.model_json_schema(),
+            max_output_tokens=2000,
+            temperature=0.
+            ),
         )
     raw_json = getattr(eval_resp, "text", "").strip()
 
@@ -395,16 +400,27 @@ async def evaluate_pipeline_async(file_qa_list: list[dict], data: str, pipeline_
     """
 
     async with AsyncGeminiClientManager() as client:
-        # Create tasks for all Q&A evaluations to run in parallel
-        tasks = [
-            evaluate_single_qa(client, qa, data, pipeline_name, prompt_answer, prompt_evaluation)
-            for qa in file_qa_list[:3]
-        ]
+        # Process tasks in batches of 5 to avoid rate limiting
+        batch_size = 5
+        all_results = []
 
-        # Execute all tasks concurrently
-        results = await asyncio.gather(*tasks)
+        for i in range(0, len(file_qa_list), batch_size):
+            batch = file_qa_list[i:i + batch_size]
+            tasks = [
+                evaluate_single_qa(client, qa, data, pipeline_name, prompt_answer, prompt_evaluation)
+                for qa in batch
+            ]
 
-    return results
+            # Execute batch concurrently
+            batch_results = await asyncio.gather(*tasks)
+            print(f"Batch {i//batch_size + 1} of {len(file_qa_list)//batch_size} done", end='\r')
+            all_results.extend(batch_results)
+
+            # Add 1s pause between batches (except after the last batch)
+            if i + batch_size < len(file_qa_list):
+                await asyncio.sleep(1)
+
+    return all_results
 
 
 def write_results_to_json(enriched_results: list[dict[str, Any]], pipeline_name: str):
@@ -442,6 +458,7 @@ async def main():
     Main async function to process all pipelines and evaluate them.
     """
     output_dir = Path("output")
+    evals_dir = Path("output/evals")
 
     # Get the eval data
     eval_data = read_eval_data(Path("eval_data/data_0.json"))
@@ -452,6 +469,19 @@ async def main():
         if not pipeline_dir.is_dir() or pipeline_dir.name == "evals":
             continue
         pipeline_name = pipeline_dir.name
+
+        # Check if pipeline folder has any markdown files
+        md_files = [f for f in pipeline_dir.iterdir() if f.is_file() and f.name.endswith(".md")]
+        if not md_files:
+            print(f"Skipping {pipeline_name} - no markdown files found")
+            continue
+
+        # Check if evaluation JSON already exists
+        eval_json_path = evals_dir / f"{pipeline_name}.json"
+        if eval_json_path.exists():
+            print(f"Skipping {pipeline_name} - evaluation already exists at {eval_json_path}")
+            continue
+
         all_results = []
         for file_path in pipeline_dir.iterdir():
             if file_path.is_file() and file_path.name.endswith(".md"):
@@ -474,15 +504,29 @@ def main_sync():
     Synchronous main function for backward compatibility.
     """
     output_dir = Path("output")
+    evals_dir = Path("output/evals")
 
     # Get the eval data
     eval_data = read_eval_data(Path("eval_data/data_0.json"))
 
     # Iterate over subdirectories in output_dir and process markdown files for each pipeline
     for pipeline_dir in output_dir.iterdir():
-        if not pipeline_dir.is_dir():
+        if not pipeline_dir.is_dir() or pipeline_dir.name == "evals":
             continue
         pipeline_name = pipeline_dir.name
+
+        # Check if pipeline folder has any markdown files
+        md_files = [f for f in pipeline_dir.iterdir() if f.is_file() and f.name.endswith(".md")]
+        if not md_files:
+            print(f"Skipping {pipeline_name} - no markdown files found")
+            continue
+
+        # Check if evaluation JSON already exists
+        eval_json_path = evals_dir / f"{pipeline_name}.json"
+        if eval_json_path.exists():
+            print(f"Skipping {pipeline_name} - evaluation already exists at {eval_json_path}")
+            continue
+
         all_results = []
         for file_path in pipeline_dir.iterdir():
             if file_path.is_file() and file_path.name.endswith(".md"):
