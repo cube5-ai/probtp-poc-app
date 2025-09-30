@@ -125,13 +125,18 @@ Tu es un assistant technique. Résume ce script Python de pipeline d'extraction 
 Fournis une synthèse courte et structurée (5–8 puces max):
 - Objet du pipeline et cas d'usage
 - Entrées attendues et sorties produites
-- Principales techniques/étapes (OCR, parsing, post-traitement LLM, etc.)
-- Dépendances externes notables (API/LLM/bibliothèques)
+- **Principales techniques/étapes (IMPORTANT: liste TOUTES les étapes de parsing):**
+  * Identifie tous les services/APIs externes utilisés (Extend, Pulse, Mistral, etc.)
+  * Identifie toutes les bibliothèques de parsing (PyMuPDF, pymupdf4llm, etc.)
+  * Identifie tous les post-traitements LLM (Claude, Gemini, etc.)
+  * Décris l'ordre et la combinaison de ces étapes
+- Dépendances externes notables (API/LLM/bibliothèques avec leurs versions si spécifiées)
 - Hypothèses/limitations connues
 
 Contraintes:
 - Style concis, neutre et factuel (pas de jugement)
-- Pas de code, pas d’implémentation détaillée
+- Pas de code, pas d'implémentation détaillée
+- CRITIQUE: Ne manque aucune étape de parsing - si le pipeline combine plusieurs outils, mentionne-les tous
 
 <script>
 {code_text}
@@ -142,8 +147,8 @@ Contraintes:
                     model="gemini-2.5-flash",
                     contents=prompt,
                     config=GenerateContentConfig(
-                        thinking_config=ThinkingConfig(thinking_budget=256),
-                        max_output_tokens=400,
+                        thinking_config=ThinkingConfig(thinking_budget=512),
+                        max_output_tokens=600,
                         temperature=0.2,
                     ),
                 )
@@ -151,6 +156,64 @@ Contraintes:
             except Exception:
                 summary = "Résumé indisponible."
 
+            summaries[py_file.stem] = summary
+    finally:
+        if hasattr(client, "close"):
+            if asyncio.iscoroutinefunction(client.close):
+                await client.close()
+            else:
+                client.close()
+
+    return summaries
+
+
+async def summarize_vqa_pipelines_fr(vqa_dir: Path) -> dict[str, str]:
+    """Summarize each VQA pipeline Python file in French using Gemini Flash."""
+    summaries: dict[str, str] = {}
+    if not vqa_dir.exists() or not vqa_dir.is_dir():
+        return summaries
+
+    client = genai.Client(vertexai=True, project="probtp-poc-prod", location="global")
+    try:
+        for py_file in sorted(vqa_dir.glob("*.py")):
+            if py_file.name == "__init__.py":
+                continue
+            code_text = py_file.read_text(encoding="utf-8")
+            prompt = f"""
+Tu es un assistant technique. Résume ce script Python de pipeline VQA (question-réponse visuelle) en français.
+
+Fournis une synthèse courte (5–8 puces):
+- Objectif et cas d'usage
+- Entrées (PDF/images) et sorties
+- **Étapes clés (liste TOUTES les étapes):**
+  * Prétraitement visuel (conversion PDF, résolution, etc.)
+  * OCR ou extraction visuelle (si applicable)
+  * VLM/LLM utilisé avec le modèle exact
+  * Post-traitement éventuel
+- Dépendances externes (modèles spécifiques, APIs, bibliothèques)
+- Limites/contraintes techniques
+
+Contraintes:
+- CRITIQUE: Identifie précisément quel modèle vision/multimodal est utilisé
+- Ne manque aucune étape du traitement
+
+<script>
+{code_text}
+</script>
+"""
+            try:
+                resp = await client.aio.models.generate_content(
+                    model="gemini-2.5-flash",
+                    contents=prompt,
+                    config=GenerateContentConfig(
+                        thinking_config=ThinkingConfig(thinking_budget=512),
+                        max_output_tokens=600,
+                        temperature=0.2,
+                    ),
+                )
+                summary = getattr(resp, "text", "").strip()
+            except Exception:
+                summary = "Résumé indisponible."
             summaries[py_file.stem] = summary
     finally:
         if hasattr(client, "close"):

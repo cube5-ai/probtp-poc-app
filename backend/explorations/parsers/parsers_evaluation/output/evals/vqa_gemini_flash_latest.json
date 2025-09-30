@@ -1,0 +1,293 @@
+[
+  {
+    "explanation": "The candidate answer provides the main reimbursement amount (6% PMSS) but omits crucial contextual details present in the ground truth, specifically the frequency (\"an / benificiare\") and the conditions for coverage (not covered by Social Security, prescribed by a doctor under specific conditions).",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "an / benificiare",
+      "non pris en charge par la Sécurité sociale",
+      "prescrits par un médecin dans les conditions prévues par leur autorisation de mise sur le marché"
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 6 % PMSS an / benificiare avec les conditions suivantes: non pris en charge par la Sécurité sociale, prescrits par un médecin dans les conditions prévues par leur autorisation de mise sur le marché."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "6 % PMSS.",
+    "ground_truth": "Le remboursement est de 6 % PMSS an / benificiare avec les conditions suivantes: non pris en charge par la Sécurité sociale, prescrits par un médecin dans les conditions prévues par leur autorisation de mise sur le marché.",
+    "question": "Quel est la prise en charge ou le remboursement pour Prévention > Vaccins au niveau de garantie Option 1 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer provides the reimbursement amount (1,25 % PMSS) and one condition (dans la limite d'une prise en charge durant la vie du contrat), but omits two crucial conditions mentioned in the ground truth: \"prescrite par un médecin\" (prescribed by a doctor) and \"Par enfant de moins de 12 ans\" (Per child under 12 years old). Since required details are missing, the verdict is PARTIAL.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "prescrite par un médecin",
+      "Par enfant de moins de 12 ans"
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 1,25 % PMSS avec les conditions suivantes: prescrite par un médecin, dans la limite d’une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans.."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "1,25 % PMSS, dans la limite d'une prise en charge durant la vie du contrat.",
+    "ground_truth": "Le remboursement est de 1,25 % PMSS avec les conditions suivantes: prescrite par un médecin, dans la limite d’une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans..",
+    "question": "Quel est la prise en charge ou le remboursement pour Prévention > Consultation chez un diététicien au niveau de garantie Base obligatoire ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer correctly states the reimbursement amount (100 €) but omits the necessary condition specified in the ground truth: the reimbursement is only valid within the Itelis optical network.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "Dans le réseau optique Itelis."
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 100€ avec les conditions suivantes: Dans le réseau optique Itelis."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "100 €",
+    "ground_truth": "Le remboursement est de 100€ avec les conditions suivantes: Dans le réseau optique Itelis.",
+    "question": "Quel est la prise en charge ou le remboursement pour Optique > Monture au niveau de garantie Base obligatoire ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer provides the correct monetary amount and frequency (200 € per year and per beneficiary) but omits the crucial condition mentioned in the ground truth regarding the minimum guarantee (100% TM). Therefore, it is a partial match.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "Nous garantissons au minimum : 100 % TM."
+    ],
+    "evidence_quotes": [
+      "200€/an/beneficiare",
+      "Nous garantissons au minimum : 100 % TM."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "200 € par année civile et par bénéficiaire.",
+    "ground_truth": "Le remboursement est de 200€/an/beneficiare avec les conditions suivantes: Nous garantissons au minimum : 100 % TM.",
+    "question": "Quel est la prise en charge ou le remboursement pour Optique > Autres postes optique > Les lentilles de contact correctrices prises en charge ou non par la Sécurité sociale au niveau de garantie Base obligatoire ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer includes additional limiting information (\"dans la limite de 500 % PLV-MR\") that is not present in the ground truth, making it a HALLUCINATION according to the strict definition (introduces content not supported by ground_truth). If the ground truth was considered incomplete, the verdict might be PARTIAL, but since the candidate adds information, it falls under HALLUCINATION based on the provided rules.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [
+      "500 % BR-MR dans la limite de 500 % PLV-MR.",
+      "Le remboursement est de 500 % BR-MR."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "500 % BR-MR dans la limite de 500 % PLV-MR.",
+    "ground_truth": "Le remboursement est de 500 % BR-MR.",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Prothèses (Hors 100% Santé) > à tarifs libre (3) (y compris Inlay Onlay) au niveau de garantie Option 1 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer provides the correct reimbursement amount (60 €) but omits the necessary conditions specified in the ground truth: \"Par année civile et par bénéficiaire\". Therefore, it is a partial match.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "avec les conditions suivantes: Par année civile et par bénéficiaire."
+    ],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "60 €",
+    "ground_truth": "Le remboursement est de 60 € avec les conditions suivantes: Par année civile et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > homéopathiques non pris en charge par la Sécurité sociale et prescrits par un médecin au niveau de garantie base obligatoire ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer provides the correct reimbursement amount (616 €) but omits the crucial limiting conditions specified in the ground truth (limit of 3 acts per calendar year per beneficiary). Therefore, the answer is partial.",
+    "verdict": "PARTIAL",
+    "missing_information": [
+      "Dans la limite, par année civile et par bénéficiaire, de : 3 acte(s)."
+    ],
+    "evidence_quotes": [
+      "Dans la limite, par année civile et par bénéficiaire, de : 3 acte(s)."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "616 €",
+    "ground_truth": "Le remboursement est de 616 € avec les conditions suivantes: Dans la limite, par année civile et par bénéficiaire, de : 3 acte(s).",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Implantologie dentaire non prise en charge par la Sécurité sociale > Pose de l’implant (phase opératoire) au niveau de garantie base obligatoire ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer provides the correct reimbursement amount (55 €) and the correct annual limit (3 sessions per year per beneficiary). Although the ground truth explicitly states \"par séance\" (per session) as a condition, the candidate answer's structure implies this, as the limit is defined in terms of sessions. Given the context of reimbursement for therapeutic acts, stating the limit is sufficient for a CORRECT verdict.",
+    "verdict": "CORRECT",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "55 € (limité à 3 séances par an et par bénéficiaire).",
+    "ground_truth": "Le remboursement est de 55 € avec les conditions suivantes: par séance, Dans la limite, par année civile et par bénéficiaire, de 3 seances.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médecines non conventionnelles > Forfait actes thérapeutiques pour les actes cités ci-contre, Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie au niveau de garantie Option 1 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states a reimbursement of 90%, which contradicts the ground truth that specifies the reimbursement is 100%.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "90% S.S.",
+    "ground_truth": "Le remboursement est de 100%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Transport au niveau de garantie S1 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "Le candidat indique une prise en charge de \"40€/an/bénéf.\", ce qui contredit la vérité terrain qui stipule que l'acte n'est \"Non pris en charge\".",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "40€/an/bénéf.",
+    "ground_truth": "Non pris en charge",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Contraception prescrite, non remboursée par la S.S. au niveau de garantie S2 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states the reimbursement is 80€/year/beneficiary, which contradicts the ground truth which states 60€/year/beneficiary. Additionally, the candidate omits the important conditions mentioned in the ground truth (prescribed vaccine with marketing authorization). Since the core numerical value is incorrect, this constitutes a hallucination.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [
+      "60 € / an / benificiare",
+      "conditions: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "evidence_quotes": [
+      "Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "Tous vaccins 80€/an/bénéf.",
+    "ground_truth": "Le remboursement est de Tous vaccins 60 € / an / benificiare avec les conditions suivantes: Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Montant en euros : plafond par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Médicaments > Vaccins au niveau de garantie S4 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states the reimbursement is 100%, which directly contradicts the ground truth which states the reimbursement is 200%.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "100%",
+    "ground_truth": "Le remboursement est de 200%.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires paramédicaux > Auxiliaires médicaux, soins infirmiers au niveau de garantie S4 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer correctly states the base reimbursement percentage (200%) but incorrectly specifies the condition for OPTAM practitioners. The ground truth states \"Frais réels si OPTAM\" (Actual costs if OPTAM), whereas the candidate states \"200% OPTAM\". This misrepresents the benefit under OPTAM.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [
+      "Frais réels si OPTAM"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "200% (200% OPTAM).",
+    "ground_truth": "Le remboursement est de 200 % **(Frais réels si OPTAM)**.",
+    "question": "Quel est la prise en charge ou le remboursement pour Soins courants > Honoraires médicaux > Radiologie au niveau de garantie S5 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states 550%, which contradicts the ground truth of 500%. This constitutes a hallucination as the information provided is incorrect relative to the expected answer.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [
+      "500 %",
+      "550%"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "550%",
+    "ground_truth": "Le remboursement est de 500 % avec les conditions suivantes: Par semestre.",
+    "question": "Quel est la prise en charge ou le remboursement pour Orthodontie > Orthodontie > prise en charge par la Sécurité sociale au niveau de garantie P6 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states a reimbursement of \"100% + 190€\", which contradicts the ground truth amount of \"150€\" and the structure (flat rate). This constitutes a hallucination as the information provided is incorrect and unsupported by the ground truth.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [
+      "150€",
+      "100% + 190€"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "100% + 190€",
+    "ground_truth": "Le remboursement est de 150€ avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Optique > Lentilles > Lentilles non remboursées par la S.S. au niveau de garantie P4 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states 300€, while the ground truth specifies 250€. The candidate answer is factually incorrect regarding the amount.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [
+      "250 €",
+      "300€"
+    ],
+    "confidence": 1.0,
+    "llm_answer": "300€",
+    "ground_truth": "Le remboursement est de 250 € avec les conditions suivantes: Montant en euros : forfait par an et par bénéficiaire.",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Parodontologie non prise en charge par la S.S. (/ an / bénéf.) (12) au niveau de garantie p3+ ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states \"Frais réels\" (Actual costs), which directly contradicts the ground truth which specifies a reimbursement rate of \"250 %\".",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "Frais réels",
+    "ground_truth": "Le remboursement est de 250 %.",
+    "question": "Quel est la prise en charge ou le remboursement pour Dentaire > Soins dentaires > Inlay/onlay (par acte) au niveau de garantie P5 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states a fixed monetary amount (100€ + 100€), which contradicts the percentage reimbursement (65%) provided in the ground truth.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [],
+    "evidence_quotes": [],
+    "confidence": 1.0,
+    "llm_answer": "100€ + 100€",
+    "ground_truth": "Le remboursement est de 65 %.",
+    "question": "Quel est la prise en charge ou le remboursement pour Prestations > Cures thermales au niveau de garantie P1 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states a reimbursement amount of 1400€, which contradicts the ground truth amount of 1000€.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [
+      "1000€",
+      "conditions: Si partenaire audioprothésiste Sévéane."
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 1000€ avec les conditions suivantes: Si partenaire audioprothésiste Sévéane."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "1 400 €",
+    "ground_truth": "Le remboursement est de 1000€ avec les conditions suivantes: Si partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P2 ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states the reimbursement is 1600€, which contradicts the ground truth which specifies the reimbursement is 950€ under the condition of using a non-partner Sévéane audiologist.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [
+      "950€",
+      "Si non partenaire audioprothésiste Sévéane."
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 950€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "1 600€",
+    "ground_truth": "Le remboursement est de 950€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de > 20 ans au niveau de garantie P3+ ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  },
+  {
+    "explanation": "The candidate answer states 1600€, which contradicts the ground truth amount of 1400€. This constitutes a hallucination regarding the core numerical value.",
+    "verdict": "HALLUCINATION",
+    "missing_information": [
+      "1400€",
+      "conditions: Si non partenaire audioprothésiste Sévéane."
+    ],
+    "evidence_quotes": [
+      "Le remboursement est de 1400€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane."
+    ],
+    "confidence": 1.0,
+    "llm_answer": "1 600€",
+    "ground_truth": "Le remboursement est de 1400€ avec les conditions suivantes: Si non partenaire audioprothésiste Sévéane.",
+    "question": "Quel est la prise en charge ou le remboursement pour Aides auditives > Prothese auditives > Pour les beneficiares de 20 ans ou moins au niveau de garantie P3+ ?",
+    "pipeline_name": "vqa_gemini_flash_latest"
+  }
+]

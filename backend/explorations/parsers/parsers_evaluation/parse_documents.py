@@ -14,11 +14,13 @@ from parsing_pipelines import (
     extend_llm_postprocessing_pymupdf_gemini_pro,
     extend_solo,
     mistral_ocr_solo,
+    pulse_solo,
     pymupdf4llm_solo,
 )
 
 parsing_pipelines = {
     "extend_solo": extend_solo,
+    "pulse_solo": pulse_solo,
     "pymupdf4llm_solo": pymupdf4llm_solo,
     "mistral_ocr_solo": mistral_ocr_solo,
     #"extend_llm_postprocessing_pymupdf_gemini_pro": extend_llm_postprocessing_pymupdf_gemini_pro,

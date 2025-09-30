@@ -403,6 +403,8 @@ Décris succinctement les étapes suivies sans les juger ni les critiquer. Nous 
    - HALLUCINATION: Informations incorrectes ou non étayées
    - MISSED: Indique "non disponible" alors que l'information existe
 
+   Note: les pipelines incluent des approches « parsing + QA » et des approches VQA (question-réponse visuelle) qui interrogent directement les PDF sans parsing préalable.
+
 ## Pipelines évalués (synthèse)
 
 {pipeline_summaries_md if pipeline_summaries_md else "(Synthèse non disponible)"}
@@ -432,23 +434,37 @@ Décris succinctement les étapes suivies sans les juger ni les critiquer. Nous 
 Rédige un rapport d'analyse structuré en français, incluant:
 
 1. Résumé exécutif: constats clés et recommandations (2-3 paragraphes)
+
 2. Description de la méthodologie: reformulation neutre et factuelle (sans évaluation)
-3. Analyse de performance:
+
+3. **Description détaillée des pipelines évalués:**
+   Pour chaque pipeline listé dans "Pipelines évalués (synthèse)" ci-dessus, crée une sous-section avec:
+   - Nom du pipeline (titre de niveau 3)
+   - Approche technique: parsing utilisé, modèles/APIs, étapes clés
+   - Points forts théoriques de l'approche
+   - Limitations potentielles
+   Utilise les informations fournies dans la section "Pipelines évalués (synthèse)" et synthétise-les de manière claire et structurée.
+
+4. Analyse de performance:
    - Comparaison objective des pipelines
    - Motifs récurrents de réussite/échec
    - Corrélation entre score de confiance et verdict
-4. Analyse des causes:
-   - Hypothèses sur les écarts de performance entre pipelines
+
+5. Analyse des causes:
+   - Hypothèses sur les écarts de performance entre pipelines (en lien avec leurs approches techniques décrites)
    - Caractéristiques documentaires influentes (structure, tableaux, formatage)
-5. Recommandations:
+
+6. Recommandations:
    - Pipeline(s) à privilégier et justification
    - Idées d'approches hybrides
    - Pistes d'amélioration de l'évaluation
-6. Analyse par type de verdict:
+
+7. Analyse par type de verdict:
    - PARTIAL: informations manquantes typiques
    - MISSED: angles morts systématiques éventuels
    - HALLUCINATION: sources fréquentes d'erreurs
-7. Aperçus par fichier:
+
+8. Aperçus par fichier:
    - Variabilité entre fichiers et explications plausibles
 
 Utilise un style clair, structuré en markdown, avec des listes lorsque pertinent.
@@ -541,10 +557,20 @@ async def generate_full_report():
         from ai_report_utils import summarize_pipeline_files_fr
 
     pipelines_dir = Path("parsing_pipelines")
+    vqa_dir = Path("vqa_pipelines")
     pipeline_summaries = await summarize_pipeline_files_fr(pipelines_dir)
-    pipeline_summaries_md = "\n\n".join(
-        [f"### {name}\n\n{summary}" for name, summary in pipeline_summaries.items()]
-    ) if pipeline_summaries else ""
+    try:
+        from .ai_report_utils import summarize_vqa_pipelines_fr
+    except Exception:
+        from ai_report_utils import summarize_vqa_pipelines_fr
+    vqa_summaries = await summarize_vqa_pipelines_fr(vqa_dir)
+
+    sections = []
+    if pipeline_summaries:
+        sections.append("\n\n".join([f"### {name}\n\n{summary}" for name, summary in pipeline_summaries.items()]))
+    if vqa_summaries:
+        sections.append("\n\n".join([f"### {name} (VQA)\n\n{summary}" for name, summary in vqa_summaries.items()]))
+    pipeline_summaries_md = "\n\n".join(sections)
 
     ai_report = await generate_ai_report(
         global_metrics,
