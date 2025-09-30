@@ -83,7 +83,7 @@ const DocumentComparePage = () => {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header with Breadcrumbs */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto px-4 py-4">
+        <div className="container  px-4 py-4">
           <div className="flex items-center justify-between">
             <Breadcrumbs items={breadcrumbItems} />
             
