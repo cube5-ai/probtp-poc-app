@@ -1,21 +1,18 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Upload, Search, Eye, X, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { documentService, type DocumentFile } from "@/lib/api/documents";
 
 interface UploadedFile {
   id: string;
   file: File;
   preview: string;
   category?: string;
-  status?: string;
-  uploadProgress?: number;
 }
 
 interface DocumentSidebarProps {
@@ -40,7 +37,6 @@ const DocumentSidebar = ({
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
   const [isDragOver, setIsDragOver] = useState(false);
-  const [isUploading, setIsUploading] = useState(false);
 
   const ALLOWED_FILE_TYPES = [
     'application/pdf',
@@ -52,26 +48,6 @@ const DocumentSidebar = ({
 
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
   const filters = ["All", "Competitors", "PRO BTP"];
-
-  // Initialize project on component mount
-  useEffect(() => {
-    const initializeProject = async () => {
-      try {
-        const projects = await documentService.getProjects();
-        if (projects.length === 0) {
-          // Create default project
-          await documentService.createProject("Document Comparison Project", "Default project for document comparison");
-        } else {
-          // Use first project
-          documentService.setDefaultProject(projects[0].id);
-        }
-      } catch (error) {
-        console.error('Failed to initialize project:', error);
-      }
-    };
-
-    initializeProject();
-  }, []);
 
   const validateFile = (file: File): string | null => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
@@ -85,13 +61,10 @@ const DocumentSidebar = ({
     return null;
   };
 
-  const handleFiles = useCallback(async (files: FileList) => {
-    if (isUploading) return;
-    
-    const validFiles: File[] = [];
+  const handleFiles = useCallback((files: FileList) => {
+    const newFiles: UploadedFile[] = [];
     const errors: string[] = [];
 
-    // Validate files first
     Array.from(files).forEach((file) => {
       const error = validateFile(file);
       if (error) {
@@ -108,78 +81,25 @@ const DocumentSidebar = ({
         return;
       }
 
-      validFiles.push(file);
+      const uploadedFile: UploadedFile = {
+        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+        file,
+        preview: URL.createObjectURL(file),
+        category: "All" // Default category, could be determined by file analysis later
+      };
+
+      newFiles.push(uploadedFile);
     });
 
     if (errors.length > 0) {
       alert(errors.join('\n'));
     }
 
-    if (validFiles.length === 0) return;
-
-    setIsUploading(true);
-
-    // Process files one by one
-    for (const file of validFiles) {
-      const tempId = `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      
-      // Add file to UI immediately with uploading status
-      const tempFile: UploadedFile = {
-        id: tempId,
-        file,
-        preview: URL.createObjectURL(file),
-        category: "All",
-        status: "uploading",
-        uploadProgress: 0
-      };
-
-      const updatedFiles = [...uploadedFiles, tempFile];
+    if (newFiles.length > 0) {
+      const updatedFiles = [...uploadedFiles, ...newFiles];
       onFilesChange(updatedFiles);
-
-      try {
-        // Upload file using real API
-        const uploadedDocument = await documentService.uploadFile(
-          file,
-          undefined, // Use default project
-          (progress) => {
-            // Update progress in UI
-            const progressFiles = updatedFiles.map(f => 
-              f.id === tempId ? { ...f, uploadProgress: progress } : f
-            );
-            onFilesChange(progressFiles);
-          }
-        );
-
-        // Update file with success status
-        const successFiles = updatedFiles.map(f => 
-          f.id === tempId ? { 
-            ...f, 
-            id: uploadedDocument.id, // Use real ID from backend
-            status: "completed",
-            uploadProgress: 100
-          } : f
-        );
-        onFilesChange(successFiles);
-
-      } catch (error) {
-        console.error('Upload failed:', error);
-        
-        // Update file with error status
-        const errorFiles = updatedFiles.map(f => 
-          f.id === tempId ? { 
-            ...f, 
-            status: "failed",
-            uploadProgress: 0
-          } : f
-        );
-        onFilesChange(errorFiles);
-        
-        alert(`Upload failed for ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-      }
     }
-
-    setIsUploading(false);
-  }, [uploadedFiles, onFilesChange, isUploading]);
+  }, [uploadedFiles, onFilesChange]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -206,16 +126,7 @@ const DocumentSidebar = ({
     }
   }, [handleFiles]);
 
-  const handleRemoveFile = useCallback(async (fileId: string) => {
-    try {
-      // Try to delete from backend if it has a real ID
-      if (!fileId.includes('-')) {
-        await documentService.deleteFile(fileId);
-      }
-    } catch (error) {
-      console.error('Failed to delete file from backend:', error);
-    }
-
+  const handleRemoveFile = useCallback((fileId: string) => {
     const updatedFiles = uploadedFiles.filter(file => {
       if (file.id === fileId) {
         URL.revokeObjectURL(file.preview);
@@ -293,8 +204,7 @@ const DocumentSidebar = ({
           onDrop={handleDrop}
           className={cn(
             "border-2 border-dashed rounded-lg p-4 text-center transition-colors cursor-pointer",
-            isDragOver ? "border-primary bg-primary/5" : "border-muted-foreground/25",
-            isUploading && "opacity-50 cursor-not-allowed"
+            isDragOver ? "border-primary bg-primary/5" : "border-muted-foreground/25"
           )}
         >
           <input
@@ -304,7 +214,6 @@ const DocumentSidebar = ({
             onChange={handleFileInput}
             className="hidden"
             id="sidebar-file-upload"
-            disabled={isUploading}
           />
           
           <label 
@@ -321,12 +230,8 @@ const DocumentSidebar = ({
             }}
           >
             <Upload className="mx-auto h-6 w-6 text-muted-foreground mb-2" />
-            <p className="text-sm font-medium">
-              {isUploading ? "Uploading..." : "Upload new files"}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {isUploading ? "Please wait..." : "Click or drag files to upload"}
-            </p>
+            <p className="text-sm font-medium">Upload new files</p>
+            <p className="text-xs text-muted-foreground">Click or drag files to upload</p>
           </label>
         </div>
       </div>
@@ -394,26 +299,9 @@ const DocumentSidebar = ({
                       <p className="text-sm font-medium truncate" title={file.file.name}>
                         {file.file.name}
                       </p>
-                      <div className="text-xs text-muted-foreground">
-                        <p>{formatFileSize(file.file.size)}</p>
-                        {file.status === "uploading" && file.uploadProgress !== undefined && (
-                          <div className="mt-1">
-                            <div className="w-full bg-muted rounded-full h-1">
-                              <div 
-                                className="bg-primary h-1 rounded-full transition-all duration-300" 
-                                style={{ width: `${file.uploadProgress}%` }}
-                              />
-                            </div>
-                            <p className="text-xs mt-1">{file.uploadProgress}%</p>
-                          </div>
-                        )}
-                        {file.status === "failed" && (
-                          <p className="text-red-500 text-xs">Upload failed</p>
-                        )}
-                        {file.status === "completed" && (
-                          <p className="text-green-500 text-xs">Upload complete</p>
-                        )}
-                      </div>
+                      <p className="text-xs text-muted-foreground">
+                        {formatFileSize(file.file.size)}
+                      </p>
                     </div>
 
                     <div className="flex gap-1">
@@ -423,6 +311,7 @@ const DocumentSidebar = ({
                         className="h-6 w-6 p-0"
                         onClick={(e) => {
                           e.stopPropagation();
+                          // Preview functionality - could open modal
                           console.log('Preview:', file.file.name);
                         }}
                         aria-label={`Preview ${file.file.name}`}
@@ -439,7 +328,6 @@ const DocumentSidebar = ({
                           handleRemoveFile(file.id);
                         }}
                         aria-label={`Remove ${file.file.name}`}
-                        disabled={file.status === "uploading"}
                       >
                         <X className="h-3 w-3" />
                       </Button>
