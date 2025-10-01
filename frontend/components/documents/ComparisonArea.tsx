@@ -7,12 +7,15 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
+import { documentService, type ComparisonResult } from "@/lib/api/documents";
+import { toast } from "sonner";
 
 interface UploadedFile {
   id: string;
   file: File;
   preview: string;
   category?: string;
+  status?: string;
 }
 
 interface ComparisonAreaProps {
@@ -28,7 +31,9 @@ const ComparisonArea = ({
   isComparing, 
   className 
 }: ComparisonAreaProps) => {
-  const [comparisonResults, setComparisonResults] = useState<any>(null);
+  const [comparisonResults, setComparisonResults] = useState<ComparisonResult | null>(null);
+  const [comparisonProgress, setComparisonProgress] = useState(0);
+  const [comparisonStep, setComparisonStep] = useState("");
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return '0 Bytes';
@@ -38,33 +43,62 @@ const ComparisonArea = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
   };
 
-  const handleStartComparison = () => {
+  const handleStartComparison = async () => {
     if (selectedFiles.length < 2) return;
-    onStartComparison();
     
-    // Mock comparison results after delay
-    setTimeout(() => {
-      setComparisonResults({
-        overallSimilarity: 78,
-        documentPairs: [
-          { doc1: selectedFiles[0].file.name, doc2: selectedFiles[1].file.name, similarity: 78 },
-          ...(selectedFiles.length > 2 ? [
-            { doc1: selectedFiles[0].file.name, doc2: selectedFiles[2].file.name, similarity: 65 },
-            { doc1: selectedFiles[1].file.name, doc2: selectedFiles[2].file.name, similarity: 82 }
-          ] : [])
-        ],
-        keyDifferences: [
-          "Pricing structure varies significantly",
-          "Different payment terms mentioned",
-          "Scope of work has minor variations"
-        ],
-        commonElements: [
-          "Similar contract duration",
-          "Consistent quality standards",
-          "Matching confidentiality clauses"
-        ]
+    // Only proceed with files that have completed upload
+    const completedFiles = selectedFiles.filter(file => 
+      file.status === "completed" || !file.status || !file.id.includes('-')
+    );
+    
+    if (completedFiles.length < 2) {
+      toast.error("Please wait for all files to finish uploading before comparing");
+      return;
+    }
+
+    onStartComparison();
+    setComparisonResults(null);
+    setComparisonProgress(0);
+    setComparisonStep("Initializing comparison...");
+
+    try {
+      // Get file IDs (filter out temporary IDs)
+      const fileIds = completedFiles
+        .filter(file => !file.id.includes('-')) // Only real backend IDs
+        .map(file => file.id);
+
+      if (fileIds.length < 2) {
+        throw new Error("Not enough uploaded files to compare. Please ensure files are fully uploaded.");
+      }
+
+      const result = await documentService.compareDocuments(fileIds, (progress) => {
+        setComparisonProgress(progress);
+        
+        // Update step based on progress
+        if (progress <= 25) {
+          setComparisonStep("Loading document details...");
+        } else if (progress <= 70) {
+          setComparisonStep("Parsing documents and extracting content...");
+        } else if (progress <= 90) {
+          setComparisonStep("Analyzing similarities and differences...");
+        } else {
+          setComparisonStep("Finalizing comparison results...");
+        }
       });
-    }, 3000);
+
+      setComparisonResults(result);
+      setComparisonStep("Comparison completed successfully!");
+      toast.success("Document comparison completed successfully!");
+
+    } catch (error) {
+      console.error('Comparison failed:', error);
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      toast.error(`Comparison failed: ${errorMessage}`);
+      
+      // Reset states on error
+      setComparisonProgress(0);
+      setComparisonStep("");
+    }
   };
 
   if (selectedFiles.length === 0) {
@@ -100,11 +134,17 @@ const ComparisonArea = ({
           {!isComparing && !comparisonResults && (
             <Button 
               onClick={handleStartComparison}
-              disabled={selectedFiles.length < 2}
+              disabled={
+                selectedFiles.length < 2 || 
+                selectedFiles.some(file => file.status === "uploading" || file.status === "failed")
+              }
               size="lg"
             >
               <GitCompare className="w-4 h-4 mr-2" />
-              Start Comparison
+              {selectedFiles.some(file => file.status === "uploading") 
+                ? "Waiting for uploads..." 
+                : "Start Comparison"
+              }
             </Button>
           )}
         </div>
@@ -148,16 +188,16 @@ const ComparisonArea = ({
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <div className="flex justify-between text-sm">
-                <span>Processing documents</span>
-                <span>Step 1 of 4</span>
+                <span>{comparisonStep || "Processing documents"}</span>
+                <span>{comparisonProgress}%</span>
               </div>
-              <Progress value={25} className="w-full" />
+              <Progress value={comparisonProgress} className="w-full" />
             </div>
             <div className="text-sm text-muted-foreground space-y-1">
-              <p>• Extracting text content from documents</p>
-              <p>• Analyzing document structure</p>
-              <p>• Identifying key sections and clauses</p>
-              <p>• Computing similarity metrics</p>
+              <p>• Loading document metadata and storage paths</p>
+              <p>• Parsing documents using AI-powered extraction</p>
+              <p>• Analyzing content blocks and document structure</p>
+              <p>• Computing similarity metrics and generating insights</p>
             </div>
           </CardContent>
         </Card>
@@ -204,7 +244,7 @@ const ComparisonArea = ({
               {/* Document Pair Comparisons */}
               <div className="space-y-4">
                 <h4 className="font-semibold">Pairwise Comparisons</h4>
-                {comparisonResults.documentPairs.map((pair: any, index: number) => (
+                {comparisonResults.documentPairs.map((pair, index) => (
                   <div key={index} className="space-y-2">
                     <div className="flex justify-between text-sm">
                       <span className="truncate">
@@ -228,7 +268,7 @@ const ComparisonArea = ({
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {comparisonResults.keyDifferences.map((diff: string, index: number) => (
+                  {comparisonResults.keyDifferences.map((diff, index) => (
                     <li key={index} className="flex items-start gap-2 text-sm">
                       <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0" />
                       <span>{diff}</span>
@@ -245,7 +285,7 @@ const ComparisonArea = ({
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
-                  {comparisonResults.commonElements.map((element: string, index: number) => (
+                  {comparisonResults.commonElements.map((element, index) => (
                     <li key={index} className="flex items-start gap-2 text-sm">
                       <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
                       <span>{element}</span>
@@ -265,24 +305,22 @@ const ComparisonArea = ({
               <div className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="text-center">
-                    <div className="text-2xl font-bold">95%</div>
+                    <div className="text-2xl font-bold">{comparisonResults.textSimilarity}%</div>
                     <div className="text-sm text-muted-foreground">Text Similarity</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold">87%</div>
+                    <div className="text-2xl font-bold">{comparisonResults.structureMatch}%</div>
                     <div className="text-sm text-muted-foreground">Structure Match</div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold">72%</div>
+                    <div className="text-2xl font-bold">{comparisonResults.semanticSimilarity}%</div>
                     <div className="text-sm text-muted-foreground">Semantic Similarity</div>
                   </div>
                 </div>
                 
                 <div className="bg-muted/50 p-4 rounded-lg">
                   <p className="text-sm text-muted-foreground">
-                    The documents show high structural similarity with consistent formatting and section organization. 
-                    Key variations are found in pricing terms and specific deliverables, while maintaining similar 
-                    legal language and contract structure.
+                    {comparisonResults.summary}
                   </p>
                 </div>
               </div>

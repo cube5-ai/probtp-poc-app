@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import { Upload, Search, Eye, X, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
-import { documentService, type DocumentFile } from "@/lib/api/documents";
+import { documentService } from "@/lib/api/documents";
 
 interface UploadedFile {
   id: string;
@@ -53,25 +53,8 @@ const DocumentSidebar = ({
   const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
   const filters = ["All", "Competitors", "PRO BTP"];
 
-  // Initialize project on component mount
-  useEffect(() => {
-    const initializeProject = async () => {
-      try {
-        const projects = await documentService.getProjects();
-        if (projects.length === 0) {
-          // Create default project
-          await documentService.createProject("Document Comparison Project", "Default project for document comparison");
-        } else {
-          // Use first project
-          documentService.setDefaultProject(projects[0].id);
-        }
-      } catch (error) {
-        console.error('Failed to initialize project:', error);
-      }
-    };
-
-    initializeProject();
-  }, []);
+  // Note: Project initialization is now handled by parent components
+  // DocumentSidebar assumes a project context is already set
 
   const validateFile = (file: File): string | null => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {

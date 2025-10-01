@@ -2,24 +2,29 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
-import { Menu } from "lucide-react";
+import { useRouter, useParams } from "next/navigation";
+import { Menu, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import DocumentSidebar from "@/components/documents/DocumentSidebar";
 import ComparisonArea from "@/components/documents/ComparisonArea";
 import Loading from "@/components/common/loading";
+import { documentService } from "@/lib/api/documents";
 
 interface UploadedFile {
   id: string;
   file: File;
   preview: string;
   category?: string;
+  status?: string;
 }
 
-const DocumentComparePage = () => {
+const ProjectDocumentComparePage = () => {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const params = useParams();
+  const projectId = params.project_id as string;
+  
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [isComparing, setIsComparing] = useState(false);
@@ -31,6 +36,13 @@ const DocumentComparePage = () => {
       return;
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    if (projectId) {
+      // Set the project context for document operations
+      documentService.setDefaultProject(projectId);
+    }
+  }, [projectId]);
 
   const handleFilesChange = (files: UploadedFile[]) => {
     setUploadedFiles(files);
@@ -48,10 +60,8 @@ const DocumentComparePage = () => {
 
     setIsComparing(true);
     
-    // Simulate comparison process (replace with actual API call later)
-    setTimeout(() => {
-      setIsComparing(false);
-    }, 3000);
+    // The comparison will be handled by ComparisonArea component
+    // which now uses real backend APIs
   };
 
   const handleToggleSidebar = () => {
@@ -63,7 +73,9 @@ const DocumentComparePage = () => {
   };
 
   const breadcrumbItems = [
-    { label: "Documents", href: "/documents" },
+    { label: "Projects", href: "/projects" },
+    { label: "Project", href: `/projects/${projectId}` },
+    { label: "Documents", href: `/projects/${projectId}/documents` },
     { label: "Compare", current: true }
   ];
 
@@ -87,16 +99,29 @@ const DocumentComparePage = () => {
           <div className="flex items-center justify-between">
             <Breadcrumbs items={breadcrumbItems} />
             
-            {/* Mobile sidebar toggle */}
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={handleToggleSidebar}
-              className="lg:hidden"
-              aria-label="Toggle sidebar"
-            >
-              <Menu className="h-4 w-4" />
-            </Button>
+            <div className="flex items-center gap-2">
+              {/* Mobile sidebar toggle */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleToggleSidebar}
+                className="lg:hidden"
+                aria-label="Toggle sidebar"
+              >
+                <Menu className="h-4 w-4" />
+              </Button>
+              
+              {/* Back to Documents */}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => router.push(`/projects/${projectId}/documents`)}
+                className="gap-2"
+              >
+                <ArrowLeft className="w-4 h-4" />
+                Back to Documents
+              </Button>
+            </div>
           </div>
         </div>
       </div>
@@ -126,4 +151,4 @@ const DocumentComparePage = () => {
   );
 };
 
-export default DocumentComparePage;
+export default ProjectDocumentComparePage;

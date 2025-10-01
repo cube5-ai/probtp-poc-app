@@ -295,6 +295,74 @@ async def list_project_files(
 
 
 @router.get(
+    "/projects/{project_id}/files/{file_id}",
+    response_model=FileListItem,
+    status_code=status.HTTP_200_OK,
+    summary="Get file details",
+    description="Get details of a specific file in a project"
+)
+async def get_file_details(
+    project_id: UUID,
+    file_id: UUID,
+    current_user_id: str = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+) -> FileListItem:
+    """Get details of a specific file"""
+    try:
+        # Check if user has access to project
+        has_access = await AuthorizationService.check_project_permission(
+            db, current_user_id, project_id
+        )
+        if not has_access:
+            raise UploadErrors.NO_PERMISSION
+
+        # Get file record
+        file_record = db.query(File).filter(
+            and_(
+                File.id == file_id,
+                File.project_id == project_id,
+                File.deleted_at.is_(None)
+            )
+        ).first()
+
+        if not file_record:
+            raise UploadErrors.FILE_NOT_FOUND
+
+        # Generate download URL if file is ready
+        download_url = None
+        if file_record.is_ready:
+            try:
+                storage_service = StorageService()
+                download_url = storage_service.generate_download_url(
+                    file_record.storage_path,
+                    settings.download_url_expiration_minutes
+                )
+            except Exception:
+                # Log error but don't fail the entire request
+                pass
+
+        return FileListItem(
+            id=file_record.id,
+            original_name=file_record.original_name,
+            file_size=file_record.file_size,
+            status=file_record.status,
+            uploaded_by=UserInfo(
+                id=file_record.uploaded_by,
+                email="user@example.com",  # TODO: Get from Firebase
+                name="User Name"  # TODO: Get from Firebase
+            ),
+            created_at=file_record.created_at,
+            download_url=download_url
+        )
+
+    except FileUploadError:
+        raise
+    except Exception as e:
+        log_exception(e, user_id=current_user_id, context={"project_id": str(project_id), "file_id": str(file_id)})
+        raise UploadErrors.DATABASE_ERROR
+
+
+@router.get(
     "/files/{file_id}/status",
     response_model=FileStatusResponse,
     status_code=status.HTTP_200_OK,

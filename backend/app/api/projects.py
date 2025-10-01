@@ -64,6 +64,45 @@ async def create_project(
         raise UploadErrors.DATABASE_ERROR
 
 
+@router.get(
+    "/projects",
+    response_model=list[ProjectResponse],
+    status_code=status.HTTP_200_OK,
+    summary="List user projects",
+    description="Get all projects where the current user is a member"
+)
+async def list_user_projects(
+    current_user_id: str = Depends(get_current_user_id),
+    db: Session = Depends(get_db)
+) -> list[ProjectResponse]:
+    """List all projects where the current user is a member."""
+    try:
+        # Get all projects where user is a member
+        user_projects = (
+            db.query(Project)
+            .join(ProjectMember, Project.id == ProjectMember.project_id)
+            .filter(ProjectMember.user_id == current_user_id)
+            .order_by(Project.created_at.desc())
+            .all()
+        )
+
+        return [
+            ProjectResponse(
+                id=project.id,
+                name=project.name,
+                description=project.description,
+                created_by=project.created_by,
+                created_at=project.created_at,
+                updated_at=project.updated_at,
+            )
+            for project in user_projects
+        ]
+
+    except Exception as e:
+        log_exception(e, user_id=current_user_id)
+        raise UploadErrors.DATABASE_ERROR
+
+
 @router.delete(
     "/projects/{project_id}",
     status_code=status.HTTP_204_NO_CONTENT,
