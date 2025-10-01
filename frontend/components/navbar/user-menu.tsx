@@ -34,9 +34,14 @@ export function UserMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button variant="ghost" className="rounded-full h-9 px-3">
           <User className="h-5 w-5" />
           <span className="sr-only">User menu</span>
+          {user?.email && (
+            <span className="ml-2 text-sm font-medium hidden sm:block max-w-32">
+              {user.email}
+            </span>
+          )}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">

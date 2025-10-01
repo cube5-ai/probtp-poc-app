@@ -5,6 +5,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.health import router as health_router
+from app.api.schemas import router as schemas_router
 from app.core.config import get_settings
 
 # Load application settings
@@ -20,7 +21,6 @@ app = FastAPI(
 )
 
 # Configure CORS middleware
-print(f"DEBUG: Configured CORS origins: {settings.allowed_origins}")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=settings.allowed_origins,
@@ -31,6 +31,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(health_router, prefix="/api/v1", tags=["health"])
+app.include_router(schemas_router, prefix="/api/v1", tags=["schemas"])
 
 
 @app.get("/")
