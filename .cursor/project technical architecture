@@ -1,0 +1,259 @@
+# Technical Architecture & Development Standards
+
+## PRO BTP Benefits Comparison POC
+
+### 1. Service Stack
+
+### Core Infrastructure
+
+- **Primary Cloud Provider**: Google Cloud Platform
+- **Region**: europe-west1 (Belgium) or europe-west9 (Paris) for data residency
+- **Project Structure**:
+    - Production environment: `probtp-poc-prod`
+
+### Authentication & Authorization
+
+- **Primary Auth**: Firebase Authentication
+    - Simple user/password authentication for POC
+- **RBAC Strategy**:
+    - Firebase Custom Claims for role management
+    - Roles: `admin`, `commercial`, `viewer`
+    - Project-based access control (single tenant for POC)
+
+### Hosting & Compute
+
+- **Frontend Hosting**: Firebase Hosting
+    - Automatic SSL certificates
+    - Global CDN
+    - Easy integration with Firebase Auth
+- **Backend API**: Cloud Run
+    - Containerized FastAPI applications
+    - Auto-scaling (0 to N instances)
+    - Pay-per-use model ideal for POC
+    - Built-in load balancing
+
+### Storage & Database
+
+- **File Storage**: Cloud Storage
+    - Bucket for uploaded PDFs/documents
+    - Separate buckets for raw/processed documents
+    - Lifecycle policies for cost optimization
+- **Primary Database**: Cloud SQL for PostgreSQL
+    - PostgreSQL 15 with pgvector extension
+    - Machine type: db-g1-small (1 vCPU, 1.7GB RAM) for POC
+    - High availability: Not needed for POC
+    - Automatic backups: Daily
+- **Vector Search**: pgvector extension
+    - Document chunk embeddings for similarity search
+    - Comparison history embeddings for finding similar cases
+    - Model: text-embedding-004 via Vertex AI
+
+### 2. Technology Stack
+
+### Backend
+
+- **Language**: Python 3.11+
+- **Framework**: FastAPI
+    - Async support for better performance
+    - Automatic OpenAPI documentation
+    - Type hints and validation with Pydantic
+    - uv for venv and package manager
+- **Key Libraries**:
+    - `langchain` / `langchain-google-vertexai` - LLM orchestration
+    - `psycopg2-binary` - PostgreSQL client
+    - `pgvector` - Vector similarity search
+    - `sqlalchemy` - ORM for database
+    - `alembic` - Database migrations
+    - `google-cloud-storage` - File storage
+    - `firebase-admin` - Auth verification
+    - `pydantic` - Data validation
+    - `httpx` - Async HTTP client
+
+### Frontend
+
+- **Next.js + ShadCN UI**
+    - TypeScript
+    - ShadCN for UI system (Tailwind CSS)
+    - Tanstack for tables
+    - Bun for package management
+
+### AI/ML Stack
+
+- **OCR Service**: Mistral OCR via Vertex AI
+    - Managed service for document parsing
+    - Support for complex tables and layouts
+- **LLM Models**: Via Vertex AI
+    - Primary: Gemini Pro 2.5 for analysis
+    - Context window: 2M tokens (ideal for large documents)
+    - Fallback: Gemini Flash 2.5 for simpler tasks and Gemini Flash Lite 2.5 for large simple processing
+- **Embeddings**: `gemini-embedding-001`
+    - For semantic search in document chunks
+    - Store in pgvector for similarity queries
+        - select 768 dimension (Matrioska trained)
+- **Document Processing**:
+    - PDF parsing with structured extraction
+    - Table detection and normalization
+
+### 3. Development Approach
+
+### Repository Structure
+
+```
+probtp-poc/
+├── backend/
+│   ├── app/
+│   │   ├── api/          # API endpoints
+│   │   ├── core/         # Core configuration
+│   │   ├── services/     # Business logic
+│   │   ├── models/       # Data models
+│   │   └── utils/        # Helpers
+│   ├── tests/
+│   ├── Dockerfile
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── app/
+│   │   ├── services/
+│   │   └── utils/
+│   ├── public/
+│   └── package.json
+├── infrastructure/
+│   ├── terraform/        # IaC definitions
+│   └── scripts/          # Deployment scripts
+├── .github/
+│   └── workflows/        # CI/CD pipelines
+└── docs/
+    └── architecture/
+
+```
+
+### Development Workflow
+
+1. **Version Control**: GitHub
+    - Main branch: `main` (protected)
+    - Development branch: `develop`
+    - Feature branches: `feature/description`
+    - Fix branches: `fix/description`
+    - Gitflow workflow
+2. **Code Standards**:
+    - Python: Ruff linter and formatter, mypy for type checking
+    - Frontend: ESLint, Prettier
+    - Pre-commit hooks for consistency
+3. **Environment Management**:
+    - `.env` files for local development
+    - Secret Manager for production secrets
+    - Environment-specific configuration
+
+### 4. CI/CD Pipeline
+
+### GitHub Actions Workflow
+
+```yaml
+name: Deploy to Cloud Run
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    # Run tests
+  build-and-deploy:
+    # Build Docker image
+    # Push to Artifact Registry
+    # Deploy to Cloud Run
+
+```
+
+Link to firebase https://firebase.google.com/docs/hosting/github-integration
+
+- https://dev.to/rid1/github-cicd-for-multi-environment-deployment-on-firebase-multiple-sites-482l
+
+### Deployment Strategy
+
+- **Develop branch** → Only CI
+- **Main branch** → Production environment (automatic)
+- **Rollback capability** via Cloud Run revisions
+
+### 5. Observability & Monitoring
+
+### LLM Observability
+
+- **Langfuse Integration**:
+    - Trace every LLM call
+    - Monitor token usage and costs
+    - Track response quality metrics
+    - User session tracking
+    - Performance analytics
+
+### Application Monitoring
+
+- **Cloud Logging**:
+    - Structured logging in JSON format
+    - Log levels: ERROR, WARNING, INFO, DEBUG
+    - Correlation IDs for request tracing
+    - Retention: 60 days
+    - Log-based metrics for key events
+- **Cloud Monitoring**:
+    - Alert policies for critical issues
+- **Error Tracking**:
+    - Cloud Error Reporting for automatic error grouping
+
+### 6. Security Considerations
+
+### Data Protection
+
+- **Encryption**:
+    - At rest: Default GCP encryption
+    - In transit: HTTPS everywhere
+
+### Access Control
+
+- **Service Accounts**:
+    - Principle of least privilege
+    - Separate accounts per service
+    - Workload Identity for Cloud Run
+
+### 7. Cost Optimization
+
+### Resource Management
+
+- **Auto-scaling policies**:
+    - Cloud Run: Min 0, Max 5 instances (POC scale)
+    - Concurrent requests: 100 per instance
+    - CPU allocation: 1 vCPU per instance
+    - Memory: 2Gi per instance
+- **Database sizing**:
+    - Cloud SQL: db-g1-small (sufficient for <5 concurrent users)
+    - Connection pool: Max 20 connections
+- **Storage lifecycle**:
+    - Move old documents to Coldline after 90 days
+- **Performance targets**:
+    - Document processing: <5 minutes for typical comparison
+    - API response time: <2 seconds for queries
+    - Concurrent users: Up to 5 for POC
+
+### 8. Disaster Recovery
+
+- **Backup Strategy**:
+    - Cloud SQL: Daily automated backups
+    - Cloud Storage: Object versioning enabled
+    - Code: Git repository as source of truth
+    - Secrets: Backed up in Secret Manager
+
+---
+
+## Architecture Decisions Log
+
+| Decision | Choice | Rationale | Date |
+| --- | --- | --- | --- |
+| Database | PostgreSQL with pgvector | Need vector search capability for semantic matching | 2025-09-19 |
+| Environments | Local + Prod only | Simplified for POC, faster iteration | 2025-09-19 |
+| LLM Model | Gemini Pro 2.5 | Best context window, good performance | 2025-09-19 |
+| Log Retention | 60 days | Balance between debugging needs and cost | 2025-09-19 |
+| Multi-tenancy | Not required | Solution specific to PRO BTP | 2025-09-19 |
+| Scale | 5 concurrent users | POC requirements, can scale later | 2025-09-19 |
+

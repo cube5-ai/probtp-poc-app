@@ -253,7 +253,7 @@ const DocumentSidebar = ({
   }
 
   return (
-    <div className={cn("w-80 bg-background border-r flex flex-col h-full", className)}>
+    <div className={cn("w-80 bg-background border-r flex flex-col h-screen", className)}>
       {/* Header */}
       <div className="p-4 border-b">
         <div className="flex items-center justify-between mb-4">
