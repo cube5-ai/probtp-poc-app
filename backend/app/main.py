@@ -23,7 +23,11 @@ app = FastAPI(
 # Configure CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.allowed_origins,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "https://probtp-poc-prod.web.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -48,6 +52,10 @@ async def root():
 async def debug_cors():
     """Debug endpoint to check CORS configuration"""
     return {
-        "allowed_origins": settings.allowed_origins,
+        "allowed_origins": [
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "https://probtp-poc-prod.web.app",
+        ],
         "environment": settings.environment,
     }

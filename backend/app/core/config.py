@@ -1,9 +1,8 @@
 """
 Core configuration module for the application
 """
-import os
+from pathlib import Path
 from functools import lru_cache
-from typing import List
 
 from pydantic_settings import BaseSettings
 
@@ -11,34 +10,16 @@ from pydantic_settings import BaseSettings
 class Settings(BaseSettings):
     """Application configuration settings"""
     
-    # API Configuration
-    api_v1_prefix: str = "/api/v1"
-    project_name: str = "ProBTP POC"
-    version: str = "1.0.0"
-    
-    # Security
-    secret_key: str = os.getenv("SECRET_KEY", "your-secret-key-here")
-    access_token_expire_minutes: int = 30
-    
     # Database
-    database_url: str = os.getenv("DATABASE_URL", "sqlite:///./probtp.db")
-    
-    # Redis
-    redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379")
-    
-    # CORS - Production and development origins
-    allowed_origins: List[str] = [
-        "http://localhost:3000",  # Next.js dev server
-        "http://localhost:3001",  # Alternative dev port
-        "https://probtp-poc-prod.web.app",  # Production frontend
-    ]
-    
-    # Environment
-    environment: str = os.getenv("ENVIRONMENT", "development")
-    debug: bool = environment == "development"
+    DATABASE_URL: str
     
     class Config:
-        env_file = ".env"
+        # Construct path to .env file relative to this config file
+        # This makes it robust to where the script is run from
+        env_file = Path(__file__).parent.parent.parent / '.env'
+        env_file_encoding = "utf-8"
+        # Allow extra fields to handle additional environment variables
+        extra = "ignore"
 
 
 @lru_cache()

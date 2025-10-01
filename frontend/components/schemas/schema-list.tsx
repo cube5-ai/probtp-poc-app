@@ -5,7 +5,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import {
   Plus,
   Search,
@@ -15,7 +15,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { toast } from "sonner";
-import type { Schema, SchemaListResponse } from "@/types/schema.types";
+import type { Schema } from "@/types/schema.types";
 import { listSchemas, deleteSchema } from "@/lib/api/schemas";
 import { SchemaCard } from "./schema-card";
 import { Button } from "@/components/ui/button";
@@ -32,7 +32,6 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export function SchemaList() {
   const router = useRouter();
-  const pathname = usePathname();
   const { loading: authLoading } = useAuth(); // Wait for auth to be ready
   const [allSchemas, setAllSchemas] = useState<Schema[]>([]); // All schemas from backend
   const [loading, setLoading] = useState(false); // Changed to false, will be set by effect
@@ -109,7 +108,14 @@ export function SchemaList() {
       setAllSchemas((prevSchemas) =>
         prevSchemas.filter((s) => s.id !== schemaId)
       );
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as {
+        response?: {
+          status?: number;
+          statusText?: string;
+          data?: { detail?: string };
+        };
+      };
       console.error("Error deleting schema:", error);
       console.error("Delete error details:", {
         status: error?.response?.status,

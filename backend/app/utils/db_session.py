@@ -26,12 +26,12 @@ class DatabaseSessionManager:
         if database_url:
             self.database_url = database_url
         else:
-            settings_url = get_settings().database_url
+            database_url = get_settings().DATABASE_URL
             # If using default sqlite, switch to PostgreSQL via proxy
-            if "sqlite" in settings_url:
+            if "sqlite" in database_url:
                 self.database_url = "postgresql://probtp-poc_user:X0i7!W0e3/CIgg@localhost:5432/probtp-poc_prod"
             else:
-                self.database_url = settings_url
+                self.database_url = database_url
         self._engine: Engine = None
         self._session_factory = None
     

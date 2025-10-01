@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   DndContext,
   closestCenter,
@@ -56,9 +56,22 @@ interface Field {
   expanded?: boolean;
 }
 
+interface SchemaProperty {
+  type: string;
+  description?: string;
+  properties?: Record<string, SchemaProperty>;
+  required?: string[];
+}
+
+interface SchemaDefinition {
+  type: string;
+  properties: Record<string, SchemaProperty>;
+  required?: string[];
+}
+
 interface ModernSchemaEditorProps {
-  schema: any;
-  onChange: (schema: any) => void;
+  schema: SchemaDefinition;
+  onChange: (schema: SchemaDefinition) => void;
   readOnly?: boolean;
 }
 
@@ -320,24 +333,34 @@ export function ModernSchemaEditor({
   );
 
   // Convert schema to fields (recursive for nested objects)
-  const convertSchemaToFields = (schema: any): Field[] => {
-    if (!schema?.properties) return [];
+  const convertSchemaToFields = useCallback(
+    (schema: SchemaDefinition): Field[] => {
+      if (!schema?.properties) return [];
 
-    return Object.entries(schema.properties).map(
-      ([name, prop]: [string, any]) => ({
-        id: `field_${Date.now()}_${Math.random()}`,
-        name,
-        type: prop.type || "string",
-        description: prop.description || "",
-        required: schema.required?.includes(name) || false,
-        children:
-          prop.type === "object" && prop.properties
-            ? convertSchemaToFields(prop)
-            : undefined,
-        expanded: true,
-      })
-    );
-  };
+      const recursiveConvert = (
+        properties: Record<string, SchemaProperty>,
+        required?: string[]
+      ): Field[] => {
+        return Object.entries(properties).map(
+          ([name, prop]: [string, SchemaProperty]) => ({
+            id: `field_${Date.now()}_${Math.random()}`,
+            name,
+            type: prop.type || "string",
+            description: prop.description || "",
+            required: required?.includes(name) || false,
+            children:
+              prop.type === "object" && prop.properties
+                ? recursiveConvert(prop.properties, prop.required)
+                : undefined,
+            expanded: true,
+          })
+        );
+      };
+
+      return recursiveConvert(schema.properties, schema.required);
+    },
+    []
+  );
 
   // Initialize from schema
   useEffect(() => {
@@ -348,51 +371,67 @@ export function ModernSchemaEditor({
 
     const loadedFields = convertSchemaToFields(schema);
     setFields(loadedFields);
-  }, []);
+  }, [convertSchemaToFields, schema]);
 
   // Convert fields to schema (recursive for nested objects)
-  const convertFieldsToSchema = (fields: Field[]): any => {
-    const properties: any = {};
-    const required: string[] = [];
+  const convertFieldsToSchema = useCallback(
+    (fields: Field[]): SchemaDefinition => {
+      const recursiveConvert = (
+        flds: Field[]
+      ): {
+        properties: Record<string, SchemaProperty>;
+        required?: string[];
+      } => {
+        const properties: Record<string, SchemaProperty> = {};
+        const required: string[] = [];
 
-    fields.forEach((field) => {
-      if (field.name) {
-        properties[field.name] = {
-          type: field.type,
-          description: field.description || undefined,
-        };
+        flds.forEach((field) => {
+          if (field.name) {
+            properties[field.name] = {
+              type: field.type,
+              description: field.description || undefined,
+            };
 
-        if (field.required) {
-          required.push(field.name);
-        }
+            if (field.required) {
+              required.push(field.name);
+            }
 
-        // Handle nested fields for objects
-        if (
-          field.type === "object" &&
-          field.children &&
-          field.children.length > 0
-        ) {
-          const nestedSchema = convertFieldsToSchema(field.children);
-          properties[field.name].properties = nestedSchema.properties;
-          if (nestedSchema.required) {
-            properties[field.name].required = nestedSchema.required;
+            // Handle nested fields for objects
+            if (
+              field.type === "object" &&
+              field.children &&
+              field.children.length > 0
+            ) {
+              const nestedResult = recursiveConvert(field.children);
+              properties[field.name].properties = nestedResult.properties;
+              if (nestedResult.required && nestedResult.required.length > 0) {
+                properties[field.name].required = nestedResult.required;
+              }
+            }
           }
-        }
-      }
-    });
+        });
 
-    return {
-      type: "object",
-      properties,
-      required: required.length > 0 ? required : undefined,
-    };
-  };
+        return {
+          properties,
+          required: required.length > 0 ? required : undefined,
+        };
+      };
+
+      const result = recursiveConvert(fields);
+      return {
+        type: "object",
+        properties: result.properties,
+        required: result.required,
+      };
+    },
+    []
+  );
 
   // Update parent when fields change
   useEffect(() => {
     const newSchema = convertFieldsToSchema(fields);
     onChange(newSchema);
-  }, [fields, onChange]);
+  }, [fields, onChange, convertFieldsToSchema]);
 
   // Add new field
   const addField = () => {

@@ -17,7 +17,11 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { getSchema, updateSchema, createSchema } from "@/lib/api/schemas";
-import type { Schema, SchemaCreateRequest } from "@/types/schema.types";
+import type {
+  Schema,
+  SchemaCreateRequest,
+  SchemaDefinition,
+} from "@/types/schema.types";
 import { useBreadcrumbs } from "@/contexts/BreadcrumbContext";
 import { useAuth } from "@/contexts/AuthContext";
 
@@ -38,7 +42,10 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
   const [schema, setSchema] = useState<Schema | null>(null);
   const [schemaName, setSchemaName] = useState("");
   const [schemaDescription, setSchemaDescription] = useState("");
-  const [schemaDefinition, setSchemaDefinition] = useState<any>({});
+  const [schemaDefinition, setSchemaDefinition] = useState<SchemaDefinition>({
+    type: "object",
+    properties: {},
+  });
   const [isTemplate, setIsTemplate] = useState(false);
   const [viewMode, setViewMode] = useState<"builder" | "preview">("builder");
 
@@ -115,10 +122,18 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
           // Create new schema
           setSchemaName("");
           setSchemaDescription("");
-          setSchemaDefinition({});
+          setSchemaDefinition({ type: "object", properties: {} });
           setIsTemplate(false);
         }
-      } catch (error: any) {
+      } catch (err) {
+        const error = err as {
+          response?: {
+            status?: number;
+            statusText?: string;
+            data?: { detail?: string };
+            headers?: unknown;
+          };
+        };
         console.error("Error loading schema:", error);
         console.error("Error details:", {
           status: error?.response?.status,
@@ -146,7 +161,7 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
     };
 
     loadSchema();
-  }, [schemaId, cloneFromId, router]);
+  }, [schemaId, cloneFromId, router, user]);
 
   const handleSave = async () => {
     if (!schemaName.trim()) {
@@ -179,7 +194,11 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
         // Redirect to edit the newly created schema
         router.push(`/settings/schema/${newSchema.id}`);
       }
-    } catch (error: any) {
+    } catch (err) {
+      const error = err as {
+        response?: { status?: number; data?: { detail?: string } };
+        message?: string;
+      };
       console.error("Error saving schema:", error);
 
       // More detailed error handling
@@ -223,7 +242,7 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
         const imported = JSON.parse(e.target?.result as string);
         setSchemaDefinition(imported);
         toast.success("Schema imported successfully");
-      } catch (error) {
+      } catch {
         toast.error("Invalid JSON file");
       }
     };
@@ -414,7 +433,7 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
                 <CardHeader>
                   <CardTitle>Schema Builder</CardTitle>
                   <p className="text-sm text-muted-foreground">
-                    Define the fields you'd like to extract from documents
+                    Define the fields you&apos;d like to extract from documents
                   </p>
                 </CardHeader>
                 <CardContent>

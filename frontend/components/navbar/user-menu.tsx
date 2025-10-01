@@ -38,7 +38,7 @@ export function UserMenu() {
           <User className="h-5 w-5" />
           <span className="sr-only">User menu</span>
           {user?.email && (
-            <span className="ml-2 text-sm font-medium hidden sm:block max-w-32">
+            <span className="m-2 text-sm font-medium hidden sm:block max-w-32">
               {user.email}
             </span>
           )}

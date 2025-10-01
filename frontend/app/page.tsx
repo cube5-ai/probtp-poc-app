@@ -23,7 +23,7 @@ export default function Home() {
     if (!loading && !user) {
       router.push("/signin");
     }
-  }, [loading, user]);
+  }, [loading, user, router]);
 
   if (loading) {
     return (
