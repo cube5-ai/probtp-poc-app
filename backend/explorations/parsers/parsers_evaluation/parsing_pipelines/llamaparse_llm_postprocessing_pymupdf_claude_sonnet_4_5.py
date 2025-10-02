@@ -35,16 +35,16 @@ def parse_with_llamaparse(file_path: str) -> dict[int, str]:
 
     # Parse document
     result = parser.parse(file_path)
-    
+
     # Extract markdown by page
     markdown_documents = result.get_markdown_documents(split_by_page=True)
-    
+
     # Map pages by page number
     pages_by_num: dict[int, str] = {}
     for idx, doc in enumerate(markdown_documents):
         page_num = idx + 1  # 1-indexed
         pages_by_num[page_num] = doc.text
-    
+
     return pages_by_num
 
 
@@ -80,7 +80,7 @@ def build_repair_prompt(llamaparse_page_md: str, pymupdf_page_md: str) -> str:
     """
     return (
         "You are a document reconstruction expert. Your task is to REPAIR the OCR-parsed page,\n"
-        "with a focus on TABLES, producing clean, unambiguous, human-readable Markdown that is\n"
+        "with a focus on TABLES, producing clean, unambiguous (no implicit merged cells) LLM-readable Markdown that is\n"
         "as close to the original layout as possible.\n\n"
         "Inputs:\n"
         "- llamaparse_page: Higher-level structured markdown from LlamaParse with better layout.\n"
@@ -88,8 +88,12 @@ def build_repair_prompt(llamaparse_page_md: str, pymupdf_page_md: str) -> str:
         "Strict rules:\n"
         "- Use exact wording from pymupdf_page when there is any discrepancy.\n"
         "- Use layout cues from llamaparse_page to reconstruct headings, lists, and TABLES.\n"
-        "- For tables: ensure clear headers, consistent columns, and avoid ambiguity.\n"
-        "  Prefer GitHub-flavored Markdown tables; do not add content not in inputs.\n"
+        "- For tables:\n"
+        "   - ensure clear headers, for unnamed columns, add the column number as header\n"
+        "   - consistent columns\n"
+        "   - avoid empty cells, replicate the value of merged cells in all cells of the merged range, put a '-' in empty cells for non merged cells\n"
+        "   - avoid ambiguity.\n"
+        "- Prefer GitHub-flavored Markdown tables; do not add content not in inputs.\n"
         "- Never hallucinate or invent data. Do not include page numbers or separators.\n"
         "- Keep content only for THIS page.\n\n"
         "Return ONLY the final repaired Markdown for this page.\n\n\n"
@@ -130,14 +134,14 @@ def parse_document(file_path: str):
     # Repair pages with Claude Sonnet 4.5
     repaired_chunks: list[dict] = []
     total_pages = max(len(pymupdf_pages), max(llamaparse_pages.keys()) if llamaparse_pages else 0)
-    
+
     for page_index in range(1, total_pages + 1):
         llamaparse_md = llamaparse_pages.get(page_index, "")
         pymupdf_md = pymupdf_pages[page_index - 1] if page_index - 1 < len(pymupdf_pages) else ""
 
         prompt = build_repair_prompt(llamaparse_md, pymupdf_md)
         improved_markdown = llamaparse_md or pymupdf_md
-        
+
         try:
             # Use streaming to handle long-running requests
             with client.messages.stream(

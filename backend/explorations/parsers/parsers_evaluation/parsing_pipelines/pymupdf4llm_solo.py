@@ -2,7 +2,7 @@ import pymupdf4llm
 import pymupdf
 from pathlib import Path
 
-from .pymupdf_lock import pymupdf_lock
+from pymupdf_lock import pymupdf_lock
 
 
 
@@ -41,7 +41,7 @@ def parse_document(file_path: str) -> dict:
                     })
                 else:
                     chunks.append({
-                        "type": "page", 
+                        "type": "page",
                         "content": str(chunk),
                         "metadata": {
                             "pageRange": {

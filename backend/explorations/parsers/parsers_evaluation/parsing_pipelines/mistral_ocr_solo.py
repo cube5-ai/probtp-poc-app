@@ -77,7 +77,7 @@ def upload_file_as_base64(file_path: str) -> str:
         file_extension = os.path.splitext(file_path)[1].lower()
         mime_type_map = {
             '.pdf': 'application/pdf',
-            '.png': 'image/png', 
+            '.png': 'image/png',
             '.jpg': 'image/jpeg',
             '.jpeg': 'image/jpeg'
         }
@@ -245,10 +245,10 @@ def parse_document_from_url(document_url: str, include_image_base64: bool = True
 def clean_empty_markdown_tables(content: str) -> str:
     """
     Remove empty markdown table patterns with 3 or more consecutive rows of only empty cells.
-    
+
     Args:
         content: Raw markdown content
-    
+
     Returns:
         Cleaned markdown content with empty table patterns removed
     """
@@ -258,34 +258,34 @@ def clean_empty_markdown_tables(content: str) -> str:
     # - Contains only spaces, | characters, and optional whitespace
     # - Ends with | and optional whitespace
     empty_row_pattern = r'^\|\s*(?:\|\s*)*\|\s*$'
-    
+
     lines = content.split('\n')
     cleaned_lines = []
     i = 0
-    
+
     while i < len(lines):
         line = lines[i]
-        
+
         # Check if current line matches empty table row pattern
         if re.match(empty_row_pattern, line.strip()):
             # Count consecutive empty table rows
             empty_row_count = 0
             j = i
-            
+
             # Count how many consecutive empty rows we have
             while j < len(lines) and re.match(empty_row_pattern, lines[j].strip()):
                 empty_row_count += 1
                 j += 1
-            
+
             # If we have 3 or more consecutive empty rows, skip them
             if empty_row_count >= 3:
                 i = j  # Skip all the empty rows
                 continue
-        
+
         # Keep the line if it's not part of a long empty table sequence
         cleaned_lines.append(line)
         i += 1
-    
+
     return '\n'.join(cleaned_lines)
 
 
@@ -469,22 +469,22 @@ Final content.
 
 Only 2 empty rows above - should be kept.
 """
-    
+
     print("🧪 Testing empty table cleaning...")
     print("Original content:")
     print("-" * 40)
     print(test_content)
-    
+
     cleaned = clean_empty_markdown_tables(test_content)
     print("\nCleaned content:")
     print("-" * 40)
     print(cleaned)
-    
+
     # Count removed lines
     original_lines = len(test_content.split('\n'))
     cleaned_lines = len(cleaned.split('\n'))
     removed_lines = original_lines - cleaned_lines
-    
+
     print(f"\n📊 Results:")
     print(f"   Original lines: {original_lines}")
     print(f"   Cleaned lines: {cleaned_lines}")
@@ -495,11 +495,11 @@ if __name__ == "__main__":
     # Example usage
     print("Mistral OCR Solo - Document Parsing Functions")
     print("=" * 50)
-    
+
     # Test empty table cleaning
     test_empty_table_cleaning()
     print("\n" + "=" * 50)
-    
+
     # Test with a sample file (replace with your file path)
     sample_file = "sample_document.pdf"
     if os.path.exists(sample_file):

@@ -21,6 +21,7 @@ from landing_ai_pipeline_utils.debug_utils import (
 )
 from landing_ai_pipeline_utils.phase1_parsers import (
     get_landing_tables,
+    get_landing_tables_with_response,
     get_pymupdf_tables,
 )
 from landing_ai_pipeline_utils.phase2_matching import match_tables_on_page
@@ -32,6 +33,7 @@ from landing_ai_pipeline_utils.phase4_sanity_check import (
     generate_table_screenshot,
     run_sanity_checks,
 )
+from landing_ai_pipeline_utils.phase5_output_mapping import map_to_landing_ai_response
 from langfuse import Langfuse
 from openinference.instrumentation.google_genai import GoogleGenAIInstrumentor
 
@@ -141,7 +143,7 @@ async def process_document(file_path: str, client: genai.Client) -> dict:
 
     # Phase 1: Parse and Get Tables
     print("\n[Phase 1] Parsing document with both parsers...")
-    landing_tables_by_page = get_landing_tables(file_path)
+    landing_tables_by_page, original_landing_response = get_landing_tables_with_response(file_path)
     pymupdf_tables_by_page = get_pymupdf_tables(file_path)
 
     total_landing_tables = sum(
@@ -392,10 +394,28 @@ async def process_document(file_path: str, client: genai.Client) -> dict:
     print(f"  Found {total_violations} violations")
     print(f"  Applied {total_visual_corrections} visual corrections")
 
+    # Phase 5: Map Corrected Tables Back to Landing AI Response
+    print("\n[Phase 5] Mapping corrected tables back to Landing AI response...")
+    final_landing_response = map_to_landing_ai_response(
+        original_landing_response=original_landing_response,
+        corrected_tables_by_page=final_tables_by_page,
+        phase3_tables_by_page=corrected_tables_by_page,
+        matches_by_page=matches_by_page,
+        pymupdf_tables_by_page=pymupdf_tables_by_page,
+    )
+
+    # Count tables with metadata
+    tables_with_metadata = sum(
+        1 for chunk in final_landing_response.get("chunks", [])
+        if "post_processing_metadata" in chunk
+    )
+    print(f"  Updated {tables_with_metadata} table chunks with post_processing_metadata")
+
     # Build result
     result = {
         "file_path": file_path,
         "tables_by_page": final_tables_by_page,
+        "landing_ai_response": final_landing_response,  # Add final response
         "statistics": {
             "total_landing_tables": total_landing_tables,
             "total_pymupdf_tables": total_pymupdf_tables,
@@ -411,16 +431,18 @@ async def process_document(file_path: str, client: genai.Client) -> dict:
 
 # Generate markdown output
 def generate_markdown_output(result: dict) -> str:
-    """Generate markdown output from processed tables."""
+    """Generate markdown output from Landing AI response with corrected tables."""
     lines = [f"# {Path(result['file_path']).name}\n"]
+
+    # Use the landing_ai_response which has all chunks in their original order
+    landing_response = result.get("landing_ai_response", {})
 
     for page_num in sorted(result["tables_by_page"].keys()):
         lines.append(f"\n## Page {page_num + 1}\n")
 
-        for table_idx, table in enumerate(result["tables_by_page"][page_num]):
-            lines.append(f"\n### Table {table_idx + 1}\n")
-            lines.append(table["html_content"])
-            lines.append("\n")
+    for chunk in landing_response.get("chunks", []):
+        lines.append(chunk.get("markdown", ""))
+        lines.append("\n")
 
     return "\n".join(lines)
 
@@ -455,16 +477,12 @@ async def main():
         output_file.write_text(markdown_output, encoding="utf-8")
         print(f"\nOutput saved to: {output_file}")
 
-        # Save full result as JSON
+        # Save Landing AI response with corrected tables and metadata
         json_file = output_dir / f"{Path(file_path).stem}.json"
-        # Remove non-serializable objects
-        serializable_result = {
-            "file_path": result["file_path"],
-            "statistics": result["statistics"],
-        }
         json_file.write_text(
-            json.dumps(serializable_result, indent=2), encoding="utf-8"
+            json.dumps(result["landing_ai_response"], indent=2), encoding="utf-8"
         )
+        print(f"Landing AI response with corrections saved to: {json_file}")
 
 
 if __name__ == "__main__":

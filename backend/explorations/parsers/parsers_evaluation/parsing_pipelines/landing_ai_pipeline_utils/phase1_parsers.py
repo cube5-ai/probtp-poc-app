@@ -111,6 +111,18 @@ def get_landing_tables(file_path: str) -> dict[int, list[dict]]:
     Returns:
         Dict mapping page number to list of table objects
     """
+    tables_by_page, _ = get_landing_tables_with_response(file_path)
+    return tables_by_page
+
+
+@observe()
+def get_landing_tables_with_response(file_path: str) -> tuple[dict[int, list[dict]], dict]:
+    """
+    Parse document with Landing AI and extract tables per page.
+
+    Returns:
+        Tuple of (tables_by_page dict, original Landing AI response dict)
+    """
     document_name = os.path.basename(file_path).replace(".pdf", "")
     cache_path = Path(__file__).parent.parent.parent / "output" / "landing_ai_solo" / f"{document_name}.json"
 
@@ -151,7 +163,7 @@ def get_landing_tables(file_path: str) -> dict[int, list[dict]]:
             'position_in_page': position_in_page,
         })
 
-    return tables_by_page
+    return tables_by_page, landing_response
 
 
 # Parse with PyMuPDF and extract tables
