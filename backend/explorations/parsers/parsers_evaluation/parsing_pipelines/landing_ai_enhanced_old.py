@@ -47,11 +47,11 @@ def extract_table_lines_from_landing_ai(chunk: dict) -> list[str]:
     """
     Extract individual table lines from LandingAI table chunks.
     Handles merged cells (colspan/rowspan) by duplicating content.
-    
+
     Example:
         HTML: <td colspan="2">A</td><td>B</td>
         Output: "A A B"
-        
+
         HTML: <td rowspan="2">X</td><td>Y</td>
         Row 1: "X Y"
         Row 2: "X <cells from row 2>"

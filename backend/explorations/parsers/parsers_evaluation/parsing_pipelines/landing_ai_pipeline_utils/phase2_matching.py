@@ -12,10 +12,11 @@ from sklearn.metrics.pairwise import cosine_similarity
 def clean_cell_content(text: str) -> str:
     """
     Clean cell content for matching.
+    Returns "-" for empty cells to ensure consistent representation.
     """
     if not text or not isinstance(text, str):
-        return ""
-    
+        return "-"
+
     # Strip HTML tags
     text = re.sub(r'<[^>]+>', ' ', text)
     # Convert line breaks to space
@@ -30,10 +31,10 @@ def clean_cell_content(text: str) -> str:
     text = text.strip()
     # Unescape HTML entities
     text = html.unescape(text)
-    # Empty cells
+    # Empty cells get "-" as default character
     if len(text) <= 1 and not text.isalnum():
-        return ""
-    
+        return "-"
+
     return text
 
 
@@ -41,6 +42,7 @@ def clean_cell_content(text: str) -> str:
 def extract_bag_of_words(table_content: str) -> str:
     """
     Extract all text from table content (HTML or markdown) as bag of words.
+    Filters out empty cell placeholders ("-") to avoid affecting TF-IDF matching.
     """
     # Parse HTML/markdown to extract all text
     if '<tr' in table_content:
@@ -55,8 +57,9 @@ def extract_bag_of_words(table_content: str) -> str:
             if '|' in line:
                 cells = [cell.strip() for cell in line.split('|') if cell.strip()]
                 cleaned_cells.extend([clean_cell_content(cell) for cell in cells])
-    
-    return ' '.join(cell for cell in cleaned_cells if cell)
+
+    # Filter out empty cell placeholders and truly empty cells
+    return ' '.join(cell for cell in cleaned_cells if cell and cell != "-")
 
 
 # Match tables using TF-IDF
@@ -69,58 +72,58 @@ def match_tables_on_page(
 ) -> dict[int, list[int]]:
     """
     Match Landing AI tables to PyMuPDF tables using TF-IDF.
-    
+
     Returns:
         Dict mapping Landing AI table index to list of matched PyMuPDF table indices
     """
     if not landing_tables or not pymupdf_tables:
         return {}
-    
+
     # Extract bag of words for all tables
     landing_bow = [extract_bag_of_words(t['html_content']) for t in landing_tables]
     pymupdf_bow = [extract_bag_of_words(t['markdown']) for t in pymupdf_tables]
-    
+
     # Build TF-IDF vectors
     all_texts = landing_bow + pymupdf_bow
     vectorizer = TfidfVectorizer(ngram_range=(1, 2), lowercase=True)
-    
+
     try:
         tfidf_matrix = vectorizer.fit_transform(all_texts)
     except ValueError:
         # No valid text to vectorize
         return {}
-    
+
     # Split back into landing and pymupdf matrices
     landing_vectors = tfidf_matrix[:len(landing_tables)]
     pymupdf_vectors = tfidf_matrix[len(landing_tables):]
-    
+
     # Calculate cosine similarities
     similarities = cosine_similarity(landing_vectors, pymupdf_vectors)
-    
+
     # Match each Landing AI table
     matches: dict[int, list[int]] = {}
-    
+
     for landing_idx in range(len(landing_tables)):
         landing_word_count = len(landing_bow[landing_idx].split())
         candidate_matches = []
-        
+
         for pymupdf_idx in range(len(pymupdf_tables)):
             sim = similarities[landing_idx, pymupdf_idx]
-            
+
             if sim < similarity_threshold:
                 continue
-            
+
             pymupdf_word_count = len(pymupdf_bow[pymupdf_idx].split())
-            
+
             # Check word count constraint
             if pymupdf_word_count > word_count_multiplier * landing_word_count:
                 continue
-            
+
             candidate_matches.append((pymupdf_idx, sim))
-        
+
         # Sort by similarity and take matches
         candidate_matches.sort(key=lambda x: x[1], reverse=True)
         matches[landing_idx] = [idx for idx, _ in candidate_matches]
-    
+
     return matches
 

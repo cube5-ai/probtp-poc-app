@@ -17,7 +17,7 @@ def save_debug_artifacts(
     """Save debug information about table processing."""
     tmp_dir = Path(__file__).parent / "tmp"
     tmp_dir.mkdir(exist_ok=True)
-    
+
     # Create debug dict
     debug_info = {
         "table_id": table_id,
@@ -43,7 +43,7 @@ def save_debug_artifacts(
             for v in violations
         ] if violations else []
     }
-    
+
     # Save to JSON
     debug_file = tmp_dir / f"{pdf_name}_page{page_num}_table{table_id}_{phase}_debug.json"
     with open(debug_file, 'w', encoding='utf-8') as f:
@@ -60,20 +60,20 @@ def save_html_versions(
     """Save different HTML versions of the table for visual comparison."""
     tmp_dir = Path(__file__).parent / "tmp"
     tmp_dir.mkdir(exist_ok=True)
-    
+
     base_name = f"{pdf_name}_page{page_num}_table{table_id}"
-    
+
     # Save original if exists
     if '_raw_html_content' in landing_table:
         html_file = tmp_dir / f"{base_name}_original.html"
         with open(html_file, 'w', encoding='utf-8') as f:
             f.write(f"<html><body>{landing_table['_raw_html_content']}</body></html>")
-    
+
     # Save current version
     html_file = tmp_dir / f"{base_name}_current.html"
     with open(html_file, 'w', encoding='utf-8') as f:
         f.write(f"<html><body>{landing_table.get('html_content', '')}</body></html>")
-    
+
     # Save error version if exists
     if '_error_html_content' in landing_table:
         html_file = tmp_dir / f"{base_name}_error.html"
