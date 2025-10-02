@@ -71,6 +71,22 @@ const ProjectDashboard = () => {
         
         setProject(mockProject);
         
+        // Load existing files from the backend
+        try {
+          const fileListResponse = await documentService.getFiles(projectId);
+          const existingFiles: UploadedFile[] = fileListResponse.files.map(file => ({
+            id: file.id,
+            file: new File([], file.original_name, { type: file.mime_type || 'application/pdf' }),
+            preview: '', // No preview for existing files
+            category: "All",
+            status: "completed"
+          }));
+          setUploadedFiles(existingFiles);
+        } catch (error) {
+          console.error('Failed to load existing files:', error);
+          // Continue without showing error to user
+        }
+        
         // Mock comparison history
         setComparisonHistory([
           {

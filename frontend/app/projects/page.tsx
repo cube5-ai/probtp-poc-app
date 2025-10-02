@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
-import { Plus, FolderOpen, Calendar, User } from "lucide-react";
+import { Plus, FolderOpen, Calendar, User, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -76,6 +76,23 @@ const ProjectsPage = () => {
     }
   };
 
+  const handleDeleteProject = async (projectId: string, projectName: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent card click navigation
+    
+    if (!confirm(`Are you sure you want to delete "${projectName}"? This action cannot be undone and will delete all files in this project.`)) {
+      return;
+    }
+    
+    try {
+      await documentService.deleteProject(projectId);
+      setProjects(prev => prev.filter(p => p.id !== projectId));
+      toast.success(`Project "${projectName}" deleted successfully`);
+    } catch (error) {
+      console.error('Failed to delete project:', error);
+      toast.error(`Failed to delete project: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString('en-US', {
       year: 'numeric',
@@ -141,9 +158,19 @@ const ProjectsPage = () => {
                   onClick={() => router.push(`/projects/${project.id}`)}
                 >
                   <CardHeader>
-                    <CardTitle className="flex items-center gap-2">
-                      <FolderOpen className="w-5 h-5" />
-                      {project.name}
+                    <CardTitle className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <FolderOpen className="w-5 h-5" />
+                        {project.name}
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={(e) => handleDeleteProject(project.id, project.name, e)}
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </Button>
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-4">

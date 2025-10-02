@@ -38,6 +38,26 @@ const DocumentManagementPage = () => {
     if (projectId) {
       // Set the project context for document operations
       documentService.setDefaultProject(projectId);
+      
+      // Load existing files from the backend
+      const loadFiles = async () => {
+        try {
+          const fileListResponse = await documentService.getFiles(projectId);
+          const existingFiles: UploadedFile[] = fileListResponse.files.map(file => ({
+            id: file.id,
+            file: new File([], file.original_name, { type: file.mime_type || 'application/pdf' }),
+            preview: '', // No preview for existing files
+            category: "All",
+            status: "completed"
+          }));
+          setUploadedFiles(existingFiles);
+        } catch (error) {
+          console.error('Failed to load existing files:', error);
+          // Continue without showing error to user
+        }
+      };
+      
+      loadFiles();
     }
   }, [projectId]);
 

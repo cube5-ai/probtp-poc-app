@@ -43,6 +43,7 @@ export interface DocumentFile {
   id: string;
   original_name: string;
   file_size: number;
+  mime_type?: string;
   status: string;
   uploaded_by: UserInfo;
   created_at: string;
@@ -131,6 +132,10 @@ export class DocumentService {
 
   getProjects = async (): Promise<Project[]> => {
     return await apiClient.get<Project[]>('/api/v1/projects');
+  };
+
+  deleteProject = async (projectId: string): Promise<void> => {
+    await apiClient.delete(`/api/v1/projects/${projectId}`);
   };
 
   uploadFile = async (
@@ -271,13 +276,8 @@ export class DocumentService {
   };
 
   deleteFile = async (fileId: string, projectId?: string): Promise<void> => {
-    const targetProjectId = projectId || this.defaultProjectId;
-    
-    if (!targetProjectId) {
-      throw new Error('No project ID specified');
-    }
-
-    await apiClient.delete(`/api/v1/projects/${targetProjectId}/files/${fileId}`);
+    // Note: Backend endpoint is /files/{file_id}, not project-scoped
+    await apiClient.delete(`/api/v1/files/${fileId}`);
   };
 
   parseDocument = async (

@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import { documentService } from "@/lib/api/documents";
+import { toast } from "sonner";
 
 interface UploadedFile {
   id: string;
@@ -157,7 +158,7 @@ const DocumentSidebar = ({
         );
         onFilesChange(errorFiles);
         
-        alert(`Upload failed for ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        toast.error(`Upload failed for ${file.name}: ${error instanceof Error ? error.message : 'Unknown error'}`);
       }
     }
 
@@ -190,28 +191,42 @@ const DocumentSidebar = ({
   }, [handleFiles]);
 
   const handleRemoveFile = useCallback(async (fileId: string) => {
+    const fileToDelete = uploadedFiles.find(f => f.id === fileId);
+    const fileName = fileToDelete?.file.name || 'Unknown file';
+    
+    // Confirm deletion
+    if (!confirm(`Are you sure you want to delete "${fileName}"? This action cannot be undone.`)) {
+      return;
+    }
+
     try {
-      // Try to delete from backend if it has a real ID
+      // Try to delete from backend if it has a real ID (not a temporary upload ID)
       if (!fileId.includes('-')) {
         await documentService.deleteFile(fileId);
       }
+      
+      // Remove from UI
+      const updatedFiles = uploadedFiles.filter(file => {
+        if (file.id === fileId) {
+          URL.revokeObjectURL(file.preview);
+          return false;
+        }
+        return true;
+      });
+      
+      onFilesChange(updatedFiles);
+      
+      // Remove from selection if selected
+      const updatedSelection = selectedFiles.filter(id => id !== fileId);
+      onSelectionChange(updatedSelection);
+      
+      // Show success message
+      toast.success(`File "${fileName}" deleted successfully`);
+      
     } catch (error) {
       console.error('Failed to delete file from backend:', error);
+      toast.error(`Failed to delete "${fileName}": ${error instanceof Error ? error.message : 'Unknown error'}`);
     }
-
-    const updatedFiles = uploadedFiles.filter(file => {
-      if (file.id === fileId) {
-        URL.revokeObjectURL(file.preview);
-        return false;
-      }
-      return true;
-    });
-    
-    onFilesChange(updatedFiles);
-    
-    // Remove from selection if selected
-    const updatedSelection = selectedFiles.filter(id => id !== fileId);
-    onSelectionChange(updatedSelection);
   }, [uploadedFiles, selectedFiles, onFilesChange, onSelectionChange]);
 
   const handleFileSelection = useCallback((fileId: string) => {
