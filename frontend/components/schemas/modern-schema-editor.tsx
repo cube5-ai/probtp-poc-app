@@ -4,7 +4,7 @@
  */
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import {
   DndContext,
   closestCenter,
@@ -321,6 +321,8 @@ export function ModernSchemaEditor({
   readOnly = false,
 }: ModernSchemaEditorProps) {
   const [fields, setFields] = useState<Field[]>([]);
+  const isInitialLoadRef = useRef<boolean>(true);
+  const hasInitializedRef = useRef<boolean>(false);
 
   // DnD sensors (disabled in read-only mode)
   const sensors = useSensors(
@@ -339,21 +341,42 @@ export function ModernSchemaEditor({
 
       const recursiveConvert = (
         properties: Record<string, SchemaProperty>,
-        required?: string[]
+        required?: string[],
+        depth: number = 0
       ): Field[] => {
+        // Prevent infinite recursion
+        if (depth > 10) {
+          console.warn("Max recursion depth reached in schema conversion");
+          return [];
+        }
+
         return Object.entries(properties).map(
-          ([name, prop]: [string, SchemaProperty]) => ({
-            id: `field_${Date.now()}_${Math.random()}`,
-            name,
-            type: prop.type || "string",
-            description: prop.description || "",
-            required: required?.includes(name) || false,
-            children:
-              prop.type === "object" && prop.properties
-                ? recursiveConvert(prop.properties, prop.required)
-                : undefined,
-            expanded: true,
-          })
+          ([name, prop]: [string, SchemaProperty]) => {
+            // Ensure all values are primitives, not objects
+            const field: Field = {
+              id: `field_${Date.now()}_${Math.random()}`,
+              name: String(name || ""),
+              type: String(prop.type || "string"),
+              description: String(prop.description || ""),
+              required: Boolean(required?.includes(name)),
+              expanded: true,
+            };
+
+            // Only add children if it's actually an object type with properties
+            if (
+              prop.type === "object" &&
+              prop.properties &&
+              typeof prop.properties === "object"
+            ) {
+              field.children = recursiveConvert(
+                prop.properties,
+                prop.required,
+                depth + 1
+              );
+            }
+
+            return field;
+          }
         );
       };
 
@@ -362,16 +385,22 @@ export function ModernSchemaEditor({
     []
   );
 
-  // Initialize from schema
+  // Initialize from schema - ONLY on first mount (key prop handles schema changes)
   useEffect(() => {
+    // Only load once when component mounts - key prop will remount for different schemas
+    if (hasInitializedRef.current) return;
+
     if (!schema?.properties) {
       setFields([]);
       return;
     }
 
+    hasInitializedRef.current = true;
+    isInitialLoadRef.current = true;
     const loadedFields = convertSchemaToFields(schema);
     setFields(loadedFields);
-  }, [convertSchemaToFields, schema]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Convert fields to schema (recursive for nested objects)
   const convertFieldsToSchema = useCallback(
@@ -418,20 +447,36 @@ export function ModernSchemaEditor({
       };
 
       const result = recursiveConvert(fields);
-      return {
+      const schema: SchemaDefinition = {
         type: "object",
         properties: result.properties,
-        required: result.required,
       };
+
+      // Only add required if it has values (to match loaded schema structure)
+      if (result.required && result.required.length > 0) {
+        schema.required = result.required;
+      }
+
+      return schema;
     },
     []
   );
 
-  // Update parent when fields change
+  // Update parent when fields change (skip during initial load)
   useEffect(() => {
+    // Skip onChange during initial load from schema to prevent infinite loop
+    if (isInitialLoadRef.current) {
+      isInitialLoadRef.current = false;
+      return;
+    }
+
+    // Only call onChange if fields are not empty (component is initialized)
+    if (fields.length === 0) return;
+
     const newSchema = convertFieldsToSchema(fields);
     onChange(newSchema);
-  }, [fields, onChange, convertFieldsToSchema]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [fields]);
 
   // Add new field
   const addField = () => {

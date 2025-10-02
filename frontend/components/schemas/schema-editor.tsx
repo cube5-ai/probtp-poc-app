@@ -161,7 +161,8 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
     };
 
     loadSchema();
-  }, [schemaId, cloneFromId, router, user]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [schemaId, cloneFromId]);
 
   const handleSave = async () => {
     if (!schemaName.trim()) {
@@ -438,6 +439,7 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
                 </CardHeader>
                 <CardContent>
                   <ModernSchemaEditor
+                    key={schemaId || "new"}
                     schema={schemaDefinition}
                     onChange={setSchemaDefinition}
                     readOnly={isReadOnly}

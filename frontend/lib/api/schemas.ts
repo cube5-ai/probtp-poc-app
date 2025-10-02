@@ -21,7 +21,8 @@ export async function listSchemas(params?: {
     queryParams.append("search", params.search);
   }
 
-  const url = `/schemas?${queryParams.toString()}`;
+  const queryString = queryParams.toString();
+  const url = queryString ? `/schemas/?${queryString}` : `/schemas/`;
   const response = await apiClient.get<SchemaListResponse>(url);
   return response;
 }
@@ -40,7 +41,10 @@ export async function listTemplates(params?: {
     queryParams.append("page_size", String(params.pageSize));
   }
 
-  const url = `/schemas/templates?${queryParams.toString()}`;
+  const queryString = queryParams.toString();
+  const url = queryString
+    ? `/schemas/templates/?${queryString}`
+    : `/schemas/templates/`;
   const response = await apiClient.get<SchemaListResponse>(url);
   return response;
 }
@@ -53,7 +57,7 @@ export async function getSchema(schemaId: string): Promise<Schema> {
 
 // Create a new schema
 export async function createSchema(data: SchemaCreateRequest): Promise<Schema> {
-  const response = await apiClient.post<Schema>("/schemas", data);
+  const response = await apiClient.post<Schema>("/schemas/", data);
   return response;
 }
 
