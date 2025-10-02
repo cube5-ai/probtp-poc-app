@@ -1,134 +1,193 @@
 """
-Pydantic schemas for API request/response models
+Schema API endpoints
+CRUD operations for user-defined schemas
 """
-from datetime import datetime
+from typing import Optional
 from uuid import UUID
+from fastapi import APIRouter, Depends, HTTPException, Query, status, Header
+from sqlalchemy.orm import Session
 
-from pydantic import BaseModel, Field, validator
-
-
-class ProjectCreateRequest(BaseModel):
-    """Request schema for creating a project"""
-
-    name: str = Field(..., min_length=1, max_length=255, description="Project name")
-    description: str | None = Field(None, description="Project description")
-
-
-class ProjectResponse(BaseModel):
-    """Response schema for project data"""
-
-    id: UUID = Field(..., description="Project identifier")
-    name: str = Field(..., description="Project name")
-    description: str | None = Field(None, description="Project description")
-    created_by: str = Field(..., description="User who created the project (Firebase UID)")
-    created_at: datetime = Field(..., description="Creation timestamp")
-    updated_at: datetime = Field(..., description="Last update timestamp")
+from app.utils import get_db_session
+from app.services.schema_service import SchemaService
+from app.schemas.schema_schemas import (
+    SchemaCreate,
+    SchemaUpdate,
+    SchemaResponse,
+    SchemaListResponse,
+    SchemaCloneRequest
+)
 
 
-class FileUploadRequest(BaseModel):
-    """Request schema for initiating file upload"""
-
-    filename: str = Field(..., min_length=1, max_length=500, description="Original filename")
-    file_size: int = Field(..., gt=0, description="File size in bytes")
-
-    @validator('filename')
-    def validate_filename(cls, v):
-        """Validate filename has PDF extension"""
-        if not v.lower().endswith('.pdf'):
-            raise ValueError('Only PDF files are allowed')
-        return v
-
-    @validator('file_size')
-    def validate_file_size(cls, v):
-        """Validate file size is within limits"""
-        max_size = 100 * 1024 * 1024  # 100MB in bytes
-        if v > max_size:
-            raise ValueError(f'File size must not exceed {max_size} bytes (100MB)')
-        return v
-
-
-class FileUploadResponse(BaseModel):
-    """Response schema for file upload initiation"""
-
-    upload_id: UUID = Field(..., description="Unique identifier for this upload")
-    upload_url: str = Field(..., description="Signed URL for direct upload to cloud storage")
-    upload_method: str = Field(default="PUT", description="HTTP method to use for upload")
-    expires_at: datetime = Field(..., description="When the upload URL expires")
-    max_file_size: int = Field(..., description="Maximum allowed file size in bytes")
+def get_current_user_id(authorization: Optional[str] = Header(None)) -> str:
+    """Extract user ID from Authorization header or use demo user"""
+    if authorization and authorization.startswith("Bearer "):
+        # Decode the Firebase JWT to get the actual user ID
+        token = authorization.replace("Bearer ", "")
+        
+        try:
+            # Decode Firebase JWT (without verification for development)
+            import jwt
+            decoded = jwt.decode(token, options={"verify_signature": False})
+            user_id = decoded.get("user_id") or decoded.get("sub")
+            return user_id
+        except Exception as e:
+            # Fallback: use a hash of the token as user ID
+            import hashlib
+            user_id = hashlib.md5(token.encode()).hexdigest()[:12]
+            return f"user_{user_id}"
+    
+    # Fallback to demo user for development
+    return "demo_user"
 
 
-class FileConfirmRequest(BaseModel):
-    """Request schema for confirming file upload completion"""
-
-    md5_hash: str | None = Field(None, min_length=32, max_length=32, description="MD5 hash for integrity check")
+router = APIRouter(prefix="/schemas", tags=["schemas"])
+schema_service = SchemaService()
 
 
-class FileConfirmResponse(BaseModel):
-    """Response schema for file upload confirmation"""
-
-    file_id: UUID = Field(..., description="File identifier")
-    status: str = Field(..., description="File status after confirmation")
-    message: str = Field(..., description="Confirmation message")
-
-
-class FileStatusResponse(BaseModel):
-    """Response schema for file status check"""
-
-    file_id: UUID = Field(..., description="File identifier")
-    status: str = Field(..., description="Current file status")
-    progress: int | None = Field(None, ge=0, le=100, description="Upload progress percentage")
-    updated_at: datetime = Field(..., description="Last status update time")
-    error_message: str | None = Field(None, description="Error message if status is failed")
-
-
-class UserInfo(BaseModel):
-    """User information schema"""
-
-    id: str = Field(..., description="User identifier")
-    email: str = Field(..., description="User email address")
-    name: str | None = Field(None, description="User display name")
-
-
-class FileListItem(BaseModel):
-    """Schema for file item in list response"""
-
-    id: UUID = Field(..., description="File identifier")
-    original_name: str = Field(..., description="Original filename")
-    file_size: int = Field(..., description="File size in bytes")
-    status: str = Field(..., description="File status")
-    uploaded_by: UserInfo = Field(..., description="User who uploaded the file")
-    created_at: datetime = Field(..., description="Upload timestamp")
-    download_url: str | None = Field(None, description="Signed URL for download")
+@router.get("/", response_model=SchemaListResponse)
+def list_schemas(
+    search: Optional[str] = Query(None, description="Search term for name/description"),
+    db: Session = Depends(get_db_session),
+    user_id: str = Depends(get_current_user_id)
+):
+    """List all schemas for the current user (returns all, no pagination)"""
+    # Get all user's schemas (no pagination, no filtering)
+    if search:
+        schemas, total = schema_service.search_schemas(
+            db, user_id, search, skip=0, limit=10000
+        )
+    else:
+        schemas, total = schema_service.get_all_schemas(
+            db, user_id, skip=0, limit=10000
+        )
+    
+    return {
+        "schemas": schemas,
+        "total": len(schemas),
+        "page": 1,
+        "page_size": len(schemas)
+    }
 
 
-class PaginationInfo(BaseModel):
-    """Pagination information schema"""
-
-    page: int = Field(..., ge=1, description="Current page number")
-    limit: int = Field(..., ge=1, le=100, description="Items per page")
-    total: int = Field(..., ge=0, description="Total number of items")
-    pages: int = Field(..., ge=0, description="Total number of pages")
-
-
-class FileListResponse(BaseModel):
-    """Response schema for file list endpoint"""
-
-    files: list[FileListItem] = Field(..., description="List of files")
-    pagination: PaginationInfo = Field(..., description="Pagination information")
-
-
-class ErrorResponse(BaseModel):
-    """Standard error response schema"""
-
-    error: str = Field(..., description="Error message")
-    detail: str | None = Field(None, description="Detailed error information")
-    error_code: str | None = Field(None, description="Error code for client handling")
+@router.get("/templates", response_model=SchemaListResponse)
+def list_templates(
+    page: int = Query(1, ge=1, description="Page number"),
+    page_size: int = Query(20, ge=1, le=100, description="Items per page"),
+    db: Session = Depends(get_db_session)
+):
+    """List all template schemas"""
+    skip = (page - 1) * page_size
+    schemas, total = schema_service.get_templates(db, skip, page_size)
+    
+    return {
+        "schemas": schemas,
+        "total": total,
+        "page": page,
+        "page_size": page_size
+    }
 
 
-class HealthResponse(BaseModel):
-    """Health check response schema"""
+@router.get("/{schema_id}", response_model=SchemaResponse)
+def get_schema(
+    schema_id: UUID,
+    db: Session = Depends(get_db_session),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Get a specific schema by ID"""
+    print(f"Getting schema {schema_id} for user {user_id}")
+    
+    # For development: allow reading any schema, but ownership info is preserved
+    schema = schema_service.get_schema_by_id(db, schema_id)
+    
+    if not schema:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Schema not found"
+        )
+    
+    print(f"Schema found, owned by: {schema.user_id}")
+    return schema
 
-    status: str = Field(..., description="Service health status")
-    timestamp: datetime = Field(..., description="Health check timestamp")
-    service: str = Field(..., description="Service name")
-    version: str = Field(..., description="Service version")
+
+@router.post("/", response_model=SchemaResponse, status_code=status.HTTP_201_CREATED)
+def create_schema(
+    schema_data: SchemaCreate,
+    db: Session = Depends(get_db_session),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Create a new schema"""
+    try:
+        schema = schema_service.create_schema(db, user_id, schema_data)
+        return schema
+    except ValueError as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+
+
+@router.put("/{schema_id}", response_model=SchemaResponse)
+def update_schema(
+    schema_id: UUID,
+    schema_data: SchemaUpdate,
+    db: Session = Depends(get_db_session),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Update an existing schema"""
+    print(f"Updating schema {schema_id} for user {user_id}")
+    
+    # Check if schema exists and show ownership
+    existing_schema = schema_service.get_schema_by_id(db, schema_id)
+    if existing_schema:
+        print(f"Schema exists, owned by: {existing_schema.user_id}")
+        print(f"User trying to update: {user_id}")
+        print(f"Ownership match: {existing_schema.user_id == user_id}")
+    
+    schema = schema_service.update_schema(db, schema_id, user_id, schema_data)
+    
+    if not schema:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Schema not found or unauthorized"
+        )
+    
+    return schema
+
+
+@router.delete("/{schema_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_schema(
+    schema_id: UUID,
+    db: Session = Depends(get_db_session),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Delete a schema"""
+    deleted = schema_service.delete_schema(db, schema_id, user_id)
+    
+    if not deleted:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Schema not found or unauthorized"
+        )
+    
+    return None
+
+
+@router.post("/{schema_id}/clone", response_model=SchemaResponse, status_code=status.HTTP_201_CREATED)
+def clone_schema(
+    schema_id: UUID,
+    clone_data: SchemaCloneRequest,
+    db: Session = Depends(get_db_session),
+    user_id: str = Depends(get_current_user_id)
+):
+    """Clone an existing schema"""
+    cloned_schema = schema_service.clone_schema(
+        db, schema_id, user_id, clone_data.name, clone_data.description
+    )
+    
+    if not cloned_schema:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Schema not found"
+        )
+    
+    return cloned_schema

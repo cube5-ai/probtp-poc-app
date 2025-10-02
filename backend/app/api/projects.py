@@ -8,7 +8,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user_id, get_db
 from app.api.errors import FileUploadError, UploadErrors
-from app.api.schemas import ProjectCreateRequest, ProjectResponse
+from app.api.api_models import ProjectCreateRequest, ProjectResponse
 from app.core.logging import log_exception
 from app.models.project import Project
 from app.models.project_member import ProjectMember

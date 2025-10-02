@@ -12,7 +12,7 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import get_current_user_id, get_db
 from app.api.errors import FileUploadError, UploadErrors
-from app.api.schemas import (
+from app.api.api_models import (
     FileConfirmRequest,
     FileConfirmResponse,
     FileListItem,
