@@ -13,6 +13,8 @@ from parsing_pipelines import (
     extend_llm_postprocessing_pymupdf_gemini_flash,
     extend_llm_postprocessing_pymupdf_gemini_pro,
     extend_solo,
+    landing_ai_solo,
+    # llamaparse_llm_postprocessing_pymupdf_claude_sonnet_4_5,
     mistral_ocr_solo,
     pulse_solo,
     pymupdf4llm_solo,
@@ -26,6 +28,8 @@ parsing_pipelines = {
     #"extend_llm_postprocessing_pymupdf_gemini_pro": extend_llm_postprocessing_pymupdf_gemini_pro,
     "extend_llm_postprocessing_pymupdf_gemini_flash": extend_llm_postprocessing_pymupdf_gemini_flash,
     "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5": extend_llm_postprocessing_pymupdf_claude_sonnet_4_5,
+    "landing_ai_solo": landing_ai_solo,
+    #"llamaparse_llm_postprocessing_pymupdf_claude_sonnet_4_5": llamaparse_llm_postprocessing_pymupdf_claude_sonnet_4_5,
 }
 
 # List documents in the input directory
@@ -66,10 +70,13 @@ async def process_document(parser_name: str, parser, document: Path, executor: T
     
     # Save JSON
     output_json_file = output_dir_parser / document.name.replace(".pdf", ".json")
-    await loop.run_in_executor(
-        executor,
-        lambda: json.dump(data, open(output_json_file, "w"))
-    )
+    try:
+        await loop.run_in_executor(
+            executor,
+            lambda: json.dump(data, open(output_json_file, "w"))
+        )
+    except Exception as e:
+        print(f"[{parser_name}] Error saving JSON: {e}")
     
     # Save markdown
     output_md_file = output_dir_parser / document.name.replace(".pdf", ".md")

@@ -42,6 +42,7 @@ dependencies = [
     "reductoai>=0.11.0",
     "jupyter>=1.1.1",
     "anthropic[vertex]>=0.69.0",
+    "landingai-ade>=0.15.1",
 ]
 
 [project.optional-dependencies]
@@ -80,6 +81,8 @@ dev-dependencies = [
     "extend-ai>=0.0.8",
     "pandas>=2.3.2",
     "openpyxl>=3.1.5",
+    "rapidfuzz>=3.14.1",
+    "scikit-learn>=1.7.2",
 ]
 
 [tool.ruff]
