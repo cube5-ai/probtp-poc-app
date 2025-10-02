@@ -8,6 +8,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 
 import { Providers } from "./providers";
+import { LayoutWrapper } from "./layout-wrapper";
 
 export const metadata: Metadata = {
   title: "ProBTP POC",
@@ -29,7 +30,7 @@ export default function RootLayout({
         )}
       >
         <Providers>
-          {children}
+          <LayoutWrapper>{children}</LayoutWrapper>
         </Providers>
       </body>
     </html>

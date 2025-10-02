@@ -1,11 +1,21 @@
 """
 Main FastAPI application module
 """
+import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.health import router as health_router
+from app.api.schemas import router as schemas_router
 from app.core.config import get_settings
+from app.utils.db_session import get_session_manager
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 # Load application settings
 settings = get_settings()
@@ -20,10 +30,13 @@ app = FastAPI(
 )
 
 # Configure CORS middleware
-print(f"DEBUG: Configured CORS origins: {settings.allowed_origins}")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.allowed_origins,
+    allow_origins=[
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "https://probtp-poc-prod.web.app",
+    ],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -31,6 +44,7 @@ app.add_middleware(
 
 # Include routers
 app.include_router(health_router, prefix="/api/v1", tags=["health"])
+app.include_router(schemas_router, prefix="/api/v1", tags=["schemas"])
 
 
 @app.get("/")
@@ -47,6 +61,31 @@ async def root():
 async def debug_cors():
     """Debug endpoint to check CORS configuration"""
     return {
-        "allowed_origins": settings.allowed_origins,
-        "environment": settings.environment,
+        "allowed_origins": [
+            "http://localhost:3000",
+            "http://localhost:3001",
+            "https://probtp-poc-prod.web.app",
+        ],
+        "environment": settings.ENVIRONMENT,
     }
+
+
+@app.on_event("startup")
+async def startup_event():
+    """Log application startup information"""
+    logger.info("=" * 60)
+    logger.info("🚀 ProBTP POC API Starting...")
+    logger.info(f"Environment: {settings.ENVIRONMENT}")
+    logger.info("=" * 60)
+    
+    # Test database connection
+    try:
+        db_manager = get_session_manager()
+        # Access the engine property which will trigger connection test
+        _ = db_manager.engine
+        logger.info("✅ Application startup complete - Database ready!")
+    except Exception as e:
+        logger.error(f"❌ Database connection failed during startup: {e}")
+        # Don't raise - let the app start but log the error
+    
+    logger.info("=" * 60)

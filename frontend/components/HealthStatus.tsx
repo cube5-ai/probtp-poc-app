@@ -23,9 +23,7 @@ export default function HealthStatus() {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_API_URL + "/api/v1/health"
-      );
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/health");
 
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`);
