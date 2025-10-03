@@ -66,6 +66,7 @@ wheels/
 .installed.cfg
 *.egg
 MANIFEST
+.cursor/
 
 # PyEnv
 .python-version
