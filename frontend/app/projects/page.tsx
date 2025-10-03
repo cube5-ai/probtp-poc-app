@@ -7,6 +7,17 @@ import { Plus, FolderOpen, Calendar, User, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import Loading from "@/components/common/loading";
 import { documentService, type Project } from "@/lib/api/documents";
 import { toast } from "sonner";
@@ -17,6 +28,7 @@ const ProjectsPage = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isCreating, setIsCreating] = useState(false);
+  const [projectToDelete, setProjectToDelete] = useState<{ id: string; name: string } | null>(null);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -70,21 +82,28 @@ const ProjectsPage = () => {
     }
   };
 
-  const handleDeleteProject = async (projectId: string, projectName: string, e: React.MouseEvent) => {
+  const handleDeleteClick = (projectId: string, projectName: string, e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent card click navigation
-    
-    if (!confirm(`Are you sure you want to delete "${projectName}"? This action cannot be undone and will delete all files in this project.`)) {
-      return;
-    }
+    setProjectToDelete({ id: projectId, name: projectName });
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!projectToDelete) return;
     
     try {
-      await documentService.deleteProject(projectId);
-      setProjects(prev => prev.filter(p => p.id !== projectId));
-      toast.success(`Project "${projectName}" deleted successfully`);
+      await documentService.deleteProject(projectToDelete.id);
+      setProjects(prev => prev.filter(p => p.id !== projectToDelete.id));
+      toast.success(`Project "${projectToDelete.name}" deleted successfully`);
     } catch (error) {
       console.error('Failed to delete project:', error);
       toast.error(`Failed to delete project: ${error instanceof Error ? error.message : 'Unknown error'}`);
+    } finally {
+      setProjectToDelete(null);
     }
+  };
+
+  const handleCancelDelete = () => {
+    setProjectToDelete(null);
   };
 
   const formatDate = (dateString: string) => {
@@ -108,7 +127,29 @@ const ProjectsPage = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <>
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!projectToDelete} onOpenChange={(open) => !open && handleCancelDelete()}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Project</AlertDialogTitle>
+            <AlertDialogDescription>
+              Are you sure you want to delete "{projectToDelete?.name}"? This action cannot be undone and will delete all files in this project.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancelDelete}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleConfirmDelete}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              Delete Project
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <div className="max-w-6xl mx-auto space-y-8">
           {/* Header */}
@@ -161,7 +202,7 @@ const ProjectsPage = () => {
                         variant="ghost"
                         size="sm"
                         className="text-destructive hover:text-destructive hover:bg-destructive/10"
-                        onClick={(e) => handleDeleteProject(project.id, project.name, e)}
+                        onClick={(e) => handleDeleteClick(project.id, project.name, e)}
                       >
                         <Trash2 className="w-4 h-4" />
                       </Button>
@@ -209,7 +250,8 @@ const ProjectsPage = () => {
           )}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 

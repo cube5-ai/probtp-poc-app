@@ -31,6 +31,20 @@ This project uses `uv` for dependency management and includes development tools 
 - **Testing:** `uv run pytest`
 - **Pre-commit hooks:** `uv run pre-commit install`
 
+### Database Access (Cloud SQL Proxy)
+
+The repository no longer ships with a local SQLite file. To work against the
+managed PostgreSQL instance from your machine:
+
+1. Install the Cloud SQL Auth Proxy and authenticate with the same project as
+   the instance (`probtp-poc-prod`).
+2. Start the proxy: `cloud-sql-proxy --port 5433 probtp-poc-prod:europe-west9:probtp-poc-db-prod`
+3. Copy `backend/.env.example` to `backend/.env` (or update your existing file)
+   and set `DATABASE_URL=postgresql://<user>:<password>@127.0.0.1:5433/probtp-poc_prod`.
+
+With the proxy running, `uvicorn` and the helper script `uv run python
+test_db_connection.py` will both connect to Cloud SQL.
+
 ### Project Structure
 
 - `app/` - Main application code

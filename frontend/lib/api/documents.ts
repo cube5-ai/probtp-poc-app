@@ -118,7 +118,7 @@ export class DocumentService {
   };
 
   createProject = async (name: string, description?: string): Promise<Project> => {
-    const response = await apiClient.post<Project>('/api/v1/projects', {
+    const response = await apiClient.post<Project>('projects', {
       name,
       description
     });
@@ -131,11 +131,11 @@ export class DocumentService {
   };
 
   getProjects = async (): Promise<Project[]> => {
-    return await apiClient.get<Project[]>('/api/v1/projects');
+    return await apiClient.get<Project[]>('projects');
   };
 
   deleteProject = async (projectId: string): Promise<void> => {
-    await apiClient.delete(`/api/v1/projects/${projectId}`);
+    await apiClient.delete(`projects/${projectId}`);
   };
 
   uploadFile = async (
@@ -193,7 +193,7 @@ export class DocumentService {
     };
 
     return await apiClient.post<FileUploadResponse>(
-      `/api/v1/projects/${projectId}/files/upload`,
+      `projects/${projectId}/files/upload`,
       request
     );
   };
@@ -242,7 +242,7 @@ export class DocumentService {
     };
 
     return await apiClient.post<FileConfirmResponse>(
-      `/api/v1/projects/${projectId}/files/${uploadId}/confirm`,
+      `projects/${projectId}/files/${uploadId}/confirm`,
       request
     );
   };
@@ -259,7 +259,7 @@ export class DocumentService {
     }
 
     return await apiClient.get<FileListResponse>(
-      `/api/v1/projects/${targetProjectId}/files?page=${page}&size=${size}`
+      `projects/${targetProjectId}/files?page=${page}&size=${size}`
     );
   };
 
@@ -271,13 +271,13 @@ export class DocumentService {
     }
 
     return await apiClient.get<DocumentFile>(
-      `/api/v1/projects/${targetProjectId}/files/${fileId}`
+      `projects/${targetProjectId}/files/${fileId}`
     );
   };
 
   deleteFile = async (fileId: string, projectId?: string): Promise<void> => {
     // Note: Backend endpoint is /files/{file_id}, not project-scoped
-    await apiClient.delete(`/api/v1/files/${fileId}`);
+    await apiClient.delete(`files/${fileId}`);
   };
 
   parseDocument = async (
@@ -291,7 +291,7 @@ export class DocumentService {
       timeout_seconds: timeoutSeconds
     };
 
-    return await apiClient.post<ParsedDocument>('/api/v1/parsing/parse', request);
+    return await apiClient.post<ParsedDocument>('parsing/parse', request);
   };
 
   getAvailableParsingServices = async (): Promise<Array<{
@@ -303,7 +303,7 @@ export class DocumentService {
       name: string;
       status: string;
       capabilities: string[];
-    }> }>('/api/v1/parsing/services');
+    }> }>('parsing/services');
     
     return response.services;
   };
