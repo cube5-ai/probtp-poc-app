@@ -281,7 +281,7 @@ async def list_project_files(
             files=file_items,
             pagination=PaginationInfo(
                 page=page,
-                limit=limit,
+                size=limit,
                 total=total,
                 pages=pages
             )

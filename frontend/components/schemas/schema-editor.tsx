@@ -77,7 +77,7 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
       : "New Schema";
 
     setBreadcrumbs([
-      { label: "Home", href: "/" },
+      { label: "Projects", href: "/projects" },
       { label: "Settings", href: "/settings" },
       { label: breadcrumbLabel },
     ]);

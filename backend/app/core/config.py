@@ -15,7 +15,11 @@ load_dotenv(override=True)
 
 class Settings(BaseSettings):
     """Application configuration settings"""
-    model_config = ConfigDict(extra='ignore', env_file='.env')
+    model_config = ConfigDict(
+        extra='ignore', 
+        env_file=Path(__file__).parent.parent.parent / '.env',
+        env_file_encoding='utf-8'
+    )
 
     # Environment
     ENVIRONMENT: Optional[str] = "development"
@@ -76,13 +80,6 @@ class Settings(BaseSettings):
     gcs_project_id: str = os.getenv("GCS_PROJECT_ID", "probtp-poc-prod")
     gcs_bucket_name: str = os.getenv("GCS_BUCKET_NAME", "probtp-poc-prod")
 
-    class Config:
-        # Construct path to .env file relative to this config file
-        # This makes it robust to where the script is run from
-        env_file = Path(__file__).parent.parent.parent / '.env'
-        env_file_encoding = "utf-8"
-        # Allow extra fields to handle additional environment variables
-        extra = "ignore"
 
     def get_database_url(self) -> str:
         """

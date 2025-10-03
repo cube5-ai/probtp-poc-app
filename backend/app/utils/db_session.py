@@ -49,12 +49,20 @@ class DatabaseSessionManager:
         if self._engine is None:
             try:
                 logger.info("Creating database engine...")
+                
+                # Configure connection args based on database type
+                connect_args = {}
+                if self.database_url.startswith('postgresql'):
+                    connect_args = {"connect_timeout": 10}
+                elif self.database_url.startswith('sqlite'):
+                    connect_args = {"timeout": 10}
+                
                 self._engine = create_engine(
                     self.database_url,
                     pool_pre_ping=True,
                     pool_size=10,
                     max_overflow=20,
-                    connect_args={"connect_timeout": 10}
+                    connect_args=connect_args
                 )
                 # Test the connection
                 with self._engine.connect() as conn:

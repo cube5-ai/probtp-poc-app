@@ -13,6 +13,7 @@ from app.models.parsing_configuration import ParsingConfiguration
 from app.models.parsing_request import ParsingRequest
 from app.models.project import Project
 from app.models.project_member import ProjectMember
+from app.models.schema import Schema
 
 __all__ = [
     "Base",
@@ -20,6 +21,7 @@ __all__ = [
     "Project",
     "ProjectMember",
     "File",
+    "Schema",
     # Parsing service models
     "BoundingBox",
     "ContentBlock",

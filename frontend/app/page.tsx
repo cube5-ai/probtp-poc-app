@@ -16,7 +16,7 @@ export default function Home() {
 
   // Set breadcrumbs for the home page
   useEffect(() => {
-    setBreadcrumbs([{ label: "Home" }]);
+    setBreadcrumbs([{ label: "Projects" }]);
   }, [setBreadcrumbs]);
 
   useEffect(() => {

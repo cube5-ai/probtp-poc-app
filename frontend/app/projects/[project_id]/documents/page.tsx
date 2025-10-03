@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useBreadcrumbs } from "@/contexts/BreadcrumbContext";
 import { useRouter, useParams } from "next/navigation";
 import { GitCompare, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Loading from "@/components/common/loading";
-import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import DocumentSidebar from "@/components/documents/DocumentSidebar";
 import { documentService } from "@/lib/api/documents";
 
@@ -20,6 +20,7 @@ interface UploadedFile {
 
 const DocumentManagementPage = () => {
   const { user, loading } = useAuth();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const router = useRouter();
   const params = useParams();
   const projectId = params.project_id as string;
@@ -38,6 +39,13 @@ const DocumentManagementPage = () => {
     if (projectId) {
       // Set the project context for document operations
       documentService.setDefaultProject(projectId);
+      
+      // Set breadcrumbs
+      setBreadcrumbs([
+        { label: "Projects", href: "/projects" },
+        { label: "Project", href: `/projects/${projectId}` },
+        { label: "Documents" }
+      ]);
       
       // Load existing files from the backend
       const loadFiles = async () => {
@@ -79,11 +87,6 @@ const DocumentManagementPage = () => {
     router.push(`/projects/${projectId}/documents/compare`);
   };
 
-  const breadcrumbItems = [
-    { label: "Projects", href: "/projects" },
-    { label: "Project", href: `/projects/${projectId}` },
-    { label: "Documents", current: true }
-  ];
 
   if (loading) {
     return (
@@ -99,11 +102,11 @@ const DocumentManagementPage = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header with Breadcrumbs */}
+      {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
-            <Breadcrumbs items={breadcrumbItems} />
+            <h1 className="text-2xl font-bold">Documents</h1>
             
             <div className="flex items-center gap-2">
               <Button

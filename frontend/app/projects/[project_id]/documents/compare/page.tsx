@@ -2,10 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useBreadcrumbs } from "@/contexts/BreadcrumbContext";
 import { useRouter, useParams } from "next/navigation";
 import { Menu, ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Breadcrumbs from "@/components/navigation/Breadcrumbs";
 import DocumentSidebar from "@/components/documents/DocumentSidebar";
 import ComparisonArea from "@/components/documents/ComparisonArea";
 import Loading from "@/components/common/loading";
@@ -21,6 +21,7 @@ interface UploadedFile {
 
 const ProjectDocumentComparePage = () => {
   const { user, loading } = useAuth();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const router = useRouter();
   const params = useParams();
   const projectId = params.project_id as string;
@@ -41,6 +42,14 @@ const ProjectDocumentComparePage = () => {
     if (projectId) {
       // Set the project context for document operations
       documentService.setDefaultProject(projectId);
+      
+      // Set breadcrumbs
+      setBreadcrumbs([
+        { label: "Projects", href: "/projects" },
+        { label: "Project", href: `/projects/${projectId}` },
+        { label: "Documents", href: `/projects/${projectId}/documents` },
+        { label: "Compare" }
+      ]);
       
       // Load existing files from the backend
       const loadFiles = async () => {
@@ -92,12 +101,6 @@ const ProjectDocumentComparePage = () => {
     return uploadedFiles.filter(file => selectedFiles.includes(file.id));
   };
 
-  const breadcrumbItems = [
-    { label: "Projects", href: "/projects" },
-    { label: "Project", href: `/projects/${projectId}` },
-    { label: "Documents", href: `/projects/${projectId}/documents` },
-    { label: "Compare", current: true }
-  ];
 
   if (loading) {
     return (
@@ -113,11 +116,11 @@ const ProjectDocumentComparePage = () => {
 
   return (
     <div className="min-h-screen bg-background flex flex-col">
-      {/* Header with Breadcrumbs */}
+      {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
         <div className="container  px-4 py-4">
           <div className="flex items-center justify-between">
-            <Breadcrumbs items={breadcrumbItems} />
+            <h1 className="text-2xl font-bold">Compare Documents</h1>
             
             <div className="flex items-center gap-2">
               {/* Mobile sidebar toggle */}

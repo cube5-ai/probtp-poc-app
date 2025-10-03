@@ -36,12 +36,6 @@ const ProjectsPage = () => {
         const userProjects = await documentService.getProjects();
         setProjects(userProjects);
         
-        // If user has exactly one project, redirect to it
-        if (userProjects.length === 1) {
-          router.push(`/projects/${userProjects[0].id}`);
-          return;
-        }
-        
       } catch (error) {
         console.error('Failed to load projects:', error);
         toast.error('Failed to load projects');
