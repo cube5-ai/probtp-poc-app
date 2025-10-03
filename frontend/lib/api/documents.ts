@@ -275,7 +275,7 @@ export class DocumentService {
     );
   };
 
-  deleteFile = async (fileId: string, projectId?: string): Promise<void> => {
+  deleteFile = async (fileId: string): Promise<void> => {
     // Note: Backend endpoint is /files/{file_id}, not project-scoped
     await apiClient.delete(`files/${fileId}`);
   };

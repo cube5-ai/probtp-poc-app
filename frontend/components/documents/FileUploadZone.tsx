@@ -18,22 +18,22 @@ interface FileUploadZoneProps {
   className?: string;
 }
 
+const ALLOWED_FILE_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'text/plain',
+  'application/rtf'
+];
+
+const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.txt', '.rtf'];
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+
 const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZoneProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
 
-  const ALLOWED_FILE_TYPES = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'text/plain',
-    'application/rtf'
-  ];
-
-  const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.txt', '.rtf'];
-  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
-
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): string | null => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       return `File type not supported. Allowed types: ${ALLOWED_EXTENSIONS.join(', ')}`;
     }
@@ -43,7 +43,7 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
     }
     
     return null;
-  };
+  }, []);
 
   const handleFiles = useCallback((files: FileList) => {
     const newFiles: UploadedFile[] = [];
@@ -88,7 +88,7 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
       setUploadedFiles(updatedFiles);
       onFilesChange(updatedFiles);
     }
-  }, [uploadedFiles, maxFiles, onFilesChange]);
+  }, [uploadedFiles, maxFiles, onFilesChange, validateFile]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();

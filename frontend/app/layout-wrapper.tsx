@@ -20,7 +20,8 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
     pathname?.startsWith("/signin") || pathname?.startsWith("/signup");
 
   // Check if we're on a protected route (settings pages)
-  const isProtectedRoute = pathname?.startsWith("/settings");
+  const isProtectedRoute =
+    pathname?.startsWith("/settings") || pathname?.startsWith("/profile");
 
   // Show loading state for protected routes while auth is loading
   if (loading && isProtectedRoute) {

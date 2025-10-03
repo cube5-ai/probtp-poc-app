@@ -29,6 +29,16 @@ interface DocumentSidebarProps {
   className?: string;
 }
 
+const ALLOWED_FILE_TYPES = [
+  'application/pdf',
+  'application/msword',
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+  'text/plain',
+  'application/rtf'
+];
+
+const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
+
 const DocumentSidebar = ({
   uploadedFiles,
   selectedFiles,
@@ -43,21 +53,12 @@ const DocumentSidebar = ({
   const [isDragOver, setIsDragOver] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
 
-  const ALLOWED_FILE_TYPES = [
-    'application/pdf',
-    'application/msword',
-    'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    'text/plain',
-    'application/rtf'
-  ];
-
-  const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
   const filters = ["All", "Competitors", "PRO BTP"];
 
   // Note: Project initialization is now handled by parent components
   // DocumentSidebar assumes a project context is already set
 
-  const validateFile = (file: File): string | null => {
+  const validateFile = useCallback((file: File): string | null => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       return `File type not supported. Allowed: PDF, DOC, DOCX, TXT, RTF`;
     }
@@ -67,7 +68,7 @@ const DocumentSidebar = ({
     }
     
     return null;
-  };
+  }, []);
 
   const handleFiles = useCallback(async (files: FileList) => {
     if (isUploading) return;
@@ -163,7 +164,7 @@ const DocumentSidebar = ({
     }
 
     setIsUploading(false);
-  }, [uploadedFiles, onFilesChange, isUploading]);
+  }, [uploadedFiles, onFilesChange, isUploading, validateFile]);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();

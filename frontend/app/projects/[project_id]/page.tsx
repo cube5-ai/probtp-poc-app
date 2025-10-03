@@ -124,7 +124,7 @@ const ProjectDashboard = () => {
     };
 
     loadProject();
-  }, [user, projectId, router]);
+  }, [user, projectId, router, setBreadcrumbs]);
 
   const handleFilesChange = (files: UploadedFile[]) => {
     setUploadedFiles(files);

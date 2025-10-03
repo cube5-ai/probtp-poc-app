@@ -13,6 +13,7 @@ interface AuthContextType {
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   getIdToken: () => Promise<string | null>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -54,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
               if (freshToken) {
                 apiClient.setAuthToken(freshToken);
               }
-            } catch (error) {
+            } catch {
               // Silent error handling
             }
           }, 45 * 60 * 1000); // 45 minutes
@@ -102,6 +103,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return await authService.getIdToken();
   };
 
+  const changePassword = async (currentPassword: string, newPassword: string) => {
+    return authService.changePassword(currentPassword, newPassword);
+  };
+
   const value = {
     user,
     loading,
@@ -109,6 +114,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     signUp,
     signOut,
     getIdToken,
+    changePassword,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

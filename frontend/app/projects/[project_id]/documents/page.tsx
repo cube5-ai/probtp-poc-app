@@ -67,7 +67,7 @@ const DocumentManagementPage = () => {
       
       loadFiles();
     }
-  }, [projectId]);
+  }, [projectId, setBreadcrumbs]);
 
   const handleFilesChange = (files: UploadedFile[]) => {
     setUploadedFiles(files);

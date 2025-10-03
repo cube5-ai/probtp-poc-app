@@ -16,7 +16,6 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import Loading from "@/components/common/loading";
 import { documentService, type Project } from "@/lib/api/documents";
@@ -93,7 +92,7 @@ const ProjectsPage = () => {
     try {
       await documentService.deleteProject(projectToDelete.id);
       setProjects(prev => prev.filter(p => p.id !== projectToDelete.id));
-      toast.success(`Project "${projectToDelete.name}" deleted successfully`);
+      toast.success(`Project ${projectToDelete.name} deleted successfully`);
     } catch (error) {
       console.error('Failed to delete project:', error);
       toast.error(`Failed to delete project: ${error instanceof Error ? error.message : 'Unknown error'}`);
@@ -134,7 +133,13 @@ const ProjectsPage = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Project</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to delete "{projectToDelete?.name}"? This action cannot be undone and will delete all files in this project.
+              Are you sure you want to delete{' '}
+              {projectToDelete?.name ? (
+                <span className="font-semibold">{projectToDelete.name}</span>
+              ) : (
+                <span className="font-semibold">this project</span>
+              )}
+              ? This action cannot be undone and will delete all files in this project.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

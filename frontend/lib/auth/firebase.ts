@@ -8,6 +8,9 @@ import {
     createUserWithEmailAndPassword,
     signOut as firebaseSignOut,
     onAuthStateChanged,
+    updatePassword,
+    reauthenticateWithCredential,
+    EmailAuthProvider,
     type User as FirebaseUser,
     type Auth as FirebaseAuth
 } from 'firebase/auth';
@@ -87,5 +90,21 @@ export const authService = {
             }
         }
         return null;
+    },
+
+    changePassword: async (currentPassword: string, newPassword: string) => {
+        if (!auth) throw new Error('Firebase not initialized');
+        const user = auth.currentUser;
+        if (!user || !user.email) {
+            throw new Error('No authenticated user');
+        }
+
+        const credential = EmailAuthProvider.credential(
+            user.email,
+            currentPassword,
+        );
+
+        await reauthenticateWithCredential(user, credential);
+        await updatePassword(user, newPassword);
     },
 };
