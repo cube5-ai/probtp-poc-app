@@ -1,7 +1,7 @@
 """
-Analysis table validation and correction utilities.
+Analysis table validation and correction utilities for enhanced schema.
 
-Validates that analysis tables preserve the exact structure from alignment tables,
+Validates that analysis tables preserve the exact enhanced structure from alignment tables,
 only adding the is_best annotation field.
 """
 
@@ -14,7 +14,12 @@ def validate_table_structure_preserved(
     alignment_table: dict, analysis_table: dict
 ) -> tuple[bool, list[str]]:
     """
-    Validate that analysis table preserves alignment table structure.
+    Validate that analysis table preserves alignment table's enhanced structure.
+
+    Checks that ALL enhanced schema fields are preserved:
+    - Metadata: total_columns, column_labels
+    - Rows: row_number, inherited_from_above
+    - Cells: id, value, type, rowspan, colspan, occupies, ref, sources, metadata
 
     Args:
         alignment_table: Table from alignment phase (after correction)
@@ -24,6 +29,20 @@ def validate_table_structure_preserved(
         Tuple of (is_valid, list_of_issues)
     """
     issues = []
+
+    # Check metadata preservation
+    align_meta = alignment_table.get("metadata", {})
+    analysis_meta = analysis_table.get("metadata", {})
+
+    if align_meta.get("total_columns") != analysis_meta.get("total_columns"):
+        issues.append(
+            f"total_columns changed: {align_meta.get('total_columns')} → {analysis_meta.get('total_columns')}"
+        )
+
+    if align_meta.get("column_labels") != analysis_meta.get("column_labels"):
+        issues.append(
+            f"column_labels changed: {align_meta.get('column_labels')} → {analysis_meta.get('column_labels')}"
+        )
 
     # Check row count
     align_rows = alignment_table.get("rows", [])
@@ -37,6 +56,21 @@ def validate_table_structure_preserved(
 
     # Check each row
     for row_idx, (align_row, analysis_row) in enumerate(zip(align_rows, analysis_rows)):
+        # Check row_number
+        if align_row.get("row_number") != analysis_row.get("row_number"):
+            issues.append(
+                f"Row {row_idx}: row_number changed ({align_row.get('row_number')} → {analysis_row.get('row_number')})"
+            )
+
+        # Check inherited_from_above
+        if align_row.get("inherited_from_above") != analysis_row.get(
+            "inherited_from_above"
+        ):
+            issues.append(
+                f"Row {row_idx + 1}: inherited_from_above changed"
+            )
+
+        # Check cells
         align_cells = align_row.get("cells", [])
         analysis_cells = analysis_row.get("cells", [])
 
@@ -51,22 +85,17 @@ def validate_table_structure_preserved(
         for cell_idx, (align_cell, analysis_cell) in enumerate(
             zip(align_cells, analysis_cells)
         ):
-            cell_loc = f"Row {row_idx + 1}, Cell {cell_idx + 1}"
+            cell_id = align_cell.get("id", f"Row{row_idx+1}Cell{cell_idx}")
+
+            # Check id
+            if align_cell.get("id") != analysis_cell.get("id"):
+                issues.append(
+                    f"{cell_id}: id changed ({align_cell.get('id')} → {analysis_cell.get('id')})"
+                )
 
             # Check value
             if align_cell.get("value") != analysis_cell.get("value"):
-                issues.append(f"{cell_loc}: value changed")
-
-            # Check rowspan/colspan
-            if align_cell.get("rowspan") != analysis_cell.get("rowspan"):
-                issues.append(
-                    f"{cell_loc}: rowspan changed ({align_cell.get('rowspan')} → {analysis_cell.get('rowspan')})"
-                )
-
-            if align_cell.get("colspan") != analysis_cell.get("colspan"):
-                issues.append(
-                    f"{cell_loc}: colspan changed ({align_cell.get('colspan')} → {analysis_cell.get('colspan')})"
-                )
+                issues.append(f"{cell_id}: value changed")
 
             # Check type field preservation
             align_type = align_cell.get("type")
@@ -75,13 +104,53 @@ def validate_table_structure_preserved(
             # If alignment omitted type, analysis should too
             if align_type is None and analysis_type is not None:
                 issues.append(
-                    f"{cell_loc}: type field added where it was omitted ('{analysis_type}')"
+                    f"{cell_id}: type field added where it was omitted ('{analysis_type}')"
                 )
 
             # If alignment had type, analysis should preserve it
             if align_type is not None and analysis_type != align_type:
                 issues.append(
-                    f"{cell_loc}: type changed ('{align_type}' → '{analysis_type}')"
+                    f"{cell_id}: type changed ('{align_type}' → '{analysis_type}')"
+                )
+
+            # Check rowspan/colspan/occupies
+            if align_cell.get("rowspan") != analysis_cell.get("rowspan"):
+                issues.append(
+                    f"{cell_id}: rowspan changed ({align_cell.get('rowspan')} → {analysis_cell.get('rowspan')})"
+                )
+
+            if align_cell.get("colspan") != analysis_cell.get("colspan"):
+                issues.append(
+                    f"{cell_id}: colspan changed ({align_cell.get('colspan')} → {analysis_cell.get('colspan')})"
+                )
+
+            if align_cell.get("occupies") != analysis_cell.get("occupies"):
+                issues.append(
+                    f"{cell_id}: occupies changed"
+                )
+
+            # Check ref (virtual cells)
+            if align_cell.get("ref") != analysis_cell.get("ref"):
+                issues.append(
+                    f"{cell_id}: ref changed ({align_cell.get('ref')} → {analysis_cell.get('ref')})"
+                )
+
+            # Check sources preservation (exact structure)
+            align_sources = align_cell.get("sources")
+            analysis_sources = analysis_cell.get("sources")
+
+            if align_sources != analysis_sources:
+                issues.append(
+                    f"{cell_id}: sources structure changed"
+                )
+
+            # Check metadata preservation
+            align_metadata = align_cell.get("metadata")
+            analysis_metadata = analysis_cell.get("metadata")
+
+            if align_metadata != analysis_metadata:
+                issues.append(
+                    f"{cell_id}: metadata changed"
                 )
 
     is_valid = len(issues) == 0
@@ -92,7 +161,9 @@ def fix_analysis_table_structure(
     alignment_table: dict, analysis_table: dict
 ) -> dict:
     """
-    Programmatically fix analysis table to match alignment structure.
+    Programmatically fix analysis table to match alignment's enhanced structure.
+
+    Restores all enhanced schema fields from alignment while keeping is_best from analysis.
 
     Args:
         alignment_table: Table from alignment phase (reference)
@@ -103,12 +174,20 @@ def fix_analysis_table_structure(
     """
     align_rows = alignment_table.get("rows", [])
     analysis_rows = analysis_table.get("rows", [])
+    align_meta = alignment_table.get("metadata", {})
 
     if len(align_rows) != len(analysis_rows):
         print(
             f"  ⚠ Cannot fix: row count mismatch ({len(align_rows)} vs {len(analysis_rows)})"
         )
         return analysis_table
+
+    # Fix metadata
+    corrected_metadata = {
+        **analysis_table.get("metadata", {}),
+        "total_columns": align_meta.get("total_columns"),
+        "column_labels": align_meta.get("column_labels"),
+    }
 
     corrected_rows = []
 
@@ -117,9 +196,7 @@ def fix_analysis_table_structure(
         analysis_cells = analysis_row.get("cells", [])
 
         if len(align_cells) != len(analysis_cells):
-            print(
-                f"  ⚠ Row {row_idx + 1}: Cannot fix cell count mismatch"
-            )
+            print(f"  ⚠ Row {row_idx + 1}: Cannot fix cell count mismatch")
             corrected_rows.append(analysis_row)
             continue
 
@@ -128,58 +205,25 @@ def fix_analysis_table_structure(
         for cell_idx, (align_cell, analysis_cell) in enumerate(
             zip(align_cells, analysis_cells)
         ):
-            # Start with analysis cell (has is_best annotation)
-            corrected_cell = {**analysis_cell}
+            # Start with alignment cell (correct structure)
+            corrected_cell = {**align_cell}
 
-            # Restore exact fields from alignment
-            corrected_cell["value"] = align_cell.get("value")
-
-            # Restore type field (or omit it)
-            align_type = align_cell.get("type")
-            if align_type is None:
-                # Alignment omitted type - remove it from analysis
-                corrected_cell.pop("type", None)
-            else:
-                # Alignment had type - preserve it
-                corrected_cell["type"] = align_type
-
-            # Restore rowspan/colspan
-            align_rowspan = align_cell.get("rowspan")
-            if align_rowspan is None:
-                corrected_cell.pop("rowspan", None)
-            else:
-                corrected_cell["rowspan"] = align_rowspan
-
-            align_colspan = align_cell.get("colspan")
-            if align_colspan is None:
-                corrected_cell.pop("colspan", None)
-            else:
-                corrected_cell["colspan"] = align_colspan
-
-            # Restore sources structure
-            align_sources = align_cell.get("sources")
-            if align_sources is None:
-                corrected_cell.pop("sources", None)
-            else:
-                # Deep copy sources to avoid reference issues
-                corrected_cell["sources"] = {**align_sources}
-
-            # Restore metadata
-            align_metadata = align_cell.get("metadata")
-            if align_metadata is None:
-                corrected_cell.pop("metadata", None)
-            else:
-                corrected_cell["metadata"] = {**align_metadata}
-
-            # Keep is_best from analysis (that's the whole point!)
-            # It should already be in corrected_cell from the copy above
+            # Add is_best from analysis (the only field analysis should add)
+            if "is_best" in analysis_cell:
+                corrected_cell["is_best"] = analysis_cell["is_best"]
 
             corrected_cells.append(corrected_cell)
 
-        corrected_rows.append({"cells": corrected_cells})
+        corrected_row = {
+            "row_number": align_row.get("row_number"),
+            "inherited_from_above": align_row.get("inherited_from_above"),
+            "cells": corrected_cells,
+        }
+        corrected_rows.append(corrected_row)
 
     corrected_table = {
         **analysis_table,
+        "metadata": corrected_metadata,
         "rows": corrected_rows,
     }
 
@@ -204,8 +248,14 @@ def verify_is_best_added(analysis_table: dict) -> tuple[bool, list[str]]:
 
     for row_idx, row in enumerate(rows):
         for cell_idx, cell in enumerate(row.get("cells", [])):
+            cell_id = cell.get("id", f"Row{row_idx+1}Cell{cell_idx}")
             cell_type = cell.get("type")
             is_best = cell.get("is_best")
+            has_value = cell.get("value") is not None
+
+            # Only check real cells (not virtual cells with ref)
+            if not has_value:
+                continue
 
             # Data cells should have is_best = true or false
             if cell_type == "data":
@@ -213,7 +263,7 @@ def verify_is_best_added(analysis_table: dict) -> tuple[bool, list[str]]:
                     data_cells_without_is_best += 1
                     if data_cells_without_is_best <= 3:  # Limit logging
                         issues.append(
-                            f"Row {row_idx + 1}, Cell {cell_idx + 1}: data cell missing is_best field"
+                            f"{cell_id}: data cell missing is_best field"
                         )
 
             # Dimension cells should have is_best = null or omitted
@@ -222,7 +272,7 @@ def verify_is_best_added(analysis_table: dict) -> tuple[bool, list[str]]:
                     dimension_cells_with_non_null_is_best += 1
                     if dimension_cells_with_non_null_is_best <= 3:
                         issues.append(
-                            f"Row {row_idx + 1}, Cell {cell_idx + 1}: dimension cell has is_best={is_best} (should be null)"
+                            f"{cell_id}: dimension cell has is_best={is_best} (should be null or false)"
                         )
 
     if data_cells_without_is_best > 0:
@@ -243,7 +293,7 @@ async def validate_and_fix_analysis_table(
     alignment_table: dict, analysis_table: dict, category: str
 ) -> tuple[dict, dict]:
     """
-    Validate and fix analysis table to preserve alignment structure.
+    Validate and fix analysis table to preserve alignment's enhanced structure.
 
     Args:
         alignment_table: Table from alignment phase (reference)
@@ -257,6 +307,8 @@ async def validate_and_fix_analysis_table(
 
     # Save original analysis table
     tmp_dir = Path(__file__).parent.parent / "output" / "two_phase" / "tmp"
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+
     original_path = tmp_dir / f"{category}_analysis_before_validation.json"
     with open(original_path, "w", encoding="utf-8") as f:
         json.dump(analysis_table, f, ensure_ascii=False, indent=2)

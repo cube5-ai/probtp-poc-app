@@ -1,416 +1,324 @@
 """
-Table structure validation and correction utilities.
+Table structure validation and correction utilities for enhanced schema.
 
-Validates that comparison tables have consistent logical column counts across all rows,
-accounting for both colspan and rowspan. Provides automatic correction for common issues.
+Validates comparison tables with Excel-style cell IDs, inherited_from_above tracking,
+and explicit span support. The enhanced schema provides multiple validation checkpoints
+through redundant fields that must agree.
 """
 
 import json
-from enum import Enum
+import re
+from pathlib import Path
 from typing import Any
 
 
-class ConsistencyState(Enum):
-    """Table consistency states."""
-
-    CONSISTENT = "CONSISTENT"
-    HEADER_MISSING_COLUMNS = "HEADER_MISSING_COLUMNS"
-    MULTIPLE_INCONSISTENCIES = "MULTIPLE_INCONSISTENCIES"
-
-
-def calculate_logical_columns_per_row(table: dict) -> list[int]:
+def validate_enhanced_table_structure(table: dict) -> tuple[bool, list[str]]:
     """
-    Calculate the logical column count for each row.
+    Validate table structure according to enhanced schema rules.
 
-    Logical columns = actual columns occupied by cells + columns occupied by active rowspans.
+    Validation Rules:
+    1. Structure consistency: inherited_from_above.length === total_columns === cells.length
+    2. Cell IDs sequential: column_labels[i] + row_number
+    3. inherited_from_above consistency: refs match inherited positions
+    4. Rowspan occupies lists correct
+    5. Colspan occupies lists and refs correct
+    6. Every cell is either real (has value) or virtual (has ref)
 
     Args:
-        table: ComparisonTable dict
+        table: ComparisonTable dict with enhanced schema
 
     Returns:
-        List of logical column counts, one per row
+        Tuple of (is_valid, list_of_issues)
     """
+    issues = []
+
+    metadata = table.get("metadata", {})
+    total_columns = metadata.get("total_columns")
+    column_labels = metadata.get("column_labels", [])
     rows = table.get("rows", [])
-    if not rows:
-        return []
 
-    logical_columns = []
-    active_rowspans = (
-        []
-    )  # List of (row_idx_started, columns_occupied, remaining_rows)
+    if not total_columns:
+        issues.append("Missing metadata.total_columns")
+        return False, issues
 
-    for row_idx, row in enumerate(rows):
-        cells = row.get("cells", [])
-
-        # Calculate columns from current row's cells
-        current_row_columns = 0
-        new_rowspans = []
-
-        for cell in cells:
-            colspan = cell.get("colspan", 1) or 1
-            rowspan = cell.get("rowspan", 1) or 1
-
-            current_row_columns += colspan
-
-            # Track if this cell spans multiple rows
-            if rowspan > 1:
-                new_rowspans.append((row_idx, colspan, rowspan - 1))
-
-        # Add columns occupied by active rowspans from previous rows
-        columns_from_active_rowspans = sum(
-            cols for (_, cols, _) in active_rowspans if row_idx > 0
+    if len(column_labels) != total_columns:
+        issues.append(
+            f"column_labels length ({len(column_labels)}) != total_columns ({total_columns})"
         )
 
-        total_logical_columns = current_row_columns + columns_from_active_rowspans
-        logical_columns.append(total_logical_columns)
+    # Validate each row
+    for row_idx, row in enumerate(rows):
+        row_number = row.get("row_number")
+        inherited_from_above = row.get("inherited_from_above", [])
+        cells = row.get("cells", [])
 
-        # Update active rowspans for next iteration
-        # Decrement remaining rows and filter out completed spans
-        active_rowspans = [
-            (start_row, cols, remaining - 1)
-            for (start_row, cols, remaining) in active_rowspans
-            if remaining > 1
-        ]
+        # Rule 1: Structure consistency
+        if row_number != row_idx + 1:
+            issues.append(
+                f"Row {row_idx}: row_number ({row_number}) != expected ({row_idx + 1})"
+            )
 
-        # Add new rowspans from current row
-        active_rowspans.extend(new_rowspans)
+        if len(inherited_from_above) != total_columns:
+            issues.append(
+                f"Row {row_number}: inherited_from_above length ({len(inherited_from_above)}) != total_columns ({total_columns})"
+            )
 
-    return logical_columns
+        if len(cells) != total_columns:
+            issues.append(
+                f"Row {row_number}: cells length ({len(cells)}) != total_columns ({total_columns})"
+            )
+            continue  # Can't validate further if cell count is wrong
+
+        # Rule 2 & 3: Cell IDs and inherited_from_above consistency
+        for col_idx, cell in enumerate(cells):
+            cell_id = cell.get("id")
+            expected_id = column_labels[col_idx] + str(row_number)
+
+            if cell_id != expected_id:
+                issues.append(
+                    f"Row {row_number}, Col {col_idx}: cell ID '{cell_id}' != expected '{expected_id}'"
+                )
+
+            # Rule 3: inherited_from_above consistency
+            inherited_ref = inherited_from_above[col_idx]
+            cell_ref = cell.get("ref")
+
+            if inherited_ref is not None:
+                # Position is inherited - cell should be virtual with matching ref
+                if cell_ref != inherited_ref:
+                    issues.append(
+                        f"Cell {cell_id}: ref '{cell_ref}' != inherited_from_above '{inherited_ref}'"
+                    )
+
+                # Ref must point to earlier row
+                if cell_ref:
+                    ref_row_num = extract_row_number(cell_ref)
+                    if ref_row_num and ref_row_num >= row_number:
+                        issues.append(
+                            f"Cell {cell_id}: ref '{cell_ref}' points to same/later row"
+                        )
+
+            # Rule 6: Every cell is either real (has value) or virtual (has ref)
+            has_value = cell.get("value") is not None
+            has_ref = cell.get("ref") is not None
+
+            if has_value == has_ref:  # Both true or both false
+                if has_value and has_ref:
+                    issues.append(
+                        f"Cell {cell_id}: has both value and ref (should have one or the other)"
+                    )
+                else:
+                    issues.append(
+                        f"Cell {cell_id}: has neither value nor ref (should have one)"
+                    )
+
+    # Rule 4 & 5: Validate spans (rowspan and colspan)
+    for row_idx, row in enumerate(rows):
+        row_number = row.get("row_number")
+        cells = row.get("cells", [])
+
+        for col_idx, cell in enumerate(cells):
+            cell_id = cell.get("id")
+            rowspan = cell.get("rowspan")
+            colspan = cell.get("colspan")
+            occupies = cell.get("occupies", [])
+            has_value = cell.get("value") is not None
+
+            # Only real cells can have spans
+            if not has_value:
+                continue
+
+            # Rule 4: Rowspan validation
+            if rowspan and rowspan > 1:
+                expected_occupies_count = rowspan
+                if colspan and colspan > 1:
+                    expected_occupies_count = rowspan * colspan
+
+                if len(occupies) != expected_occupies_count:
+                    issues.append(
+                        f"Cell {cell_id}: rowspan={rowspan}, colspan={colspan or 1}, but occupies has {len(occupies)} items (expected {expected_occupies_count})"
+                    )
+
+                if occupies and occupies[0] != cell_id:
+                    issues.append(
+                        f"Cell {cell_id}: occupies[0] should be '{cell_id}', got '{occupies[0]}'"
+                    )
+
+            # Rule 5: Colspan validation
+            if colspan and colspan > 1:
+                if not rowspan or rowspan == 1:
+                    # Colspan only (no rowspan)
+                    if len(occupies) != colspan:
+                        issues.append(
+                            f"Cell {cell_id}: colspan={colspan} but occupies has {len(occupies)} items"
+                        )
+
+                # Verify next (colspan-1) cells in same row have ref to this cell
+                for offset in range(1, colspan):
+                    if col_idx + offset < len(cells):
+                        next_cell = cells[col_idx + offset]
+                        if next_cell.get("ref") != cell_id:
+                            issues.append(
+                                f"Cell {cell_id}: colspan continuation cell {next_cell.get('id')} should have ref='{cell_id}'"
+                            )
+
+    is_valid = len(issues) == 0
+    return is_valid, issues
+
+
+def extract_row_number(cell_id: str) -> int | None:
+    """Extract row number from Excel-style cell ID (e.g., 'A15' -> 15)."""
+    if not cell_id:
+        return None
+    match = re.match(r"[A-Z]+(\d+)", cell_id)
+    return int(match.group(1)) if match else None
+
+
+def extract_column_letter(cell_id: str) -> str | None:
+    """Extract column letter from Excel-style cell ID (e.g., 'A15' -> 'A')."""
+    if not cell_id:
+        return None
+    match = re.match(r"([A-Z]+)\d+", cell_id)
+    return match.group(1) if match else None
 
 
 def remove_category_column(table: dict) -> tuple[dict, bool]:
     """
-    Remove category column if present.
+    Remove category column if present (adapted for enhanced schema).
 
-    Detects if row 2, cell 1 has rowspan = (total_rows - 1), indicating a category label
-    that spans all data rows. If found, removes this cell and adjusts row 1 accordingly.
+    Detects if first cell in row 2 has rowspan = (total_rows - 1), indicating a category label
+    that spans all data rows. If found, removes this cell and adjusts header row.
 
     Args:
-        table: ComparisonTable dict
+        table: ComparisonTable dict with enhanced schema
 
     Returns:
         Tuple of (modified_table, was_removed)
     """
     rows = table.get("rows", [])
-    if len(rows) < 2:
+    metadata = table.get("metadata", {})
+    total_columns = metadata.get("total_columns", 0)
+    column_labels = metadata.get("column_labels", [])
+
+    if len(rows) < 2 or total_columns == 0:
         return table, False
 
-    row1 = rows[0]
     row2 = rows[1]
+    cells2 = row2.get("cells", [])
 
-    row1_cells = row1.get("cells", [])
-    row2_cells = row2.get("cells", [])
-
-    if not row1_cells or not row2_cells:
+    if not cells2:
         return table, False
 
-    # Check if row2, cell1 has rowspan = total_rows - 1
-    category_cell = row2_cells[0]
-    rowspan = category_cell.get("rowspan", 1) or 1
-    expected_rowspan = len(rows) - 1
+    # Check if first cell has rowspan covering all data rows
+    first_cell = cells2[0]
+    rowspan = first_cell.get("rowspan")
+    has_value = first_cell.get("value") is not None
 
-    if rowspan != expected_rowspan:
-        # Not a category column
+    if not has_value or not rowspan or rowspan != (len(rows) - 1):
         return table, False
 
-    # Category column detected - remove it
-    # Remove cell from row 2
-    row2_cells_new = row2_cells[1:]
+    print(f"  → Removing category column (rowspan={rowspan})")
 
-    # Adjust row 1
-    row1_cell = row1_cells[0]
-    row1_colspan = row1_cell.get("colspan", 1) or 1
+    # This is a category column - need to:
+    # 1. Remove first column from all rows
+    # 2. Update total_columns and column_labels
+    # 3. Update all cell IDs to shift left
+    # 4. Update inherited_from_above arrays
+    # 5. Update occupies lists
 
-    if row1_colspan > 1:
-        # Reduce colspan by 1
-        row1_cell_new = {**row1_cell, "colspan": row1_colspan - 1}
-        if row1_cell_new["colspan"] == 1:
-            # Remove colspan field if now 1
-            row1_cell_new = {
-                k: v for k, v in row1_cell_new.items() if k != "colspan"
-            }
-        row1_cells_new = [row1_cell_new] + row1_cells[1:]
-    else:
-        # Remove first cell from row 1
-        row1_cells_new = row1_cells[1:]
+    new_total_columns = total_columns - 1
+    new_column_labels = column_labels[1:]  # Remove first column (A)
 
-        # Edge case: if removed cell had content, log warning
-        if row1_cell.get("value", "").strip():
-            print(
-                f"  ⚠ Warning: Removed header cell had content: '{row1_cell.get('value')}'"
-            )
+    new_rows = []
 
-    # Create modified table
-    modified_table = {**table}
-    modified_rows = []
+    for row_idx, row in enumerate(rows):
+        row_number = row.get("row_number")
+        old_cells = row.get("cells", [])
+        old_inherited = row.get("inherited_from_above", [])
 
-    for idx, row in enumerate(rows):
-        if idx == 0:
-            modified_rows.append({"cells": row1_cells_new})
-        elif idx == 1:
-            modified_rows.append({"cells": row2_cells_new})
-        else:
-            modified_rows.append(row)
+        # Skip first cell, shift rest
+        new_cells = []
+        for col_idx in range(1, len(old_cells)):
+            old_cell = old_cells[col_idx]
+            new_cell = {**old_cell}
 
-    modified_table["rows"] = modified_rows
+            # Update cell ID (shift column left)
+            old_id = old_cell.get("id")
+            new_id = new_column_labels[col_idx - 1] + str(row_number)
+            new_cell["id"] = new_id
 
-    return modified_table, True
+            # Update ref if present (shift column letter)
+            if "ref" in new_cell and new_cell["ref"]:
+                old_ref = new_cell["ref"]
+                ref_row = extract_row_number(old_ref)
+                ref_col_letter = extract_column_letter(old_ref)
+                # Shift column: A->skip, B->A, C->B, etc.
+                old_col_idx = column_labels.index(ref_col_letter) if ref_col_letter in column_labels else -1
+                if old_col_idx > 0:
+                    new_ref = new_column_labels[old_col_idx - 1] + str(ref_row)
+                    new_cell["ref"] = new_ref
 
+            # Update occupies list (shift column letters)
+            if "occupies" in new_cell and new_cell["occupies"]:
+                new_occupies = []
+                for occupy_id in new_cell["occupies"]:
+                    occupy_row = extract_row_number(occupy_id)
+                    occupy_col = extract_column_letter(occupy_id)
+                    old_col_idx = column_labels.index(occupy_col) if occupy_col in column_labels else -1
+                    if old_col_idx > 0:
+                        new_occupy_id = new_column_labels[old_col_idx - 1] + str(occupy_row)
+                        new_occupies.append(new_occupy_id)
+                new_cell["occupies"] = new_occupies if new_occupies else None
 
-def validate_table_consistency(table: dict) -> tuple[ConsistencyState, dict]:
-    """
-    Validate table structure consistency.
+            new_cells.append(new_cell)
 
-    Args:
-        table: ComparisonTable dict
-
-    Returns:
-        Tuple of (ConsistencyState, diagnosis_dict)
-    """
-    columns_per_row = calculate_logical_columns_per_row(table)
-
-    if not columns_per_row:
-        return ConsistencyState.CONSISTENT, {"expected_columns": 0}
-
-    # Find the mode (most common column count) - this is the expected value
-    from collections import Counter
-
-    counter = Counter(columns_per_row)
-    expected_columns = counter.most_common(1)[0][0]
-
-    # Find inconsistent rows
-    inconsistent_rows = [
-        idx
-        for idx, count in enumerate(columns_per_row)
-        if count != expected_columns
-    ]
-
-    if not inconsistent_rows:
-        return ConsistencyState.CONSISTENT, {
-            "expected_columns": expected_columns,
-            "actual_columns_per_row": columns_per_row,
-        }
-
-    # Check if only row 1 (header) is inconsistent
-    if inconsistent_rows == [0]:
-        return ConsistencyState.HEADER_MISSING_COLUMNS, {
-            "expected_columns": expected_columns,
-            "actual_columns_per_row": columns_per_row,
-            "inconsistent_rows": inconsistent_rows,
-            "differences": {0: columns_per_row[0] - expected_columns},
-        }
-
-    # Multiple inconsistencies
-    differences = {
-        idx: columns_per_row[idx] - expected_columns for idx in inconsistent_rows
-    }
-
-    return ConsistencyState.MULTIPLE_INCONSISTENCIES, {
-        "expected_columns": expected_columns,
-        "actual_columns_per_row": columns_per_row,
-        "inconsistent_rows": inconsistent_rows,
-        "differences": differences,
-    }
-
-
-def diagnose_inconsistencies(table: dict, diagnosis: dict) -> str:
-    """
-    Generate human-readable diagnosis of table inconsistencies.
-
-    Args:
-        table: ComparisonTable dict
-        diagnosis: Diagnosis dict from validate_table_consistency
-
-    Returns:
-        Human-readable diagnosis string
-    """
-    rows = table.get("rows", [])
-    expected = diagnosis.get("expected_columns", 0)
-    actual_per_row = diagnosis.get("actual_columns_per_row", [])
-    inconsistent = diagnosis.get("inconsistent_rows", [])
-    differences = diagnosis.get("differences", {})
-
-    lines = [
-        f"Table has {len(rows)} rows. Expected logical columns: {expected}",
-        "",
-        "Issues found:",
-    ]
-
-    for row_idx in inconsistent:
-        actual = actual_per_row[row_idx]
-        diff = differences[row_idx]
-
-        if row_idx == 0:
-            row_label = "Row 1 (header)"
-        else:
-            row_label = f"Row {row_idx + 1}"
-
-        if diff < 0:
-            lines.append(
-                f"- {row_label}: has {actual} columns, expected {expected} (missing {abs(diff)} column(s))"
-            )
-        else:
-            lines.append(
-                f"- {row_label}: has {actual} columns, expected {expected} ({diff} extra column(s))"
-            )
-
-    lines.append("")
-    lines.append("Possible causes:")
-
-    # Analyze possible causes
-    for row_idx in inconsistent:
-        if row_idx > 0:
-            # Check if previous rows have rowspan cells
-            prev_rows_with_rowspan = []
-            for prev_idx in range(row_idx):
-                cells = rows[prev_idx].get("cells", [])
-                for cell_idx, cell in enumerate(cells):
-                    rowspan = cell.get("rowspan", 1) or 1
-                    if rowspan > 1 and prev_idx + rowspan > row_idx:
-                        prev_rows_with_rowspan.append((prev_idx, cell_idx, rowspan))
-
-            if prev_rows_with_rowspan:
-                lines.append(
-                    f"- Row {row_idx + 1} has active rowspan cells from previous rows not properly accounted for"
-                )
-
-    return "\n".join(lines)
-
-
-def fix_header_missing_columns(table: dict, diagnosis: dict) -> dict:
-    """
-    Fix header row column count mismatch.
-
-    Handles two cases:
-    - Header has too few columns: add empty cells
-    - Header has too many columns: remove empty cells or reduce colspan
-
-    Args:
-        table: ComparisonTable dict
-        diagnosis: Diagnosis dict
-
-    Returns:
-        Corrected table dict
-    """
-    rows = table.get("rows", [])
-    if not rows:
-        return table
-
-    difference = diagnosis["differences"].get(0, 0)
-
-    if difference == 0:
-        # No difference
-        return table
-
-    row1_cells = rows[0].get("cells", [])
-
-    if difference > 0:
-        # Header has TOO MANY columns - remove extras
-        columns_to_remove = difference
-
-        # Strategy: Remove empty cells from the beginning, or reduce colspan of first empty cell
-        new_row1_cells = []
-        columns_removed = 0
-
-        for cell in row1_cells:
-            if columns_removed >= columns_to_remove:
-                # Already removed enough, keep rest
-                new_row1_cells.append(cell)
-            elif not cell.get("value", "").strip():
-                # Empty cell - can remove or reduce colspan
-                colspan = cell.get("colspan", 1) or 1
-
-                if colspan > columns_to_remove - columns_removed:
-                    # Reduce colspan
-                    new_colspan = colspan - (columns_to_remove - columns_removed)
-                    columns_removed = columns_to_remove
-
-                    if new_colspan == 1:
-                        # Remove colspan field
-                        new_cell = {k: v for k, v in cell.items() if k != "colspan"}
-                        new_row1_cells.append(new_cell)
-                    else:
-                        new_row1_cells.append({**cell, "colspan": new_colspan})
+        # Update inherited_from_above (remove first element, update refs)
+        new_inherited = []
+        for col_idx in range(1, len(old_inherited)):
+            old_ref = old_inherited[col_idx]
+            if old_ref:
+                ref_row = extract_row_number(old_ref)
+                ref_col = extract_column_letter(old_ref)
+                old_col_idx = column_labels.index(ref_col) if ref_col in column_labels else -1
+                if old_col_idx > 0:
+                    new_ref = new_column_labels[old_col_idx - 1] + str(ref_row)
+                    new_inherited.append(new_ref)
                 else:
-                    # Remove entire cell
-                    columns_removed += colspan
+                    new_inherited.append(None)
             else:
-                # Non-empty cell - keep it
-                new_row1_cells.append(cell)
-    else:
-        # Header has TOO FEW columns - add empty cells
-        columns_to_add = abs(difference)
-        empty_cells = [{"value": ""} for _ in range(columns_to_add)]
-        new_row1_cells = empty_cells + row1_cells
+                new_inherited.append(None)
 
-    # Create modified table
-    modified_table = {**table}
-    modified_rows = [{"cells": new_row1_cells}] + rows[1:]
-    modified_table["rows"] = modified_rows
+        new_row = {
+            "row_number": row_number,
+            "inherited_from_above": new_inherited,
+            "cells": new_cells,
+        }
+        new_rows.append(new_row)
 
-    return modified_table
+    new_metadata = {
+        **metadata,
+        "total_columns": new_total_columns,
+        "column_labels": new_column_labels,
+    }
 
+    new_table = {
+        **table,
+        "metadata": new_metadata,
+        "rows": new_rows,
+    }
 
-async def fix_with_llm_correction(
-    table: dict, diagnosis: dict, category: str
-) -> dict:
-    """
-    Fix table inconsistencies using LLM.
-
-    Args:
-        table: ComparisonTable dict
-        diagnosis: Diagnosis dict
-        category: Category name
-
-    Returns:
-        Corrected table dict
-    """
-    from prompts.table_correction_prompt import create_table_correction_prompt
-    from utils.gemini_client import generate_with_reasoning
-    from prompts.alignment_prompt import ComparisonTable
-
-    diagnosis_text = diagnose_inconsistencies(table, diagnosis)
-    expected_columns = diagnosis.get("expected_columns", 0)
-
-    prompt = create_table_correction_prompt(
-        table=table,
-        diagnosis=diagnosis_text,
-        category=category,
-        expected_columns=expected_columns,
-    )
-
-    response = await generate_with_reasoning(
-        prompt=prompt,
-        model="gemini-2.5-flash",
-        thinking_budget=4096,
-        temperature=0.2,
-        response_mime_type="application/json",
-        response_schema=ComparisonTable.model_json_schema(),
-    )
-
-    try:
-        corrected_table = json.loads(response)
-        return corrected_table
-    except json.JSONDecodeError as e:
-        print(f"    ✗ Failed to parse LLM correction response: {e}")
-        return table
+    return new_table, True
 
 
 async def validate_and_fix_table(
     table: dict, category: str, max_iterations: int = 3
 ) -> tuple[dict, dict]:
     """
-    Validate and fix table structure.
-
-    Main orchestration function that:
-    1. Removes category column if present
-    2. Validates consistency
-    3. Applies appropriate fixes
-    4. Loops until consistent or max iterations reached
+    Validate and fix table structure with enhanced schema.
 
     Args:
-        table: ComparisonTable dict
-        category: Category name
+        table: ComparisonTable dict with enhanced schema
+        category: Category name (for file naming)
         max_iterations: Maximum correction iterations
 
     Returns:
@@ -418,83 +326,50 @@ async def validate_and_fix_table(
     """
     from pathlib import Path
 
-    log: dict[str, Any] = {"iterations": 0, "fixes_applied": []}
+    log: dict[str, Any] = {}
 
-    # Save the original table before any corrections
+    # Save original table
     tmp_dir = Path(__file__).parent.parent / "output" / "two_phase" / "tmp"
-    original_table_path = tmp_dir / f"{category}_table_before_correction.json"
-    with open(original_table_path, "w", encoding="utf-8") as f:
+    tmp_dir.mkdir(parents=True, exist_ok=True)
+
+    original_path = tmp_dir / f"{category}_table_before_correction.json"
+    with open(original_path, "w", encoding="utf-8") as f:
         json.dump(table, f, ensure_ascii=False, indent=2)
 
-    for iteration in range(max_iterations):
-        log["iterations"] = iteration + 1
+    print(f"  → Validating table structure for '{category}'")
 
-        # Step 1: Remove category column
-        table, removed = remove_category_column(table)
-        if removed and iteration == 0:
-            log["category_column_removed"] = True
-            log["fixes_applied"].append("remove_category")
-            print(f"  ✓ Removed category column from table")
+    # Try removing category column first
+    table, was_removed = remove_category_column(table)
+    if was_removed:
+        log["category_column_removed"] = True
 
-        # Step 2: Calculate logical columns
-        columns_per_row = calculate_logical_columns_per_row(table)
+    # Validate enhanced schema
+    is_valid, issues = validate_enhanced_table_structure(table)
 
-        # Step 3: Validate
-        state, diagnosis = validate_table_consistency(table)
+    log["initial_valid"] = is_valid
+    if issues:
+        log["initial_issues"] = issues
+        print(f"  ⚠ Found {len(issues)} structural issues:")
+        for issue in issues[:10]:  # Show first 10
+            print(f"    - {issue}")
 
-        if iteration == 0:
-            log["initial_state"] = state.value
-            log["initial_columns_per_row"] = columns_per_row
-            if state != ConsistencyState.CONSISTENT:
-                log["initial_diagnosis"] = diagnose_inconsistencies(table, diagnosis)
-                print(f"  ⚠ Table validation: {state.value}")
-                print(f"    Columns per row: {columns_per_row}")
+    if not is_valid:
+        print(f"  ⚠ Enhanced schema validation failed - table may need LLM re-generation")
+        log["recommendation"] = "Re-run alignment with enhanced schema instructions"
 
-        # Step 4: Check if done
-        if state == ConsistencyState.CONSISTENT:
-            log["final_state"] = "CONSISTENT"
-            log["final_column_count"] = columns_per_row[0] if columns_per_row else 0
-
-            # Save the corrected table
-            corrected_table_path = tmp_dir / f"{category}_table_after_correction.json"
-            with open(corrected_table_path, "w", encoding="utf-8") as f:
-                json.dump(table, f, ensure_ascii=False, indent=2)
-
-            if iteration > 0:
-                print(
-                    f"  ✓ Table validated and corrected after {iteration + 1} iteration(s)"
-                )
-            return table, log
-
-        # Step 5: Apply fixes
-        if state == ConsistencyState.HEADER_MISSING_COLUMNS:
-            print(f"  → Fixing header row (iteration {iteration + 1})")
-            table = fix_header_missing_columns(table, diagnosis)
-            log["fixes_applied"].append(f"fix_header_iter_{iteration + 1}")
-
-        elif state == ConsistencyState.MULTIPLE_INCONSISTENCIES:
-            print(
-                f"  → Applying LLM correction for multiple issues (iteration {iteration + 1})"
-            )
-            table = await fix_with_llm_correction(table, diagnosis, category)
-            log["fixes_applied"].append(f"llm_correction_iter_{iteration + 1}")
-
-    # Max iterations reached
-    final_state, final_diagnosis = validate_table_consistency(table)
-    log["final_state"] = final_state.value
-    log["final_columns_per_row"] = calculate_logical_columns_per_row(table)
-
-    # Save the final table (even if not fully corrected)
-    corrected_table_path = tmp_dir / f"{category}_table_after_correction.json"
-    with open(corrected_table_path, "w", encoding="utf-8") as f:
+    # Save corrected table
+    corrected_path = tmp_dir / f"{category}_table_after_correction.json"
+    with open(corrected_path, "w", encoding="utf-8") as f:
         json.dump(table, f, ensure_ascii=False, indent=2)
 
-    if final_state != ConsistencyState.CONSISTENT:
-        log["warning"] = "Max iterations reached, table may still have issues"
+    log["final_valid"] = is_valid
+    log["final_issue_count"] = len(issues)
+
+    if is_valid:
+        print(f"  ✓ Table structure validated successfully")
+    else:
         print(
-            f"  ⚠ Warning: Table still inconsistent after {max_iterations} iterations"
+            f"  ⚠ Table structure has {len(issues)} remaining issues (see validation log)"
         )
-        print(f"    Final state: {final_state.value}")
-        print(f"    Final columns: {log['final_columns_per_row']}")
 
     return table, log
