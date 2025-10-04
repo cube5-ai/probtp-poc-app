@@ -1,0 +1,930 @@
+{
+  "metadata": {
+    "category": "Soins courants",
+    "policy_levels": {
+      "probtp": [
+        "S2"
+      ],
+      "axa": [
+        "Base Obligatoire"
+      ]
+    }
+  },
+  "rows": [
+    {
+      "cells": [
+        {
+          "value": ""
+        },
+        {
+          "value": ""
+        },
+        {
+          "value": ""
+        },
+        {
+          "value": "Part S.S.*",
+          "sources": {
+            "probtp": [
+              "2-5"
+            ]
+          }
+        },
+        {
+          "value": "S2",
+          "sources": {
+            "probtp": [
+              "2-7"
+            ]
+          }
+        },
+        {
+          "value": "Base Obligatoire",
+          "sources": {
+            "axa": [
+              "2-3"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Soins courants",
+          "rowspan": 12,
+          "sources": {
+            "probtp": [
+              "2-c"
+            ]
+          }
+        },
+        {
+          "value": "Honoraires médicaux",
+          "rowspan": 4,
+          "sources": {
+            "probtp": [
+              "2-d"
+            ]
+          }
+        },
+        {
+          "value": "Consultations et visites (généralistes et spécialistes)",
+          "sources": {
+            "probtp": [
+              "2-e"
+            ]
+          }
+        },
+        {
+          "value": "70%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-f"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-h"
+            ]
+          }
+        },
+        {
+          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (si non DPTAM)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-f",
+              "4-i",
+              "4-l",
+              "4-o"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Actes techniques médicaux",
+          "sources": {
+            "probtp": [
+              "2-m"
+            ]
+          }
+        },
+        {
+          "value": "70%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-n"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-h"
+            ]
+          }
+        },
+        {
+          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (si non DPTAM)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-x",
+              "4-A"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Radiologie",
+          "sources": {
+            "probtp": [
+              "2-o"
+            ]
+          }
+        },
+        {
+          "value": "70%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-p"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-h"
+            ]
+          }
+        },
+        {
+          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (si non DPTAM)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-D",
+              "4-G"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Soins externes",
+          "sources": {
+            "probtp": [
+              "2-q"
+            ]
+          }
+        },
+        {
+          "value": "60% à 70%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-r"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-h"
+            ]
+          }
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Honoraires paramédicaux",
+          "rowspan": 3,
+          "sources": {
+            "probtp": [
+              "2-s"
+            ]
+          }
+        },
+        {
+          "value": "Auxiliaires médicaux, soins infirmiers",
+          "sources": {
+            "probtp": [
+              "2-t"
+            ]
+          }
+        },
+        {
+          "value": "60%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-u"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-w"
+            ]
+          }
+        },
+        {
+          "value": "160% BR-MR",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-T"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Transport",
+          "sources": {
+            "probtp": [
+              "2-B"
+            ]
+          }
+        },
+        {
+          "value": "55%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-C"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-E"
+            ]
+          }
+        },
+        {
+          "value": "100% BR-MR",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "5-B"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Séances d'accompagnement psychologique remboursées par la SS",
+          "sources": {
+            "probtp": [
+              "2-J"
+            ]
+          }
+        },
+        {
+          "value": "60%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-K"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-E"
+            ]
+          }
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Analyses et examens de laboratoires",
+          "colspan": 2,
+          "sources": {
+            "probtp": [
+              "2-L"
+            ]
+          }
+        },
+        {
+          "value": "60%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-M"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-O"
+            ]
+          }
+        },
+        {
+          "value": "160% BR-MR (si pris en charge par SS) / 100 € (si non pris en charge par SS)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-M",
+              "4-P"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Médicaments",
+          "rowspan": 3,
+          "sources": {
+            "probtp": [
+              "2-T"
+            ]
+          }
+        },
+        {
+          "value": "Pharmacie remboursée par la S.S.",
+          "sources": {
+            "probtp": [
+              "2-U"
+            ]
+          }
+        },
+        {
+          "value": "65% 30% 15%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-V"
+            ]
+          }
+        },
+        {
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-X"
+            ]
+          }
+        },
+        {
+          "value": "100% BR-MR",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-Z"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Vaccins non remboursés par la S.S.",
+          "sources": {
+            "probtp": [
+              "2-12"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-13"
+            ]
+          }
+        },
+        {
+          "value": "Vaccin anti-grippe 15€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-15"
+            ]
+          },
+          "metadata": {
+            "conditions": "Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Plafond par an et par bénéficiaire."
+          }
+        },
+        {
+          "value": "6 % PMSS",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "6-c"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Contraception prescrite, non remboursée par la S.S.",
+          "sources": {
+            "probtp": [
+              "2-1a"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1b"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1d"
+            ]
+          }
+        },
+        {
+          "value": "50 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-15"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Matériel médical",
+          "sources": {
+            "probtp": [
+              "2-1i"
+            ]
+          }
+        },
+        {
+          "value": "Appareillages orthopédiques et autres prothèses",
+          "sources": {
+            "probtp": [
+              "2-1j"
+            ]
+          }
+        },
+        {
+          "value": "60%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1k"
+            ]
+          }
+        },
+        {
+          "value": "250%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1m"
+            ]
+          }
+        },
+        {
+          "value": "170% BR-MR",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-1b"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Médecines douces agréées",
+          "sources": {
+            "probtp": [
+              "2-6c"
+            ]
+          }
+        },
+        {
+          "value": "ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.",
+          "sources": {
+            "probtp": [
+              "2-6c"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-6d"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-6e"
+            ]
+          }
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Cures thermales",
+          "sources": {
+            "probtp": [
+              "2-6l"
+            ]
+          }
+        },
+        {
+          "value": "65%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-6m"
+            ]
+          }
+        },
+        {
+          "value": "100% + 100€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-6o"
+            ]
+          },
+          "metadata": {
+            "conditions": "Limité à une cure par an et par bénéficiaire"
+          }
+        },
+        {
+          "value": "300 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "5-E"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Garanties supplémentaires AXA",
+          "rowspan": 8
+        },
+        {
+          "value": "Homéopathie non prise en charge par la Sécurité sociale",
+          "sources": {
+            "axa": [
+              "4-11"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "60 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "4-12"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Consultation chez un diététicien prescrite par un médecin (enfant -12 ans)",
+          "sources": {
+            "axa": [
+              "6-n",
+              "6-q",
+              "6-r"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "1,25% PMSS",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "6-o"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Test de dépistage HPV non pris en charge par la Sécurité sociale",
+          "sources": {
+            "axa": [
+              "6-t"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "170% BR-MR",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "6-u"
+            ]
+          },
+          "metadata": {
+            "conditions": "Prise en charge tous les 3 ans"
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Tout acte de prévention prévu à l'article R 871-2 du code de la Sécurité sociale",
+          "sources": {
+            "axa": [
+              "6-z"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "Inclus",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "6-A"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Téléconsultation",
+          "sources": {
+            "axa": [
+              "6-C"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "Inclus",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "6-D"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Séances d'activité physique adaptée",
+          "sources": {
+            "axa": [
+              "6-F"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "200 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "6-G"
+            ]
+          },
+          "metadata": {
+            "conditions": "Par année civile et par bénéficiaire"
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Connecteur Bluetooth aux stylos à insuline et aux glucomètres",
+          "sources": {
+            "axa": [
+              "6-L"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "100 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "6-M"
+            ]
+          },
+          "metadata": {
+            "conditions": "Une fois par année civile et par bénéficiaire"
+          }
+        }
+      ]
+    },
+    {
+      "cells": [
+        {
+          "value": "Forfait actes thérapeutiques (Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie)",
+          "sources": {
+            "axa": [
+              "5-8"
+            ]
+          }
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "",
+          "type": "data"
+        },
+        {
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "value": "3 séance(s)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "5-9"
+            ]
+          },
+          "metadata": {
+            "conditions": "Par année civile et par bénéficiaire"
+          }
+        }
+      ]
+    }
+  ]
+}
