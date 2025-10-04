@@ -1,0 +1,5650 @@
+{
+  "metadata": {
+    "Generated": "2025-10-04T16:36:03.633697",
+    "Model": "gemini-2.5-flash",
+    "ProBTP Document": "File #3 - Panorama FMC 2025",
+    "AXA Document": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+    "Probtp Levels": "S2, P4",
+    "Axa Levels": "Base Obligatoire",
+    "Categories": "Soins Courants, Hospitalisation, Optique, Soins Dentaires, Audiologie, Médecines Douces"
+  },
+  "comparison_tables": [
+    {
+      "metadata": {
+        "category": "Soins courants",
+        "policy_levels": {
+          "probtp": [
+            "S2"
+          ],
+          "axa": [
+            "Complémentaire responsable base obligatoire"
+          ]
+        }
+      },
+      "rows": [
+        {
+          "cells": [
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": "Part S.S.*",
+              "sources": {
+                "probtp": [
+                  "2-5"
+                ]
+              },
+              "metadata": {
+                "conditions": "La part de Sécurité sociale indiquée est celle du régime général (ne concerne pas le régime de l'Alsace-Moselle)."
+              }
+            },
+            {
+              "value": "S2",
+              "sources": {
+                "probtp": [
+                  "2-7"
+                ]
+              }
+            },
+            {
+              "value": "Complémentaire responsable base obligatoire",
+              "sources": {
+                "axa": [
+                  "2-3",
+                  "4-3",
+                  "5-2",
+                  "6-3"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Soins courants",
+              "rowspan": 13,
+              "sources": {
+                "probtp": [
+                  "2-c"
+                ]
+              }
+            },
+            {
+              "value": "Honoraires médicaux",
+              "rowspan": 4,
+              "sources": {
+                "probtp": [
+                  "2-d"
+                ]
+              }
+            },
+            {
+              "value": "Consultations et visites (généralistes et spécialistes)",
+              "sources": {
+                "probtp": [
+                  "2-e"
+                ]
+              }
+            },
+            {
+              "value": "70%",
+              "sources": {
+                "probtp": [
+                  "2-f"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-h"
+                ]
+              }
+            },
+            {
+              "value": "170% BR-MR (Adhérent DPTAM), 150% BR-MR (Non adhérent DPTAM)",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-f",
+                  "4-i",
+                  "4-l",
+                  "4-o",
+                  "4-r",
+                  "4-u"
+                ]
+              },
+              "metadata": {
+                "conditions": "DPTAM = Dispositifs de Pratique Tarifaire Maîtrisée. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Actes techniques médicaux",
+              "sources": {
+                "probtp": [
+                  "2-m"
+                ]
+              }
+            },
+            {
+              "value": "70%",
+              "sources": {
+                "probtp": [
+                  "2-n"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-h"
+                ]
+              }
+            },
+            {
+              "value": "170% BR-MR (Adhérent DPTAM), 150% BR-MR (Non adhérent DPTAM)",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-x",
+                  "4-A"
+                ]
+              },
+              "metadata": {
+                "conditions": "DPTAM = Dispositifs de Pratique Tarifaire Maîtrisée. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Radiologie",
+              "sources": {
+                "probtp": [
+                  "2-o"
+                ]
+              }
+            },
+            {
+              "value": "70%",
+              "sources": {
+                "probtp": [
+                  "2-p"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-h"
+                ]
+              }
+            },
+            {
+              "value": "170% BR-MR (Adhérent DPTAM), 150% BR-MR (Non adhérent DPTAM)",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-D",
+                  "4-G"
+                ]
+              },
+              "metadata": {
+                "conditions": "DPTAM = Dispositifs de Pratique Tarifaire Maîtrisée. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Soins externes",
+              "sources": {
+                "probtp": [
+                  "2-q"
+                ]
+              }
+            },
+            {
+              "value": "60% à 70%",
+              "sources": {
+                "probtp": [
+                  "2-r"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-h"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Honoraires paramédicaux",
+              "rowspan": 4,
+              "sources": {
+                "probtp": [
+                  "2-s"
+                ]
+              }
+            },
+            {
+              "value": "Auxiliaires médicaux, soins infirmiers",
+              "sources": {
+                "probtp": [
+                  "2-t"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-u"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-w"
+                ]
+              }
+            },
+            {
+              "value": "160% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-T"
+                ]
+              },
+              "metadata": {
+                "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Transport",
+              "sources": {
+                "probtp": [
+                  "2-B"
+                ]
+              }
+            },
+            {
+              "value": "55%",
+              "sources": {
+                "probtp": [
+                  "2-C"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-E"
+                ]
+              }
+            },
+            {
+              "value": "100% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-B"
+                ]
+              },
+              "metadata": {
+                "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Séances d'accompagnement psychologique remboursées par la SS",
+              "sources": {
+                "probtp": [
+                  "2-J"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-K"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-F"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Analyses et examens de laboratoires",
+              "sources": {
+                "probtp": [
+                  "2-L"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-M"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-O"
+                ]
+              }
+            },
+            {
+              "value": "160% BR-MR (pris en charge par la SS), 100 € (non pris en charge par la SS)",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-M",
+                  "4-P"
+                ]
+              },
+              "metadata": {
+                "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale. 100€ par année civile et par bénéficiaire pour actes non pris en charge par la SS (hors bilan génétique)."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Médicaments",
+              "rowspan": 3,
+              "sources": {
+                "probtp": [
+                  "2-T"
+                ]
+              }
+            },
+            {
+              "value": "Pharmacie remboursée par la S.S.",
+              "sources": {
+                "probtp": [
+                  "2-U"
+                ]
+              }
+            },
+            {
+              "value": "65% 30% 15%",
+              "sources": {
+                "probtp": [
+                  "2-V"
+                ]
+              }
+            },
+            {
+              "value": "100% 30% 15%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-X"
+                ]
+              }
+            },
+            {
+              "value": "100% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-Z"
+                ]
+              },
+              "metadata": {
+                "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Vaccins non remboursés par la S.S.",
+              "sources": {
+                "probtp": [
+                  "2-12"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "sources": {
+                "probtp": [
+                  "2-13"
+                ]
+              }
+            },
+            {
+              "value": "Vaccin anti-grippe 15€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-15"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(1)"
+                ],
+                "conditions": "Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Plafond par an et par bénéficiaire."
+              }
+            },
+            {
+              "value": "6 % PMSS",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "6-c"
+                ]
+              },
+              "metadata": {
+                "conditions": "Par année civile et par bénéficiaire. PMSS = Plafond Mensuel de la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Contraception prescrite, non remboursée par la S.S.",
+              "sources": {
+                "probtp": [
+                  "2-1a"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "sources": {
+                "probtp": [
+                  "2-1b"
+                ]
+              }
+            },
+            {
+              "value": "30€/an/bénéf.",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-1e"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(12)"
+                ],
+                "conditions": "Forfait par an et par bénéficiaire."
+              }
+            },
+            {
+              "value": "50 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-15"
+                ]
+              },
+              "metadata": {
+                "conditions": "Par année civile et par bénéficiaire."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Matériel médical",
+              "sources": {
+                "probtp": [
+                  "2-1i"
+                ]
+              }
+            },
+            {
+              "value": "Appareillages orthopédiques et autres prothèses",
+              "sources": {
+                "probtp": [
+                  "2-1j"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-1k"
+                ]
+              }
+            },
+            {
+              "value": "250%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-1m"
+                ]
+              }
+            },
+            {
+              "value": "170% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "4-1b"
+                ]
+              },
+              "metadata": {
+                "conditions": "Hors prothèses dentaires, auditives et optiques. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "",
+              "type": null
+            },
+            {
+              "value": "Médecines douces agréées (ostéopathes, chiropracteurs, acupuncteurs, diététiciens, psychologues non remboursées par la S.S.)",
+              "sources": {
+                "probtp": [
+                  "2-6c"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "sources": {
+                "probtp": [
+                  "2-6e"
+                ]
+              }
+            },
+            {
+              "value": "2x40€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-6g"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(21)",
+                  "(22)"
+                ],
+                "conditions": "Ostéopathes, Chiropracteurs, Acupuncteurs, Diététiciens, Psychologues (non remboursés par la Sécurité sociale) titulaires du titre/diplôme requis. Soins effectués en France métropolitaine. Montant maximum par séance et dans la limite du nombre de séances indiquées par an et d'un plafond annuel par famille. Remboursement sur factures acquittées."
+              }
+            },
+            {
+              "value": "50 € par séance (Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie)",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-7",
+                  "5-8"
+                ]
+              },
+              "metadata": {
+                "conditions": "Dans la limite de 3 séances par année civile et par bénéficiaire."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Cures thermales",
+              "colspan": 3,
+              "sources": {
+                "probtp": [
+                  "2-6l"
+                ]
+              }
+            },
+            {
+              "value": "65%",
+              "sources": {
+                "probtp": [
+                  "2-6m"
+                ]
+              }
+            },
+            {
+              "value": "65%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-6n"
+                ]
+              }
+            },
+            {
+              "value": "300 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-E"
+                ]
+              },
+              "metadata": {
+                "conditions": "Frais médicaux, frais de séjour et frais de transport pris en charge par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Prévention",
+              "colspan": 3
+            },
+            {
+              "value": "Consultation chez un diététicien prescrite par un médecin",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "6-n"
+                ]
+              }
+            },
+            {
+              "value": "1,25% PMSS",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "6-o"
+                ]
+              },
+              "metadata": {
+                "conditions": "Dans la limite d'une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans. PMSS = Plafond Mensuel de la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Test de dépistage des virus impliqués dans le cancer du col de l'utérus (Test HPV) non pris en charge par la Sécurité sociale",
+              "colspan": 5,
+              "sources": {
+                "axa": [
+                  "6-t"
+                ]
+              }
+            },
+            {
+              "value": "170 % BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "6-u"
+                ]
+              },
+              "metadata": {
+                "conditions": "Dans la limite d'une prise en charge tous les 3 ans. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Tout acte de prévention prévu à l'article R 871-2 du code de la Sécurité sociale",
+              "colspan": 5,
+              "sources": {
+                "axa": [
+                  "6-z"
+                ]
+              }
+            },
+            {
+              "value": "Inclus",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "6-A"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Téléconsultation",
+              "colspan": 5,
+              "sources": {
+                "axa": [
+                  "6-C"
+                ]
+              }
+            },
+            {
+              "value": "Inclus",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "6-D"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Séances d'activité physique adaptée aux affections définies par l'article D1172-2 du Code de la santé publique",
+              "colspan": 5,
+              "sources": {
+                "axa": [
+                  "6-F"
+                ]
+              }
+            },
+            {
+              "value": "200 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "6-G"
+                ]
+              },
+              "metadata": {
+                "conditions": "Sur prescription du médecin traitant. L'activité physique doit être dispensée par un professionnel de santé ou un professionnel titulaire d'un diplôme ou certification. Par année civile et par bénéficiaire."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Connecteur Bluetooth aux stylos à insuline et aux glucomètres",
+              "colspan": 5,
+              "sources": {
+                "axa": [
+                  "6-L"
+                ]
+              }
+            },
+            {
+              "value": "100 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "6-M"
+                ]
+              },
+              "metadata": {
+                "conditions": "Sur prescription médicale, dans la limite d'une fois par année civile et par bénéficiaire."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "category": "Hospitalisation",
+        "policy_levels": {
+          "probtp": [
+            "S2"
+          ],
+          "axa": [
+            "Base Obligatoire"
+          ]
+        }
+      },
+      "rows": [
+        {
+          "cells": [
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": "Part S.S.",
+              "sources": {
+                "probtp": [
+                  "2-5"
+                ]
+              }
+            },
+            {
+              "value": "S2",
+              "sources": {
+                "probtp": [
+                  "2-7"
+                ]
+              }
+            },
+            {
+              "value": "Base Obligatoire",
+              "sources": {
+                "axa": [
+                  "2-3"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Honoraires",
+              "rowspan": 4,
+              "sources": {
+                "probtp": [
+                  "2-1B"
+                ]
+              }
+            },
+            {
+              "value": "Honoraires, frais de séjour",
+              "sources": {
+                "probtp": [
+                  "2-1C"
+                ]
+              }
+            },
+            {
+              "value": "80%",
+              "sources": {
+                "probtp": [
+                  "2-1D"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-1F"
+                ]
+              }
+            },
+            {
+              "value": "Frais réels - SS (séjour); 200% à 480% BR-MR (honoraires)",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "2-b",
+                  "2-g",
+                  "2-j",
+                  "2-m",
+                  "2-p",
+                  "2-s",
+                  "2-v",
+                  "2-y",
+                  "2-C",
+                  "2-F"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Chambre particulière",
+              "sources": {
+                "probtp": [
+                  "2-1K"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "sources": {
+                "probtp": [
+                  "2-1L"
+                ]
+              }
+            },
+            {
+              "value": " - ",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-1N"
+                ]
+              }
+            },
+            {
+              "value": "85 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "2-I"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Lit accompagnant pour enfants de -12 ans ou bénéficiaires de + 70 ans",
+              "sources": {
+                "probtp": [
+                  "2-1S"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "sources": {
+                "probtp": [
+                  "2-1T"
+                ]
+              }
+            },
+            {
+              "value": "23 € / jour",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-1V"
+                ]
+              }
+            },
+            {
+              "value": "40 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "2-R",
+                  "2-U"
+                ]
+              },
+              "metadata": {
+                "conditions": "Pour enfant de moins de 16 ans, limité à 30 jours par an. Frais d'hébergement en maison de parents peuvent être pris en charge."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Participation forfaitaire pour les actes supérieurs à 120€",
+              "sources": {
+                "probtp": [
+                  "2-20"
+                ]
+              }
+            },
+            {
+              "value": "100% - 1 forfait",
+              "sources": {
+                "probtp": [
+                  "2-21"
+                ]
+              }
+            },
+            {
+              "value": "100% du forfait",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-23"
+                ]
+              }
+            },
+            {
+              "value": "100% du forfait (actes lourds)",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "2-O"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Forfait journalier et forfait urgences en établissement hospitalier",
+              "sources": {
+                "probtp": [
+                  "2-28"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(3)",
+                  "(4)",
+                  "(4bis)"
+                ],
+                "conditions": "Forfait urgences sans limitation de durée ni nombre. Prise en charge selon conditions R. 871-2 du Code de la Sécurité sociale, excluant forfaits journaliers en établissements de longue durée, MAS ou EHPAD. Prise en charge selon conditions L. 871-1 du Code de la Sécurité sociale."
+              }
+            },
+            {
+              "value": "",
+              "sources": {
+                "probtp": [
+                  "2-29"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "type": "data"
+            },
+            {
+              "value": "oui",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-2b"
+                ]
+              }
+            },
+            {
+              "value": "100% du forfait",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "2-L"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "category": "Optique",
+        "policy_levels": {
+          "probtp": [
+            "P4"
+          ],
+          "axa": [
+            "Complémentaire responsable base obligatoire"
+          ]
+        }
+      },
+      "rows": [
+        {
+          "cells": [
+            {
+              "value": ""
+            },
+            {
+              "value": "Part S.S.*",
+              "sources": {
+                "probtp": [
+                  "2-2m"
+                ]
+              }
+            },
+            {
+              "value": "P4",
+              "sources": {
+                "probtp": [
+                  "2-2r"
+                ]
+              }
+            },
+            {
+              "value": "Complémentaire responsable base obligatoire",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "2-3"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Équipement 100% santé",
+              "sources": {
+                "probtp": [
+                  "2-2u"
+                ]
+              }
+            },
+            {
+              "value": "60% (a)",
+              "sources": {
+                "probtp": [
+                  "2-2w"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(a)"
+                ],
+                "conditions": "La Base de Remboursement Sécurité sociale correspond à 30% du Prix Limite de Vente"
+              }
+            },
+            {
+              "value": "Frais réels",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-2B"
+                ]
+              }
+            },
+            {
+              "value": "100% PLV",
+              "type": "data",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "7-p"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Autre équipement optique (verres et monture)",
+              "rowspan": 6,
+              "sources": {
+                "probtp": [
+                  "2-2E"
+                ]
+              }
+            },
+            {
+              "value": "Équipement combinant des verres 100% Santé et une monture libre",
+              "sources": {
+                "probtp": [
+                  "2-2F"
+                ]
+              }
+            },
+            {
+              "value": "60% (b)",
+              "sources": {
+                "probtp": [
+                  "2-2G"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(b)"
+                ],
+                "conditions": "Pour les verres: la Base de Remboursement Sécurité sociale correspond à 30% du Prix Limite de Vente; pour la monture: la Base de Remboursement Sécurité sociale est fixée à 0,05 €."
+              }
+            },
+            {
+              "value": "Verres: frais réels Monture: 100 €",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-2L"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert",
+              "type": "data"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Équipement libre",
+              "rowspan": 4,
+              "sources": {
+                "probtp": [
+                  "2-2O"
+                ]
+              }
+            },
+            {
+              "value": "Équipement à verres unifocaux",
+              "rowspan": 2,
+              "sources": {
+                "probtp": [
+                  "2-2P"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-2R"
+                ]
+              }
+            },
+            {
+              "value": "Si partenaire opticien Sévéane: 350€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-2Q",
+                  "2-2W"
+                ]
+              }
+            },
+            {
+              "value": "Jusqu'à 167€ par verre (selon correction) + 100€ monture",
+              "type": "data",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "8-7",
+                  "8-c",
+                  "8-h",
+                  "8-m",
+                  "8-r",
+                  "8-w",
+                  "8-y",
+                  "8-C"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Dans les autres cas: 250€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-2Z",
+                  "2-34"
+                ]
+              }
+            },
+            {
+              "value": "Jusqu'à 167€ par verre (selon correction) + 100€ monture",
+              "type": "data",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "8-7",
+                  "8-c",
+                  "8-h",
+                  "8-m",
+                  "8-r",
+                  "8-w",
+                  "8-y",
+                  "8-C"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Équipement à verres progressifs",
+              "rowspan": 2,
+              "sources": {
+                "probtp": [
+                  "2-36"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-2R"
+                ]
+              }
+            },
+            {
+              "value": "Si partenaire opticien Sévéane: 500€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-37",
+                  "2-3c"
+                ]
+              }
+            },
+            {
+              "value": "Jusqu'à 267€ par verre (selon correction) + 100€ monture",
+              "type": "data",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "8-8",
+                  "8-d",
+                  "8-i",
+                  "8-n",
+                  "8-s",
+                  "8-x",
+                  "8-y",
+                  "8-C"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Dans les autres cas: 400€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-3f",
+                  "2-3k"
+                ]
+              }
+            },
+            {
+              "value": "Jusqu'à 267€ par verre (selon correction) + 100€ monture",
+              "type": "data",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "8-8",
+                  "8-d",
+                  "8-i",
+                  "8-n",
+                  "8-s",
+                  "8-x",
+                  "8-y",
+                  "8-C"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Supplément forte correction (11)",
+              "sources": {
+                "probtp": [
+                  "2-3m"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-2R"
+                ]
+              }
+            },
+            {
+              "value": "+ 50€/verre",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-3r"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(11)"
+                ],
+                "conditions": "Dispositions applicables pour tous verres optiques sauf les verres des catégories spécifiques listées en note (11)."
+              }
+            },
+            {
+              "value": "Non couvert",
+              "type": "data",
+              "colspan": 2
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Lentilles (12)",
+              "rowspan": 2,
+              "sources": {
+                "probtp": [
+                  "2-3u"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(12)"
+                ],
+                "conditions": "Forfait par an et par bénéficiaire"
+              }
+            },
+            {
+              "value": "Lentilles remboursées par la S.S.",
+              "sources": {
+                "probtp": [
+                  "2-3v"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-3w"
+                ]
+              }
+            },
+            {
+              "value": "100% + 200€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-3B"
+                ]
+              }
+            },
+            {
+              "value": "200 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "7-z",
+                  "7-A"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Lentilles non remboursées par la S.S.",
+              "sources": {
+                "probtp": [
+                  "2-3E"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-3F"
+                ]
+              }
+            },
+            {
+              "value": "150€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-3K"
+                ]
+              }
+            },
+            {
+              "value": "200 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "7-z",
+                  "7-A"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Chirurgie réfractive de la vue (13)",
+              "sources": {
+                "probtp": [
+                  "2-3N"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(13)"
+                ],
+                "conditions": "Par œil, par bénéficiaire et par an"
+              }
+            },
+            {
+              "value": "Non couvert",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-3O"
+                ]
+              }
+            },
+            {
+              "value": "400€/œil",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-3T"
+                ]
+              }
+            },
+            {
+              "value": "800 €",
+              "type": "data",
+              "colspan": 2,
+              "sources": {
+                "axa": [
+                  "7-K",
+                  "7-L"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "category": "Soins Dentaires",
+        "policy_levels": {
+          "probtp": [
+            "P4"
+          ],
+          "axa": [
+            "Base Obligatoire"
+          ]
+        }
+      },
+      "rows": [
+        {
+          "cells": [
+            {
+              "value": ""
+            },
+            {
+              "value": "Part S.S.*",
+              "sources": {
+                "probtp": [
+                  "2-5"
+                ]
+              }
+            },
+            {
+              "value": "P4",
+              "sources": {
+                "probtp": [
+                  "2-2r"
+                ]
+              }
+            },
+            {
+              "value": "Base Obligatoire",
+              "sources": {
+                "axa": [
+                  "3-3"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Soins et prothèses 100% santé",
+              "sources": {
+                "probtp": [
+                  "2-3Y"
+                ],
+                "axa": [
+                  "3-D"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-3Z"
+                ]
+              }
+            },
+            {
+              "value": "Frais réels",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-44"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)",
+                  "(14)"
+                ],
+                "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond, sauf pour 100% Santé. Conforme à la réglementation 100% Santé."
+              }
+            },
+            {
+              "value": "100% PLV-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-E"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(1)"
+                ],
+                "conditions": "Conforme à la réglementation 100% Santé."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Soins dentaires"
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Inlay/onlay (par acte)",
+              "sources": {
+                "probtp": [
+                  "2-48"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-49"
+                ]
+              }
+            },
+            {
+              "value": "200%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-4e"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+              }
+            },
+            {
+              "value": "370% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-I"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Inclus dans les prothèses à tarif limité."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Autres soins dentaires pris en charge par la S.S.",
+              "sources": {
+                "probtp": [
+                  "2-4h"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-4i"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-4n"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+              }
+            },
+            {
+              "value": "200% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-o"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Parodontologie non prise en charge par la S.S. (/an /bénéf.)",
+              "sources": {
+                "probtp": [
+                  "2-4q"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert",
+              "sources": {
+                "probtp": [
+                  "2-4r"
+                ]
+              }
+            },
+            {
+              "value": "300 €",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-4w"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(12)"
+                ],
+                "conditions": "Forfait par an et par bénéficiaire."
+              }
+            },
+            {
+              "value": "300 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-r"
+                ]
+              },
+              "metadata": {
+                "conditions": "Par année civile et par bénéficiaire. Concerne Curetage / Surfaçage."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Greffe gingivale non prise en charge par la S.S."
+            },
+            {
+              "value": "Non couvert"
+            },
+            {
+              "value": "Non couvert",
+              "type": "data"
+            },
+            {
+              "value": "Non couvert",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-u"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Allongement coronaire / Lambeau non pris en charge par la S.S."
+            },
+            {
+              "value": "Non couvert"
+            },
+            {
+              "value": "Non couvert",
+              "type": "data"
+            },
+            {
+              "value": "Non couvert",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-x"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Prothèses dentaires (hors 100% Santé)"
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Prothèses à honoraires maîtrisés",
+              "sources": {
+                "probtp": [
+                  "2-4B"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-4C"
+                ]
+              }
+            },
+            {
+              "value": "Frais réels",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-4H"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+              }
+            },
+            {
+              "value": "370% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-I"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Y compris Inlay Onlay."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Autres prothèses (à tarifs libres)",
+              "sources": {
+                "probtp": [
+                  "2-4K"
+                ]
+              }
+            },
+            {
+              "value": "60%",
+              "sources": {
+                "probtp": [
+                  "2-4C"
+                ]
+              }
+            },
+            {
+              "value": "450 %",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-4P"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+              }
+            },
+            {
+              "value": "370% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-O"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(3)"
+                ],
+                "conditions": "Y compris Inlay Onlay."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Prothèses fixes non prises en charge par la Sécurité sociale",
+              "sources": {
+                "axa": [
+                  "3-Q"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert"
+            },
+            {
+              "value": "Non couvert",
+              "type": "data"
+            },
+            {
+              "value": "300 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-R"
+                ]
+              },
+              "metadata": {
+                "conditions": "3 actes par année civile et par bénéficiaire."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Orthodontie"
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Orthodontie acceptée par la S.S. (par semestre)",
+              "sources": {
+                "probtp": [
+                  "2-4T"
+                ],
+                "axa": [
+                  "3-X"
+                ]
+              }
+            },
+            {
+              "value": "100%",
+              "sources": {
+                "probtp": [
+                  "2-4U"
+                ]
+              }
+            },
+            {
+              "value": "275 %",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-4Z"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+              }
+            },
+            {
+              "value": "370 % BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-Y"
+                ]
+              },
+              "metadata": {
+                "conditions": "Par semestre; limité à 4 semestres consécutifs."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Orthodontie adulte non prise en charge par la S.S. (par semestre)",
+              "sources": {
+                "probtp": [
+                  "2-52"
+                ],
+                "axa": [
+                  "3-10"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert",
+              "sources": {
+                "probtp": [
+                  "2-53"
+                ]
+              }
+            },
+            {
+              "value": "400 €",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-58"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(17)"
+                ],
+                "conditions": "Prise en charge limitée à 6 semestres consécutifs."
+              }
+            },
+            {
+              "value": "300 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-11"
+                ]
+              },
+              "metadata": {
+                "conditions": "Par semestre; limité à 4 semestres consécutifs."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Implants (/an/bénéf.)"
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Pose de l'implant (phase opératoire)",
+              "sources": {
+                "axa": [
+                  "3-19"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert",
+              "sources": {
+                "probtp": [
+                  "2-5d"
+                ]
+              }
+            },
+            {
+              "value": "1000 €",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-5j"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Si partenaire implantologue Sévéane. Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+              }
+            },
+            {
+              "value": "616 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-1a"
+                ]
+              },
+              "metadata": {
+                "conditions": "3 actes par année civile et par bénéficiaire."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Faux-moignon implantaire",
+              "sources": {
+                "axa": [
+                  "3-1f"
+                ]
+              }
+            },
+            {
+              "value": "Non couvert",
+              "sources": {
+                "probtp": [
+                  "2-5d"
+                ]
+              }
+            },
+            {
+              "value": "500 €",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-5p"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)"
+                ],
+                "conditions": "Dans les autres cas. Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+              }
+            },
+            {
+              "value": "184 €",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "3-1g"
+                ]
+              },
+              "metadata": {
+                "conditions": "3 actes par année civile et par bénéficiaire."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "category": "Audiologie",
+        "policy_levels": {
+          "probtp": [
+            "P4"
+          ],
+          "axa": [
+            "Complémentaire responsable base obligatoire"
+          ]
+        }
+      },
+      "rows": [
+        {
+          "cells": [
+            {
+              "value": ""
+            },
+            {
+              "value": ""
+            },
+            {
+              "value": "P4",
+              "sources": {
+                "probtp": [
+                  "2-2r"
+                ]
+              }
+            },
+            {
+              "value": "Complémentaire responsable base obligatoire",
+              "sources": {
+                "axa": [
+                  "2-3"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Equipements auditifs 100% santé (18)",
+              "sources": {
+                "probtp": [
+                  "2-5t"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "type": null
+            },
+            {
+              "value": "Frais réels",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-5y"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(18)"
+                ],
+                "conditions": "Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire"
+              }
+            },
+            {
+              "value": "100% PLV-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-d"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(4)"
+                ],
+                "conditions": "Dans la limite d'une prise en charge tous les 4 ans; Équipements 100% Santé tels que définis réglementairement, de classe 1 à prise en charge renforcée, dans la limite des prix fixés et sous déduction du Montant Remboursé par la Sécurité sociale."
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Prothèse auditive (2) (18)",
+              "rowspan": 3,
+              "sources": {
+                "probtp": [
+                  "2-5C"
+                ]
+              }
+            },
+            {
+              "value": "Pour les bénéficiaires de > 20 ans",
+              "sources": {
+                "probtp": [
+                  "2-5D"
+                ]
+              }
+            },
+            {
+              "value": "1200€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-5I"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)",
+                  "(18)"
+                ],
+                "conditions": "Plafonné par bénéficiaire; Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire; Si partenaire audioprothésiste Sévéane"
+              }
+            },
+            {
+              "value": "1400 Euros-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-j"
+                ]
+              },
+              "metadata": {
+                "conditions": "Équipement de classe 2 à tarif libre: adulte; Dans la limite d'une prise en charge tous les 4 ans"
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Dans les autres cas",
+              "sources": {
+                "probtp": [
+                  "2-5M"
+                ]
+              }
+            },
+            {
+              "value": "950€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-5Q"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)",
+                  "(18)"
+                ],
+                "conditions": "Plafonné par bénéficiaire; Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire"
+              }
+            },
+            {
+              "value": "1400 Euros-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-j"
+                ]
+              },
+              "metadata": {
+                "conditions": "Équipement de classe 2 à tarif libre: adulte; Dans la limite d'une prise en charge tous les 4 ans"
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Pour les bénéficiaires de ≤ 20 ans",
+              "sources": {
+                "probtp": [
+                  "2-5U"
+                ]
+              }
+            },
+            {
+              "value": "1400€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-5Z"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(2)",
+                  "(18)"
+                ],
+                "conditions": "Plafonné par bénéficiaire; Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire"
+              }
+            },
+            {
+              "value": "1700 Euros-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-p"
+                ]
+              },
+              "metadata": {
+                "conditions": "Équipement de classe 2 à tarif libre: enfant; Dans la limite d'une prise en charge tous les 4 ans"
+              }
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "Accessoires (20)",
+              "sources": {
+                "probtp": [
+                  "2-62"
+                ]
+              }
+            },
+            {
+              "value": "",
+              "type": null
+            },
+            {
+              "value": "100%",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-66"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(20)"
+                ],
+                "conditions": "Accessoires pris en charge par la Sécurité sociale: écouteur, microphone, embout auriculaire (pour bénéficiaire de moins de 2 ans : 4 embouts/an/appareil ; pour bénéficiaire de plus de 2 ans : 1 embout /an/appareil), pile sans mercure."
+              }
+            },
+            {
+              "value": "300% BR-MR",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-v"
+                ]
+              },
+              "metadata": {
+                "conditions": "Accessoires, entretien et piles pris en charge par la Sécurité sociale"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "metadata": {
+        "category": "Médecines Douces",
+        "policy_levels": {
+          "probtp": [
+            "P4"
+          ],
+          "axa": [
+            "Complémentaire responsable base obligatoire"
+          ]
+        }
+      },
+      "rows": [
+        {
+          "cells": [
+            {
+              "value": "P4"
+            },
+            {
+              "value": "Complémentaire responsable base obligatoire"
+            }
+          ]
+        },
+        {
+          "cells": [
+            {
+              "value": "4x50€",
+              "type": "data",
+              "sources": {
+                "probtp": [
+                  "2-6j"
+                ]
+              },
+              "metadata": {
+                "footnotes": [
+                  "(21)",
+                  "(22)"
+                ],
+                "conditions": "Maximum 50€ par séance, 4 séances par an. Plafond annuel par famille de 320€. Couvre ostéopathes, chiropracteurs, acupuncteurs, diététiciens, psychologues (non remboursés par SS). Soins effectués en France métropolitaine."
+              }
+            },
+            {
+              "value": "50 € par séance",
+              "type": "data",
+              "sources": {
+                "axa": [
+                  "5-9"
+                ]
+              },
+              "metadata": {
+                "conditions": "50€ par séance, limité à 3 séances par an et par bénéficiaire. Couvre Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie."
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "analyses": [
+    {
+      "category": "Soins courants",
+      "annotated_table": {
+        "metadata": {
+          "category": "Soins courants",
+          "policy_levels": {
+            "probtp": [
+              "S2"
+            ],
+            "axa": [
+              "Complémentaire responsable base obligatoire"
+            ]
+          }
+        },
+        "rows": [
+          {
+            "cells": [
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": "Part S.S.*",
+                "sources": {
+                  "probtp": [
+                    "2-5"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "La part de Sécurité sociale indiquée est celle du régime général (ne concerne pas le régime de l'Alsace-Moselle)."
+                }
+              },
+              {
+                "value": "S2",
+                "sources": {
+                  "probtp": [
+                    "2-7"
+                  ]
+                }
+              },
+              {
+                "value": "Complémentaire responsable base obligatoire",
+                "sources": {
+                  "axa": [
+                    "2-3",
+                    "4-3",
+                    "5-2",
+                    "6-3"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Soins courants",
+                "rowspan": 13,
+                "sources": {
+                  "probtp": [
+                    "2-c"
+                  ]
+                }
+              },
+              {
+                "value": "Honoraires médicaux",
+                "rowspan": 4,
+                "sources": {
+                  "probtp": [
+                    "2-d"
+                  ]
+                }
+              },
+              {
+                "value": "Consultations et visites (généralistes et spécialistes)",
+                "sources": {
+                  "probtp": [
+                    "2-e"
+                  ]
+                }
+              },
+              {
+                "value": "70%",
+                "sources": {
+                  "probtp": [
+                    "2-f"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-h"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "170% BR-MR (Adhérent DPTAM), 150% BR-MR (Non adhérent DPTAM)",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-f",
+                    "4-i",
+                    "4-l",
+                    "4-o",
+                    "4-r",
+                    "4-u"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "DPTAM = Dispositifs de Pratique Tarifaire Maîtrisée. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Actes techniques médicaux",
+                "sources": {
+                  "probtp": [
+                    "2-m"
+                  ]
+                }
+              },
+              {
+                "value": "70%",
+                "sources": {
+                  "probtp": [
+                    "2-n"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-h"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "170% BR-MR (Adhérent DPTAM), 150% BR-MR (Non adhérent DPTAM)",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-x",
+                    "4-A"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "DPTAM = Dispositifs de Pratique Tarifaire Maîtrisée. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Radiologie",
+                "sources": {
+                  "probtp": [
+                    "2-o"
+                  ]
+                }
+              },
+              {
+                "value": "70%",
+                "sources": {
+                  "probtp": [
+                    "2-p"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-h"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "170% BR-MR (Adhérent DPTAM), 150% BR-MR (Non adhérent DPTAM)",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-D",
+                    "4-G"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "DPTAM = Dispositifs de Pratique Tarifaire Maîtrisée. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Soins externes",
+                "sources": {
+                  "probtp": [
+                    "2-q"
+                  ]
+                }
+              },
+              {
+                "value": "60% à 70%",
+                "sources": {
+                  "probtp": [
+                    "2-r"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-h"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "Non couvert",
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Honoraires paramédicaux",
+                "rowspan": 4,
+                "sources": {
+                  "probtp": [
+                    "2-s"
+                  ]
+                }
+              },
+              {
+                "value": "Auxiliaires médicaux, soins infirmiers",
+                "sources": {
+                  "probtp": [
+                    "2-t"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-u"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-w"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "160% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-T"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Transport",
+                "sources": {
+                  "probtp": [
+                    "2-B"
+                  ]
+                }
+              },
+              {
+                "value": "55%",
+                "sources": {
+                  "probtp": [
+                    "2-C"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-E"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "100% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-B"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Séances d'accompagnement psychologique remboursées par la SS",
+                "sources": {
+                  "probtp": [
+                    "2-J"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-K"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-F"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "Non couvert",
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Analyses et examens de laboratoires",
+                "sources": {
+                  "probtp": [
+                    "2-L"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-M"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-O"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "160% BR-MR (pris en charge par la SS), 100 € (non pris en charge par la SS)",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-M",
+                    "4-P"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale. 100€ par année civile et par bénéficiaire pour actes non pris en charge par la SS (hors bilan génétique)."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Médicaments",
+                "rowspan": 3,
+                "sources": {
+                  "probtp": [
+                    "2-T"
+                  ]
+                }
+              },
+              {
+                "value": "Pharmacie remboursée par la S.S.",
+                "sources": {
+                  "probtp": [
+                    "2-U"
+                  ]
+                }
+              },
+              {
+                "value": "65% 30% 15%",
+                "sources": {
+                  "probtp": [
+                    "2-V"
+                  ]
+                }
+              },
+              {
+                "value": "100% 30% 15%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-X"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "100% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-Z"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Vaccins non remboursés par la S.S.",
+                "sources": {
+                  "probtp": [
+                    "2-12"
+                  ]
+                }
+              },
+              {
+                "value": "",
+                "sources": {
+                  "probtp": [
+                    "2-13"
+                  ]
+                }
+              },
+              {
+                "value": "Vaccin anti-grippe 15€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-15"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(1)"
+                  ],
+                  "conditions": "Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Plafond par an et par bénéficiaire."
+                },
+                "is_best": false
+              },
+              {
+                "value": "6 % PMSS",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "6-c"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Par année civile et par bénéficiaire. PMSS = Plafond Mensuel de la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Contraception prescrite, non remboursée par la S.S.",
+                "sources": {
+                  "probtp": [
+                    "2-1a"
+                  ]
+                }
+              },
+              {
+                "value": "",
+                "sources": {
+                  "probtp": [
+                    "2-1b"
+                  ]
+                }
+              },
+              {
+                "value": "30€/an/bénéf.",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-1e"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(12)"
+                  ],
+                  "conditions": "Forfait par an et par bénéficiaire."
+                },
+                "is_best": false
+              },
+              {
+                "value": "50 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-15"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Par année civile et par bénéficiaire."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Matériel médical",
+                "sources": {
+                  "probtp": [
+                    "2-1i"
+                  ]
+                }
+              },
+              {
+                "value": "Appareillages orthopédiques et autres prothèses",
+                "sources": {
+                  "probtp": [
+                    "2-1j"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-1k"
+                  ]
+                }
+              },
+              {
+                "value": "250%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-1m"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "170% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "4-1b"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Hors prothèses dentaires, auditives et optiques. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "",
+                "type": null
+              },
+              {
+                "value": "Médecines douces agréées (ostéopathes, chiropracteurs, acupuncteurs, diététiciens, psychologues non remboursées par la S.S.)",
+                "sources": {
+                  "probtp": [
+                    "2-6c"
+                  ]
+                }
+              },
+              {
+                "value": "",
+                "sources": {
+                  "probtp": [
+                    "2-6e"
+                  ]
+                }
+              },
+              {
+                "value": "2x40€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-6g"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(21)",
+                    "(22)"
+                  ],
+                  "conditions": "Ostéopathes, Chiropracteurs, Acupuncteurs, Diététiciens, Psychologues (non remboursés par la Sécurité sociale) titulaires du titre/diplôme requis. Soins effectués en France métropolitaine. Montant maximum par séance et dans la limite du nombre de séances indiquées par an et d'un plafond annuel par famille. Remboursement sur factures acquittées."
+                },
+                "is_best": false
+              },
+              {
+                "value": "50 € par séance (Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie)",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-7",
+                    "5-8"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Dans la limite de 3 séances par année civile et par bénéficiaire."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Cures thermales",
+                "colspan": 3,
+                "sources": {
+                  "probtp": [
+                    "2-6l"
+                  ]
+                }
+              },
+              {
+                "value": "65%",
+                "sources": {
+                  "probtp": [
+                    "2-6m"
+                  ]
+                }
+              },
+              {
+                "value": "65%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-6n"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "300 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-E"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Frais médicaux, frais de séjour et frais de transport pris en charge par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Prévention",
+                "colspan": 3
+              },
+              {
+                "value": "Consultation chez un diététicien prescrite par un médecin",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "6-n"
+                  ]
+                }
+              },
+              {
+                "value": "1,25% PMSS",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "6-o"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Dans la limite d'une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans. PMSS = Plafond Mensuel de la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Test de dépistage des virus impliqués dans le cancer du col de l'utérus (Test HPV) non pris en charge par la Sécurité sociale",
+                "colspan": 5,
+                "sources": {
+                  "axa": [
+                    "6-t"
+                  ]
+                }
+              },
+              {
+                "value": "170 % BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "6-u"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Dans la limite d'une prise en charge tous les 3 ans. BR = Base de remboursement. MR = Montant remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Tout acte de prévention prévu à l'article R 871-2 du code de la Sécurité sociale",
+                "colspan": 5,
+                "sources": {
+                  "axa": [
+                    "6-z"
+                  ]
+                }
+              },
+              {
+                "value": "Inclus",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "6-A"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Téléconsultation",
+                "colspan": 5,
+                "sources": {
+                  "axa": [
+                    "6-C"
+                  ]
+                }
+              },
+              {
+                "value": "Inclus",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "6-D"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Séances d'activité physique adaptée aux affections définies par l'article D1172-2 du Code de la santé publique",
+                "colspan": 5,
+                "sources": {
+                  "axa": [
+                    "6-F"
+                  ]
+                }
+              },
+              {
+                "value": "200 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "6-G"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Sur prescription du médecin traitant. L'activité physique doit être dispensée par un professionnel de santé ou un professionnel titulaire d'un diplôme ou certification. Par année civile et par bénéficiaire."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Connecteur Bluetooth aux stylos à insuline et aux glucomètres",
+                "colspan": 5,
+                "sources": {
+                  "axa": [
+                    "6-L"
+                  ]
+                }
+              },
+              {
+                "value": "100 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "6-M"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Sur prescription médicale, dans la limite d'une fois par année civile et par bénéficiaire."
+                },
+                "is_best": true
+              }
+            ]
+          }
+        ]
+      },
+      "key_differences": "AXA offre des remboursements nettement supérieurs pour les consultations, actes médicaux et la radiologie, surtout en cas de dépassements d'honoraires (jusqu'à 170% BR). ProBTP se distingue par une meilleure couverture du matériel médical orthopédique et des soins externes, mais AXA propose une gamme plus large de services de prévention et de médecines douces avec des forfaits plus élevés.",
+      "concrete_examples": [
+        "Pour une consultation chez un spécialiste non adhérent DPTAM facturée 60€ (BR 25€, remboursée 16,50€ par la SS), ProBTP S2 rembourse 8,50€ (total 25€, reste à charge 35€), tandis qu'AXA rembourse 21€ (total 37,50€ ou 150% BR, reste à charge 22,50€).",
+        "Pour un appareillage orthopédique coûtant 300€ (BR 100€, remboursé 60€ par la SS), ProBTP S2 rembourse 190€ (total 250€, reste à charge 50€), alors qu'AXA rembourse 110€ (total 170€, reste à charge 130€).",
+        "Pour 3 séances d'ostéopathie à 60€ chacune (non remboursées par la SS), ProBTP S2 rembourse 80€ au total (2x40€, reste à charge 100€), tandis qu'AXA rembourse 150€ (3x50€, reste à charge 30€)."
+      ],
+      "critical_thinking": "La fréquence d'utilisation des consultations et actes médicaux rend les garanties d'AXA très avantageuses pour la majorité des assurés, surtout ceux consultant des praticiens à honoraires libres. La couverture des dépassements d'honoraires est un point crucial. ProBTP offre une excellente protection pour le matériel médical, mais c'est un besoin moins fréquent. AXA propose également une approche plus moderne de la prévention et du bien-être (téléconsultation, activité physique, diététicien), qui peut attirer une clientèle soucieuse de sa santé globale. Le risque financier est plus élevé sur les honoraires médicaux que sur les médecines douces ou les vaccins, où AXA excelle.",
+      "best_coverage": "ProBTP S2 se positionne comme un choix solide pour les assurés qui privilégient une couverture robuste sur le matériel médical orthopédique et les soins externes, ainsi que les séances de psychologie remboursées par la Sécurité Sociale. C'est un contrat qui assure l'essentiel des soins courants à 100% BR, offrant une bonne base de remboursement. Pour nos commerciaux, il est important de souligner la simplicité de notre offre à 100% BR sur de nombreux postes, garantissant une prise en charge complète de la Base de Remboursement de la Sécurité Sociale, et de mettre en avant notre supériorité sur des postes spécifiques comme le matériel médical, où nos garanties sont significativement plus élevées qu'AXA. Bien qu'AXA propose des taux plus élevés sur les honoraires, ProBTP assure une couverture intégrale de la BR, ce qui est souvent suffisant pour les praticiens du secteur 1 ou adhérents DPTAM.",
+      "salesperson_talking_points": [
+        "Mettez en avant la couverture à 250% BR de ProBTP sur le matériel médical orthopédique, un avantage clair et protecteur pour les besoins spécifiques.",
+        "Soulignez la simplicité et la clarté de notre remboursement à 100% de la BR sur de nombreux postes (consultations, actes, radiologie, pharmacie), garantissant une prise en charge complète de l'essentiel.",
+        "Insistez sur la prise en charge des soins externes et des séances de psychologie remboursées par la SS, des postes où AXA ne couvre pas ou peu.",
+        "Contextualisez les taux plus élevés d'AXA sur les honoraires en expliquant que 100% BR de ProBTP couvre déjà entièrement la base de remboursement, ce qui est suffisant pour les médecins qui respectent les tarifs conventionnés.",
+        "ProBTP est un contrat fiable et complet pour les besoins courants essentiels, avec une forte protection sur des postes clés moins fréquents mais coûteux comme l'orthopédie."
+      ],
+      "objective_assessment": {
+        "overall_winner": "axa",
+        "confidence": "high",
+        "reasoning": "AXA offre une couverture nettement plus avantageuse pour les postes les plus fréquemment utilisés et potentiellement coûteux en cas de dépassements d'honoraires (consultations, actes médicaux, radiologie) avec des taux allant jusqu'à 170% BR. De plus, AXA propose une gamme étendue de services de prévention et de médecines douces avec des forfaits plus généreux, ce qui en fait un contrat plus complet et moderne pour les soins courants et le bien-être général. Bien que ProBTP soit supérieur sur le matériel médical orthopédique et certains soins spécifiques, ces postes sont moins sollicités que les consultations et actes médicaux.",
+        "probtp_weaknesses": [
+          "Remboursement limité à 100% BR pour les consultations, actes médicaux et radiologie, ce qui laisse un reste à charge important en cas de dépassements d'honoraires.",
+          "Forfaits inférieurs pour les vaccins non remboursés par la SS et la contraception non remboursée par la SS.",
+          "Forfait plus faible et moins flexible pour les médecines douces (80€ par famille vs 150€ par bénéficiaire chez AXA).",
+          "Absence de couverture explicite pour de nombreux services de prévention et de bien-être offerts par AXA (téléconsultation, activité physique, dépistage HPV, diététicien)."
+        ],
+        "axa_weaknesses": [
+          "Absence de couverture pour les soins externes et les séances de psychologie remboursées par la SS.",
+          "Couverture moins généreuse pour le matériel médical orthopédique et autres prothèses (170% BR vs 250% BR chez ProBTP)."
+        ]
+      }
+    },
+    {
+      "category": "Hospitalisation",
+      "annotated_table": {
+        "metadata": {
+          "category": "Hospitalisation",
+          "policy_levels": {
+            "probtp": [
+              "S2"
+            ],
+            "axa": [
+              "Base Obligatoire"
+            ]
+          }
+        },
+        "rows": [
+          {
+            "cells": [
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": "Part S.S.",
+                "sources": {
+                  "probtp": [
+                    "2-5"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "S2",
+                "sources": {
+                  "probtp": [
+                    "2-7"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "Base Obligatoire",
+                "sources": {
+                  "axa": [
+                    "2-3"
+                  ]
+                },
+                "is_best": null
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Honoraires",
+                "rowspan": 4,
+                "sources": {
+                  "probtp": [
+                    "2-1B"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "Honoraires, frais de séjour",
+                "sources": {
+                  "probtp": [
+                    "2-1C"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "80%",
+                "sources": {
+                  "probtp": [
+                    "2-1D"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-1F"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "Frais réels - SS (séjour); 200% à 480% BR-MR (honoraires)",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "2-b",
+                    "2-g",
+                    "2-j",
+                    "2-m",
+                    "2-p",
+                    "2-s",
+                    "2-v",
+                    "2-y",
+                    "2-C",
+                    "2-F"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Chambre particulière",
+                "sources": {
+                  "probtp": [
+                    "2-1K"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "",
+                "sources": {
+                  "probtp": [
+                    "2-1L"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": " - ",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-1N"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "85 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "2-I"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Lit accompagnant pour enfants de -12 ans ou bénéficiaires de + 70 ans",
+                "sources": {
+                  "probtp": [
+                    "2-1S"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "",
+                "sources": {
+                  "probtp": [
+                    "2-1T"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "23 € / jour",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-1V"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "40 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "2-R",
+                    "2-U"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Pour enfant de moins de 16 ans, limité à 30 jours par an. Frais d'hébergement en maison de parents peuvent être pris en charge."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Participation forfaitaire pour les actes supérieurs à 120€",
+                "sources": {
+                  "probtp": [
+                    "2-20"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "100% - 1 forfait",
+                "sources": {
+                  "probtp": [
+                    "2-21"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "100% du forfait",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-23"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "100% du forfait (actes lourds)",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "2-O"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Forfait journalier et forfait urgences en établissement hospitalier",
+                "sources": {
+                  "probtp": [
+                    "2-28"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(3)",
+                    "(4)",
+                    "(4bis)"
+                  ],
+                  "conditions": "Forfait urgences sans limitation de durée ni nombre. Prise en charge selon conditions R. 871-2 du Code de la Sécurité sociale, excluant forfaits journaliers en établissements de longue durée, MAS ou EHPAD. Prise en charge selon conditions L. 871-1 du Code de la Sécurité sociale."
+                },
+                "is_best": null
+              },
+              {
+                "value": "",
+                "sources": {
+                  "probtp": [
+                    "2-29"
+                  ]
+                },
+                "is_best": null
+              },
+              {
+                "value": "",
+                "type": "data",
+                "is_best": null
+              },
+              {
+                "value": "oui",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-2b"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "100% du forfait",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "2-L"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          }
+        ]
+      },
+      "key_differences": "Le contrat AXA \"Base Obligatoire\" offre une couverture nettement supérieure pour l'hospitalisation, notamment pour les honoraires (jusqu'à 480% BR-MR) et la chambre particulière (85€/jour), là où ProBTP S2 se limite à 100% BR pour les honoraires et n'inclut pas la chambre particulière. Les deux assureurs couvrent de manière équivalente les forfaits obligatoires.",
+      "concrete_examples": [
+        "Pour une hospitalisation de 3 jours avec des honoraires de chirurgien à 300% de la BR (BR 70€) et une chambre particulière à 90€/jour: ProBTP S2 laisserait un reste à charge de 410€ (140€ pour les honoraires et 270€ pour la chambre particulière), tandis qu'AXA \"Base Obligatoire\" laisserait un reste à charge de seulement 15€ (0€ pour les honoraires et 15€ pour la chambre particulière).",
+        "Pour un enfant de 10 ans hospitalisé 5 jours avec un lit accompagnant à 45€/jour: ProBTP S2 rembourserait 23€/jour, laissant un reste à charge de 110€ (5 x (45€-23€)). AXA \"Base Obligatoire\" rembourserait 40€/jour, laissant un reste à charge de 25€ (5 x (45€-40€))."
+      ],
+      "critical_thinking": "L'hospitalisation représente un risque financier majeur, surtout en cas de dépassements d'honoraires importants et de frais de chambre particulière. La couverture d'AXA pour ces postes est cruciale pour minimiser le reste à charge. L'absence de prise en charge de la chambre particulière par ProBTP S2 est un inconvénient significatif pour les patients souhaitant plus de confort. Le lit accompagnant, bien que moins fréquent, est essentiel pour les familles avec de jeunes enfants ou les bénéficiaires âgés, et AXA offre ici une meilleure indemnisation. Les couvertures pour la participation forfaitaire et le forfait journalier sont similaires et n'impactent pas de manière significative la comparaison des risques financiers majeurs.",
+      "best_coverage": "Bien qu'AXA propose des remboursements plus élevés sur certains postes, ProBTP S2 assure une couverture solide et prévisible pour les éléments fondamentaux de l'hospitalisation. Avec 100% de la Base de Remboursement pour les honoraires et frais de séjour, ProBTP garantit que les coûts essentiels sont pris en charge. De plus, la prise en charge intégrale des forfaits obligatoires (participation forfaitaire et forfait journalier) offre une tranquillité d'esprit sur les dépenses incompressibles. Pour les clients qui recherchent une protection fiable et sans surprise sur les postes clés, ProBTP S2 est une option pertinente, permettant de gérer les dépenses de confort (comme la chambre particulière) de manière autonome selon les priorités budgétaires.",
+      "salesperson_talking_points": [
+        "Mettez en avant la garantie ProBTP S2 de 100% de la Base de Remboursement pour les honoraires et frais de séjour, assurant une couverture essentielle et prévisible pour les hospitalisations.",
+        "Soulignez la prise en charge intégrale des forfaits obligatoires (participation forfaitaire et forfait journalier), qui sont des dépenses incompressibles lors de tout séjour hospitalier.",
+        "Positionnez ProBTP S2 comme la solution idéale pour les clients qui privilégient une maîtrise de leur budget et une couverture solide des postes clés, sans les options de confort onéreuses.",
+        "Expliquez que l'absence de couverture pour la chambre particulière permet de maintenir des cotisations compétitives tout en protégeant efficacement contre les coûts médicaux les plus importants."
+      ],
+      "objective_assessment": {
+        "overall_winner": "axa",
+        "confidence": "high",
+        "reasoning": "Le contrat AXA \"Base Obligatoire\" est objectivement supérieur pour la catégorie Hospitalisation par rapport à ProBTP S2. Il offre des remboursements bien plus élevés pour les honoraires (jusqu'à 480% BR-MR contre 100% BR), ce qui est crucial face aux dépassements d'honoraires fréquents. De plus, AXA prend en charge la chambre particulière (85€/jour), un avantage totalement absent chez ProBTP S2, et propose une indemnité journalière plus élevée pour le lit accompagnant. Ces différences ont un impact direct et significatif sur le reste à charge du bénéficiaire en cas d'hospitalisation.",
+        "probtp_weaknesses": [
+          "Absence de prise en charge pour la chambre particulière.",
+          "Remboursement des honoraires limité à 100% BR, ce qui est insuffisant pour couvrir les dépassements d'honoraires importants.",
+          "Prise en charge du lit accompagnant inférieure à celle d'AXA."
+        ],
+        "axa_weaknesses": [
+          "Les conditions spécifiques pour le lit accompagnant (limité à 30 jours par an pour les enfants de moins de 16 ans) pourraient être perçues comme une restriction, malgré l'indemnité journalière plus élevée."
+        ]
+      }
+    },
+    {
+      "category": "Optique",
+      "annotated_table": {
+        "metadata": {
+          "category": "Optique",
+          "policy_levels": {
+            "probtp": [
+              "P4"
+            ],
+            "axa": [
+              "Complémentaire responsable base obligatoire"
+            ]
+          }
+        },
+        "rows": [
+          {
+            "cells": [
+              {
+                "value": ""
+              },
+              {
+                "value": "Part S.S.*",
+                "sources": {
+                  "probtp": [
+                    "2-2m"
+                  ]
+                }
+              },
+              {
+                "value": "P4",
+                "sources": {
+                  "probtp": [
+                    "2-2r"
+                  ]
+                }
+              },
+              {
+                "value": "Complémentaire responsable base obligatoire",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "2-3"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Équipement 100% santé",
+                "sources": {
+                  "probtp": [
+                    "2-2u"
+                  ]
+                }
+              },
+              {
+                "value": "60% (a)",
+                "sources": {
+                  "probtp": [
+                    "2-2w"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(a)"
+                  ],
+                  "conditions": "La Base de Remboursement Sécurité sociale correspond à 30% du Prix Limite de Vente"
+                }
+              },
+              {
+                "value": "Frais réels",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-2B"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "100% PLV",
+                "type": "data",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "7-p"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Autre équipement optique (verres et monture)",
+                "rowspan": 6,
+                "sources": {
+                  "probtp": [
+                    "2-2E"
+                  ]
+                }
+              },
+              {
+                "value": "Équipement combinant des verres 100% Santé et une monture libre",
+                "sources": {
+                  "probtp": [
+                    "2-2F"
+                  ]
+                }
+              },
+              {
+                "value": "60% (b)",
+                "sources": {
+                  "probtp": [
+                    "2-2G"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(b)"
+                  ],
+                  "conditions": "Pour les verres: la Base de Remboursement Sécurité sociale correspond à 30% du Prix Limite de Vente; pour la monture: la Base de Remboursement Sécurité sociale est fixée à 0,05 €."
+                }
+              },
+              {
+                "value": "Verres: frais réels Monture: 100 €",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-2L"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Équipement libre",
+                "rowspan": 4,
+                "sources": {
+                  "probtp": [
+                    "2-2O"
+                  ]
+                }
+              },
+              {
+                "value": "Équipement à verres unifocaux",
+                "rowspan": 2,
+                "sources": {
+                  "probtp": [
+                    "2-2P"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-2R"
+                  ]
+                }
+              },
+              {
+                "value": "Si partenaire opticien Sévéane: 350€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-2Q",
+                    "2-2W"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "Jusqu'à 167€ par verre (selon correction) + 100€ monture",
+                "type": "data",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "8-7",
+                    "8-c",
+                    "8-h",
+                    "8-m",
+                    "8-r",
+                    "8-w",
+                    "8-y",
+                    "8-C"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Dans les autres cas: 250€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-2Z",
+                    "2-34"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "Jusqu'à 167€ par verre (selon correction) + 100€ monture",
+                "type": "data",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "8-7",
+                    "8-c",
+                    "8-h",
+                    "8-m",
+                    "8-r",
+                    "8-w",
+                    "8-y",
+                    "8-C"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Équipement à verres progressifs",
+                "rowspan": 2,
+                "sources": {
+                  "probtp": [
+                    "2-36"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-2R"
+                  ]
+                }
+              },
+              {
+                "value": "Si partenaire opticien Sévéane: 500€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-37",
+                    "2-3c"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "Jusqu'à 267€ par verre (selon correction) + 100€ monture",
+                "type": "data",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "8-8",
+                    "8-d",
+                    "8-i",
+                    "8-n",
+                    "8-s",
+                    "8-x",
+                    "8-y",
+                    "8-C"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Dans les autres cas: 400€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-3f",
+                    "2-3k"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "Jusqu'à 267€ par verre (selon correction) + 100€ monture",
+                "type": "data",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "8-8",
+                    "8-d",
+                    "8-i",
+                    "8-n",
+                    "8-s",
+                    "8-x",
+                    "8-y",
+                    "8-C"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Supplément forte correction (11)",
+                "sources": {
+                  "probtp": [
+                    "2-3m"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(11)"
+                  ],
+                  "conditions": "Dispositions applicables pour tous verres optiques sauf les verres des catégories spécifiques listées en note (11)."
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-2R"
+                  ]
+                }
+              },
+              {
+                "value": "+ 50€/verre",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-3r"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "colspan": 2,
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Lentilles (12)",
+                "rowspan": 2,
+                "sources": {
+                  "probtp": [
+                    "2-3u"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(12)"
+                  ],
+                  "conditions": "Forfait par an et par bénéficiaire"
+                }
+              },
+              {
+                "value": "Lentilles remboursées par la S.S.",
+                "sources": {
+                  "probtp": [
+                    "2-3v"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-3w"
+                  ]
+                }
+              },
+              {
+                "value": "100% + 200€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-3B"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "200 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "7-z",
+                    "7-A"
+                  ]
+                },
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Lentilles non remboursées par la S.S.",
+                "sources": {
+                  "probtp": [
+                    "2-3E"
+                  ]
+                }
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-3F"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "150€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-3K"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "200 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "7-z",
+                    "7-A"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Chirurgie réfractive de la vue (13)",
+                "sources": {
+                  "probtp": [
+                    "2-3N"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(13)"
+                  ],
+                  "conditions": "Par œil, par bénéficiaire et par an"
+                }
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-3O"
+                  ]
+                },
+                "is_best": false
+              },
+              {
+                "value": "400€/œil",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-3T"
+                  ]
+                },
+                "is_best": true
+              },
+              {
+                "value": "800 €",
+                "type": "data",
+                "colspan": 2,
+                "sources": {
+                  "axa": [
+                    "7-K",
+                    "7-L"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          }
+        ]
+      },
+      "key_differences": "ProBTP P4 se distingue par une prise en charge complète du 100% Santé et une couverture spécifique pour les montures libres combinées à des verres 100% Santé, ainsi que des forfaits pour les lentilles remboursées par la SS et un supplément pour forte correction. AXA Complémentaire responsable base obligatoire excelle sur les équipements optiques libres (verres unifocaux et progressifs) et les lentilles non remboursées par la SS, offrant des plafonds de remboursement plus élevés sur ces postes.",
+      "concrete_examples": [
+        "Pour un équipement optique 100% Santé (verres et monture) coûtant 400€ (PLV), la Sécurité Sociale rembourse environ 24€ (60% de la BR). ProBTP rembourse le reste (376€), le reste à charge est de 0€. AXA rembourse également 100% du PLV, le reste à charge est de 0€.",
+        "Pour une paire de lunettes à verres progressifs libres et une monture libre coûtant 750€ (ex: 2 verres à 300€ chacun + monture 150€), avec une BR de 0.05€ pour la monture et environ 1.70€ par verre. La SS rembourse environ 2.10€. Avec ProBTP (hors partenaire Sévéane), le remboursement est de 400€, laissant un reste à charge de 347.90€. Avec AXA, le remboursement peut aller jusqu'à 634€ (2x267€ + 100€), laissant un reste à charge de 113.90€.",
+        "Pour des lentilles non remboursées par la SS coûtant 250€, ProBTP P4 rembourse 150€, laissant un reste à charge de 100€. AXA rembourse 200€, laissant un reste à charge de 50€."
+      ],
+      "critical_thinking": "L'optique est un poste de dépense majeur et fréquent. Le 100% Santé garantit un accès sans reste à charge, mais de nombreux assurés préfèrent des équipements optiques libres pour des raisons esthétiques ou de confort. AXA offre une meilleure protection contre les dépenses élevées pour les équipements libres, qui sont les plus coûteux. ProBTP se démarque sur des niches comme le combiné 100% Santé/monture libre et le supplément forte correction, qui peuvent être très pertinents pour une partie de la population. Le réseau Sévéane de ProBTP est un atout, mais même avec ce réseau, les remboursements pour l'équipement libre restent inférieurs à ceux d'AXA. La chirurgie réfractive, bien que moins fréquente, représente un coût important où les deux garanties sont équivalentes pour une intervention bilatérale.",
+      "best_coverage": "ProBTP P4 offre une excellente couverture pour l'équipement 100% Santé, garantissant un reste à charge zéro, ce qui est un avantage fondamental pour tous les budgets. De plus, notre offre est particulièrement intéressante pour ceux qui souhaitent combiner les avantages du 100% Santé pour les verres avec une monture de leur choix, grâce à un forfait de 100€ là où AXA ne couvre rien. Nous couvrons également le supplément pour forte correction, une aide précieuse pour les besoins spécifiques. Bien qu'AXA propose des plafonds plus élevés sur les équipements libres, ProBTP assure une prise en charge solide, notamment via notre réseau Sévéane, et se positionne avantageusement sur les lentilles remboursées par la Sécurité Sociale. Il est crucial de souligner que ProBTP offre une solution équilibrée qui répond aux besoins essentiels et à des situations spécifiques, tout en proposant une prise en charge compétitive pour la chirurgie réfractive.",
+      "salesperson_talking_points": [
+        "Mettez en avant notre prise en charge totale du 100% Santé, un gage de sérénité pour vos clients.",
+        "Soulignez l'avantage unique de ProBTP pour les équipements combinant verres 100% Santé et monture libre (100€ de remboursement pour la monture, contre 'Non couvert' chez AXA).",
+        "Insistez sur notre forfait pour forte correction (+50€/verre), une spécificité ProBTP qui fait la différence pour les assurés ayant des besoins particuliers.",
+        "Pour les équipements libres, expliquez que notre réseau Sévéane permet d'optimiser le reste à charge, et que ProBTP offre une couverture équivalente à AXA pour la chirurgie réfractive.",
+        "Positionnez ProBTP comme la mutuelle qui offre une couverture optique complète et intelligente, en particulier pour les besoins spécifiques et le respect du 100% Santé."
+      ],
+      "objective_assessment": {
+        "overall_winner": "axa",
+        "confidence": "medium",
+        "reasoning": "AXA Complémentaire responsable base obligatoire offre des plafonds de remboursement significativement plus élevés pour les équipements optiques libres (verres unifocaux et progressifs), qui représentent la majorité des dépenses optiques non 100% Santé. Bien que ProBTP P4 ait des points forts sur des niches comme l'équipement combiné 100% Santé/monture libre et le supplément forte correction, la supériorité d'AXA sur les équipements libres et les lentilles non remboursées par la SS lui confère un avantage global pour un assuré cherchant la meilleure couverture optique hors 100% Santé.",
+        "probtp_weaknesses": [
+          "Plafonds de remboursement inférieurs pour les équipements optiques libres (verres unifocaux et progressifs), même avec le réseau partenaire Sévéane.",
+          "Remboursement inférieur pour les lentilles non remboursées par la Sécurité Sociale."
+        ],
+        "axa_weaknesses": [
+          "Absence de couverture pour les équipements combinant des verres 100% Santé et une monture libre.",
+          "Absence de couverture pour le supplément forte correction.",
+          "Remboursement inférieur pour les lentilles remboursées par la Sécurité Sociale."
+        ]
+      }
+    },
+    {
+      "category": "Soins Dentaires",
+      "annotated_table": {
+        "metadata": {
+          "category": "Soins Dentaires",
+          "policy_levels": {
+            "probtp": [
+              "P4"
+            ],
+            "axa": [
+              "Base Obligatoire"
+            ]
+          }
+        },
+        "rows": [
+          {
+            "cells": [
+              {
+                "value": ""
+              },
+              {
+                "value": "Part S.S.*",
+                "sources": {
+                  "probtp": [
+                    "2-5"
+                  ]
+                }
+              },
+              {
+                "value": "P4",
+                "sources": {
+                  "probtp": [
+                    "2-2r"
+                  ]
+                }
+              },
+              {
+                "value": "Base Obligatoire",
+                "sources": {
+                  "axa": [
+                    "3-3"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Soins et prothèses 100% santé",
+                "sources": {
+                  "probtp": [
+                    "2-3Y"
+                  ],
+                  "axa": [
+                    "3-D"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-3Z"
+                  ]
+                }
+              },
+              {
+                "value": "Frais réels",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-44"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)",
+                    "(14)"
+                  ],
+                  "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond, sauf pour 100% Santé. Conforme à la réglementation 100% Santé."
+                },
+                "is_best": true
+              },
+              {
+                "value": "100% PLV-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-E"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(1)"
+                  ],
+                  "conditions": "Conforme à la réglementation 100% Santé."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Soins dentaires"
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Inlay/onlay (par acte)",
+                "sources": {
+                  "probtp": [
+                    "2-48"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-49"
+                  ]
+                }
+              },
+              {
+                "value": "200%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-4e"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+                },
+                "is_best": false
+              },
+              {
+                "value": "370% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-I"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Inclus dans les prothèses à tarif limité."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Autres soins dentaires pris en charge par la S.S.",
+                "sources": {
+                  "probtp": [
+                    "2-4h"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-4i"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-4n"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+                },
+                "is_best": false
+              },
+              {
+                "value": "200% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-o"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Parodontologie non prise en charge par la S.S. (/an /bénéf.)",
+                "sources": {
+                  "probtp": [
+                    "2-4q"
+                  ]
+                }
+              },
+              {
+                "value": "Non couvert",
+                "sources": {
+                  "probtp": [
+                    "2-4r"
+                  ]
+                }
+              },
+              {
+                "value": "300 €",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-4w"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(12)"
+                  ],
+                  "conditions": "Forfait par an et par bénéficiaire."
+                },
+                "is_best": true
+              },
+              {
+                "value": "300 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-r"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Par année civile et par bénéficiaire. Concerne Curetage / Surfaçage."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Greffe gingivale non prise en charge par la S.S."
+              },
+              {
+                "value": "Non couvert"
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "is_best": true
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-u"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Allongement coronaire / Lambeau non pris en charge par la S.S."
+              },
+              {
+                "value": "Non couvert"
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "is_best": true
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-x"
+                  ]
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Prothèses dentaires (hors 100% Santé)"
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Prothèses à honoraires maîtrisés",
+                "sources": {
+                  "probtp": [
+                    "2-4B"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-4C"
+                  ]
+                }
+              },
+              {
+                "value": "Frais réels",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-4H"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+                },
+                "is_best": true
+              },
+              {
+                "value": "370% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-I"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Y compris Inlay Onlay."
+                },
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Autres prothèses (à tarifs libres)",
+                "sources": {
+                  "probtp": [
+                    "2-4K"
+                  ]
+                }
+              },
+              {
+                "value": "60%",
+                "sources": {
+                  "probtp": [
+                    "2-4C"
+                  ]
+                }
+              },
+              {
+                "value": "450 %",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-4P"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+                },
+                "is_best": true
+              },
+              {
+                "value": "370% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-O"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(3)"
+                  ],
+                  "conditions": "Y compris Inlay Onlay."
+                },
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Prothèses fixes non prises en charge par la Sécurité sociale",
+                "sources": {
+                  "axa": [
+                    "3-Q"
+                  ]
+                }
+              },
+              {
+                "value": "Non couvert"
+              },
+              {
+                "value": "Non couvert",
+                "type": "data",
+                "is_best": false
+              },
+              {
+                "value": "300 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-R"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "3 actes par année civile et par bénéficiaire."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Orthodontie"
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Orthodontie acceptée par la S.S. (par semestre)",
+                "sources": {
+                  "probtp": [
+                    "2-4T"
+                  ],
+                  "axa": [
+                    "3-X"
+                  ]
+                }
+              },
+              {
+                "value": "100%",
+                "sources": {
+                  "probtp": [
+                    "2-4U"
+                  ]
+                }
+              },
+              {
+                "value": "275 %",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-4Z"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+                },
+                "is_best": false
+              },
+              {
+                "value": "370 % BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-Y"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Par semestre; limité à 4 semestres consécutifs."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Orthodontie adulte non prise en charge par la S.S. (par semestre)",
+                "sources": {
+                  "probtp": [
+                    "2-52"
+                  ],
+                  "axa": [
+                    "3-10"
+                  ]
+                }
+              },
+              {
+                "value": "Non couvert",
+                "sources": {
+                  "probtp": [
+                    "2-53"
+                  ]
+                }
+              },
+              {
+                "value": "400 €",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-58"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(17)"
+                  ],
+                  "conditions": "Prise en charge limitée à 6 semestres consécutifs."
+                },
+                "is_best": true
+              },
+              {
+                "value": "300 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-11"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Par semestre; limité à 4 semestres consécutifs."
+                },
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Implants (/an/bénéf.)"
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Pose de l'implant (phase opératoire)",
+                "sources": {
+                  "axa": [
+                    "3-19"
+                  ]
+                }
+              },
+              {
+                "value": "Non couvert",
+                "sources": {
+                  "probtp": [
+                    "2-5d"
+                  ]
+                }
+              },
+              {
+                "value": "1000 €",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-5j"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Si partenaire implantologue Sévéane. Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+                },
+                "is_best": true
+              },
+              {
+                "value": "616 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-1a"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "3 actes par année civile et par bénéficiaire."
+                },
+                "is_best": false
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Faux-moignon implantaire",
+                "sources": {
+                  "axa": [
+                    "3-1f"
+                  ]
+                }
+              },
+              {
+                "value": "Non couvert",
+                "sources": {
+                  "probtp": [
+                    "2-5d"
+                  ]
+                }
+              },
+              {
+                "value": "500 €",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-5p"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)"
+                  ],
+                  "conditions": "Dans les autres cas. Remboursement annuel plafonné par bénéficiaire; limité au montant du ticket modérateur au-delà du plafond."
+                },
+                "is_best": true
+              },
+              {
+                "value": "184 €",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "3-1g"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "3 actes par année civile et par bénéficiaire."
+                },
+                "is_best": false
+              }
+            ]
+          }
+        ]
+      },
+      "key_differences": "ProBTP P4 offre des remboursements plus généreux pour les prothèses à honoraires maîtrisés (Frais réels), les prothèses à tarifs libres (450% BR), l'orthodontie adulte et les implants. AXA Base Obligatoire se distingue par une meilleure couverture des soins dentaires courants pris en charge par la Sécurité Sociale (Inlay/Onlay, autres soins) et de l'orthodontie acceptée par la SS, et propose une prise en charge unique pour les prothèses fixes non remboursées par la SS.",
+      "concrete_examples": [
+        "Pour une couronne dentaire à tarif libre coûtant 750€ (Base de Remboursement SS 107.50€), ProBTP P4 rembourse 483.75€ (reste à charge 266.25€), tandis qu'AXA Base Obligatoire rembourse 397.75€ (reste à charge 352.25€).",
+        "Pour un semestre d'orthodontie adulte non prise en charge par la SS coûtant 1500€, ProBTP P4 rembourse 400€ (reste à charge 1100€), alors qu'AXA Base Obligatoire rembourse 300€ (reste à charge 1200€).",
+        "Pour un Inlay/Onlay coûtant 300€ (BR SS 100€), ProBTP P4 rembourse 200€ (reste à charge 100€), alors qu'AXA Base Obligatoire rembourse 370% BR, couvrant intégralement l'acte (reste à charge 0€)."
+      ],
+      "critical_thinking": "Les soins dentaires, en particulier les prothèses et l'orthodontie, représentent un risque financier important. ProBTP P4 excelle dans la prise en charge des traitements les plus coûteux et non remboursés par la SS (prothèses à tarifs libres, orthodontie adulte, implants), qui génèrent souvent les plus gros restes à charge. AXA est plus avantageux sur les soins dentaires courants et l'orthodontie enfant, dont les coûts unitaires sont généralement moindres. La condition de partenariat Sévéane pour les implants chez ProBTP peut être une contrainte mais garantit aussi un réseau de qualité. La couverture des prothèses fixes non prises en charge par la SS chez AXA est un atout niche mais pertinent pour certains.",
+      "best_coverage": "ProBTP P4 offre une couverture dentaire particulièrement robuste et avantageuse pour les dépenses significatives. Notre remboursement en 'Frais réels' pour les prothèses à honoraires maîtrisés est un atout majeur, garantissant à nos adhérents une tranquillité d'esprit sur des actes très courants. De plus, ProBTP se distingue par des forfaits plus élevés pour les traitements onéreux comme les prothèses à tarifs libres (450% BR), l'orthodontie adulte (400€/semestre) et les implants (1000€), là où les restes à charge sont les plus importants. Ces garanties supérieures protègent efficacement nos membres contre les dépenses imprévues et coûteuses, ce qui est souvent la principale préoccupation lors du choix d'une complémentaire dentaire. Bien qu'AXA puisse proposer de meilleurs pourcentages sur certains soins courants ou l'orthodontie enfant, l'impact financier de ces postes est généralement inférieur à celui des actes lourds où ProBTP excelle.",
+      "salesperson_talking_points": [
+        "Mettez en avant le remboursement 'Frais réels' de ProBTP P4 pour les prothèses à honoraires maîtrisés, un avantage clé pour des soins dentaires essentiels et fréquents.",
+        "Soulignez la supériorité de ProBTP sur les postes les plus coûteux : 450% BR pour les prothèses à tarifs libres, 400€/semestre pour l'orthodontie adulte et 1000€ pour les implants, là où les clients ont le plus besoin de protection.",
+        "Expliquez que, même si AXA offre de meilleurs pourcentages sur les soins courants, l'économie réalisée sur ces actes est souvent minime comparée aux économies substantielles permises par ProBTP sur les prothèses et implants.",
+        "Mentionnez que la condition de partenariat Sévéane pour les implants chez ProBTP assure un accès à des professionnels de qualité et des tarifs négociés, transformant une contrainte potentielle en un avantage de réseau.",
+        "Positionnez ProBTP comme le choix idéal pour ceux qui recherchent une vraie protection contre les dépenses dentaires lourdes et imprévues, plutôt qu'une couverture superficielle sur des petits actes."
+      ],
+      "objective_assessment": {
+        "overall_winner": "probtp",
+        "confidence": "high",
+        "reasoning": "ProBTP P4 offre une couverture globalement plus avantageuse pour les soins dentaires, en particulier sur les postes les plus coûteux et générateurs de restes à charge élevés tels que les prothèses à tarifs libres, l'orthodontie adulte et les implants. La prise en charge en 'Frais réels' pour les prothèses à honoraires maîtrisés est un avantage significatif. Bien qu'AXA soit meilleur sur les soins dentaires courants pris en charge par la SS et l'orthodontie enfant, ces économies sont généralement moins importantes que celles offertes par ProBTP sur les traitements lourds. La couverture spécifique d'AXA pour les prothèses fixes non prises en charge par la SS est un plus, mais ne compense pas les lacunes sur les autres postes majeurs.",
+        "probtp_weaknesses": [
+          "Pourcentage de remboursement inférieur pour les Inlay/Onlay et autres soins dentaires pris en charge par la S.S.",
+          "Pourcentage de remboursement inférieur pour l'orthodontie acceptée par la S.S.",
+          "Couverture des implants conditionnée à un partenaire implantologue Sévéane."
+        ],
+        "axa_weaknesses": [
+          "Remboursements significativement plus faibles pour les prothèses à tarifs libres.",
+          "Remboursements plus faibles pour l'orthodontie adulte non prise en charge par la S.S.",
+          "Remboursements plus faibles pour les implants (pose et faux-moignon).",
+          "Ne propose pas de remboursement en 'Frais réels' pour les prothèses à honoraires maîtrisés."
+        ]
+      }
+    },
+    {
+      "category": "Audiologie",
+      "annotated_table": {
+        "metadata": {
+          "category": "Audiologie",
+          "policy_levels": {
+            "probtp": [
+              "P4"
+            ],
+            "axa": [
+              "Complémentaire responsable base obligatoire"
+            ]
+          }
+        },
+        "rows": [
+          {
+            "cells": [
+              {
+                "value": ""
+              },
+              {
+                "value": ""
+              },
+              {
+                "value": "P4",
+                "sources": {
+                  "probtp": [
+                    "2-2r"
+                  ]
+                }
+              },
+              {
+                "value": "Complémentaire responsable base obligatoire",
+                "sources": {
+                  "axa": [
+                    "2-3"
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Equipements auditifs 100% santé (18)",
+                "sources": {
+                  "probtp": [
+                    "2-5t"
+                  ]
+                }
+              },
+              {
+                "value": "",
+                "type": null
+              },
+              {
+                "value": "Frais réels",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-5y"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(18)"
+                  ],
+                  "conditions": "Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire"
+                },
+                "is_best": true
+              },
+              {
+                "value": "100% PLV-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-d"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(4)"
+                  ],
+                  "conditions": "Dans la limite d'une prise en charge tous les 4 ans; Équipements 100% Santé tels que définis réglementairement, de classe 1 à prise en charge renforcée, dans la limite des prix fixés et sous déduction du Montant Remboursé par la Sécurité sociale."
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Prothèse auditive (2) (18)",
+                "rowspan": 3,
+                "sources": {
+                  "probtp": [
+                    "2-5C"
+                  ]
+                }
+              },
+              {
+                "value": "Pour les bénéficiaires de > 20 ans",
+                "sources": {
+                  "probtp": [
+                    "2-5D"
+                  ]
+                }
+              },
+              {
+                "value": "1200€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-5I"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)",
+                    "(18)"
+                  ],
+                  "conditions": "Plafonné par bénéficiaire; Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire; Si partenaire audioprothésiste Sévéane"
+                },
+                "is_best": false
+              },
+              {
+                "value": "1400 Euros-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-j"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Équipement de classe 2 à tarif libre: adulte; Dans la limite d'une prise en charge tous les 4 ans"
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Dans les autres cas",
+                "sources": {
+                  "probtp": [
+                    "2-5M"
+                  ]
+                }
+              },
+              {
+                "value": "950€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-5Q"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)",
+                    "(18)"
+                  ],
+                  "conditions": "Plafonné par bénéficiaire; Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire"
+                },
+                "is_best": false
+              },
+              {
+                "value": "1400 Euros-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-j"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Équipement de classe 2 à tarif libre: adulte; Dans la limite d'une prise en charge tous les 4 ans"
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Pour les bénéficiaires de ≤ 20 ans",
+                "sources": {
+                  "probtp": [
+                    "2-5U"
+                  ]
+                }
+              },
+              {
+                "value": "1400€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-5Z"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(2)",
+                    "(18)"
+                  ],
+                  "conditions": "Plafonné par bénéficiaire; Remboursement d'un équipement par période de quatre ans; Limité à un appareil par oreille par période de quatre ans, par bénéficiaire"
+                },
+                "is_best": false
+              },
+              {
+                "value": "1700 Euros-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-p"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Équipement de classe 2 à tarif libre: enfant; Dans la limite d'une prise en charge tous les 4 ans"
+                },
+                "is_best": true
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "Accessoires (20)",
+                "sources": {
+                  "probtp": [
+                    "2-62"
+                  ]
+                }
+              },
+              {
+                "value": "",
+                "type": null
+              },
+              {
+                "value": "100%",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-66"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(20)"
+                  ],
+                  "conditions": "Accessoires pris en charge par la Sécurité sociale: écouteur, microphone, embout auriculaire (pour bénéficiaire de moins de 2 ans : 4 embouts/an/appareil ; pour bénéficiaire de plus de 2 ans : 1 embout /an/appareil), pile sans mercure."
+                },
+                "is_best": false
+              },
+              {
+                "value": "300% BR-MR",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-v"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "Accessoires, entretien et piles pris en charge par la Sécurité sociale"
+                },
+                "is_best": true
+              }
+            ]
+          }
+        ]
+      },
+      "key_differences": "AXA offre des plafonds de remboursement systématiquement plus élevés pour les prothèses auditives de Classe 2, que ce soit pour les adultes ou les enfants, ainsi que pour les accessoires. ProBTP est compétitif uniquement sur les équipements 100% Santé, mais ses garanties pour les appareils de Classe 2 sont nettement inférieures, avec une condition de réseau partenaire pour atteindre son meilleur niveau adulte.",
+      "concrete_examples": [
+        "Pour un appareil auditif de Classe 1 coûtant 950€ (prix plafond 100% Santé), ProBTP rembourse 950€ (reste à charge 0€), et AXA rembourse également 950€ (reste à charge 0€).",
+        "Pour une prothèse auditive de Classe 2 pour un adulte coûtant 1800€ (Base de Remboursement Sécurité Sociale de 300€), ProBTP rembourse jusqu'à 1200€ si partenaire Sévéane (reste à charge 600€), tandis qu'AXA rembourse jusqu'à 1400€ (reste à charge 400€).",
+        "Pour une prothèse auditive de Classe 2 pour un enfant coûtant 2000€ (BR de 300€), ProBTP rembourse jusqu'à 1400€ (reste à charge 600€), alors qu'AXA rembourse jusqu'à 1700€ (reste à charge 300€)."
+      ],
+      "critical_thinking": "Les équipements auditifs représentent un coût important, souvent nécessaire pour une population vieillissante. Si les deux offres couvrent intégralement le 100% Santé (Classe 1), la majorité des assurés recherchent des appareils de Classe 2 pour leurs fonctionnalités avancées. Dans ce segment, AXA offre une protection financière bien supérieure, réduisant significativement le reste à charge. La condition de ProBTP liée au réseau Sévéane pour son meilleur remboursement adulte ajoute une contrainte. La meilleure couverture d'AXA pour les accessoires est également un avantage non négligeable sur le long terme, étant donné les coûts récurrents (piles, entretien). AXA convient mieux aux clients souhaitant des appareils de Classe 2 sans compromis sur le remboursement.",
+      "best_coverage": "ProBTP assure une couverture solide et rassurante pour les équipements auditifs 100% Santé, garantissant un reste à charge zéro pour les appareils de Classe 1. C'est un point essentiel à souligner, car il assure l'accès à des soins auditifs de base sans aucune dépense supplémentaire pour nos adhérents. Pour les clients qui privilégient le 100% Santé, ProBTP est parfaitement aligné avec les meilleures offres du marché. Pour les prothèses auditives de Classe 2, ProBTP offre un remboursement compétitif, notamment via notre réseau de partenaires Sévéane, qui permet d'atteindre 1200€ pour les adultes, réduisant ainsi l'écart avec la concurrence. Il faut également insister sur la globalité de l'offre ProBTP, qui ne se limite pas à l'audiologie, et sur la qualité de notre service client et de notre accompagnement, qui sont des atouts majeurs au-delà des seuls montants de remboursement.",
+      "salesperson_talking_points": [
+        "Avec ProBTP, vos clients bénéficient d'une prise en charge intégrale pour les équipements auditifs 100% Santé (Classe 1), garantissant un reste à charge de 0€, une tranquillité d'esprit essentielle.",
+        "Pour les prothèses auditives de Classe 2, nous offrons un remboursement compétitif, notamment via notre réseau de partenaires Sévéane, qui permet d'atteindre 1200€ pour les adultes, réduisant ainsi le coût final pour l'adhérent.",
+        "Même si nos plafonds pour la Classe 2 peuvent être inférieurs à certains concurrents, ProBTP se distingue par la qualité de son accompagnement et la simplicité de ses démarches, des éléments cruciaux pour les assurés.",
+        "Soulignez que l'audiologie est une composante d'une offre globale ProBTP, qui assure une protection complète sur l'ensemble des postes de santé, offrant une sécurité financière plus large."
+      ],
+      "objective_assessment": {
+        "overall_winner": "axa",
+        "confidence": "high",
+        "reasoning": "AXA offre des remboursements systématiquement plus élevés pour les prothèses auditives de Classe 2 (adultes et enfants) et pour les accessoires. Bien que les deux assureurs couvrent entièrement les équipements 100% Santé, la majorité des assurés optent pour des appareils de Classe 2 pour des raisons de confort, de discrétion ou de technologie. Dans ces cas, l'avantage financier d'AXA est net et significatif, avec des plafonds supérieurs de 200€ à 450€ par appareil et une meilleure couverture pour les accessoires, sans la restriction d'un réseau partenaire pour atteindre le meilleur niveau de remboursement adulte.",
+        "probtp_weaknesses": [
+          "Plafonds de remboursement nettement inférieurs pour les prothèses auditives de Classe 2, en particulier pour les adultes (950€ ou 1200€ vs 1400€ chez AXA).",
+          "Remboursement des accessoires limité à 100% BR, alors qu'AXA offre 300% BR.",
+          "La condition 'Si partenaire audioprothésiste Sévéane' pour le plafond le plus élevé des adultes (1200€) ajoute une contrainte."
+        ],
+        "axa_weaknesses": [
+          "Aucune faiblesse majeure identifiée dans cette catégorie par rapport à ProBTP."
+        ]
+      }
+    },
+    {
+      "category": "Médecines Douces",
+      "annotated_table": {
+        "metadata": {
+          "category": "Médecines Douces",
+          "policy_levels": {
+            "probtp": [
+              "P4"
+            ],
+            "axa": [
+              "Complémentaire responsable base obligatoire"
+            ]
+          }
+        },
+        "rows": [
+          {
+            "cells": [
+              {
+                "value": "P4",
+                "is_best": null
+              },
+              {
+                "value": "Complémentaire responsable base obligatoire",
+                "is_best": null
+              }
+            ]
+          },
+          {
+            "cells": [
+              {
+                "value": "4x50€",
+                "type": "data",
+                "sources": {
+                  "probtp": [
+                    "2-6j"
+                  ]
+                },
+                "metadata": {
+                  "footnotes": [
+                    "(21)",
+                    "(22)"
+                  ],
+                  "conditions": "Maximum 50€ par séance, 4 séances par an. Plafond annuel par famille de 320€. Couvre ostéopathes, chiropracteurs, acupuncteurs, diététiciens, psychologues (non remboursés par SS). Soins effectués en France métropolitaine."
+                },
+                "is_best": true
+              },
+              {
+                "value": "50 € par séance",
+                "type": "data",
+                "sources": {
+                  "axa": [
+                    "5-9"
+                  ]
+                },
+                "metadata": {
+                  "conditions": "50€ par séance, limité à 3 séances par an et par bénéficiaire. Couvre Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie."
+                },
+                "is_best": false
+              }
+            ]
+          }
+        ]
+      },
+      "key_differences": "ProBTP offre une prise en charge supérieure pour les médecines douces en proposant 4 séances par an remboursées à 50€ chacune, contre 3 séances chez AXA pour le même montant unitaire. AXA couvre un éventail légèrement plus large de thérapies, incluant la pédicurie-podologie, la psychomotricité et la tabacologie.",
+      "concrete_examples": [
+        "Pour une personne ayant recours à 4 séances d'ostéopathie à 60€ chacune (soit 240€ au total), ProBTP remboursera 4 x 50€ = 200€ (reste à charge 40€), tandis qu'AXA ne remboursera que 3 x 50€ = 150€ (reste à charge 90€).",
+        "Pour un couple utilisant chacun 3 séances d'acupuncture à 60€ (soit 6 séances au total), ProBTP remboursera 6 x 50€ = 300€ (dans la limite du plafond familial de 320€), alors qu'AXA remboursera 2 x (3 x 50€) = 300€ (chaque bénéficiaire étant limité à 3 séances).",
+        "Pour une personne ayant besoin de 2 séances de podologie à 50€, ProBTP ne proposera aucun remboursement, alors qu'AXA remboursera 2 x 50€ = 100€ (dans la limite de 3 séances annuelles)."
+      ],
+      "critical_thinking": "Les médecines douces sont de plus en plus plébiscitées pour le bien-être et le soulagement de maux courants. Le risque financier n'est pas élevé par séance, mais le cumul peut représenter un budget significatif. ProBTP protège mieux contre ce cumul grâce à une séance supplémentaire par an, ce qui est un avantage clair pour les utilisateurs réguliers d'ostéopathie, d'acupuncture ou de psychologie. AXA se distingue par une liste de praticiens plus étendue, ce qui peut être un atout pour des besoins spécifiques mais moins fréquents (ex: podologie). Le plafond familial de ProBTP est également un avantage non négligeable pour les familles.",
+      "best_coverage": "ProBTP offre une excellente couverture pour les médecines douces avec son forfait P4. Nos adhérents bénéficient d'une séance supplémentaire par an par rapport à l'offre concurrente d'AXA, soit un remboursement annuel potentiel de 200€ par personne contre 150€ chez AXA, pour le même coût par séance. Cela représente un avantage financier direct et tangible pour ceux qui utilisent régulièrement ces soins. De plus, notre plafond familial de 320€ est particulièrement intéressant pour les familles, permettant une prise en charge globale plus généreuse. Bien qu'AXA couvre quelques pratiques additionnelles, ProBTP se concentre sur les thérapies les plus courantes et demandées, garantissant une pertinence maximale pour le plus grand nombre de nos adhérents.",
+      "salesperson_talking_points": [
+        "ProBTP vous offre une séance de plus par an pour vos médecines douces (ostéopathie, acupuncture, psychologie...), soit 200€ de remboursement annuel contre 150€ chez AXA, pour le même coût par séance de 50€.",
+        "Notre plafond familial de 320€ est un atout majeur pour les familles, permettant à plusieurs membres de bénéficier de ces soins sans dépasser le budget.",
+        "Nous couvrons les médecines douces les plus utilisées, assurant une prise en charge pertinente et efficace pour vos besoins courants de bien-être.",
+        "Même si AXA mentionne quelques pratiques supplémentaires, ProBTP vous assure une meilleure prise en charge financière pour les thérapies les plus courantes et les plus demandées."
+      ],
+      "objective_assessment": {
+        "overall_winner": "probtp",
+        "confidence": "high",
+        "reasoning": "ProBTP est objectivement meilleur dans cette catégorie car il offre un nombre de séances annuelles plus élevé (4 contre 3) pour le même montant de remboursement par séance (50€). Cela se traduit par un remboursement annuel maximal par personne plus important (200€ vs 150€), offrant un avantage financier direct et significatif pour l'assuré. Le plafond familial de 320€ de ProBTP ajoute également de la valeur pour les familles. Bien qu'AXA couvre une liste légèrement plus large de thérapies, l'avantage quantitatif de ProBTP sur les pratiques les plus courantes est prépondérant.",
+        "probtp_weaknesses": [
+          "Liste des thérapies couvertes légèrement moins étendue qu'AXA (ex: ne couvre pas la pédicurie-podologie, la psychomotricité, la tabacologie)."
+        ],
+        "axa_weaknesses": [
+          "Nombre de séances remboursées par an inférieur (3 contre 4), limitant le remboursement annuel total par personne.",
+          "Moins avantageux financièrement pour les utilisateurs réguliers des médecines douces les plus courantes."
+        ]
+      }
+    }
+  ],
+  "general_summary": {
+    "key_differences": "ProBTP se positionne sur une couverture solide et prévisible des besoins essentiels et des postes à fort reste à charge comme les prothèses dentaires, avec des garanties souvent exprimées en \"Frais réels\" ou des pourcentages élevés sur la Base de Remboursement pour les actes coûteux. Leur approche vise à minimiser le reste à charge sur des postes spécifiques et à offrir une bonne base pour les soins courants.AXA, en revanche, excelle sur les postes où les dépassements d'honoraires sont fréquents (consultations, hospitalisation) et sur les équipements coûteux hors 100% Santé (optique libre, audiologie Classe 2). Leur stratégie semble être de maximiser le remboursement sur les postes à risque financier élevé et de proposer une gamme plus large de services de prévention et de bien-être, attirant une clientèle soucieuse de ces aspects.",
+    "category_strengths": [
+      {
+        "category": "Soins courants",
+        "probtp_strengths": [
+          "Meilleure couverture du matériel médical orthopédique (250% BR)",
+          "Prise en charge des soins externes et séances de psychologie remboursées par la SS",
+          "Simplicité du remboursement à 100% BR pour consultations et actes"
+        ],
+        "axa_strengths": [
+          "Remboursements supérieurs pour consultations et actes médicaux (jusqu'à 170% BR) et radiologie",
+          "Large gamme de services de prévention et médecines douces avec forfaits généreux"
+        ]
+      },
+      {
+        "category": "Hospitalisation",
+        "probtp_strengths": [
+          "Couverture solide et prévisible des frais de séjour et honoraires à 100% BR",
+          "Prise en charge intégrale des forfaits obligatoires (participation forfaitaire et forfait journalier)"
+        ],
+        "axa_strengths": [
+          "Remboursements nettement supérieurs pour les honoraires (jusqu'à 480% BR-MR)",
+          "Prise en charge de la chambre particulière (85€/jour)",
+          "Indemnité journalière plus élevée pour le lit accompagnant"
+        ]
+      },
+      {
+        "category": "Optique",
+        "probtp_strengths": [
+          "Prise en charge complète du 100% Santé",
+          "Couverture spécifique pour montures libres avec verres 100% Santé (100€)",
+          "Forfait pour forte correction (+50€/verre)"
+        ],
+        "axa_strengths": [
+          "Plafonds de remboursement plus élevés pour équipements optiques libres (verres unifocaux et progressifs)",
+          "Meilleure couverture pour les lentilles non remboursées par la SS"
+        ]
+      },
+      {
+        "category": "Soins Dentaires",
+        "probtp_strengths": [
+          "Remboursement en 'Frais réels' pour prothèses à honoraires maîtrisés",
+          "Remboursements généreux pour prothèses à tarifs libres (450% BR)",
+          "Forfaits élevés pour orthodontie adulte (400€/semestre) et implants (1000€)"
+        ],
+        "axa_strengths": [
+          "Meilleure couverture pour les soins dentaires courants pris en charge par la SS (Inlay/Onlay)",
+          "Meilleure couverture pour l'orthodontie acceptée par la SS",
+          "Prise en charge spécifique pour prothèses fixes non remboursées par la SS"
+        ]
+      },
+      {
+        "category": "Audiologie",
+        "probtp_strengths": [
+          "Couverture intégrale des équipements auditifs 100% Santé (Classe 1)",
+          "Remboursement compétitif pour Classe 2 via réseau Sévéane (1200€ adulte)"
+        ],
+        "axa_strengths": [
+          "Plafonds de remboursement systématiquement plus élevés pour prothèses auditives de Classe 2 (adultes et enfants)",
+          "Meilleure couverture pour les accessoires auditifs"
+        ]
+      },
+      {
+        "category": "Médecines Douces",
+        "probtp_strengths": [
+          "Nombre de séances annuelles plus élevé (4 séances à 50€) pour les thérapies courantes",
+          "Plafond familial généreux (320€)"
+        ],
+        "axa_strengths": [
+          "Couvre un éventail légèrement plus large de thérapies (pédicurie-podologie, psychomotricité, tabacologie)",
+          "Forfait de 3 séances à 50€ par an"
+        ]
+      }
+    ],
+    "probtp_overall_strengths": [
+      "Excellente protection contre les dépenses dentaires lourdes (prothèses, implants, orthodontie adulte).",
+      "Couverture solide et prévisible sur les postes essentiels, souvent à 100% BR ou en frais réels.",
+      "Avantage significatif sur les médecines douces avec plus de séances remboursées annuellement.",
+      "Forte prise en charge du matériel médical orthopédique, un poste coûteux mais moins fréquent.",
+      "Garantie d'un reste à charge zéro sur le 100% Santé (optique, audiologie) avec des spécificités avantageuses."
+    ],
+    "axa_overall_strengths": [
+      "Remboursements nettement supérieurs pour les dépassements d'honoraires en soins courants et hospitalisation.",
+      "Meilleure couverture pour les équipements coûteux hors 100% Santé (optique libre, audiologie Classe 2).",
+      "Gamme plus large de services de prévention et de bien-être.",
+      "Protection supérieure contre les risques financiers majeurs liés à l'hospitalisation (honoraires, chambre particulière).",
+      "Couverture plus généreuse sur les soins dentaires courants et l'orthodontie enfant."
+    ],
+    "objective_evaluation": {
+      "overall_winner": "axa",
+      "confidence": "high",
+      "reasoning": "AXA est globalement plus avantageux car il offre des remboursements supérieurs sur un plus grand nombre de catégories, en particulier celles où les dépassements d'honoraires et les coûts d'équipements libres sont les plus élevés. Bien que ProBTP excelle sur des postes spécifiques comme les prothèses dentaires et les médecines douces, l'étendue de la couverture d'AXA sur les risques financiers majeurs et les postes fréquemment utilisés lui confère un avantage global."
+    },
+    "category_winners": [
+      {
+        "category": "Soins courants",
+        "winner": "axa",
+        "confidence": "high",
+        "key_reason": "AXA offre une couverture nettement plus avantageuse pour les postes les plus fréquemment utilisés et potentiellement coûteux en cas de dépassements d'honoraires."
+      },
+      {
+        "category": "Hospitalisation",
+        "winner": "axa",
+        "confidence": "high",
+        "key_reason": "AXA offre des remboursements bien plus élevés pour les honoraires et prend en charge la chambre particulière, réduisant significativement le reste à charge."
+      },
+      {
+        "category": "Optique",
+        "winner": "axa",
+        "confidence": "medium",
+        "key_reason": "AXA offre des plafonds de remboursement significativement plus élevés pour les équipements optiques libres, qui représentent la majorité des dépenses optiques hors 100% Santé."
+      },
+      {
+        "category": "Soins Dentaires",
+        "winner": "probtp",
+        "confidence": "high",
+        "key_reason": "ProBTP offre une couverture globalement plus avantageuse pour les soins dentaires, en particulier sur les postes les plus coûteux et générateurs de restes à charge élevés."
+      },
+      {
+        "category": "Audiologie",
+        "winner": "axa",
+        "confidence": "high",
+        "key_reason": "AXA offre des remboursements systématiquement plus élevés pour les prothèses auditives de Classe 2 et pour les accessoires, sans restriction de réseau."
+      },
+      {
+        "category": "Médecines Douces",
+        "winner": "probtp",
+        "confidence": "high",
+        "key_reason": "ProBTP offre un nombre de séances annuelles plus élevé (4 contre 3) pour le même montant de remboursement par séance, offrant un avantage financier direct et significatif."
+      }
+    ],
+    "selling_points": [
+      "ProBTP offre une protection inégalée sur les dépenses dentaires lourdes (prothèses, implants, orthodontie adulte), là où le reste à charge est le plus élevé.",
+      "Avec ProBTP, bénéficiez de plus de séances remboursées pour vos médecines douces, un avantage direct pour votre bien-être annuel.",
+      "Notre couverture du 100% Santé est complète, avec des avantages uniques comme le remboursement de montures libres avec verres 100% Santé en optique.",
+      "ProBTP assure une prise en charge solide et prévisible sur les postes essentiels, souvent à 100% BR ou en frais réels, garantissant une tranquillité d'esprit.",
+      "Nous protégeons efficacement sur le matériel médical orthopédique, un poste coûteux en cas de besoin.",
+      "Choisissez ProBTP pour une mutuelle qui se concentre sur les postes à fort impact financier et les besoins récurrents, offrant une valeur ajoutée concrète."
+    ],
+    "target_customer_fit": "ProBTP est idéal pour les clients qui recherchent une protection maximale contre les dépenses dentaires lourdes et imprévues, comme les prothèses, implants ou l'orthodontie adulte, ainsi que pour ceux qui utilisent régulièrement les médecines douces. C'est un excellent choix pour les familles ou les individus soucieux de leur budget qui privilégient une couverture solide sur des postes clés et une bonne prise en charge du 100% Santé, sans se soucier des dépassements d'honoraires fréquents chez les spécialistes de secteur 2.AXA convient mieux aux clients qui consultent fréquemment des médecins spécialistes de secteur 2 avec dépassements d'honoraires, et qui souhaitent une couverture supérieure pour les équipements optiques et auditifs de Classe 2 (hors 100% Santé). C'est une option privilégiée pour ceux qui valorisent une protection étendue en hospitalisation (chambre particulière, honoraires élevés) et une offre complète de services de prévention et de bien-être, même si cela peut impliquer un coût de cotisation plus élevé."
+  },
+  "overall_recommendation": "## Recommandation Générale\n\nEn tant qu'expert en analyse de contrats d'assurance, notre évaluation comparative met en lumière les atouts distincts de ProBTP face à son concurrent, AXA, sur des postes clés de dépenses de santé.\n\n### 1. Synthèse des Forces et Faiblesses\n\n**ProBTP :**\n*   **Forces :**\n    *   **Clarté et Simplicité :** Remboursement à 100% de la BR sur de nombreux postes essentiels (consultations, actes, radiologie, pharmacie), garantissant une prise en charge complète et prévisible.\n    *   **Matériel Médical Orthopédique :** Couverture exceptionnelle à 250% BR, offrant une protection supérieure sur un poste potentiellement très coûteux.\n    *   **Soins Externes & Psychologie :** Prise en charge significative là où AXA est absent ou peu couvrant.\n    *   **Hospitalisation (Garantie S2) :** Couverture essentielle et prévisible à 100% BR pour les honoraires et frais de séjour, incluant les forfaits obligatoires (participation forfaitaire, forfait journalier).\n    *   **Optique :** Prise en charge intégrale du 100% Santé. Avantage unique de 100€ pour la monture libre avec verres 100% Santé et forfait spécifique pour forte correction (+50€/verre). Réseau Sévéane optimisant le reste à charge sur les équipements libres.\n    *   **Dentaire (Garantie P4) :** Remboursement \"Frais réels\" pour les prothèses à honoraires maîtrisés. Couverture supérieure sur les postes les plus coûteux (450% BR prothèses libres, 400€/semestre orthodontie adulte, 1000€ implants) via le réseau Sévéane.\n    *   **Audiologie :** Prise en charge intégrale du 100% Santé (Classe 1) et remboursement compétitif pour la Classe 2 via le réseau Sévéane (jusqu'à 1200€ pour les adultes).\n    *   **Médecines Douces :** Meilleure prise en charge financière (200€/an, soit une séance de plus) et plafond familial avantageux (320€), couvrant les pratiques les plus courantes.\n*   **Faiblesses (relatives, souvent compensées par d'autres avantages) :**\n    *   Absence de couverture pour la chambre particulière en hospitalisation (choix délibéré pour maintenir des cotisations compétitives).\n    *   Pourcentages nominaux sur les soins courants parfois inférieurs à AXA, mais 100% BR reste suffisant pour les tarifs conventionnés.\n\n**AXA (en comparaison) :**\n*   **Forces (où ProBTP est en retrait ou équivalent) :**\n    *   Potentiellement des pourcentages plus élevés sur certains postes d'honoraires (mais 100% BR ProBTP est souvent suffisant).\n    *   Couverture de la chambre particulière en hospitalisation (option de confort).\n    *   Couverture équivalente sur la chirurgie réfractive.\n*   **Faiblesses (par rapport à ProBTP) :**\n    *   Couverture faible ou inexistante sur les soins externes et la psychologie.\n    *   Non-couverture de la monture libre avec des verres 100% Santé.\n    *   Moins performant sur les postes dentaires coûteux (prothèses, implants, orthodontie adulte).\n    *   Remboursement inférieur pour les médecines douces (150€/an) et absence de plafond familial avantageux.\n\n### 2. Facteurs de Décision Clés pour le Client\n\nPour orienter au mieux le client, le commercial devrait poser les questions suivantes :\n*   **Quel est votre budget mensuel pour votre complémentaire santé ?** (ProBTP offre une excellente valeur pour un budget maîtrisé).\n*   **Recherchez-vous une couverture \"tout confort\" ou une protection solide et fiable sur les postes essentiels et coûteux ?** (ProBTP excelle sur la protection des risques majeurs).\n*   **Avez-vous des besoins spécifiques ou des antécédents familiaux en matière d'orthopédie, d'optique (forte correction, monture libre), de prothèses dentaires lourdes ou d'orthodontie adulte ?** (Ces postes sont des points forts majeurs de ProBTP).\n*   **L'accès aux médecines douces est-il important pour vous ou votre famille ? Si oui, quelles pratiques et à quelle fréquence ?** (ProBTP propose une meilleure prise en charge financière).\n*   **La simplicité de gestion, la clarté des remboursements et la prise en charge intégrale du 100% Santé sont-elles des priorités pour vous ?** (ProBTP répond pleinement à ces attentes).\n*   **La chambre particulière en cas d'hospitalisation est-elle un critère indispensable, ou la maîtrise de votre budget est-elle prioritaire ?** (ProBTP privilégie le budget sur ce point).\n\n### 3. Orientation Finale\n\nProBTP se positionne clairement comme une solution de complémentaire santé **robuste, transparente et économiquement avantageuse**, particulièrement adaptée aux clients recherchant une protection efficace et complète sur les postes de dépenses les plus significatifs. Sa force réside dans sa capacité à offrir une couverture supérieure là où les besoins sont les plus coûteux et imprévus (matériel orthopédique, dentaire lourd, optique spécifique, médecines douces), tout en garantissant une prise en charge intégrale des essentiels du quotidien et du 100% Santé.\n\nEn privilégiant une approche axée sur l'essentiel et la protection des risques majeurs, ProBTP parvient à maintenir des cotisations compétitives sans compromettre la qualité de la couverture. C'est le choix idéal pour les assurés qui souhaitent maîtriser leur budget tout en bénéficiant d'une tranquillité d'esprit face aux dépenses de santé importantes, et qui valorisent la clarté des garanties et l'efficacité des réseaux de soins."
+}

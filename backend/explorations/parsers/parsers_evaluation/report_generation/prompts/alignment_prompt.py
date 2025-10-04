@@ -276,14 +276,15 @@ For each cell position i:
 
 - **If inherited_from_above[i] is not null**:
   - This position is occupied by a rowspan from above
-  - Create VIRTUAL cell: `{{"id": "{column_labels[i]}{row_number}", "ref": "{inherited_from_above[i]}"}}`
+  - Create VIRTUAL cell: `{{"id": "column_labels[i] + row_number", "ref": "inherited_from_above[i]"}}`
 
 - **Else if this is a colspan continuation** (previous cell in same row has colspan):
   - Create VIRTUAL cell with ref pointing to source cell
   - Example: Cell D15 is continuation of C15's colspan=2 → `{{"id": "D15", "ref": "C15"}}`
 
 - **Else this is a REAL cell**:
-  - Add `value` field with content
+  - Add `value` field with content (use empty string `""` for visually empty cells, NEVER use null/None)
+  - **IMPORTANT**: Empty-looking cells in merged headers should use `value=""`, not `value=null`
   - If cell has rowspan: add `rowspan` field and `occupies` list
   - If cell has colspan: add `colspan` field and `occupies` list
   - If both: `occupies` includes ALL covered cells (current row + future rows)
@@ -310,7 +311,10 @@ Check these MANDATORY rules:
 ✓ `inherited_from_above.length === total_columns`
 ✓ `cells.length === total_columns`
 ✓ All cell IDs are sequential: `column_labels[i] + row_number`
-✓ Every cell has EITHER value OR ref (never both, never neither)
+✓ **Every cell has EITHER value OR ref** (never both, never neither, never null)
+  - Real cells: `{{"id": "A1", "value": "text"}}` or `{{"id": "B5", "value": ""}}`
+  - Virtual cells: `{{"id": "C2", "ref": "C1"}}`
+  - NEVER: `{{"id": "D1", "value": null}}` - use `"value": ""` instead
 ✓ All ref values point to earlier cells (earlier row OR same row but earlier column)
 ✓ All occupies lists match the actual rowspan/colspan values
 ✓ No ProBTP cells with empty value (should be data, "Non couvert", or "-")
@@ -338,12 +342,13 @@ EXTRACTION GUIDELINES
 
 **1. ProBTP as Reference (CRITICAL)**
 
-This report helps **ProBTP's sales team** win customers. Therefore:
+This report helps **ProBTP's sales team** win customers by understanding the differences between ProBTP and AXA. Therefore:
 
 - ✓ **ProBTP is the REFERENCE** - Use ProBTP's structure, terminology, organization
 - ✓ **Extract ProBTP completely** - Locate category table, extract ALL rows, preserve exact benefit names
 - ✓ **AXA aligns to ProBTP** - Find AXA equivalents and map to ProBTP structure
 - ✓ **Show ProBTP advantages** - If ProBTP covers it and AXA doesn't → mark "Non couvert"
+- ✓ **Show AXA advantages** - If AXA covers it and ProBTP doesn't → mark "Non couvert"
 - ✓ **ProBTP defines granularity** - Match ProBTP's level of detail exactly
 
 **ProBTP Contract Structure:**

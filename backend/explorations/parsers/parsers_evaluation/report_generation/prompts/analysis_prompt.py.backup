@@ -1,0 +1,145 @@
+"""Analysis prompt template for generating insights from comparison tables."""
+
+
+def create_analysis_prompt(
+    category: str,
+    comparison_table_markdown: str,
+    probtp_levels: list[str] | None = None,
+    axa_levels: list[str] | None = None,
+    language: str = "French (France)"
+) -> str:
+    """
+    Create a prompt for generating insights and analysis from a comparison table.
+
+    Args:
+        category: Healthcare category name
+        comparison_table_markdown: Markdown table from alignment phase
+        probtp_levels: ProBTP contract levels being compared
+        axa_levels: AXA contract levels being compared
+        language: Language for the output (default: "French (France)")
+
+    Returns:
+        Formatted prompt string
+    """
+    # Use the markdown table directly
+    table_text = comparison_table_markdown
+
+    # Format levels context
+    levels_context = ""
+    if probtp_levels or axa_levels:
+        levels_context = "\n\n**Contract Levels Being Compared:**"
+        if probtp_levels:
+            levels_context += f"\n- ProBTP: {', '.join(probtp_levels)}"
+        if axa_levels:
+            levels_context += f"\n- AXA: {', '.join(axa_levels)}"
+
+    prompt = f"""You are an expert insurance analyst specializing in French health insurance. Your task is to generate sales-ready insights and analysis for a specific healthcare category.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GOAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Generate comprehensive sales-ready insights and analysis for a specific healthcare category based on a structured comparison table. You will receive the category name, contract levels, and comparison table data as parameters at the end of this prompt.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+GENERAL TASK DESCRIPTION
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Analysis Components Required:**
+
+1. **Key Differences** (2-3 sentences in plain language)
+   - Main strategic differences between ProBTP and AXA for the category
+   - Which contract emphasizes what type of coverage?
+
+2. **Concrete Examples** (2-3 specific scenarios with euro amounts)
+   - Realistic scenarios showing actual costs and reimbursements
+   - Exact out-of-pocket costs for each contract
+   - Use typical service prices (e.g., dental crown €750, progressive glasses €600)
+   - Format: "For [service] costing €X, ProBTP reimburses €Y (remain €Z), AXA reimburses €A (remain €B)"
+
+3. **Critical Thinking & Value Assessment**
+   - **Real-world probability:** How often do people use these benefits?
+   - **Financial risk:** Which benefits protect against the highest financial exposure?
+   - **Customer segments:** Which types of customers benefit most from each contract?
+   - **Hidden value:** Network benefits, caps, or conditions that change value proposition
+
+4. **Best Coverage Determination** (1-2 paragraphs)
+   - Which contract offers better value for this category overall?
+   - Specific sub-categories where one clearly wins
+   - What salespeople should emphasize
+
+**Output Format:**
+
+Return a JSON object with this structure:
+
+{{
+  "category": "Category name",
+  "key_differences": "Plain language explanation of main differences...",
+  "concrete_examples": [
+    "Example 1: For orthodontics costing €3000...",
+    "Example 2: For glasses costing €600...",
+    "Example 3: ..."
+  ],
+  "critical_thinking": "Analysis of real-world value, risk, and customer fit...",
+  "best_coverage": "Determination of which contract is better and why...",
+  "salesperson_talking_points": [
+    "Key point 1 to emphasize",
+    "Key point 2 to emphasize",
+    "Key point 3 to emphasize"
+  ]
+}}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INSTRUCTIONS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**CRITICAL: ProBTP Sales Perspective:**
+
+This analysis is for **ProBTP's sales team** to help them sell ProBTP policies. Therefore:
+
+1. **ProBTP is the reference** - Frame comparisons from ProBTP's perspective
+2. **Highlight ProBTP strengths** - When ProBTP has advantages, make them clear and quantifiable
+3. **Contextualize ProBTP gaps** - If AXA has advantages, explain the context (is it worth it? does it matter?)
+4. **Use ProBTP terminology** - The table uses ProBTP's benefit names and structure
+5. **Sales-ready insights** - Focus on what salespeople can say to customers about ProBTP's value
+
+**Analysis Methodology:**
+
+1. Review the comparison table data (provided below)
+2. **Identify ProBTP advantages** - Where does ProBTP offer better coverage?
+3. Calculate realistic reimbursement scenarios using typical BR values for France
+4. Assess TRUE value - not just raw percentages, consider caps, conditions, networks
+5. Think about customer psychology - what matters to different age groups?
+6. Identify non-obvious ProBTP advantages (e.g., "per act" vs "per year" limits, network benefits)
+7. Consider cumulative costs over time - show when ProBTP saves customers money
+8. **Frame competitive gaps** - If AXA has advantages, assess if they're meaningful or niche
+
+**Quality Standards:**
+
+- Use exact euro amounts in examples
+- **When ProBTP is better:** Quantify the advantage (e.g., "ProBTP saves €X per year")
+- **When AXA is better:** Contextualize (e.g., "AXA covers X, but this benefit is rarely used by...")
+- Provide clear, actionable talking points for ProBTP salespeople
+- Address different customer scenarios from ProBTP's value perspective
+- Output ONLY the JSON object - no preamble, no commentary
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TASK PARAMETERS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Category:** {category}{levels_context}
+
+**Output Language:** {language}
+
+**Comparison Table Data (Markdown format):**
+
+```markdown
+{table_text}
+```
+
+**Task Recap:**
+Based on the instructions above, generate a comprehensive analysis for the "{category}" category using the Markdown comparison table provided above. The table contains hierarchical category structure and separated conditions columns for clear interpretation. Output all content in {language}.
+
+Generate the JSON analysis now:"""
+
+    return prompt

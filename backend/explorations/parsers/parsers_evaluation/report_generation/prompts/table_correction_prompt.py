@@ -1,5 +1,5 @@
 """
-Prompt for LLM-based table structure correction.
+Prompt for LLM-based table structure correction (enhanced schema version).
 
 Used when table has multiple inconsistencies that cannot be fixed programmatically.
 """
@@ -8,152 +8,131 @@ import json
 from typing import Any
 
 
-def _render_table_as_aligned_text(table: dict, expected_columns: int) -> str:
+def _render_enhanced_table_as_text(table: dict) -> str:
     """
-    Render table as aligned text to help visualize structure issues.
+    Render enhanced schema table as aligned text to help visualize structure.
 
     Args:
-        table: ComparisonTable dict
-        expected_columns: Target logical column count
+        table: ComparisonTable dict with enhanced schema
 
     Returns:
-        Aligned text representation
+        Aligned text representation with Excel-style cell IDs
     """
+    metadata = table.get("metadata", {})
+    total_columns = metadata.get("total_columns", 0)
+    column_labels = metadata.get("column_labels", [])
     rows = table.get("rows", [])
-    if not rows:
-        return "Empty table"
+
+    if not rows or total_columns == 0:
+        return "Empty table or missing metadata"
 
     lines = []
-    lines.append(
-        f"Visual representation (target: {expected_columns} logical columns per row):"
-    )
+    lines.append(f"Enhanced Schema Visual (total_columns={total_columns}):")
+    lines.append(f"Column Labels: {' '.join(column_labels)}")
+    lines.append("")
+    lines.append("Format: [CellID] value (or ref/virtual)")
     lines.append("")
 
-    # Track active rowspans: list of (starting_row_idx, starting_col_position, colspan, rows_remaining)
-    active_rowspans: list[tuple[int, int, int, int]] = []
-
     for row_idx, row in enumerate(rows):
+        row_number = row.get("row_number", row_idx + 1)
+        inherited_from_above = row.get("inherited_from_above", [])
         cells = row.get("cells", [])
 
-        # Build row representation
-        row_parts = []
-        col_position = 0  # Tracks current logical column position
-        cell_idx = 0
-        new_rowspans = []  # Collect new rowspans from this row
-
-        while col_position < expected_columns:
-            # Check if this column position is occupied by an active rowspan
-            occupied_by_rowspan = False
-            for (start_row, start_col, span_cols, remaining) in active_rowspans:
-                if start_col <= col_position < start_col + span_cols:
-                    occupied_by_rowspan = True
-                    break
-
-            if occupied_by_rowspan:
-                # This column is spanned from above
-                row_parts.append("↓↓↓")
-                col_position += 1
-            elif cell_idx < len(cells):
-                # Place the next cell
-                cell = cells[cell_idx]
-                value = cell.get("value", "")[:30]  # Truncate long values
-                colspan = cell.get("colspan", 1) or 1
-                rowspan = cell.get("rowspan", 1) or 1
-
-                # Format cell with span indicators
-                cell_text = value if value else "[empty]"
-                if colspan > 1:
-                    cell_text += f" [⟷×{colspan}]"
-                if rowspan > 1:
-                    cell_text += f" [⟱×{rowspan}]"
-
-                row_parts.append(cell_text)
-
-                # For colspan > 1, add placeholders for the extra columns
-                for _ in range(1, colspan):
-                    row_parts.append("⟷⟷⟷")
-
-                # Track this cell's rowspan for future rows
-                if rowspan > 1:
-                    new_rowspans.append(
-                        (row_idx, col_position, colspan, rowspan - 1)
-                    )
-
-                col_position += colspan
-                cell_idx += 1
+        # Header line showing inherited positions
+        inherited_display = []
+        for i, ref in enumerate(inherited_from_above):
+            if ref:
+                inherited_display.append(f"{column_labels[i]}:{ref}")
             else:
-                # No more cells, but column is expected
-                row_parts.append("[MISSING]")
-                col_position += 1
+                inherited_display.append(f"{column_labels[i]}:─")
 
-        # Calculate actual logical columns
-        actual_columns_from_cells = sum(
-            cell.get("colspan", 1) or 1 for cell in cells
-        )
-        # Count columns from active rowspans (all rowspans that were started in previous rows)
-        columns_from_rowspans = sum(
-            span_cols
-            for (start_row, start_col, span_cols, remaining) in active_rowspans
-        )
-        actual_columns = actual_columns_from_cells + columns_from_rowspans
+        lines.append(f"Row {row_number} - Inherited: [{' '.join(inherited_display)}]")
 
-        status = "✓" if actual_columns == expected_columns else "✗"
-        lines.append(
-            f"Row {row_idx + 1:2d} ({len(cells)} cells, {actual_columns} cols) {status}: {' | '.join(row_parts)}"
-        )
+        # Cell display
+        cell_parts = []
+        for col_idx, cell in enumerate(cells):
+            cell_id = cell.get("id", "?")
+            value = cell.get("value")
+            ref = cell.get("ref")
+            colspan = cell.get("colspan")
+            rowspan = cell.get("rowspan")
+            occupies = cell.get("occupies", [])
 
-        # Update active rowspans for next row
-        # 1. Decrement existing rowspans
-        # 2. Add new rowspans from current row
-        updated_rowspans = []
-        for (start_row, start_col, span_cols, remaining) in active_rowspans:
-            new_remaining = remaining - 1
-            if new_remaining > 0:
-                updated_rowspans.append((start_row, start_col, span_cols, new_remaining))
+            # Format cell representation
+            if ref:
+                # Virtual cell
+                cell_repr = f"[{cell_id}] →{ref}"
+            else:
+                # Real cell
+                value_str = (value[:20] + "...") if value and len(value) > 20 else (value or "[empty]")
+                cell_repr = f"[{cell_id}] {value_str}"
 
-        # Add new rowspans from this row (they will be active starting next row)
-        updated_rowspans.extend(new_rowspans)
-        active_rowspans = updated_rowspans
+                # Add span indicators
+                if colspan and colspan > 1:
+                    cell_repr += f" ⟷×{colspan}"
+                if rowspan and rowspan > 1:
+                    cell_repr += f" ⟱×{rowspan}"
+
+                # Show occupies list
+                if occupies and len(occupies) > 1:
+                    occupies_str = ",".join(occupies)
+                    cell_repr += f" (→{occupies_str})"
+
+            cell_parts.append(cell_repr)
+
+        lines.append(f"  Cells: {' | '.join(cell_parts)}")
+
+        # Validation status
+        status = "✓" if len(cells) == total_columns else f"✗ ({len(cells)} cells != {total_columns})"
+        lines.append(f"  Status: {status}")
+        lines.append("")
 
     return "\n".join(lines)
 
 
 def create_table_correction_prompt(
-    table: dict, diagnosis: str, category: str, expected_columns: int
+    table: dict, diagnosis: str, category: str
 ) -> str:
     """
-    Create prompt for LLM to correct table structure issues.
+    Create prompt for LLM to correct enhanced schema table structure issues.
 
     Args:
-        table: ComparisonTable dict with inconsistencies
+        table: ComparisonTable dict with enhanced schema
         diagnosis: Human-readable description of issues
         category: Category name
-        expected_columns: Target logical column count
 
     Returns:
         Prompt string
     """
+    metadata = table.get("metadata", {})
+    total_columns = metadata.get("total_columns", 0)
+    column_labels = metadata.get("column_labels", [])
+
     # Format table JSON for readability
     table_json = json.dumps(table, indent=2, ensure_ascii=False)
 
     # Generate visual representation
-    visual_table = _render_table_as_aligned_text(table, expected_columns)
+    visual_table = _render_enhanced_table_as_text(table)
 
-    prompt = f"""You are a table structure correction expert. Your task is to fix rowspan/colspan issues in an insurance comparison table.
+    prompt = f"""You are a table structure correction expert for insurance comparison tables using an enhanced schema with Excel-style cell IDs.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CONTEXT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 **Table Purpose:**
-- This is a comparative insurance policy table for category: {category}
-- It compares ProBTP vs AXA insurance coverage
-- Columns represent: dimension labels, policy levels from both insurers
+- Comparative insurance policy table for category: {category}
+- Compares ProBTP vs AXA insurance coverage
+- Uses enhanced schema with explicit span tracking
 
-**Target Structure:**
-- Each row must occupy exactly **{expected_columns} logical columns**
-- Row 1 is the header row (policy level names)
-- Subsequent rows contain benefit comparisons
+**Enhanced Schema Structure:**
+- Every cell has Excel-style ID: "A1", "B15", "C2" (column + row)
+- total_columns = {total_columns} (fixed for entire table)
+- column_labels = {column_labels}
+- inherited_from_above array: shows which positions are occupied by rowspans
+- Real cells: have `value` field
+- Virtual cells: have `ref` field pointing to source cell
+- occupies list: declares all cell IDs occupied by a span
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ISSUES FOUND
@@ -162,47 +141,83 @@ ISSUES FOUND
 {diagnosis}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-KEY RULES FOR CORRECTION
+ENHANCED SCHEMA CORRECTION RULES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Logical Column Calculation:**
-1. Each cell occupies `colspan` logical columns (default: 1)
-2. Cells with `rowspan=N` occupy columns in the next N-1 rows
-3. Those subsequent rows must have FEWER cells (they skip the spanned columns)
+**Mandatory Rules:**
 
-**Example of correct rowspan usage:**
-```
-Row 1: [A, B, C, D, E] → 5 columns
-Row 2: [F (rowspan=3), G, H, I, J] → 5 columns (F will span down)
-Row 3: [K, L, M, N] → 4 cells + 1 occupied by F's rowspan = 5 columns ✓
-Row 4: [O, P, Q, R] → 4 cells + 1 occupied by F's rowspan = 5 columns ✓
-Row 5: [S, T, U, V, W] → 5 columns (F's rowspan ended)
-```
+1. **Every row MUST have exactly {total_columns} cells** (real + virtual)
+   - No exceptions - this is the fundamental constraint
+   - Use virtual cells with `ref` for positions occupied by spans
 
-**CRITICAL - Track ALL Active Rowspans:**
-- If row 3 has cell A with `rowspan=7` AND cell B with `rowspan=5`
-- Then rows 4-7 must skip BOTH columns A and B (2 fewer cells)
-- And rows 8-9 must skip only column A (1 fewer cell)
+2. **Cell IDs MUST be sequential:**
+   - Cell at position i in row N must have id = column_labels[i] + N
+   - Example: Row 15, position 2 (column C) → id = "C15"
 
-**Common Mistakes to Fix:**
-1. **Too many cells in nested rowspan rows** - When a cell has rowspan, subsequent rows should have fewer cells
-2. **Incorrect rowspan values** - Rowspan may be too large or too small
-3. **Missing cells** - Some rows may be missing cells needed to reach {expected_columns} columns
-4. **Incorrect colspan** - Colspan values may be wrong, especially in header row
+3. **inherited_from_above MUST match refs:**
+   - Length = {total_columns}
+   - If inherited_from_above[i] = "A2", then cells[i].ref MUST equal "A2"
+   - If inherited_from_above[i] = null, then cells[i] is a real cell or colspan continuation
+
+4. **Real vs Virtual cells:**
+   - Real cell: has `value` field (and optional rowspan/colspan/occupies)
+   - Virtual cell: has `ref` field pointing to source cell
+   - Every cell has EITHER value OR ref, never both, never neither
+
+5. **occupies lists for spans:**
+   - Cell with rowspan=N: occupies = [self, row+1, row+2, ..., row+N-1]
+   - Cell with colspan=M: occupies = [self, col+1, col+2, ..., col+M-1]
+   - Cell with rowspan=N AND colspan=M: occupies = all N×M cells in rectangle
+   - Example: A1 with rowspan=3 → occupies = ["A1", "A2", "A3"]
+   - Example: C15 with colspan=3 → occupies = ["C15", "D15", "E15"]
+   - Example: E1 with rowspan=3, colspan=2 → occupies = ["E1", "F1", "E2", "F2", "E3", "F3"]
+
+6. **Colspan creates virtual cells in same row:**
+   - Cell C15 with colspan=2 occupies positions C and D
+   - Position C has real cell with value
+   - Position D has virtual cell with ref="C15"
+
+7. **Rowspan creates virtual cells in subsequent rows:**
+   - Cell A1 with rowspan=3 occupies positions A in rows 1, 2, 3
+   - Row 1, pos A: real cell with value
+   - Row 2, pos A: virtual cell with ref="A1"
+   - Row 3, pos A: virtual cell with ref="A1"
+   - Rows 2 and 3: inherited_from_above[0] = "A1"
+
+**Common Errors to Fix:**
+
+1. **Wrong cell count:** Row has != {total_columns} cells
+   → Add missing virtual cells with refs OR remove extra cells
+
+2. **Wrong cell IDs:** Cell ID doesn't match column_labels[i] + row_number
+   → Regenerate IDs mechanically: column_labels[i] + str(row_number)
+
+3. **Mismatched inherited_from_above and refs:**
+   → If inherited_from_above[i] = "A1", ensure cells[i].ref = "A1"
+
+4. **Missing occupies lists:**
+   → For cell with rowspan/colspan, generate complete occupies list
+
+5. **Incorrect inherited_from_above:**
+   → Check ALL previous rows for active rowspans
+   → Mark positions with source cell ID or null
 
 **What You Can Change:**
-- Add/remove cells from rows
-- Adjust `rowspan` values (or remove field if value is 1)
-- Adjust `colspan` values (or remove field if value is 1)
-- Add empty cells where needed: `{{"value": ""}}`
+- Fix cell IDs to match formula
+- Add/remove cells to reach {total_columns}
+- Add virtual cells with correct refs
+- Fix inherited_from_above arrays
+- Fix occupies lists
+- Adjust rowspan/colspan values
 
 **What You MUST Preserve:**
-- Cell `value` text (do not change the content)
+- Cell `value` text content (do not change the actual data)
 - Cell `type` field (if present)
 - Cell `sources` field (if present)
 - Cell `metadata` field (if present)
-- Table metadata (category, policy_levels)
-- Overall table structure and meaning
+- metadata.total_columns = {total_columns}
+- metadata.column_labels = {column_labels}
+- Table semantic meaning
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 VISUAL REPRESENTATION (CURRENT TABLE WITH ISSUES)
@@ -211,41 +226,14 @@ VISUAL REPRESENTATION (CURRENT TABLE WITH ISSUES)
 {visual_table}
 
 Legend:
-- ↓↓↓ = Column occupied by rowspan from previous row
-- ⟷⟷⟷ = Column occupied by colspan from same row
-- [⟷×N] = Cell has colspan=N (occupies N columns)
-- [⟱×N] = Cell has rowspan=N (spans N rows)
-- [empty] = Cell with no value
-- [MISSING] = Expected cell is missing
-- ✓ = Row has correct column count
-- ✗ = Row has incorrect column count
-
-**Semantic Analysis Guidance:**
-When correcting the table, analyze the MEANING and semantic relationships:
-
-1. **Header row (row 1):** Should contain policy level names or labels
-   - Check if column labels align with data in subsequent rows
-   - Data cells in lower rows should correspond to their header column
-
-2. **Data alignment:** Each data cell should be under the correct policy level
-   - ProBTP data should be under ProBTP policy levels
-   - AXA data should be under AXA policy levels
-   - Verify cell `sources` field matches the column (probtp vs axa)
-
-3. **Dimension hierarchy:** Look for hierarchical benefit labels
-   - Parent categories (e.g., "Hospitalisation") often have large rowspan
-   - Sub-categories (e.g., "Honoraires", "Chambre particulière") are nested
-   - Ensure hierarchy makes semantic sense
-
-4. **Pattern consistency:** Similar benefits should have similar structures
-   - If one benefit row has 3 dimension columns + 2 data columns, others likely do too
-   - Look for patterns in how rows are structured
-
-**Common semantic errors to fix:**
-- Data cell appears under wrong policy level (check sources field)
-- Rowspan creates misalignment between labels and data
-- Colspan in header doesn't match the number of related columns below
-- Dimension labels and data values don't correspond
+- [A15] = Cell ID (Excel-style)
+- →B2 = Virtual cell (ref points to B2)
+- ⟷×N = Cell has colspan=N
+- ⟱×N = Cell has rowspan=N
+- (→A1,A2,A3) = occupies list
+- Inherited row shows which columns are occupied by rowspans from above
+  - "A:─" = Position A is free
+  - "B:B1" = Position B is inherited from B1's rowspan
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 CURRENT TABLE JSON (WITH ISSUES)
@@ -254,28 +242,67 @@ CURRENT TABLE JSON (WITH ISSUES)
 {table_json}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+STEP-BY-STEP CORRECTION PROCESS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+For each row:
+
+**Step 1: Determine inherited_from_above**
+- Check ALL previous rows for cells with active rowspans
+- For each column position (0 to {total_columns-1}):
+  - If a rowspan from previous row occupies this position → add source cell ID
+  - Otherwise → add null
+- Example: Row 3, column A occupied by A1's rowspan=3 → inherited_from_above[0] = "A1"
+
+**Step 2: Generate cell IDs mechanically**
+- For each position i from 0 to {total_columns-1}:
+  - cell_id = column_labels[i] + str(row_number)
+- ALL positions get IDs (both real and virtual cells)
+
+**Step 3: Populate cell content**
+For each cell position i:
+
+- **If inherited_from_above[i] is not null**:
+  - Create VIRTUAL cell: {{"id": column_labels[i] + str(row_number), "ref": inherited_from_above[i]}}
+
+- **Else if this is colspan continuation** (previous cell in same row has colspan):
+  - Create VIRTUAL cell with ref pointing to source cell
+  - Example: Cell D15 is continuation of C15's colspan=2 → {{"id": "D15", "ref": "C15"}}
+
+- **Else this is a REAL cell**:
+  - Add `value` field with content
+  - If cell has rowspan: add `rowspan` field and `occupies` list
+  - If cell has colspan: add `colspan` field and `occupies` list
+  - If both: `occupies` includes ALL covered cells
+  - Add `sources`, `metadata`, `type` as appropriate
+
+**Step 4: Validate**
+- Count cells = {total_columns} ✓
+- All cell IDs match column_labels[i] + row_number ✓
+- All refs point to earlier cells ✓
+- All occupies lists match spans ✓
+- All inherited_from_above entries match refs ✓
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 TASK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 **Your Task:**
-1. **Study the visual representation** to identify patterns and inconsistencies
-2. **Analyze semantic relationships** between headers, dimension labels, and data cells
-3. **Verify column correspondence** - ensure data cells align with correct policy levels using `sources` field
-4. **Fix rowspan/colspan values** so ALL rows occupy exactly {expected_columns} logical columns
-5. **Maintain semantic meaning** - the corrected table must preserve the insurance benefit comparison structure
+1. Study the visual representation to understand the structure
+2. Identify which cells should have rowspan/colspan
+3. For each row, build correct inherited_from_above array
+4. Generate exactly {total_columns} cells per row (real + virtual)
+5. Ensure all cell IDs are correct (column_labels[i] + row_number)
+6. Build correct occupies lists for all spans
+7. Preserve all cell content, sources, metadata
 
 **Output Requirements:**
 - Return ONLY the corrected ComparisonTable JSON
 - No preamble, no explanation, no commentary
-- The output must be valid JSON conforming to the ComparisonTable schema
-- All rows must have exactly {expected_columns} logical columns when accounting for colspan and active rowspans
-
-**Verification Before Output:**
-For each row, verify:
-- Count cells in row
-- Multiply each cell's colspan (default 1)
-- Add columns occupied by active rowspans from previous rows
-- Total must equal {expected_columns}
+- The output must be valid JSON conforming to the enhanced ComparisonTable schema
+- ALL rows must have exactly {total_columns} cells
+- ALL cell IDs must be correct
+- ALL inherited_from_above arrays must be correct
 
 Return the corrected table now:"""
 

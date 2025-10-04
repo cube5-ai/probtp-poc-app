@@ -8,21 +8,49 @@
       "axa": [
         "Base Obligatoire"
       ]
-    }
+    },
+    "total_columns": 6,
+    "column_labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ]
   },
   "rows": [
     {
+      "row_number": 1,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
-          "value": ""
+          "id": "A1",
+          "value": "",
+          "colspan": 3,
+          "occupies": [
+            "A1",
+            "B1",
+            "C1"
+          ]
         },
         {
-          "value": ""
+          "id": "B1",
+          "ref": "A1"
         },
         {
-          "value": ""
+          "id": "C1",
+          "ref": "A1"
         },
         {
+          "id": "D1",
           "value": "Part S.S.*",
           "sources": {
             "probtp": [
@@ -31,6 +59,7 @@
           }
         },
         {
+          "id": "E1",
           "value": "S2",
           "sources": {
             "probtp": [
@@ -39,20 +68,46 @@
           }
         },
         {
+          "id": "F1",
           "value": "Base Obligatoire",
           "sources": {
             "axa": [
-              "2-3"
+              "2-2"
             ]
           }
         }
       ]
     },
     {
+      "row_number": 2,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A2",
           "value": "Soins courants",
-          "rowspan": 12,
+          "rowspan": 13,
+          "occupies": [
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "A6",
+            "A7",
+            "A8",
+            "A9",
+            "A10",
+            "A11",
+            "A12",
+            "A13",
+            "A14"
+          ],
           "sources": {
             "probtp": [
               "2-c"
@@ -60,8 +115,15 @@
           }
         },
         {
+          "id": "B2",
           "value": "Honoraires médicaux",
           "rowspan": 4,
+          "occupies": [
+            "B2",
+            "B3",
+            "B4",
+            "B5"
+          ],
           "sources": {
             "probtp": [
               "2-d"
@@ -69,6 +131,7 @@
           }
         },
         {
+          "id": "C2",
           "value": "Consultations et visites (généralistes et spécialistes)",
           "sources": {
             "probtp": [
@@ -77,8 +140,8 @@
           }
         },
         {
+          "id": "D2",
           "value": "70%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-f"
@@ -86,6 +149,7 @@
           }
         },
         {
+          "id": "E2",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -95,22 +159,43 @@
           }
         },
         {
-          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (si non DPTAM)",
+          "id": "F2",
+          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (non DPTAM)",
           "type": "data",
           "sources": {
             "axa": [
               "4-f",
               "4-i",
               "4-l",
-              "4-o"
+              "4-o",
+              "4-r",
+              "4-u"
             ]
           }
         }
       ]
     },
     {
+      "row_number": 3,
+      "inherited_from_above": [
+        "A2",
+        "B2",
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A3",
+          "ref": "A2"
+        },
+        {
+          "id": "B3",
+          "ref": "B2"
+        },
+        {
+          "id": "C3",
           "value": "Actes techniques médicaux",
           "sources": {
             "probtp": [
@@ -119,8 +204,8 @@
           }
         },
         {
+          "id": "D3",
           "value": "70%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-n"
@@ -128,6 +213,7 @@
           }
         },
         {
+          "id": "E3",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -137,7 +223,8 @@
           }
         },
         {
-          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (si non DPTAM)",
+          "id": "F3",
+          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (non DPTAM)",
           "type": "data",
           "sources": {
             "axa": [
@@ -149,8 +236,26 @@
       ]
     },
     {
+      "row_number": 4,
+      "inherited_from_above": [
+        "A2",
+        "B2",
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A4",
+          "ref": "A2"
+        },
+        {
+          "id": "B4",
+          "ref": "B2"
+        },
+        {
+          "id": "C4",
           "value": "Radiologie",
           "sources": {
             "probtp": [
@@ -159,8 +264,8 @@
           }
         },
         {
+          "id": "D4",
           "value": "70%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-p"
@@ -168,6 +273,7 @@
           }
         },
         {
+          "id": "E4",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -177,7 +283,8 @@
           }
         },
         {
-          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (si non DPTAM)",
+          "id": "F4",
+          "value": "170% BR-MR (si DPTAM) / 150% BR-MR (non DPTAM)",
           "type": "data",
           "sources": {
             "axa": [
@@ -189,8 +296,26 @@
       ]
     },
     {
+      "row_number": 5,
+      "inherited_from_above": [
+        "A2",
+        "B2",
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A5",
+          "ref": "A2"
+        },
+        {
+          "id": "B5",
+          "ref": "B2"
+        },
+        {
+          "id": "C5",
           "value": "Soins externes",
           "sources": {
             "probtp": [
@@ -199,8 +324,8 @@
           }
         },
         {
+          "id": "D5",
           "value": "60% à 70%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-r"
@@ -208,6 +333,7 @@
           }
         },
         {
+          "id": "E5",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -217,16 +343,37 @@
           }
         },
         {
+          "id": "F5",
           "value": "Non couvert",
           "type": "data"
         }
       ]
     },
     {
+      "row_number": 6,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A6",
+          "ref": "A2"
+        },
+        {
+          "id": "B6",
           "value": "Honoraires paramédicaux",
-          "rowspan": 3,
+          "rowspan": 4,
+          "occupies": [
+            "B6",
+            "B7",
+            "B8",
+            "B9"
+          ],
           "sources": {
             "probtp": [
               "2-s"
@@ -234,6 +381,7 @@
           }
         },
         {
+          "id": "C6",
           "value": "Auxiliaires médicaux, soins infirmiers",
           "sources": {
             "probtp": [
@@ -242,8 +390,8 @@
           }
         },
         {
+          "id": "D6",
           "value": "60%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-u"
@@ -251,6 +399,7 @@
           }
         },
         {
+          "id": "E6",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -260,6 +409,7 @@
           }
         },
         {
+          "id": "F6",
           "value": "160% BR-MR",
           "type": "data",
           "sources": {
@@ -271,8 +421,26 @@
       ]
     },
     {
+      "row_number": 7,
+      "inherited_from_above": [
+        "A2",
+        "B6",
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A7",
+          "ref": "A2"
+        },
+        {
+          "id": "B7",
+          "ref": "B6"
+        },
+        {
+          "id": "C7",
           "value": "Transport",
           "sources": {
             "probtp": [
@@ -281,8 +449,8 @@
           }
         },
         {
+          "id": "D7",
           "value": "55%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-C"
@@ -290,6 +458,7 @@
           }
         },
         {
+          "id": "E7",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -299,6 +468,7 @@
           }
         },
         {
+          "id": "F7",
           "value": "100% BR-MR",
           "type": "data",
           "sources": {
@@ -310,9 +480,32 @@
       ]
     },
     {
+      "row_number": 8,
+      "inherited_from_above": [
+        "A2",
+        "B6",
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A8",
+          "ref": "A2"
+        },
+        {
+          "id": "B8",
+          "ref": "B6"
+        },
+        {
+          "id": "C8",
           "value": "Séances d'accompagnement psychologique remboursées par la SS",
+          "rowspan": 2,
+          "occupies": [
+            "C8",
+            "C9"
+          ],
           "sources": {
             "probtp": [
               "2-J"
@@ -320,8 +513,13 @@
           }
         },
         {
+          "id": "D8",
           "value": "60%",
-          "type": "data",
+          "rowspan": 2,
+          "occupies": [
+            "D8",
+            "D9"
+          ],
           "sources": {
             "probtp": [
               "2-K"
@@ -329,6 +527,7 @@
           }
         },
         {
+          "id": "E8",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -338,32 +537,41 @@
           }
         },
         {
+          "id": "F8",
           "value": "Non couvert",
           "type": "data"
         }
       ]
     },
     {
+      "row_number": 9,
+      "inherited_from_above": [
+        "A2",
+        "B6",
+        "C8",
+        "D8",
+        null,
+        null
+      ],
       "cells": [
         {
-          "value": "Analyses et examens de laboratoires",
-          "colspan": 2,
-          "sources": {
-            "probtp": [
-              "2-L"
-            ]
-          }
+          "id": "A9",
+          "ref": "A2"
         },
         {
-          "value": "60%",
-          "type": "data",
-          "sources": {
-            "probtp": [
-              "2-M"
-            ]
-          }
+          "id": "B9",
+          "ref": "B6"
         },
         {
+          "id": "C9",
+          "ref": "C8"
+        },
+        {
+          "id": "D9",
+          "ref": "D8"
+        },
+        {
+          "id": "E9",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -373,9 +581,14 @@
           }
         },
         {
-          "value": "160% BR-MR (si pris en charge par SS) / 100 € (si non pris en charge par SS)",
+          "id": "F9",
+          "value": "160% BR-MR (si SS) / 100€ (non SS)",
           "type": "data",
           "sources": {
+            "probtp": [
+              "2-L",
+              "2-M"
+            ],
             "axa": [
               "4-M",
               "4-P"
@@ -385,10 +598,29 @@
       ]
     },
     {
+      "row_number": 10,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A10",
+          "ref": "A2"
+        },
+        {
+          "id": "B10",
           "value": "Médicaments",
           "rowspan": 3,
+          "occupies": [
+            "B10",
+            "B11",
+            "B12"
+          ],
           "sources": {
             "probtp": [
               "2-T"
@@ -396,6 +628,7 @@
           }
         },
         {
+          "id": "C10",
           "value": "Pharmacie remboursée par la S.S.",
           "sources": {
             "probtp": [
@@ -404,8 +637,8 @@
           }
         },
         {
+          "id": "D10",
           "value": "65% 30% 15%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-V"
@@ -413,6 +646,7 @@
           }
         },
         {
+          "id": "E10",
           "value": "100%",
           "type": "data",
           "sources": {
@@ -422,6 +656,7 @@
           }
         },
         {
+          "id": "F10",
           "value": "100% BR-MR",
           "type": "data",
           "sources": {
@@ -433,8 +668,26 @@
       ]
     },
     {
+      "row_number": 11,
+      "inherited_from_above": [
+        "A2",
+        "B10",
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A11",
+          "ref": "A2"
+        },
+        {
+          "id": "B11",
+          "ref": "B10"
+        },
+        {
+          "id": "C11",
           "value": "Vaccins non remboursés par la S.S.",
           "sources": {
             "probtp": [
@@ -443,8 +696,8 @@
           }
         },
         {
+          "id": "D11",
           "value": "",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-13"
@@ -452,31 +705,51 @@
           }
         },
         {
+          "id": "E11",
           "value": "Vaccin anti-grippe 15€",
           "type": "data",
           "sources": {
             "probtp": [
               "2-15"
             ]
-          },
-          "metadata": {
-            "conditions": "Vaccin prescrit ayant reçu une autorisation de mise sur le marché. Plafond par an et par bénéficiaire."
           }
         },
         {
+          "id": "F11",
           "value": "6 % PMSS",
           "type": "data",
           "sources": {
             "axa": [
               "6-c"
             ]
+          },
+          "metadata": {
+            "conditions": "Par année civile et par bénéficiaire"
           }
         }
       ]
     },
     {
+      "row_number": 12,
+      "inherited_from_above": [
+        "A2",
+        "B10",
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A12",
+          "ref": "A2"
+        },
+        {
+          "id": "B12",
+          "ref": "B10"
+        },
+        {
+          "id": "C12",
           "value": "Contraception prescrite, non remboursée par la S.S.",
           "sources": {
             "probtp": [
@@ -485,8 +758,8 @@
           }
         },
         {
+          "id": "D12",
           "value": "",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-1b"
@@ -494,6 +767,7 @@
           }
         },
         {
+          "id": "E12",
           "value": "",
           "type": "data",
           "sources": {
@@ -503,19 +777,37 @@
           }
         },
         {
+          "id": "F12",
           "value": "50 €",
           "type": "data",
           "sources": {
             "axa": [
               "4-15"
             ]
+          },
+          "metadata": {
+            "conditions": "Par année civile et par bénéficiaire"
           }
         }
       ]
     },
     {
+      "row_number": 13,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
+          "id": "A13",
+          "ref": "A2"
+        },
+        {
+          "id": "B13",
           "value": "Matériel médical",
           "sources": {
             "probtp": [
@@ -524,6 +816,7 @@
           }
         },
         {
+          "id": "C13",
           "value": "Appareillages orthopédiques et autres prothèses",
           "sources": {
             "probtp": [
@@ -532,8 +825,8 @@
           }
         },
         {
+          "id": "D13",
           "value": "60%",
-          "type": "data",
           "sources": {
             "probtp": [
               "2-1k"
@@ -541,6 +834,7 @@
           }
         },
         {
+          "id": "E13",
           "value": "250%",
           "type": "data",
           "sources": {
@@ -550,6 +844,7 @@
           }
         },
         {
+          "id": "F13",
           "value": "170% BR-MR",
           "type": "data",
           "sources": {
@@ -561,367 +856,403 @@
       ]
     },
     {
+      "row_number": 14,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
-          "value": "Médecines douces agréées",
-          "sources": {
-            "probtp": [
-              "2-6c"
-            ]
-          }
+          "id": "A14",
+          "ref": "A2"
         },
         {
-          "value": "ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.",
-          "sources": {
-            "probtp": [
-              "2-6c"
-            ]
-          }
-        },
-        {
+          "id": "B14",
           "value": "",
-          "type": "data",
           "sources": {
             "probtp": [
-              "2-6d"
+              "2-1s"
             ]
           }
         },
         {
+          "id": "C14",
           "value": "",
-          "type": "data",
           "sources": {
             "probtp": [
-              "2-6e"
+              "2-1t"
             ]
           }
         },
         {
-          "value": "Non couvert",
-          "type": "data"
+          "id": "D14",
+          "value": "",
+          "sources": {
+            "probtp": [
+              "2-1u"
+            ]
+          }
+        },
+        {
+          "id": "E14",
+          "value": "",
+          "sources": {
+            "probtp": [
+              "2-1v"
+            ]
+          }
+        },
+        {
+          "id": "F14",
+          "value": "",
+          "sources": {
+            "probtp": [
+              "2-1z"
+            ]
+          }
         }
       ]
     },
     {
+      "row_number": 15,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
-          "value": "Cures thermales",
+          "id": "A15",
+          "value": "Hospitalisation",
+          "rowspan": 5,
+          "occupies": [
+            "A15",
+            "A16",
+            "A17",
+            "A18",
+            "A19"
+          ],
           "sources": {
             "probtp": [
-              "2-6l"
+              "2-1A"
             ]
           }
         },
         {
-          "value": "65%",
-          "type": "data",
+          "id": "B15",
+          "value": "Honoraires",
+          "rowspan": 4,
+          "occupies": [
+            "B15",
+            "B16",
+            "B17",
+            "B18"
+          ],
           "sources": {
             "probtp": [
-              "2-6m"
+              "2-1B"
             ]
           }
         },
         {
-          "value": "100% + 100€",
+          "id": "C15",
+          "value": "Honoraires, frais de séjour",
+          "sources": {
+            "probtp": [
+              "2-1C"
+            ]
+          }
+        },
+        {
+          "id": "D15",
+          "value": "80%",
+          "sources": {
+            "probtp": [
+              "2-1D"
+            ]
+          }
+        },
+        {
+          "id": "E15",
+          "value": "100%",
           "type": "data",
           "sources": {
             "probtp": [
-              "2-6o"
+              "2-1F"
+            ]
+          }
+        },
+        {
+          "id": "F15",
+          "value": "100% FR-SS (conventionné) / 90% FR-SS (non conventionné) / 480% BR-MR (DPTAM) / 200% BR-MR (non DPTAM)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-b",
+              "2-g",
+              "2-p",
+              "2-s",
+              "2-C",
+              "2-F"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 16,
+      "inherited_from_above": [
+        "A15",
+        "B15",
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A16",
+          "ref": "A15"
+        },
+        {
+          "id": "B16",
+          "ref": "B15"
+        },
+        {
+          "id": "C16",
+          "value": "Chambre particulière",
+          "sources": {
+            "probtp": [
+              "2-1K"
+            ]
+          }
+        },
+        {
+          "id": "D16",
+          "value": "",
+          "sources": {
+            "probtp": [
+              "2-1L"
+            ]
+          }
+        },
+        {
+          "id": "E16",
+          "value": " - ",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1N"
+            ]
+          }
+        },
+        {
+          "id": "F16",
+          "value": "85 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-I"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 17,
+      "inherited_from_above": [
+        "A15",
+        "B15",
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A17",
+          "ref": "A15"
+        },
+        {
+          "id": "B17",
+          "ref": "B15"
+        },
+        {
+          "id": "C17",
+          "value": "Lit accompagnant pour enfants de -12 ans ou bénéficiaires de + 70 ans",
+          "sources": {
+            "probtp": [
+              "2-1S"
+            ]
+          }
+        },
+        {
+          "id": "D17",
+          "value": "",
+          "sources": {
+            "probtp": [
+              "2-1T"
+            ]
+          }
+        },
+        {
+          "id": "E17",
+          "value": "23 € / jour",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1V"
+            ]
+          }
+        },
+        {
+          "id": "F17",
+          "value": "40 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-R"
             ]
           },
           "metadata": {
-            "conditions": "Limité à une cure par an et par bénéficiaire"
+            "conditions": "Pour enfant de moins de 16 ans, 30 jours/an"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 18,
+      "inherited_from_above": [
+        "A15",
+        "B15",
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A18",
+          "ref": "A15"
+        },
+        {
+          "id": "B18",
+          "ref": "B15"
+        },
+        {
+          "id": "C18",
+          "value": "Participation forfaitaire pour les actes supérieurs à 120€",
+          "sources": {
+            "probtp": [
+              "2-20"
+            ]
           }
         },
         {
-          "value": "300 €",
+          "id": "D18",
+          "value": "100% - 1 forfait",
+          "sources": {
+            "probtp": [
+              "2-21"
+            ]
+          }
+        },
+        {
+          "id": "E18",
+          "value": "100% du forfait",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-23"
+            ]
+          }
+        },
+        {
+          "id": "F18",
+          "value": "100% du forfait",
           "type": "data",
           "sources": {
             "axa": [
-              "5-E"
+              "2-O"
             ]
           }
         }
       ]
     },
     {
+      "row_number": 19,
+      "inherited_from_above": [
+        "A15",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
       "cells": [
         {
-          "value": "Garanties supplémentaires AXA",
-          "rowspan": 8
+          "id": "A19",
+          "ref": "A15"
         },
         {
-          "value": "Homéopathie non prise en charge par la Sécurité sociale",
+          "id": "B19",
+          "value": "Forfait journalier[3] [4] et forfait urgences [3] [4bis] en établissement hospitalier",
+          "colspan": 2,
+          "occupies": [
+            "B19",
+            "C19"
+          ],
           "sources": {
-            "axa": [
-              "4-11"
-            ]
-          }
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "60 €",
-          "type": "data",
-          "sources": {
-            "axa": [
-              "4-12"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "cells": [
-        {
-          "value": "Consultation chez un diététicien prescrite par un médecin (enfant -12 ans)",
-          "sources": {
-            "axa": [
-              "6-n",
-              "6-q",
-              "6-r"
-            ]
-          }
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "1,25% PMSS",
-          "type": "data",
-          "sources": {
-            "axa": [
-              "6-o"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "cells": [
-        {
-          "value": "Test de dépistage HPV non pris en charge par la Sécurité sociale",
-          "sources": {
-            "axa": [
-              "6-t"
-            ]
-          }
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "170% BR-MR",
-          "type": "data",
-          "sources": {
-            "axa": [
-              "6-u"
+            "probtp": [
+              "2-28"
             ]
           },
           "metadata": {
-            "conditions": "Prise en charge tous les 3 ans"
-          }
-        }
-      ]
-    },
-    {
-      "cells": [
-        {
-          "value": "Tout acte de prévention prévu à l'article R 871-2 du code de la Sécurité sociale",
-          "sources": {
-            "axa": [
-              "6-z"
+            "footnotes": [
+              "3",
+              "4",
+              "4bis"
             ]
           }
         },
         {
+          "id": "C19",
+          "ref": "B19"
+        },
+        {
+          "id": "D19",
           "value": "",
-          "type": "data"
+          "sources": {
+            "probtp": [
+              "2-29"
+            ]
+          }
         },
         {
-          "value": "",
-          "type": "data"
+          "id": "E19",
+          "value": "oui",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2b"
+            ]
+          }
         },
         {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "Inclus",
+          "id": "F19",
+          "value": "100% du forfait",
           "type": "data",
           "sources": {
             "axa": [
-              "6-A"
+              "2-L"
             ]
-          }
-        }
-      ]
-    },
-    {
-      "cells": [
-        {
-          "value": "Téléconsultation",
-          "sources": {
-            "axa": [
-              "6-C"
-            ]
-          }
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "Inclus",
-          "type": "data",
-          "sources": {
-            "axa": [
-              "6-D"
-            ]
-          }
-        }
-      ]
-    },
-    {
-      "cells": [
-        {
-          "value": "Séances d'activité physique adaptée",
-          "sources": {
-            "axa": [
-              "6-F"
-            ]
-          }
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "200 €",
-          "type": "data",
-          "sources": {
-            "axa": [
-              "6-G"
-            ]
-          },
-          "metadata": {
-            "conditions": "Par année civile et par bénéficiaire"
-          }
-        }
-      ]
-    },
-    {
-      "cells": [
-        {
-          "value": "Connecteur Bluetooth aux stylos à insuline et aux glucomètres",
-          "sources": {
-            "axa": [
-              "6-L"
-            ]
-          }
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "100 €",
-          "type": "data",
-          "sources": {
-            "axa": [
-              "6-M"
-            ]
-          },
-          "metadata": {
-            "conditions": "Une fois par année civile et par bénéficiaire"
-          }
-        }
-      ]
-    },
-    {
-      "cells": [
-        {
-          "value": "Forfait actes thérapeutiques (Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie)",
-          "sources": {
-            "axa": [
-              "5-8"
-            ]
-          }
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "",
-          "type": "data"
-        },
-        {
-          "value": "Non couvert",
-          "type": "data"
-        },
-        {
-          "value": "3 séance(s)",
-          "type": "data",
-          "sources": {
-            "axa": [
-              "5-9"
-            ]
-          },
-          "metadata": {
-            "conditions": "Par année civile et par bénéficiaire"
           }
         }
       ]
