@@ -1,4 +1,4 @@
-"""Alignment prompt template for extracting structured comparison tables with cell-level grounding."""
+"""Alignment prompt template for extracting structured comparison tables with enhanced span support."""
 
 from pydantic import BaseModel, Field
 
@@ -16,18 +16,29 @@ class CellSources(BaseModel):
 
 
 class TableCell(BaseModel):
-    """A single cell in the comparison table."""
-    value: str = Field(..., description="Cell content (coverage amount, benefit name, etc.)")
+    """A single cell in the comparison table with Excel-style ID."""
+    id: str = Field(..., description="Excel-style cell ID (e.g., 'A1', 'B15', 'C2')")
+
+    # Real cells (first occurrence of a span or simple cells)
+    value: str | None = Field(None, description="Cell content (coverage amount, benefit name, etc.). Required for real cells, omit for virtual cells.")
     type: str | None = Field(None, description="'data' for data cells. Omit for dimension cells (headers/labels).")
     colspan: int | None = Field(None, description="Column span. Omit if 1.")
     rowspan: int | None = Field(None, description="Row span. Omit if 1.")
+    occupies: list[str] | None = Field(None, description="List of all cell IDs occupied by this span (e.g., ['C15', 'D15', 'E15'] for colspan=3). Omit if no span.")
+
+    # Virtual cells (continuations of rowspan/colspan)
+    ref: str | None = Field(None, description="For virtual cells: ID of the cell that occupies this position (e.g., 'A1' or 'C15'). Omit for real cells.")
+
+    # Metadata (optional)
     sources: CellSources | None = Field(None, description="Source cell IDs. Omit for dimension cells.")
     metadata: CellMetadata | None = Field(None, description="Cell metadata (footnotes, conditions). Omit if empty.")
 
 
 class TableRow(BaseModel):
-    """A single row in the comparison table."""
-    cells: list[TableCell] = Field(..., description="Cells in this row")
+    """A single row in the comparison table with rowspan tracking."""
+    row_number: int = Field(..., description="1-indexed row number matching Excel notation")
+    inherited_from_above: list[str | None] = Field(..., description="Array showing rowspan inheritance. Length must equal total_columns. Cell ID (e.g., 'A1') = inherited position, null = free position for new cells.")
+    cells: list[TableCell] = Field(..., description="Exactly total_columns cells (real + virtual)")
 
 
 class PolicyLevels(BaseModel):
@@ -40,10 +51,12 @@ class ComparisonTableMetadata(BaseModel):
     """Metadata for the comparison table."""
     category: str = Field(..., description="Healthcare category (e.g., 'Soins courants', 'Dentaire')")
     policy_levels: PolicyLevels = Field(..., description="Policy levels being compared")
+    total_columns: int = Field(..., description="Total number of columns in the table")
+    column_labels: list[str] = Field(..., description="Excel-style column labels (e.g., ['A', 'B', 'C', 'D', 'E', 'F'])")
 
 
 class ComparisonTable(BaseModel):
-    """Structured comparison table with cell-level grounding."""
+    """Structured comparison table with enhanced span support and cell-level grounding."""
     metadata: ComparisonTableMetadata = Field(..., description="Table metadata")
     rows: list[TableRow] = Field(..., description="Table rows (first row should be header)")
 
@@ -57,7 +70,7 @@ def create_alignment_prompt(
     language: str = "French (France)"
 ) -> str:
     """
-    Create a prompt for extracting structured comparison tables with cell-level grounding.
+    Create a prompt for extracting structured comparison tables with enhanced span support.
 
     Args:
         probtp_markdown: Full markdown of ProBTP contract (with cell IDs)
@@ -98,149 +111,209 @@ Extract a **complete comparison table** that captures EVERY benefit from the Pro
 3. ✓ **Clarity**: Mark "Non couvert" when AXA doesn't cover a ProBTP benefit
 4. ✓ **Granularity**: Match ProBTP's level of detail exactly
 5. ✓ **Traceability**: Track source cell IDs for every value
+6. ✓ **Structural Integrity**: Every row must have exactly total_columns cells (no missing cells!)
 
 **What Success Looks Like:**
 - ProBTP column has NO unexplained empty cells
 - Every ProBTP benefit row in source table appears in output
 - AXA benefits align to ProBTP equivalents OR clearly marked as "Non couvert"
-- No data hidden in colspan spanning multiple columns
+- All rows have correct cell counts (exactly total_columns cells per row)
+- No missing cells due to rowspan/colspan tracking errors
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-OUTPUT FORMAT
+ENHANCED TABLE STRUCTURE WITH SPAN SUPPORT
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Structure:**
-You will return a JSON object conforming to the ComparisonTable schema (defined below). The table consists of:
+**Problem This Schema Solves:**
+LLMs struggle with rowspan/colspan tracking, often forgetting cells (like the "Prévention" row issue where columns were omitted). This schema provides **cognitive scaffolding** to make it mechanically difficult to generate incorrect structures.
 
-1. **Metadata**: Category name and policy levels
-2. **Rows**: Array of row objects, each containing cells
-3. **Cells**: Each cell has:
-   - `value`: The cell content
-   - `type`: Either "dimension" (labels/headers) or "data" (coverage values)
-   - `colspan`/`rowspan`: Only if > 1 (omit otherwise)
-   - `sources`: Cell IDs from original documents (probtp and/or axa)
-   - `metadata`: Optional footnotes, conditions, document attribution
+**Key Concepts:**
 
-**Cell Types:**
-- **dimension**: Benefit names, category labels, policy level headers, "Part S.S." column - **OMIT `type` field**
-- **data**: Coverage percentages, amounts, "Frais réels", "Non couvert", etc. - **SET `type: "data"`**
+1. **Excel-Style Cell IDs**: Every cell has an ID like "A1", "B15", "C2"
+   - Column letter (A, B, C...) + Row number (1, 2, 3...)
+   - Makes position explicit and unambiguous
+   - Easy to validate and debug
 
-**Table Structure:**
-- **First row**: Header row with empty dimension cells, then policy level headers
-  - Empty cells for dimension columns (value: "")
-  - Policy level cells (e.g., "S1", "Option 1") with metadata.document set to "probtp" or "axa"
-- **Subsequent rows**: Data rows with benefit information
-  - First columns: dimension cells (benefit names, categories)
-  - Remaining columns: data cells (coverage values)
+2. **Every Row Has Exactly total_columns Cells** (MANDATORY):
+   - Real cells (with value content)
+   - Virtual cells (placeholders for spans with ref pointing to source)
+   - No exceptions - this prevents the "missing cells" problem
+   - Example: If total_columns=6, every row MUST have 6 cells
 
-**Token Optimization - OMIT these fields:**
-- **`type`**: Omit for dimension cells (only include `type: "data"` for data cells)
-- **`colspan`/`rowspan`**: Omit if value is 1
-- **`sources`**: Omit for dimension cells entirely
-- **`metadata`**: Omit if no footnotes or conditions
-- **`sources.probtp`**: Omit if null (not `null`, just omit the field)
-- **`sources.axa`**: Omit if null
-- **`metadata.footnotes`**: Omit if empty array
-- **`metadata.conditions`**: Omit if null or empty
+3. **inherited_from_above Array**:
+   - Length = total_columns
+   - Shows which positions are occupied by rowspans from previous rows
+   - Cell ID (e.g., "A1") = this position inherited from that cell's rowspan
+   - null = free position available for new cells
+   - This makes rowspan tracking explicit and visible
 
-**Important:**
-- Use exact cell IDs from the markdown (e.g., "0-c", "0-f")
-- **CRITICAL for rowspan/colspan**: When a cell has `rowspan=N`, it occupies space in the next N-1 rows
-  - Those subsequent rows must have FEWER cells (the spanned cell is NOT repeated)
-  - **TRACK ALL ACTIVE ROWSPANS**: If multiple cells have rowspan in previous rows, ALL of them reduce the cell count
-  - Example 1: Row 1 has cell A with `rowspan=3` → rows 2-3 skip column A (each has 1 fewer cell)
-  - Example 2: Row 3 has cell A with `rowspan=7` AND cell B with `rowspan=5` → rows 4-7 skip BOTH columns A and B (each has 2 fewer cells), rows 8-9 skip only column A (each has 1 fewer cell)
-  - **CALCULATION**: For each row, count how many rowspan cells from previous rows are still active, then subtract that from the total column count
-  - The total number of logical columns must remain constant across all rows
-- For merged cells, use the source cell ID from the original merged cell element
+4. **Real vs Virtual Cells**:
+   - **Real cells**: Have `value` field and optional `rowspan`/`colspan`
+   - **Virtual cells**: Have `ref` field pointing to the cell that occupies this position
+   - Both types have `id` fields (Excel-style)
+   - Every cell is either real (has value) OR virtual (has ref), never both
+
+5. **occupies List**:
+   - For cells with rowspan/colspan
+   - Lists ALL cell IDs occupied by the span
+   - Example: Cell C15 with colspan=3 occupies ["C15", "D15", "E15"]
+   - Example: Cell A1 with rowspan=3 occupies ["A1", "A2", "A3"]
+   - Example: Cell E1 with rowspan=3 AND colspan=2 occupies ["E1", "F1", "E2", "F2", "E3", "F3"]
+
+**Structure Benefits:**
+- ✅ Prevents missing cells (must have exactly total_columns)
+- ✅ Makes rowspan tracking explicit (inherited_from_above array)
+- ✅ Self-validating (multiple redundant fields must agree)
+- ✅ Mirrors HTML table structure naturally
+- ✅ Easy to debug (scan for inconsistencies visually)
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 SCHEMA DEFINITION
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-The output must conform to this Pydantic schema:
-
 ```python
 class ComparisonTable(BaseModel):
-    metadata: ComparisonTableMetadata  # category and policy_levels
-    rows: list[TableRow]  # array of rows
+    metadata: ComparisonTableMetadata  # category, policy_levels, total_columns, column_labels
+    rows: list[TableRow]
+
+class ComparisonTableMetadata(BaseModel):
+    category: str  # e.g., "Soins courants"
+    policy_levels: PolicyLevels
+    total_columns: int  # Fixed number of columns in table
+    column_labels: list[str]  # ["A", "B", "C", "D", "E", "F"]
 
 class TableRow(BaseModel):
-    cells: list[TableCell]
+    row_number: int  # 1-indexed (matches Excel)
+    inherited_from_above: list[str | None]  # Length = total_columns
+    cells: list[TableCell]  # Length = total_columns (real + virtual)
 
 class TableCell(BaseModel):
-    value: str  # cell content
+    id: str  # Excel-style: "A1", "B15", "C2"
+
+    # Real cells (has value)
+    value: str | None  # Cell content (required for real cells)
     type: str | None  # "data" for data cells, OMIT for dimension cells
     colspan: int | None  # OMIT if 1
     rowspan: int | None  # OMIT if 1
-    sources: CellSources | None  # source cell IDs - OMIT for dimension cells
-    metadata: CellMetadata | None  # OMIT if no footnotes/conditions
+    occupies: list[str] | None  # Cell IDs occupied by span, OMIT if no span
+    sources: CellSources | None  # OMIT for dimension cells
+    metadata: CellMetadata | None  # OMIT if empty
 
-class CellSources(BaseModel):
-    probtp: list[str] | None  # ProBTP cell IDs - OMIT if not applicable
-    axa: list[str] | None  # AXA cell IDs - OMIT if not applicable
-
-class CellMetadata(BaseModel):
-    footnotes: list[str] | None  # e.g., ["*", "(1)"] - OMIT if empty
-    conditions: str | None  # special conditions - OMIT if none
+    # Virtual cells (has ref)
+    ref: str | None  # For virtual cells only: ID of source cell, OMIT for real cells
 ```
 
+**Token Optimization - OMIT these fields:**
+- `type`: Omit for dimension cells (only include for data cells)
+- `colspan`/`rowspan`: Omit if value is 1
+- `occupies`: Omit if no span (colspan=1 and rowspan=1)
+- `ref`: Omit for real cells (only for virtual cells)
+- `sources`: Omit for dimension cells entirely
+- `metadata`: Omit if no footnotes or conditions
+- `sources.probtp`/`sources.axa`: Omit if not applicable
+
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TWO-PASS EXTRACTION PROCESS
+STEP-BY-STEP GENERATION PROCESS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**This is a TWO-PASS process. ProBTP is the reference document - extract it FIRST, then align AXA.**
+**STEP 0: Determine Table Structure**
 
-**PASS 1: EXTRACT ALL PROBTP BENEFITS (Reference Document)**
+Before extracting any content, analyze the ProBTP table to determine:
 
-1. **Locate ProBTP table** for the category (e.g., "Soins courants" table)
-2. **Count total benefit rows** in ProBTP source table (excluding header)
-3. **Extract EVERY row completely**:
-   - Benefit names (dimensions)
-   - Coverage values for each ProBTP policy level
-   - Part S.S. percentages
-   - All conditions, footnotes, caps
-   - Cell IDs for traceability
-4. **Build table skeleton** using ProBTP's structure (rowspan/colspan from source)
-5. **Checkpoint**: Row count in output MUST equal row count in ProBTP source table
+1. **Count total_columns**: Look at the ProBTP table header
+   - Count dimension columns (benefit categories, names, etc.)
+   - Count "Part S.S.*" column (if present)
+   - Count policy level columns (S1, S2, S3, P3+, etc.)
+   - Count AXA policy level columns
+   - **CRITICAL**: Think carefully about the grid structure needed
+   - Example: If you have 3 dimension columns, 1 Part SS column, 1 ProBTP level column, 1 AXA level column → total_columns = 6
 
-**PASS 2: ALIGN AXA BENEFITS**
+2. **Generate column_labels**: Create Excel-style labels
+   - ["A", "B", "C", "D", "E", "F"] for 6 columns
+   - ["A", "B", "C", "D", "E"] for 5 columns
+   - etc.
 
-For each ProBTP benefit row:
+3. **Double-check your column count**: This is critical for the entire structure!
 
-1. **Search AXA document** for equivalent benefit
-   - Look for matching benefit names
-   - Look for same coverage type (e.g., "consultations", "orthodontie")
-   - Check synonyms and variations
+**STEP 1: Two-Pass Semantic Extraction** (ProBTP First!)
 
-2. **If AXA equivalent found**:
-   - Extract AXA coverage value
-   - Extract AXA conditions, footnotes
-   - Add AXA cell IDs to sources
-   - Align to the ProBTP row
+**PASS 1 - Extract ALL ProBTP Benefits:**
+1. Locate ProBTP table for the category
+2. Extract EVERY benefit row (complete count from source table)
+3. Use ProBTP's structure, terminology, and organization
+4. Extract: benefit names, coverage values, Part S.S., cell IDs, footnotes, conditions
 
-3. **If AXA equivalent NOT found**:
-   - Mark AXA column as **"Non couvert"** (not covered)
-   - Add metadata note explaining search attempt
-   - DO NOT leave empty - explicitly state "Non couvert"
+**PASS 2 - Align AXA Benefits:**
+5. For each ProBTP benefit row, search AXA for equivalent
+6. Extract AXA coverage OR mark "Non couvert"
+7. Track AXA cell IDs in sources
+8. Handle granularity differences (detailed ProBTP vs broad AXA)
 
-**PASS 3: HANDLE AXA-ONLY BENEFITS (Optional)**
+**PASS 3 - AXA-Only Benefits (if applicable):**
+9. Identify AXA benefits not in ProBTP category table
+10. Add as separate section at end with clear labeling ("Garanties supplémentaires AXA")
+11. Use category rowspan cell for label, ProBTP columns show "-"
 
-If AXA has benefits not in ProBTP category table:
+**STEP 2: Generate Table Structure Row by Row**
 
-1. **List them separately** at the end of table
-2. **Use clear labeling**: Add a category row "Garanties supplémentaires AXA"
-3. **DO NOT hide by spanning columns** - make it explicit
-4. **Keep ProBTP column as "-"** to show it's not covered
+For each row (starting with row_number=1 for header):
 
-**COMPLETENESS VALIDATION (Before Returning)**
+**2.1: Determine inherited_from_above**
+- Check ALL previous rows for cells with active rowspans
+- For each column position (0 to total_columns-1):
+  - If a rowspan from previous row occupies this position → add source cell ID (e.g., "A1")
+  - Otherwise → add null
+- Example: Row 2 with column A occupied by A1's rowspan=3 → inherited_from_above = ["A1", null, null, null, null, null]
 
-Before outputting JSON, verify:
-- ✓ ProBTP row count in output ≥ ProBTP row count in source table
-- ✓ No ProBTP cells with empty value (should be data, "Non couvert", or "-")
-- ✓ Every ProBTP benefit has corresponding AXA alignment OR "Non couvert"
-- ✓ No unexplained colspan spanning ProBTP columns
-- ✓ Granularity matches ProBTP's level of detail
+**2.2: Generate cell IDs mechanically**
+- For each position i from 0 to total_columns-1:
+  - cell_id = column_labels[i] + str(row_number)
+  - Example: Row 15, position 2 (column C) → id = "C15"
+- ALL positions get IDs (both real and virtual cells)
+
+**2.3: Populate cell content**
+For each cell position i:
+
+- **If inherited_from_above[i] is not null**:
+  - This position is occupied by a rowspan from above
+  - Create VIRTUAL cell: `{{"id": "{column_labels[i]}{row_number}", "ref": "{inherited_from_above[i]}"}}`
+
+- **Else if this is a colspan continuation** (previous cell in same row has colspan):
+  - Create VIRTUAL cell with ref pointing to source cell
+  - Example: Cell D15 is continuation of C15's colspan=2 → `{{"id": "D15", "ref": "C15"}}`
+
+- **Else this is a REAL cell**:
+  - Add `value` field with content
+  - If cell has rowspan: add `rowspan` field and `occupies` list
+  - If cell has colspan: add `colspan` field and `occupies` list
+  - If both: `occupies` includes ALL covered cells (current row + future rows)
+  - Add `sources`, `metadata`, `type` as appropriate
+
+**2.4: Build occupies list** (for cells with spans)
+
+For rowspan only:
+- `occupies = [cell_id, same_col_next_row, same_col_next_row+1, ...]`
+- Example: A1 with rowspan=3 → occupies = ["A1", "A2", "A3"]
+
+For colspan only:
+- `occupies = [cell_id, next_col_same_row, next_col+1_same_row, ...]`
+- Example: C15 with colspan=3 → occupies = ["C15", "D15", "E15"]
+
+For BOTH rowspan and colspan:
+- `occupies = [all cells in the rectangle]`
+- Example: E1 with rowspan=3, colspan=2 → occupies = ["E1", "F1", "E2", "F2", "E3", "F3"]
+
+**STEP 3: Validate Before Returning**
+
+Check these MANDATORY rules:
+
+✓ `inherited_from_above.length === total_columns`
+✓ `cells.length === total_columns`
+✓ All cell IDs are sequential: `column_labels[i] + row_number`
+✓ Every cell has EITHER value OR ref (never both, never neither)
+✓ All ref values point to earlier cells (earlier row OR same row but earlier column)
+✓ All occupies lists match the actual rowspan/colspan values
+✓ No ProBTP cells with empty value (should be data, "Non couvert", or "-")
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EXTRACTION REQUIREMENTS
@@ -250,13 +323,14 @@ EXTRACTION REQUIREMENTS
 1. **Completeness**: Extract EVERY ProBTP benefit from category table
 2. **Accuracy**: Align equivalent benefits correctly (check benefit names, coverage types)
 3. **Explicit missing data**: Mark "Non couvert" when AXA doesn't cover a ProBTP benefit
-4. **Granularity matching**: Match ProBTP's level of detail (don't merge detailed rows into broad categories)
+4. **Granularity matching**: Match ProBTP's level of detail (don't merge detailed rows)
 5. **Condition extraction**: Capture ALL conditions, footnotes, caps, age limits
 
-**Technical Quality (Priority 2):**
-6. **Source tracking**: Every cell must reference source cell IDs from parsed markdown
-7. **Structure preservation**: Use colspan/rowspan from source tables (post-processing will validate)
-8. **Metadata extraction**: Include footnote references and conditions in metadata fields
+**Structural Quality (Priority 2):**
+6. **Correct column count**: Think carefully about total_columns before starting
+7. **Every row has exactly total_columns cells**: Real + virtual cells
+8. **inherited_from_above tracking**: Accurately track rowspans from previous rows
+9. **Source tracking**: Every real cell must reference source cell IDs from parsed markdown
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 EXTRACTION GUIDELINES
@@ -266,7 +340,7 @@ EXTRACTION GUIDELINES
 
 This report helps **ProBTP's sales team** win customers. Therefore:
 
-- ✓ **ProBTP is the REFERENCE** - Use ProBTP's structure, terminology, and organization
+- ✓ **ProBTP is the REFERENCE** - Use ProBTP's structure, terminology, organization
 - ✓ **Extract ProBTP completely** - Locate category table, extract ALL rows, preserve exact benefit names
 - ✓ **AXA aligns to ProBTP** - Find AXA equivalents and map to ProBTP structure
 - ✓ **Show ProBTP advantages** - If ProBTP covers it and AXA doesn't → mark "Non couvert"
@@ -285,52 +359,7 @@ Documents include cell IDs (e.g., `<td id="2-5">`). Track them in `sources`:
 - Aligned cells → include IDs from both documents
 - Merged cells (rowspan/colspan) → use the cell ID from the merged cell element
 
-**3. Table Structure (Simplified)**
-
-- **Preserve source structure**: Use colspan/rowspan from ProBTP table
-- **Post-processing validates structure** - Focus on semantic extraction
-- **Key rule**: When cell has `rowspan=N`, it occupies N rows. Subsequent rows have fewer cells.
-  (System validation will catch and fix structural issues - prioritize completeness over structure)
-
-**Footnote and Condition Extraction:**
-
-**CRITICAL**: Conditions can come from TWO sources and should be combined in `metadata.conditions`:
-
-**Source 1: Direct conditions in cell/dimension text**
-- Age limits specified inline (e.g., "Orthodontie jusqu'à 16 ans")
-- Frequency limits (e.g., "1 séance/an")
-- Caps specified in cell (e.g., "100% BR (plafond €300)")
-- Prior authorization (e.g., "Sous accord préalable")
-
-**Source 2: Conditions from footnotes**
-- Age limits (e.g., "*jusqu'à 18 ans" = only for children)
-- Frequency restrictions (e.g., "1 fois par an")
-- Prior authorization requirements
-- Annual caps beyond the base reimbursement
-- Network restrictions
-
-**Your responsibility:**
-1. **Extract direct conditions** from cell/dimension text itself
-2. **Identify footnote markers** in cell values (*, (1), (2), †, etc.)
-3. **Extract footnote text** from the document (usually at bottom of tables)
-4. **Store in metadata:**
-   - `metadata.footnotes`: Keep the markers as array (e.g., ["*", "(1)"])
-   - `metadata.conditions`: Combine direct conditions + footnote translations into single concise text
-5. **Examples:**
-   - Cell: "200% BR*", Footnote: "*jusqu'à 18 ans" →
-     - footnotes: ["*"]
-     - conditions: "Limited to under 18 years old"
-   - Dimension: "Orthodontie (jusqu'à 16 ans)", Cell: "€500(1)", Footnote: "(1) 1 séance par an" →
-     - footnotes: ["(1)"]
-     - conditions: "Under 16 years old only; 1 session per year maximum"
-   - Cell: "150% BR (plafond €300)" (no footnote) →
-     - footnotes: []
-     - conditions: "Annual cap of €300"
-   - Cell: "Frais réels†", Footnote: "† Sous réserve d'accord préalable" →
-     - footnotes: ["†"]
-     - conditions: "Requires prior authorization"
-
-**4. Handling Asymmetry Between Contracts**
+**3. Handling Asymmetry Between Contracts**
 
 **When ProBTP and AXA have different granularity:**
 
@@ -348,31 +377,24 @@ Documents include cell IDs (e.g., `<td id="2-5">`). Track them in `sources`:
 - **Missing coverage**:
   → ProBTP covers, AXA doesn't: Mark "Non couvert"
   → AXA covers, ProBTP doesn't: Add to "Garanties supplémentaires AXA" section
-  → Neither covers: Should not be in output
 
-**5. Extraction Steps (Follow TWO-PASS Process Above)**
+**4. Footnote and Condition Extraction**
 
-**PASS 1 - ProBTP Extraction:**
-1. Locate ProBTP table for category
-2. Build header row with policy levels
-3. Extract ALL benefit rows (complete count from source table)
-4. Extract: cell values, cell IDs, footnotes, conditions
-5. Remove category rowspan cell if it spans entire table
+**CRITICAL**: Conditions come from TWO sources:
 
-**PASS 2 - AXA Alignment:**
-6. For each ProBTP benefit row, search AXA for equivalent
-7. Extract AXA coverage OR mark "Non couvert"
-8. Track AXA cell IDs in sources
-9. Handle granularity differences (see section 4 above)
+**Source 1: Direct conditions in cell/dimension text**
+- Age limits inline (e.g., "Orthodontie jusqu'à 16 ans")
+- Frequency limits (e.g., "1 séance/an")
+- Caps in cell (e.g., "100% BR (plafond €300)")
 
-**PASS 3 - AXA-Only Benefits:**
-10. Identify AXA benefits not in ProBTP
-11. Add as separate section at end if applicable
-12. Use clear labeling, keep structure visible
+**Source 2: Footnotes**
+- Identify markers (*, (1), (2), †)
+- Find footnote text at bottom of table
+- Translate to conditions
 
-**Final:**
-13. Validate completeness (checklist from TWO-PASS PROCESS section)
-14. Return JSON only - No preamble, no commentary
+**Combine both sources** in `metadata.conditions`:
+- Keep markers in `metadata.footnotes` array
+- Store combined text in `metadata.conditions`
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INSURANCE CONTRACT DOCUMENTS (CONTEXT)
@@ -402,15 +424,18 @@ TASK PARAMETERS
 
 Extract a **COMPLETE** comparison table for "{category}" category:
 
-1. **ProBTP First**: Locate ProBTP "{category}" table, extract ALL rows
-2. **AXA Alignment**: Find AXA equivalents for each ProBTP benefit
-3. **Explicit Missing Data**: Mark "Non couvert" when AXA doesn't cover a ProBTP benefit
-4. **Validate Completeness**: Before returning, verify no ProBTP benefits are missing
-5. **Return**: ONLY the JSON object conforming to ComparisonTable schema
+**STEP 0**: Determine total_columns and column_labels (think about grid structure!)
+**STEP 1**: ProBTP First - Extract ALL benefits, then align AXA
+**STEP 2**: Generate rows with proper structure:
+  - inherited_from_above (track rowspans)
+  - Exactly total_columns cells (real + virtual)
+  - Excel-style cell IDs (A1, B15, C2)
+  - occupies lists for spans
+**STEP 3**: Validate before returning (check rules above)
 
-Policy levels: ProBTP {probtp_levels_str}, AXA {axa_levels_str}. Output language: {language}.
+**Return**: ONLY the JSON object conforming to ComparisonTable schema.
 
-**Example Output Structure (showing key patterns):**
+**Example output structure** (showing enhanced schema):
 
 {{
   "metadata": {{
@@ -418,40 +443,45 @@ Policy levels: ProBTP {probtp_levels_str}, AXA {axa_levels_str}. Output language
     "policy_levels": {{
       "probtp": {probtp_levels},
       "axa": {axa_levels}
-    }}
+    }},
+    "total_columns": 6,  // Example: 3 dimension + 1 Part SS + 1 ProBTP + 1 AXA
+    "column_labels": ["A", "B", "C", "D", "E", "F"]
   }},
   "rows": [
-    // Header row
     {{
+      "row_number": 1,
+      "inherited_from_above": [null, null, null, null, null, null],
       "cells": [
-        {{"value": ""}},
-        {{"value": "{probtp_levels_str.split('/')[0] if probtp_levels else 'S1'}"}},
-        {{"value": "{axa_levels_str.split('/')[0] if axa_levels else 'Option 1'}"}}
+        {{"id": "A1", "value": ""}},
+        {{"id": "B1", "value": "", "colspan": 2, "occupies": ["B1", "C1"]}},
+        {{"id": "C1", "ref": "B1"}},
+        {{"id": "D1", "value": "Part S.S.*"}},
+        {{"id": "E1", "value": "S2"}},
+        {{"id": "F1", "value": "Base Obligatoire"}}
       ]
     }},
-    // Regular benefit - both contracts cover it
     {{
+      "row_number": 2,
+      "inherited_from_above": [null, null, null, null, null, null],
       "cells": [
-        {{"value": "Consultations"}},
-        {{"value": "100%", "type": "data", "sources": {{"probtp": ["0-g"]}}}},
-        {{"value": "80%", "type": "data", "sources": {{"axa": ["1-9b"]}}}}
+        {{"id": "A2", "value": "Soins courants", "rowspan": 3, "occupies": ["A2", "A3", "A4"]}},
+        {{"id": "B2", "value": "Consultations"}},
+        {{"id": "C2", "value": "70%"}},
+        {{"id": "D2", "value": ""}},
+        {{"id": "E2", "value": "100%", "type": "data", "sources": {{"probtp": ["2-h"]}}}},
+        {{"id": "F2", "value": "170% BR-MR", "type": "data", "sources": {{"axa": ["4-f"]}}}}
       ]
     }},
-    // ProBTP advantage - AXA doesn't cover this
     {{
+      "row_number": 3,
+      "inherited_from_above": ["A2", null, null, null, null, null],  // A2's rowspan still active
       "cells": [
-        {{"value": "Orthodontie"}},
-        {{"value": "200% BR*", "type": "data", "sources": {{"probtp": ["0-n"]}}, "metadata": {{"footnotes": ["*"], "conditions": "Limited to under 18 years old"}}}},
-        {{"value": "Non couvert", "type": "data"}}  // ← EXPLICIT: AXA doesn't cover this
-      ]
-    }},
-    // AXA-only benefit (if applicable) - separate section
-    {{
-      "cells": [
-        {{"value": "Garanties supplémentaires AXA", "rowspan": 2}},  // Clear label
-        {{"value": "Téléconsultation"}},
-        {{"value": "-", "type": "data"}},  // ProBTP doesn't cover
-        {{"value": "Inclus", "type": "data", "sources": {{"axa": ["6-D"]}}}}
+        {{"id": "A3", "ref": "A2"}},  // Virtual cell for A2's rowspan
+        {{"id": "B3", "value": "Radiologie"}},
+        {{"id": "C3", "value": "70%"}},
+        {{"id": "D3", "value": ""}},
+        {{"id": "E3", "value": "100%", "type": "data"}},
+        {{"id": "F3", "value": "Non couvert", "type": "data"}}  // ProBTP advantage!
       ]
     }}
   ]
