@@ -17,6 +17,7 @@ interface UploadedFile {
   preview: string;
   category?: string;
   status?: string;
+  fileSize?: number; // Store actual file size from backend
 }
 
 const ProjectDocumentComparePage = () => {
@@ -25,7 +26,7 @@ const ProjectDocumentComparePage = () => {
   const router = useRouter();
   const params = useParams();
   const projectId = params.project_id as string;
-  
+
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [isComparing, setIsComparing] = useState(false);
@@ -42,33 +43,37 @@ const ProjectDocumentComparePage = () => {
     if (projectId) {
       // Set the project context for document operations
       documentService.setDefaultProject(projectId);
-      
+
       // Set breadcrumbs
       setBreadcrumbs([
         { label: "Projects", href: "/projects" },
         { label: "Project", href: `/projects/${projectId}` },
         { label: "Documents", href: `/projects/${projectId}/documents` },
-        { label: "Compare" }
+        { label: "Compare" },
       ]);
-      
+
       // Load existing files from the backend
       const loadFiles = async () => {
         try {
           const fileListResponse = await documentService.getFiles(projectId);
-          const existingFiles: UploadedFile[] = fileListResponse.files.map(file => ({
-            id: file.id,
-            file: new File([], file.original_name, { type: file.mime_type || 'application/pdf' }),
-            preview: '', // No preview for existing files
-            category: "All",
-            status: "completed"
-          }));
+          const existingFiles: UploadedFile[] = fileListResponse.files.map(
+            (file) => ({
+              id: file.id,
+              file: new File([], file.original_name, {
+                type: file.mime_type || "application/pdf",
+              }),
+              preview: "", // No preview for existing files
+              category: "All",
+              status: "completed",
+            })
+          );
           setUploadedFiles(existingFiles);
         } catch (error) {
-          console.error('Failed to load existing files:', error);
+          console.error("Failed to load existing files:", error);
           // Continue without showing error to user
         }
       };
-      
+
       loadFiles();
     }
   }, [projectId, setBreadcrumbs]);
@@ -88,7 +93,7 @@ const ProjectDocumentComparePage = () => {
     }
 
     setIsComparing(true);
-    
+
     // The comparison will be handled by ComparisonArea component
     // which now uses real backend APIs
   };
@@ -98,9 +103,8 @@ const ProjectDocumentComparePage = () => {
   };
 
   const getSelectedFileObjects = (): UploadedFile[] => {
-    return uploadedFiles.filter(file => selectedFiles.includes(file.id));
+    return uploadedFiles.filter((file) => selectedFiles.includes(file.id));
   };
-
 
   if (loading) {
     return (
@@ -121,7 +125,7 @@ const ProjectDocumentComparePage = () => {
         <div className="container  px-4 py-4">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">Compare Documents</h1>
-            
+
             <div className="flex items-center gap-2">
               {/* Mobile sidebar toggle */}
               <Button
@@ -133,7 +137,7 @@ const ProjectDocumentComparePage = () => {
               >
                 <Menu className="h-4 w-4" />
               </Button>
-              
+
               {/* Back to Documents */}
               <Button
                 variant="ghost"

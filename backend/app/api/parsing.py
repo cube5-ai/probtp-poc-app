@@ -138,11 +138,11 @@ async def parse_document(
         # Validate and create parsing request
         parsing_request = ParsingRequest(**request)
 
-        logger.info("Received parse request", extra={
-            "file_path": parsing_request.file_path,
-            "service": parsing_request.service_name,
-            "timeout": parsing_request.timeout_seconds
-        })
+        # logger.info("Received parse request", extra={
+        #     "file_path": parsing_request.file_path,
+        #     "service": parsing_request.service_name,
+        #     "timeout": parsing_request.timeout_seconds
+        # })
 
         # Parse the document
         result = await parsing_service.parse_document(parsing_request)
@@ -176,11 +176,11 @@ async def parse_document(
             "error_message": result.error_message
         }
 
-        logger.info("Parse request completed", extra={
-            "document_id": result.document_id,
-            "status": result.status,
-            "blocks_count": len(result.content_blocks)
-        })
+        # logger.info("Parse request completed", extra={
+        #     "document_id": result.document_id,
+        #     "status": result.status,
+        #     "blocks_count": len(result.content_blocks)
+        # })
 
         return JSONResponse(content=response_data, status_code=status.HTTP_200_OK)
 
@@ -229,10 +229,10 @@ async def validate_file(
         # Validate and create parsing request
         parsing_request = ParsingRequest(**request)
 
-        logger.info("Received validate request", extra={
-            "file_path": parsing_request.file_path,
-            "service": parsing_request.service_name
-        })
+        # logger.info("Received validate request", extra={
+        #     "file_path": parsing_request.file_path,
+        #     "service": parsing_request.service_name
+        # })
 
         # Check if service exists
         service_config = parsing_service.get_service_config(parsing_request.service_name)
@@ -249,11 +249,11 @@ async def validate_file(
         # Perform comprehensive validation
         result = await validation_service.validate_file(parsing_request, service_config)
 
-        logger.info("Validate request completed", extra={
-            "file_path": parsing_request.file_path,
-            "service": parsing_request.service_name,
-            "valid": result["valid"]
-        })
+        # logger.info("Validate request completed", extra={
+        #     "file_path": parsing_request.file_path,
+        #     "service": parsing_request.service_name,
+        #     "valid": result["valid"]
+        # })
 
         return JSONResponse(content=result, status_code=status.HTTP_200_OK)
 
@@ -299,17 +299,17 @@ async def get_parsing_services(
         HTTPException: For service errors
     """
     try:
-        logger.info("Received get services request")
+        # logger.info("Received get services request")
 
         # Get service availability
         services = await parsing_service.get_available_services()
 
         response_data = {"services": services}
 
-        logger.info("Get services request completed", extra={
-            "services_count": len(services),
-            "available_count": sum(1 for s in services if s["status"] == "available")
-        })
+        # logger.info("Get services request completed", extra={
+        #     "services_count": len(services),
+        #     "available_count": sum(1 for s in services if s["status"] == "available")
+        # })
 
         return JSONResponse(content=response_data, status_code=status.HTTP_200_OK)
 
@@ -342,7 +342,7 @@ async def check_parsing_health(
         JSONResponse: Health status information
     """
     try:
-        logger.info("Received health check request")
+        # logger.info("Received health check request")
 
         health_data = {
             "status": "healthy",
@@ -382,11 +382,11 @@ async def check_parsing_health(
         elif health_data["summary"]["unavailable_services"] > 0:
             health_data["status"] = "degraded"
 
-        logger.info("Health check completed", extra={
-            "status": health_data["status"],
-            "available_services": health_data["summary"]["available_services"],
-            "total_services": health_data["summary"]["total_services"]
-        })
+        # logger.info("Health check completed", extra={
+        #     "status": health_data["status"],
+        #     "available_services": health_data["summary"]["available_services"],
+        #     "total_services": health_data["summary"]["total_services"]
+        # })
 
         return JSONResponse(content=health_data, status_code=status.HTTP_200_OK)
 

@@ -10,6 +10,7 @@ interface UploadedFile {
   id: string;
   file: File;
   preview: string;
+  fileSize?: number; // Store actual file size from backend
 }
 
 interface FileUploadZoneProps {
@@ -19,76 +20,86 @@ interface FileUploadZoneProps {
 }
 
 const ALLOWED_FILE_TYPES = [
-  'application/pdf',
-  'application/msword',
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-  'text/plain',
-  'application/rtf'
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/plain",
+  "application/rtf",
 ];
 
-const ALLOWED_EXTENSIONS = ['.pdf', '.doc', '.docx', '.txt', '.rtf'];
+const ALLOWED_EXTENSIONS = [".pdf", ".doc", ".docx", ".txt", ".rtf"];
 const MAX_FILE_SIZE = 50 * 1024 * 1024; // 50MB
 
-const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZoneProps) => {
+const FileUploadZone = ({
+  onFilesChange,
+  maxFiles = 10,
+  className,
+}: FileUploadZoneProps) => {
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [isDragOver, setIsDragOver] = useState(false);
 
   const validateFile = useCallback((file: File): string | null => {
     if (!ALLOWED_FILE_TYPES.includes(file.type)) {
-      return `File type not supported. Allowed types: ${ALLOWED_EXTENSIONS.join(', ')}`;
+      return `File type not supported. Allowed types: ${ALLOWED_EXTENSIONS.join(
+        ", "
+      )}`;
     }
-    
+
     if (file.size > MAX_FILE_SIZE) {
       return `File too large. Maximum size: 50MB`;
     }
-    
+
     return null;
   }, []);
 
-  const handleFiles = useCallback((files: FileList) => {
-    const newFiles: UploadedFile[] = [];
-    const errors: string[] = [];
+  const handleFiles = useCallback(
+    (files: FileList) => {
+      const newFiles: UploadedFile[] = [];
+      const errors: string[] = [];
 
-    Array.from(files).forEach((file) => {
-      const error = validateFile(file);
-      if (error) {
-        errors.push(`${file.name}: ${error}`);
-        return;
+      Array.from(files).forEach((file) => {
+        const error = validateFile(file);
+        if (error) {
+          errors.push(`${file.name}: ${error}`);
+          return;
+        }
+
+        if (uploadedFiles.length + newFiles.length >= maxFiles) {
+          errors.push(`Maximum ${maxFiles} files allowed`);
+          return;
+        }
+
+        const isDuplicate = uploadedFiles.some(
+          (existing) =>
+            existing.file.name === file.name && existing.file.size === file.size
+        );
+
+        if (isDuplicate) {
+          errors.push(`${file.name}: File already uploaded`);
+          return;
+        }
+
+        const uploadedFile: UploadedFile = {
+          id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
+          file,
+          preview: URL.createObjectURL(file),
+        };
+
+        newFiles.push(uploadedFile);
+      });
+
+      if (errors.length > 0) {
+        alert(errors.join("\n"));
       }
 
-      if (uploadedFiles.length + newFiles.length >= maxFiles) {
-        errors.push(`Maximum ${maxFiles} files allowed`);
-        return;
+      if (newFiles.length > 0) {
+        const updatedFiles = [...uploadedFiles, ...newFiles];
+        setUploadedFiles(updatedFiles);
+        onFilesChange(updatedFiles);
       }
-
-      const isDuplicate = uploadedFiles.some(existing => 
-        existing.file.name === file.name && existing.file.size === file.size
-      );
-
-      if (isDuplicate) {
-        errors.push(`${file.name}: File already uploaded`);
-        return;
-      }
-
-      const uploadedFile: UploadedFile = {
-        id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`,
-        file,
-        preview: URL.createObjectURL(file)
-      };
-
-      newFiles.push(uploadedFile);
-    });
-
-    if (errors.length > 0) {
-      alert(errors.join('\n'));
-    }
-
-    if (newFiles.length > 0) {
-      const updatedFiles = [...uploadedFiles, ...newFiles];
-      setUploadedFiles(updatedFiles);
-      onFilesChange(updatedFiles);
-    }
-  }, [uploadedFiles, maxFiles, onFilesChange, validateFile]);
+    },
+    [uploadedFiles, maxFiles, onFilesChange, validateFile]
+  );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -100,40 +111,49 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
     setIsDragOver(false);
   }, []);
 
-  const handleDrop = useCallback((e: React.DragEvent) => {
-    e.preventDefault();
-    setIsDragOver(false);
-    
-    if (e.dataTransfer.files) {
-      handleFiles(e.dataTransfer.files);
-    }
-  }, [handleFiles]);
+  const handleDrop = useCallback(
+    (e: React.DragEvent) => {
+      e.preventDefault();
+      setIsDragOver(false);
 
-  const handleFileInput = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      handleFiles(e.target.files);
-    }
-  }, [handleFiles]);
-
-  const handleRemoveFile = useCallback((fileId: string) => {
-    const updatedFiles = uploadedFiles.filter(file => {
-      if (file.id === fileId) {
-        URL.revokeObjectURL(file.preview);
-        return false;
+      if (e.dataTransfer.files) {
+        handleFiles(e.dataTransfer.files);
       }
-      return true;
-    });
-    
-    setUploadedFiles(updatedFiles);
-    onFilesChange(updatedFiles);
-  }, [uploadedFiles, onFilesChange]);
+    },
+    [handleFiles]
+  );
+
+  const handleFileInput = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (e.target.files) {
+        handleFiles(e.target.files);
+      }
+    },
+    [handleFiles]
+  );
+
+  const handleRemoveFile = useCallback(
+    (fileId: string) => {
+      const updatedFiles = uploadedFiles.filter((file) => {
+        if (file.id === fileId) {
+          URL.revokeObjectURL(file.preview);
+          return false;
+        }
+        return true;
+      });
+
+      setUploadedFiles(updatedFiles);
+      onFilesChange(updatedFiles);
+    },
+    [uploadedFiles, onFilesChange]
+  );
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
   return (
@@ -147,8 +167,11 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
             onDrop={handleDrop}
             className={cn(
               "border-2 border-dashed rounded-lg p-8 text-center transition-colors cursor-pointer",
-              isDragOver ? "border-primary bg-primary/5" : "border-muted-foreground/25",
-              uploadedFiles.length >= maxFiles && "opacity-50 cursor-not-allowed"
+              isDragOver
+                ? "border-primary bg-primary/5"
+                : "border-muted-foreground/25",
+              uploadedFiles.length >= maxFiles &&
+                "opacity-50 cursor-not-allowed"
             )}
           >
             <input
@@ -160,17 +183,17 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
               id="file-upload"
               disabled={uploadedFiles.length >= maxFiles}
             />
-            
-            <label 
-              htmlFor="file-upload" 
+
+            <label
+              htmlFor="file-upload"
               className="cursor-pointer"
               tabIndex={0}
               role="button"
               aria-label="Upload files"
               onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                   e.preventDefault();
-                  document.getElementById('file-upload')?.click();
+                  document.getElementById("file-upload")?.click();
                 }
               }}
             >
@@ -185,7 +208,10 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
                 <div className="text-xs text-muted-foreground space-y-1">
                   <p>Supported formats: PDF, DOC, DOCX, TXT, RTF</p>
                   <p>Maximum file size: 50MB</p>
-                  <p>Maximum files: {maxFiles} ({uploadedFiles.length}/{maxFiles} uploaded)</p>
+                  <p>
+                    Maximum files: {maxFiles} ({uploadedFiles.length}/{maxFiles}{" "}
+                    uploaded)
+                  </p>
                 </div>
               </div>
             </label>
@@ -206,7 +232,10 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
                   <div className="flex items-start gap-3">
                     <FileText className="h-8 w-8 text-blue-500 flex-shrink-0 mt-1" />
                     <div className="flex-1 min-w-0">
-                      <h4 className="font-medium text-sm truncate" title={uploadedFile.file.name}>
+                      <h4
+                        className="font-medium text-sm truncate"
+                        title={uploadedFile.file.name}
+                      >
                         {uploadedFile.file.name}
                       </h4>
                       <div className="text-xs text-muted-foreground space-y-1">
@@ -216,7 +245,7 @@ const FileUploadZone = ({ onFilesChange, maxFiles = 10, className }: FileUploadZ
                       </div>
                     </div>
                   </div>
-                  
+
                   <Button
                     variant="ghost"
                     size="sm"

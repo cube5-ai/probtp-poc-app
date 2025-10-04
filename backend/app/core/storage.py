@@ -1,24 +1,11 @@
 """
-Cloud Storage configuration and utilities
+Firebase Storage configuration and utilities
 """
 import os
 
 
 class StorageConfig:
-    """Configuration for Google Cloud Storage operations"""
-
-    # Environment-based bucket configuration (using single bucket for POC)
-    BUCKET_NAMES: dict[str, str] = {
-        'production': 'probtp-poc-prod',
-        'development': 'probtp-poc-prod',
-        'test': 'probtp-poc-prod'
-    }
-
-    @classmethod
-    def get_bucket_name(cls) -> str:
-        """Get bucket name based on current environment"""
-        env = os.getenv('ENVIRONMENT', 'development')
-        return cls.BUCKET_NAMES.get(env, cls.BUCKET_NAMES['development'])
+    """Configuration for Firebase Storage operations"""
 
     @classmethod
     def get_file_path(cls, project_id: str, file_id: str, timestamp: int) -> str:

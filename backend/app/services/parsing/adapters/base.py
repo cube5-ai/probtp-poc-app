@@ -37,11 +37,11 @@ class BaseParsingAdapter(ABC):
         self.service_name = config.service_name
         self._validate_config()
 
-        logger.info(f"Initialized {self.service_name} adapter", extra={
-            "service": self.service_name,
-            "endpoint": config.endpoint_url,
-            "max_file_size": config.max_file_size
-        })
+        # logger.info(f"Initialized {self.service_name} adapter", extra={
+        #     "service": self.service_name,
+        #     "endpoint": config.endpoint_url,
+        #     "max_file_size": config.max_file_size
+        # })
 
     def _validate_config(self) -> None:
         """

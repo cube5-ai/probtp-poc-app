@@ -47,7 +47,7 @@ class Settings(BaseSettings):
     # Redis
     redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379")
 
-    # Google Cloud Storage
+    # Firebase Storage
     upload_url_expiration_minutes: int = int(os.getenv("UPLOAD_URL_EXPIRATION_MINUTES", "15"))
     download_url_expiration_minutes: int = int(os.getenv("DOWNLOAD_URL_EXPIRATION_MINUTES", "60"))
     max_file_size_mb: int = int(os.getenv("MAX_FILE_SIZE_MB", "100"))
@@ -75,10 +75,6 @@ class Settings(BaseSettings):
     llamaparse_api_key: str = os.getenv("LLAMAPARSE_API_KEY", "")
     llamaparse_endpoint: str = os.getenv("LLAMAPARSE_ENDPOINT", "https://api.llamaindex.ai")
     llamaparse_timeout: int = int(os.getenv("LLAMAPARSE_TIMEOUT", "300"))
-
-    # Google Cloud Project Configuration
-    gcs_project_id: str = os.getenv("GCS_PROJECT_ID", "probtp-poc-prod")
-    gcs_bucket_name: str = os.getenv("GCS_BUCKET_NAME", "probtp-poc-prod")
 
 
     def get_database_url(self) -> str:

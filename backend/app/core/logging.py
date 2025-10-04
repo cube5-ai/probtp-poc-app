@@ -20,7 +20,7 @@ configure(
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),
         TimeStamper(fmt="iso"),
-        StackInfoRenderer(),
+        # Removed StackInfoRenderer to reduce verbosity
         structlog.processors.format_exc_info,
         JSONRenderer() if not settings.debug else structlog.dev.ConsoleRenderer()
     ],
@@ -56,15 +56,15 @@ class FileUploadLogger:
             file_id: Generated file UUID (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "file_upload_initiated",
-            user_id=user_id,
-            project_id=project_id,
-            file_name=file_name,
-            file_size=file_size,
-            file_id=file_id,
-            **kwargs
-        )
+        # logger.info(
+        #     "file_upload_initiated",
+        #     user_id=user_id,
+        #     project_id=project_id,
+        #     file_name=file_name,
+        #     file_size=file_size,
+        #     file_id=file_id,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_upload_completed(
@@ -88,16 +88,16 @@ class FileUploadLogger:
             storage_path: Cloud storage path (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "file_upload_completed",
-            user_id=user_id,
-            file_id=file_id,
-            project_id=project_id,
-            duration_seconds=round(duration_seconds, 2),
-            file_size=file_size,
-            storage_path=storage_path,
-            **kwargs
-        )
+        # logger.info(
+        #     "file_upload_completed",
+        #     user_id=user_id,
+        #     file_id=file_id,
+        #     project_id=project_id,
+        #     duration_seconds=round(duration_seconds, 2),
+        #     file_size=file_size,
+        #     storage_path=storage_path,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_upload_failed(
@@ -152,15 +152,15 @@ class FileUploadLogger:
             storage_path: Cloud storage path (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "file_deleted",
-            user_id=user_id,
-            file_id=file_id,
-            project_id=project_id,
-            file_name=file_name,
-            storage_path=storage_path,
-            **kwargs
-        )
+        # logger.info(
+        #     "file_deleted",
+        #     user_id=user_id,
+        #     file_id=file_id,
+        #     project_id=project_id,
+        #     file_name=file_name,
+        #     storage_path=storage_path,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_download_requested(
@@ -180,14 +180,14 @@ class FileUploadLogger:
             file_name: Original filename (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "file_download_requested",
-            user_id=user_id,
-            file_id=file_id,
-            project_id=project_id,
-            file_name=file_name,
-            **kwargs
-        )
+        # logger.info(
+        #     "file_download_requested",
+        #     user_id=user_id,
+        #     file_id=file_id,
+        #     project_id=project_id,
+        #     file_name=file_name,
+        #     **kwargs
+        # )
 
 
 class RequestLogger:
@@ -213,15 +213,15 @@ class RequestLogger:
             ip_address: Client IP address (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "api_request",
-            method=method,
-            path=path,
-            user_id=user_id,
-            request_id=request_id,
-            ip_address=ip_address,
-            **kwargs
-        )
+        # logger.info(
+        #     "api_request",
+        #     method=method,
+        #     path=path,
+        #     user_id=user_id,
+        #     request_id=request_id,
+        #     ip_address=ip_address,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_response(
@@ -245,16 +245,16 @@ class RequestLogger:
             request_id: Request ID for tracing (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "api_response",
-            method=method,
-            path=path,
-            status_code=status_code,
-            duration_ms=round(duration_ms, 2),
-            user_id=user_id,
-            request_id=request_id,
-            **kwargs
-        )
+        # logger.info(
+        #     "api_response",
+        #     method=method,
+        #     path=path,
+        #     status_code=status_code,
+        #     duration_ms=round(duration_ms, 2),
+        #     user_id=user_id,
+        #     request_id=request_id,
+        #     **kwargs
+        # )
 
 
 def get_request_logger() -> structlog.stdlib.BoundLogger:
@@ -315,15 +315,15 @@ class ParsingLogger:
             timeout_seconds: Parsing timeout (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "parsing_initiated",
-            file_path=file_path,
-            service_name=service_name,
-            correlation_id=correlation_id,
-            file_size=file_size,
-            timeout_seconds=timeout_seconds,
-            **kwargs
-        )
+        # logger.info(
+        #     "parsing_initiated",
+        #     file_path=file_path,
+        #     service_name=service_name,
+        #     correlation_id=correlation_id,
+        #     file_size=file_size,
+        #     timeout_seconds=timeout_seconds,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_parsing_completed(
@@ -349,17 +349,17 @@ class ParsingLogger:
             pages_count: Number of pages processed (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "parsing_completed",
-            file_path=file_path,
-            service_name=service_name,
-            correlation_id=correlation_id,
-            duration_seconds=round(duration_seconds, 2),
-            status=status,
-            blocks_count=blocks_count,
-            pages_count=pages_count,
-            **kwargs
-        )
+        # logger.info(
+        #     "parsing_completed",
+        #     file_path=file_path,
+        #     service_name=service_name,
+        #     correlation_id=correlation_id,
+        #     duration_seconds=round(duration_seconds, 2),
+        #     status=status,
+        #     blocks_count=blocks_count,
+        #     pages_count=pages_count,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_parsing_failed(
@@ -418,17 +418,17 @@ class ParsingLogger:
             errors: List of validation errors (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "validation_performed",
-            file_path=file_path,
-            service_name=service_name,
-            correlation_id=correlation_id,
-            valid=valid,
-            file_size=file_size,
-            file_format=file_format,
-            error_count=len(errors) if errors else 0,
-            **kwargs
-        )
+        # logger.info(
+        #     "validation_performed",
+        #     file_path=file_path,
+        #     service_name=service_name,
+        #     correlation_id=correlation_id,
+        #     valid=valid,
+        #     file_size=file_size,
+        #     file_format=file_format,
+        #     error_count=len(errors) if errors else 0,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_service_health_checked(
@@ -448,14 +448,14 @@ class ParsingLogger:
             endpoint: Health check endpoint (optional)
             **kwargs: Additional context
         """
-        logger.info(
-            "service_health_checked",
-            service_name=service_name,
-            health_status=status,
-            response_time_ms=round(response_time_ms, 2),
-            endpoint=endpoint,
-            **kwargs
-        )
+        # logger.info(
+        #     "service_health_checked",
+        #     service_name=service_name,
+        #     health_status=status,
+        #     response_time_ms=round(response_time_ms, 2),
+        #     endpoint=endpoint,
+        #     **kwargs
+        # )
 
     @staticmethod
     def log_performance_metrics(
@@ -482,15 +482,15 @@ class ParsingLogger:
         throughput_pages = page_count / max(duration_seconds, 0.001)
         throughput_bytes = file_size / max(duration_seconds, 0.001)
 
-        logger.info(
-            "parsing_performance_metrics",
-            service_name=service_name,
-            file_size_bytes=file_size,
-            page_count=page_count,
-            duration_seconds=round(duration_seconds, 2),
-            status=status,
-            correlation_id=correlation_id,
-            throughput_pages_per_second=round(throughput_pages, 2),
-            throughput_bytes_per_second=round(throughput_bytes, 2),
-            **kwargs
-        )
+        # logger.info(
+        #     "parsing_performance_metrics",
+        #     service_name=service_name,
+        #     file_size_bytes=file_size,
+        #     page_count=page_count,
+        #     duration_seconds=round(duration_seconds, 2),
+        #     status=status,
+        #     correlation_id=correlation_id,
+        #     throughput_pages_per_second=round(throughput_pages, 2),
+        #     throughput_bytes_per_second=round(throughput_bytes, 2),
+        #     **kwargs
+        # )

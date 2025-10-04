@@ -53,7 +53,7 @@ class ContentBlockService:
             # Commit all blocks at once
             db.commit()
 
-            logger.info(f"Saved {len(saved_blocks)} content blocks for file {file_id}", extra={
+            # logger.info(f"Saved {len(saved_blocks)} content blocks for file {file_id}", extra={
                 "file_id": str(file_id),
                 "document_id": parsed_document.document_id,
                 "parsing_service": parsed_document.parsing_service,
@@ -168,7 +168,7 @@ class ContentBlockService:
 
             db.commit()
 
-            logger.info(f"Deleted {deleted_count} content blocks for file {file_id}", extra={
+            # logger.info(f"Deleted {deleted_count} content blocks for file {file_id}", extra={
                 "file_id": str(file_id),
                 "deleted_count": deleted_count
             })

@@ -16,6 +16,7 @@ interface UploadedFile {
   preview: string;
   category?: string;
   status?: string;
+  fileSize?: number; // Store actual file size from backend
 }
 
 interface ComparisonAreaProps {
@@ -25,34 +26,40 @@ interface ComparisonAreaProps {
   className?: string;
 }
 
-const ComparisonArea = ({ 
-  selectedFiles, 
-  onStartComparison, 
-  isComparing, 
-  className 
+const ComparisonArea = ({
+  selectedFiles,
+  onStartComparison,
+  isComparing,
+  className,
 }: ComparisonAreaProps) => {
-  const [comparisonResults, setComparisonResults] = useState<ComparisonResult | null>(null);
+  const [comparisonResults, setComparisonResults] =
+    useState<ComparisonResult | null>(null);
   const [comparisonProgress, setComparisonProgress] = useState(0);
   const [comparisonStep, setComparisonStep] = useState("");
 
   const formatFileSize = (bytes: number): string => {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return "0 Bytes";
     const k = 1024;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const sizes = ["Bytes", "KB", "MB", "GB"];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
   };
 
   const handleStartComparison = async () => {
     if (selectedFiles.length < 2) return;
-    
+
     // Only proceed with files that have completed upload
-    const completedFiles = selectedFiles.filter(file => 
-      file.status === "completed" || !file.status || !file.id.includes('-')
+    const completedFiles = selectedFiles.filter(
+      (file) =>
+        file.status === "completed" ||
+        !file.status ||
+        !file.id.startsWith("temp_")
     );
-    
+
     if (completedFiles.length < 2) {
-      toast.error("Please wait for all files to finish uploading before comparing");
+      toast.error(
+        "Please wait for all files to finish uploading before comparing"
+      );
       return;
     }
 
@@ -64,37 +71,42 @@ const ComparisonArea = ({
     try {
       // Get file IDs (filter out temporary IDs)
       const fileIds = completedFiles
-        .filter(file => !file.id.includes('-')) // Only real backend IDs
-        .map(file => file.id);
+        .filter((file) => !file.id.startsWith("temp_")) // Only real backend IDs
+        .map((file) => file.id);
 
       if (fileIds.length < 2) {
-        throw new Error("Not enough uploaded files to compare. Please ensure files are fully uploaded.");
+        throw new Error(
+          "Not enough uploaded files to compare. Please ensure files are fully uploaded."
+        );
       }
 
-      const result = await documentService.compareDocuments(fileIds, (progress) => {
-        setComparisonProgress(progress);
-        
-        // Update step based on progress
-        if (progress <= 25) {
-          setComparisonStep("Loading document details...");
-        } else if (progress <= 70) {
-          setComparisonStep("Parsing documents and extracting content...");
-        } else if (progress <= 90) {
-          setComparisonStep("Analyzing similarities and differences...");
-        } else {
-          setComparisonStep("Finalizing comparison results...");
+      const result = await documentService.compareDocuments(
+        fileIds,
+        (progress) => {
+          setComparisonProgress(progress);
+
+          // Update step based on progress
+          if (progress <= 25) {
+            setComparisonStep("Loading document details...");
+          } else if (progress <= 70) {
+            setComparisonStep("Parsing documents and extracting content...");
+          } else if (progress <= 90) {
+            setComparisonStep("Analyzing similarities and differences...");
+          } else {
+            setComparisonStep("Finalizing comparison results...");
+          }
         }
-      });
+      );
 
       setComparisonResults(result);
       setComparisonStep("Comparison completed successfully!");
       toast.success("Document comparison completed successfully!");
-
     } catch (error) {
-      console.error('Comparison failed:', error);
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
+      console.error("Comparison failed:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error occurred";
       toast.error(`Comparison failed: ${errorMessage}`);
-      
+
       // Reset states on error
       setComparisonProgress(0);
       setComparisonStep("");
@@ -109,7 +121,9 @@ const ComparisonArea = ({
             <GitCompare className="w-8 h-8 text-muted-foreground" />
           </div>
           <div>
-            <h3 className="text-lg font-semibold">Ready to Compare Documents</h3>
+            <h3 className="text-lg font-semibold">
+              Ready to Compare Documents
+            </h3>
             <p className="text-muted-foreground">
               Select at least 2 documents from the sidebar to start comparing
             </p>
@@ -127,24 +141,27 @@ const ComparisonArea = ({
           <div>
             <h2 className="text-2xl font-bold">Document Comparison</h2>
             <p className="text-muted-foreground">
-              {selectedFiles.length} document{selectedFiles.length !== 1 ? 's' : ''} selected for analysis
+              {selectedFiles.length} document
+              {selectedFiles.length !== 1 ? "s" : ""} selected for analysis
             </p>
           </div>
-          
+
           {!isComparing && !comparisonResults && (
-            <Button 
+            <Button
               onClick={handleStartComparison}
               disabled={
-                selectedFiles.length < 2 || 
-                selectedFiles.some(file => file.status === "uploading" || file.status === "failed")
+                selectedFiles.length < 2 ||
+                selectedFiles.some(
+                  (file) =>
+                    file.status === "uploading" || file.status === "failed"
+                )
               }
               size="lg"
             >
               <GitCompare className="w-4 h-4 mr-2" />
-              {selectedFiles.some(file => file.status === "uploading") 
-                ? "Waiting for uploads..." 
-                : "Start Comparison"
-              }
+              {selectedFiles.some((file) => file.status === "uploading")
+                ? "Waiting for uploads..."
+                : "Start Comparison"}
             </Button>
           )}
         </div>
@@ -159,7 +176,10 @@ const ComparisonArea = ({
                     <FileText className="w-4 h-4 text-blue-600" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-sm truncate" title={file.file.name}>
+                    <h4
+                      className="font-medium text-sm truncate"
+                      title={file.file.name}
+                    >
                       Document {index + 1}
                     </h4>
                     <p className="text-xs text-muted-foreground truncate">
@@ -232,12 +252,20 @@ const ComparisonArea = ({
                 <div className="text-3xl font-bold text-primary">
                   {comparisonResults.overallSimilarity}%
                 </div>
-                <p className="text-muted-foreground">Overall Similarity Score</p>
-                <Badge 
-                  variant={comparisonResults.overallSimilarity > 70 ? "default" : "secondary"}
+                <p className="text-muted-foreground">
+                  Overall Similarity Score
+                </p>
+                <Badge
+                  variant={
+                    comparisonResults.overallSimilarity > 70
+                      ? "default"
+                      : "secondary"
+                  }
                   className="mt-2"
                 >
-                  {comparisonResults.overallSimilarity > 70 ? "High Similarity" : "Moderate Similarity"}
+                  {comparisonResults.overallSimilarity > 70
+                    ? "High Similarity"
+                    : "Moderate Similarity"}
                 </Badge>
               </div>
 
@@ -305,19 +333,31 @@ const ComparisonArea = ({
               <div className="space-y-4">
                 <div className="grid gap-4 md:grid-cols-3">
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{comparisonResults.textSimilarity}%</div>
-                    <div className="text-sm text-muted-foreground">Text Similarity</div>
+                    <div className="text-2xl font-bold">
+                      {comparisonResults.textSimilarity}%
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Text Similarity
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{comparisonResults.structureMatch}%</div>
-                    <div className="text-sm text-muted-foreground">Structure Match</div>
+                    <div className="text-2xl font-bold">
+                      {comparisonResults.structureMatch}%
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Structure Match
+                    </div>
                   </div>
                   <div className="text-center">
-                    <div className="text-2xl font-bold">{comparisonResults.semanticSimilarity}%</div>
-                    <div className="text-sm text-muted-foreground">Semantic Similarity</div>
+                    <div className="text-2xl font-bold">
+                      {comparisonResults.semanticSimilarity}%
+                    </div>
+                    <div className="text-sm text-muted-foreground">
+                      Semantic Similarity
+                    </div>
                   </div>
                 </div>
-                
+
                 <div className="bg-muted/50 p-4 rounded-lg">
                   <p className="text-sm text-muted-foreground">
                     {comparisonResults.summary}

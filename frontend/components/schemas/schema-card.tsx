@@ -33,6 +33,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { Spinner } from "@/components/ui/spinner";
 
 interface SchemaCardProps {
   schema: Schema;
@@ -50,17 +51,26 @@ export function SchemaCard({
   onClone,
 }: SchemaCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Count fields in schema definition
   const fieldCount = schema.schemaDefinition?.properties
     ? Object.keys(schema.schemaDefinition.properties).length
     : 0;
 
-  const handleDelete = () => {
-    if (onDelete) {
-      onDelete(schema.id);
+  const handleDelete = async () => {
+    if (!onDelete) return;
+
+    try {
+      setIsDeleting(true);
+      await onDelete(schema.id);
+      setShowDeleteDialog(false);
+    } catch (error) {
+      // Error handling is done in the parent component
+      console.error("Error deleting schema:", error);
+    } finally {
+      setIsDeleting(false);
     }
-    setShowDeleteDialog(false);
   };
 
   return (
@@ -152,7 +162,12 @@ export function SchemaCard({
         </CardContent>
       </Card>
 
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+      <AlertDialog
+        open={showDeleteDialog}
+        onOpenChange={(open) =>
+          !open && !isDeleting && setShowDeleteDialog(false)
+        }
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Delete Schema</AlertDialogTitle>
@@ -162,12 +177,14 @@ export function SchemaCard({
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isDeleting}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDelete}
+              disabled={isDeleting}
               className="bg-destructive text-destructive-foreground"
             >
-              Delete
+              {isDeleting && <Spinner className="mr-2 h-4 w-4" />}
+              {isDeleting ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

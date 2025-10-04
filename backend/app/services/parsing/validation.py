@@ -55,7 +55,7 @@ class FileValidationService:
 
     def __init__(self):
         """Initialize the file validation service."""
-        logger.info("Initialized file validation service")
+        # logger.info("Initialized file validation service")
 
     async def validate_file(
         self,
@@ -131,14 +131,14 @@ class FileValidationService:
             # Overall validation result
             result["valid"] = len(result["errors"]) == 0
 
-            logger.info("File validation completed", extra={
-                "file_path": request.file_path,
-                "service": config.service_name,
-                "valid": result["valid"],
-                "file_size": result["file_size"],
-                "format": result["format"],
-                "errors_count": len(result["errors"])
-            })
+            # logger.info("File validation completed", extra={
+            #     "file_path": request.file_path,
+            #     "service": config.service_name,
+            #     "valid": result["valid"],
+            #     "file_size": result["file_size"],
+            #     "format": result["format"],
+            #     "errors_count": len(result["errors"])
+            # })
 
             return result
 

@@ -10,8 +10,9 @@ from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy import and_, desc
 from sqlalchemy.orm import Session
 
-from app.api.deps import get_current_user_id, get_db
+from app.api.deps import get_current_user_id
 from app.api.errors import FileUploadError, UploadErrors
+from app.utils import get_db_session
 from app.api.api_models import (
     FileConfirmRequest,
     FileConfirmResponse,
@@ -45,7 +46,7 @@ async def initialize_file_upload(
     project_id: UUID,
     request: FileUploadRequest,
     current_user_id: str = Depends(get_current_user_id),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_session)
 ) -> FileUploadResponse:
     """Initialize file upload and return signed URL"""
     start_time = time.time()
@@ -95,14 +96,7 @@ async def initialize_file_upload(
         db.commit()
         db.refresh(new_file)
 
-        # Log upload initiation
-        FileUploadLogger.log_upload_initiated(
-            user_id=current_user_id,
-            project_id=str(project_id),
-            file_name=request.filename,
-            file_size=request.file_size,
-            file_id=str(file_id)
-        )
+        # Only log errors, not every upload initiation
 
         return FileUploadResponse(
             upload_id=new_file.id,
@@ -131,7 +125,7 @@ async def confirm_file_upload(
     file_id: UUID,
     request: FileConfirmRequest,
     current_user_id: str = Depends(get_current_user_id),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_session)
 ) -> FileConfirmResponse:
     """Confirm file upload completion"""
     start_time = time.time()
@@ -165,6 +159,16 @@ async def confirm_file_upload(
             db.commit()
             raise FileUploadError("File upload verification failed", 400)
 
+        # Update blob metadata for proper inline viewing
+        try:
+            storage_service.update_content_type(
+                file_record.storage_path,
+                file_record.mime_type or "application/pdf"
+            )
+        except Exception:
+            # Silently continue if metadata update fails
+            pass
+
         # Update MD5 hash if provided
         if request.md5_hash:
             file_record.md5_hash = request.md5_hash
@@ -176,16 +180,7 @@ async def confirm_file_upload(
 
         db.commit()
 
-        # Log upload completion
-        duration = time.time() - start_time
-        FileUploadLogger.log_upload_completed(
-            user_id=current_user_id,
-            file_id=str(file_id),
-            project_id=str(project_id),
-            duration_seconds=duration,
-            file_size=file_record.file_size,
-            storage_path=file_record.storage_path
-        )
+        # Only log errors, not successful operations
 
         return FileConfirmResponse(
             file_id=file_record.id,
@@ -213,7 +208,7 @@ async def list_project_files(
     limit: int = Query(20, ge=1, le=100, description="Items per page"),
     status_filter: str | None = Query(None, description="Filter by file status"),
     current_user_id: str = Depends(get_current_user_id),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_session)
 ) -> FileListResponse:
     """List files in a project with pagination"""
     try:
@@ -250,9 +245,15 @@ async def list_project_files(
 
         for file in files:
             download_url = None
+            view_url = None
             if file.is_ready:
                 try:
                     download_url = storage_service.generate_download_url(
+                        file.storage_path,
+                        settings.download_url_expiration_minutes,
+                        file.original_name
+                    )
+                    view_url = storage_service.generate_view_url(
                         file.storage_path,
                         settings.download_url_expiration_minutes
                     )
@@ -271,7 +272,8 @@ async def list_project_files(
                     name="User Name"  # TODO: Get from Firebase
                 ),
                 created_at=file.created_at,
-                download_url=download_url
+                download_url=download_url,
+                view_url=view_url
             ))
 
         # Calculate pagination info
@@ -305,7 +307,7 @@ async def get_file_details(
     project_id: UUID,
     file_id: UUID,
     current_user_id: str = Depends(get_current_user_id),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_session)
 ) -> FileListItem:
     """Get details of a specific file"""
     try:
@@ -330,10 +332,16 @@ async def get_file_details(
 
         # Generate download URL if file is ready
         download_url = None
+        view_url = None
         if file_record.is_ready:
             try:
                 storage_service = StorageService()
                 download_url = storage_service.generate_download_url(
+                    file_record.storage_path,
+                    settings.download_url_expiration_minutes,
+                    file_record.original_name
+                )
+                view_url = storage_service.generate_view_url(
                     file_record.storage_path,
                     settings.download_url_expiration_minutes
                 )
@@ -352,7 +360,8 @@ async def get_file_details(
                 name="User Name"  # TODO: Get from Firebase
             ),
             created_at=file_record.created_at,
-            download_url=download_url
+            download_url=download_url,
+            view_url=view_url
         )
 
     except FileUploadError:
@@ -372,7 +381,7 @@ async def get_file_details(
 async def get_file_status(
     file_id: UUID,
     current_user_id: str = Depends(get_current_user_id),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_session)
 ) -> FileStatusResponse:
     """Get current file status"""
     try:
@@ -420,14 +429,14 @@ async def get_file_status(
     "/files/{file_id}",
     status_code=status.HTTP_204_NO_CONTENT,
     summary="Delete file",
-    description="Soft delete a file (mark as deleted without removing from storage)"
+    description="Permanently delete a file from storage and database"
 )
 async def delete_file(
     file_id: UUID,
     current_user_id: str = Depends(get_current_user_id),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db_session)
 ) -> None:
-    """Delete a file (soft delete)"""
+    """Delete a file permanently from storage and database"""
     try:
         # Check if user can delete this file
         can_delete = await AuthorizationService.can_delete_file(
@@ -447,21 +456,19 @@ async def delete_file(
         if not file_record:
             raise UploadErrors.FILE_NOT_FOUND
 
-        # Soft delete the file
-        file_record.soft_delete()
+        # Delete from Firebase Storage
+        storage_service = StorageService()
+        try:
+            storage_service.delete_file(file_record.storage_path)
+        except Exception:
+            # Silently continue if storage deletion fails
+            pass
+
+        # Delete from database (hard delete)
+        db.delete(file_record)
         db.commit()
 
-        # Log file deletion
-        FileUploadLogger.log_file_deleted(
-            user_id=current_user_id,
-            file_id=str(file_id),
-            project_id=str(file_record.project_id),
-            file_name=file_record.original_name,
-            storage_path=file_record.storage_path
-        )
-
-        # Note: We don't delete from cloud storage immediately for safety
-        # This could be done via a background job or cleanup process
+        # Only log errors, not deletions
 
     except FileUploadError:
         raise

@@ -46,11 +46,11 @@ class MistralOCRAdapter(BaseParsingAdapter):
         document_id = f"mistral_{uuid.uuid4().hex[:8]}"
         start_time = datetime.utcnow()
 
-        logger.info(f"Starting Mistral OCR parsing for {request.file_path}", extra={
-            "document_id": document_id,
-            "service": self.service_name,
-            "file_path": request.file_path
-        })
+        # logger.info(f"Starting Mistral OCR parsing for {request.file_path}", extra={
+        #     "document_id": document_id,
+        #     "service": self.service_name,
+        #     "file_path": request.file_path
+        # })
 
         try:
             # Validate file format

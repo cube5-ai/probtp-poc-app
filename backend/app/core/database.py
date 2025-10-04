@@ -15,7 +15,7 @@ database_url = settings.get_database_url()
 # Use dynamic engine configuration so we can talk to either SQLite (local) or
 # Cloud SQL/Postgres (via DATABASE_URL) without editing this module again.
 engine_kwargs = {
-    "echo": settings.debug,
+    "echo": False,  # Disable SQLAlchemy echo to prevent verbose logging
 }
 
 if database_url.startswith("sqlite"):

@@ -28,12 +28,43 @@ async def get_current_user(
     Raises:
         HTTPException: If token is invalid or expired
     """
-    # Development mode: bypass auth
     from app.core.config import get_settings
     settings = get_settings()
 
+    # If token is provided, always try to verify it first
+    if credentials:
+        try:
+            # Extract token from Bearer credentials
+            token = credentials.credentials
+
+            # Verify Firebase token and get user info
+            user_info = FirebaseAuthService.verify_id_token(token)
+            return user_info
+
+        except Exception as e:
+            # In development mode, allow fallback if token verification fails
+            if settings.environment == "development" and settings.debug:
+                print(f"⚠️  Token verification failed in dev mode: {e}")
+                print(f"⚠️  Falling back to dev user")
+                return {
+                    'user_id': 'dev-user-123',
+                    'email': 'dev@example.com',
+                    'email_verified': True,
+                    'name': 'Development User',
+                    'roles': ['admin'],
+                    'firebase_claims': {}
+                }
+            else:
+                # In production, fail on invalid token
+                raise HTTPException(
+                    status_code=status.HTTP_401_UNAUTHORIZED,
+                    detail=f"Invalid authentication credentials: {str(e)}",
+                    headers={"WWW-Authenticate": "Bearer"},
+                )
+    
+    # No credentials provided
     if settings.environment == "development" and settings.debug:
-        # Return mock user for development
+        # Return mock user for development when no token
         return {
             'user_id': 'dev-user-123',
             'email': 'dev@example.com',
@@ -42,28 +73,11 @@ async def get_current_user(
             'roles': ['admin'],
             'firebase_claims': {}
         }
-
-    # Production mode: require actual authentication
-    if not credentials:
+    else:
+        # Production mode: require authentication
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication credentials required",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
-    try:
-        # Extract token from Bearer credentials
-        token = credentials.credentials
-
-        # Verify Firebase token and get user info
-        user_info = FirebaseAuthService.verify_id_token(token)
-
-        return user_info
-
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail=f"Invalid authentication credentials: {str(e)}",
             headers={"WWW-Authenticate": "Bearer"},
         )
 

@@ -99,6 +99,7 @@ class FileListItem(BaseModel):
     uploaded_by: UserInfo = Field(..., description="User who uploaded the file")
     created_at: datetime = Field(..., description="Upload timestamp")
     download_url: str | None = Field(None, description="Temporary download URL")
+    view_url: str | None = Field(None, description="Temporary view URL for inline display")
 
 
 class PaginationInfo(BaseModel):

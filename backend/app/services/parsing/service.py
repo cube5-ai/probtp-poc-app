@@ -39,9 +39,9 @@ class ParsingService:
         self.adapters: dict[str, BaseParsingAdapter] = {}
         self._initialize_adapters()
 
-        logger.info(f"Initialized parsing service with {len(self.adapters)} adapters", extra={
-            "services": list(self.adapters.keys())
-        })
+        # logger.info(f"Initialized parsing service with {len(self.adapters)} adapters", extra={
+        #     "services": list(self.adapters.keys())
+        # })
 
     def _initialize_adapters(self) -> None:
         """Initialize all configured parsing adapters."""
@@ -56,7 +56,7 @@ class ParsingService:
                 try:
                     adapter_class = adapter_classes[service_name]
                     self.adapters[service_name] = adapter_class(config)
-                    logger.info(f"Initialized {service_name} adapter successfully")
+                    # logger.info(f"Initialized {service_name} adapter successfully")
                 except Exception as e:
                     logger.error(f"Failed to initialize {service_name} adapter: {e}")
             else:
@@ -77,12 +77,12 @@ class ParsingService:
         """
         correlation_id = f"parse_{hash(request.file_path)}_{int(datetime.utcnow().timestamp())}"
 
-        logger.info("Starting document parsing", extra={
-            "correlation_id": correlation_id,
-            "file_path": request.file_path,
-            "service": request.service_name,
-            "timeout": request.timeout_seconds
-        })
+        # logger.info("Starting document parsing", extra={
+        #     "correlation_id": correlation_id,
+        #     "file_path": request.file_path,
+        #     "service": request.service_name,
+        #     "timeout": request.timeout_seconds
+        # })
 
         # Validate service name
         if request.service_name not in self.adapters:
@@ -123,12 +123,12 @@ class ParsingService:
                 result.metadata = {}
             result.metadata["correlation_id"] = correlation_id
 
-            logger.info("Document parsing completed successfully", extra={
-                "correlation_id": correlation_id,
-                "service": request.service_name,
-                "status": result.status,
-                "blocks_count": len(result.content_blocks)
-            })
+            # logger.info("Document parsing completed successfully", extra={
+            #     "correlation_id": correlation_id,
+            #     "service": request.service_name,
+            #     "status": result.status,
+            #     "blocks_count": len(result.content_blocks)
+            # })
 
             return result
 
@@ -244,11 +244,11 @@ class ParsingService:
         """
         correlation_id = f"validate_{hash(request.file_path)}_{int(datetime.utcnow().timestamp())}"
 
-        logger.info("Starting file validation", extra={
-            "correlation_id": correlation_id,
-            "file_path": request.file_path,
-            "service": request.service_name
-        })
+        # logger.info("Starting file validation", extra={
+        #     "correlation_id": correlation_id,
+        #     "file_path": request.file_path,
+        #     "service": request.service_name
+        # })
 
         result = {
             "valid": False,
@@ -295,11 +295,11 @@ class ParsingService:
             # File is valid if no errors
             result["valid"] = len(result["errors"]) == 0
 
-            logger.info("File validation completed", extra={
-                "correlation_id": correlation_id,
-                "valid": result["valid"],
-                "errors_count": len(result["errors"])
-            })
+            # logger.info("File validation completed", extra={
+            #     "correlation_id": correlation_id,
+            #     "valid": result["valid"],
+            #     "errors_count": len(result["errors"])
+            # })
 
             return result
 
@@ -350,10 +350,10 @@ class ParsingService:
                     "error": str(e)
                 })
 
-        logger.info("Retrieved service availability", extra={
-            "services_count": len(services),
-            "available": [s["name"] for s in services if s["status"] == "available"]
-        })
+        # logger.info("Retrieved service availability", extra={
+        #     "services_count": len(services),
+        #     "available": [s["name"] for s in services if s["status"] == "available"]
+        # })
 
         return services
 
