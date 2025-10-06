@@ -9,7 +9,6 @@ Updated to use recursive tree structure for better LLM generation and navigation
 """
 
 from pydantic import BaseModel, Field
-from typing import Optional
 
 
 class TaxonomyNode(BaseModel):
@@ -37,9 +36,9 @@ class TaxonomyNode(BaseModel):
     )
 
     # ============ HIERARCHY ============
-    parent_id: Optional[str] = Field(
-        None,
-        description="ID of parent node. Null for top-level categories. Examples: 'optique' is parent of 'optique_lunettes'"
+    parent_id: str = Field(
+        ...,
+        description="ID of parent node. Use '_root_' for top-level categories. Examples: 'optique' is parent of 'optique_lunettes'"
     )
 
     level: int = Field(
@@ -58,19 +57,25 @@ class TaxonomyNode(BaseModel):
         description="True if this represents a measurable benefit with actual coverage values. False if it's a container/category."
     )
 
-    # ============ LEAF-SPECIFIC ATTRIBUTES ============
-    basis: Optional[str] = Field(
+    # ============ NODE CONDITIONS ============
+    conditions: str | None = Field(
         None,
-        description="ONLY for leaves: What makes this a distinct category. Examples: 'securite_sociale_status', 'medical_classification', 'age_bracket', 'service_type', 'network_requirement'. Omit if straightforward or if not a leaf."
+        description="Node-level conditions or constraints as prescribed by footnotes, annotations, or equivalent markers. These help refine what is meant for this node. Examples: 'Sous réserve d\\'accord préalable', 'Maximum 2 équipements par an', 'Uniquement pour certaines pathologies'. Leave null if no conditions apply."
+    )
+
+    # ============ SÉCURITÉ SOCIALE COVERAGE ============
+    securite_sociale_coverage: str | None = Field(
+        None,
+        description="Sécurité Sociale (S.S.) reimbursement information for this benefit. Only applicable to leaf nodes. Examples: '60% BR', '70% du tarif de convention', 'Non remboursé par la S.S.', '100% BRSS'. Leave null for non-leaf nodes or if S.S. coverage is not specified."
     )
 
     # ============ OPTIONAL METADATA ============
-    source_section: Optional[str] = Field(
+    source_section: str | None = Field(
         None,
         description="Optional: reference to where in source document this was found (e.g., page number, table name)"
     )
 
-    notes: Optional[str] = Field(
+    notes: str | None = Field(
         None,
         description="Optional: any additional context or clarifications"
     )
@@ -225,7 +230,25 @@ The taxonomy has **variable depth** - some branches are shallow, others are deep
 
 **DO NOT enforce a fixed number of levels.** Extract the natural structure from ProBTP's document.
 
-**3. What is a Leaf Node?**
+**3. Capturing Node-Level Conditions**
+
+Many nodes (both leaves and non-leaves) may have **conditions** specified via:
+- Footnotes (e.g., markers like *, †, ‡, (1), (2))
+- Annotations or parenthetical notes
+- Explicit constraints in the text
+
+These conditions help refine what is meant for the node and should be captured:
+- ✓ "Sous réserve d'accord préalable" (requires prior approval)
+- ✓ "Maximum 2 équipements par an" (frequency limit)
+- ✓ "Uniquement pour certaines pathologies" (scope constraint)
+- ✓ "Maximum 1 intervention par œil et par vie" (lifetime limit)
+- ✓ "Sur présentation de devis" (procedural requirement)
+
+**When to capture as conditions vs. excluding:**
+- If it's a **universal constraint** that helps define the benefit → capture in `conditions`
+- If it's **vendor-specific** (network bonuses, ProBTP-specific programs) → exclude entirely
+
+**4. What is a Leaf Node?**
 
 A **leaf** is the finest granularity where:
 - There is an actual **coverage value** that can be measured
@@ -335,8 +358,15 @@ For EVERY node (category, subcategory, or leaf):
 - Set path (list from root to this node)
 - Set is_leaf (true only if this is a measurable benefit endpoint)
 
+
+For ANY node (leaf or non-leaf):
+- Set conditions if footnotes, annotations, or markers specify constraints
+  Examples: "Sous réserve d'accord préalable", "Maximum 2 équipements par an"
+
 For LEAF nodes only:
-- Set basis if it's a universal distinction (otherwise null)
+- Set securite_sociale_coverage if S.S. reimbursement information is available
+  Examples: "60% BR", "70% du tarif de convention", "Non remboursé par la S.S.", "100% BRSS"
+  This is informative data about the baseline Sécurité Sociale coverage for this benefit
 
 **STEP 4: Validate the Taxonomy**
 
@@ -368,11 +398,10 @@ OUTPUT FORMAT
       "node_id": "optique",
       "name": "Optique",
       "description": "Soins et équipements optiques (lunettes, lentilles, chirurgie réfractive)",
-      "parent_id": null,
+      "parent_id": "_root_",
       "level": 0,
       "path": ["Optique"],
-      "is_leaf": false,
-      "basis": null
+      "is_leaf": false
     }},
     // Optique → Lunettes
     {{
@@ -382,8 +411,7 @@ OUTPUT FORMAT
       "parent_id": "optique",
       "level": 1,
       "path": ["Optique", "Lunettes"],
-      "is_leaf": false,
-      "basis": null
+      "is_leaf": false
     }},
     // Optique → Lunettes → Monture (leaf)
     {{
@@ -394,7 +422,7 @@ OUTPUT FORMAT
       "level": 2,
       "path": ["Optique", "Lunettes", "Monture"],
       "is_leaf": true,
-      "basis": null
+      "securite_sociale_coverage": "60% BR"
     }},
     // Optique → Lunettes → Verres (container)
     {{
@@ -404,8 +432,7 @@ OUTPUT FORMAT
       "parent_id": "optique_lunettes",
       "level": 2,
       "path": ["Optique", "Lunettes", "Verres"],
-      "is_leaf": false,
-      "basis": null
+      "is_leaf": false
     }},
     // Optique → Lunettes → Verres → Verres simples (leaf)
     {{
@@ -416,7 +443,7 @@ OUTPUT FORMAT
       "level": 3,
       "path": ["Optique", "Lunettes", "Verres", "Verres simples"],
       "is_leaf": true,
-      "basis": "medical_classification"
+      "securite_sociale_coverage": "60% BR"
     }},
     // Optique → Lunettes → Verres → Verres complexes (leaf)
     {{
@@ -427,7 +454,7 @@ OUTPUT FORMAT
       "level": 3,
       "path": ["Optique", "Lunettes", "Verres", "Verres complexes"],
       "is_leaf": true,
-      "basis": "medical_classification"
+      "securite_sociale_coverage": "60% BR"
     }},
     // Optique → Lentilles (container)
     {{
@@ -437,8 +464,7 @@ OUTPUT FORMAT
       "parent_id": "optique",
       "level": 1,
       "path": ["Optique", "Lentilles"],
-      "is_leaf": false,
-      "basis": null
+      "is_leaf": false
     }},
     // Optique → Lentilles → Remboursées SS (leaf)
     {{
@@ -449,7 +475,7 @@ OUTPUT FORMAT
       "level": 2,
       "path": ["Optique", "Lentilles", "Remboursées par la S.S."],
       "is_leaf": true,
-      "basis": "securite_sociale_status"
+      "securite_sociale_coverage": "60% du tarif de convention"
     }},
     // Optique → Lentilles → Non remboursées SS (leaf)
     {{
@@ -460,9 +486,9 @@ OUTPUT FORMAT
       "level": 2,
       "path": ["Optique", "Lentilles", "Non remboursées par la S.S."],
       "is_leaf": true,
-      "basis": "securite_sociale_status"
+      "securite_sociale_coverage": "Non remboursé par la S.S."
     }},
-    // Optique → Chirurgie réfractive (leaf)
+    // Optique → Chirurgie réfractive (leaf with conditions)
     {{
       "node_id": "optique_chirurgie_refractive",
       "name": "Chirurgie réfractive",
@@ -471,18 +497,18 @@ OUTPUT FORMAT
       "level": 1,
       "path": ["Optique", "Chirurgie réfractive"],
       "is_leaf": true,
-      "basis": "service_type"
+      "conditions": "Sous réserve d'accord préalable. Maximum 1 intervention par œil et par vie.",
+      "securite_sociale_coverage": "Non remboursé par la S.S."
     }},
     // Top-level category: Hospitalisation
     {{
       "node_id": "hospitalisation",
       "name": "Hospitalisation",
       "description": "Frais d'hospitalisation et soins associés",
-      "parent_id": null,
+      "parent_id": "_root_",
       "level": 0,
       "path": ["Hospitalisation"],
-      "is_leaf": false,
-      "basis": null
+      "is_leaf": false
     }},
     // Hospitalisation → Frais de séjour (leaf)
     {{
@@ -493,7 +519,7 @@ OUTPUT FORMAT
       "level": 1,
       "path": ["Hospitalisation", "Frais de séjour"],
       "is_leaf": true,
-      "basis": null
+      "securite_sociale_coverage": "80% du tarif de convention"
     }},
     // Hospitalisation → Chambre particulière (leaf)
     {{
@@ -504,7 +530,7 @@ OUTPUT FORMAT
       "level": 1,
       "path": ["Hospitalisation", "Chambre particulière"],
       "is_leaf": true,
-      "basis": "service_type"
+      "securite_sociale_coverage": "Non remboursé par la S.S."
     }},
     // Hospitalisation → Forfait journalier (leaf)
     {{
@@ -515,7 +541,7 @@ OUTPUT FORMAT
       "level": 1,
       "path": ["Hospitalisation", "Forfait journalier"],
       "is_leaf": true,
-      "basis": null
+      "securite_sociale_coverage": "100% BRSS"
     }}
   ],
   "metadata": {{
@@ -529,7 +555,7 @@ OUTPUT FORMAT
 **CRITICAL REMINDERS:**
 
 1. Output nodes in DEPTH-FIRST ORDER (complete each category before moving to next)
-2. Use parent_id to indicate hierarchy (null for top-level)
+2. Use parent_id to indicate hierarchy ('_root_' for top-level)
 3. Variable depth is NORMAL and EXPECTED
 4. A leaf has is_leaf=true (no other nodes reference it as parent)
 5. A non-leaf has is_leaf=false (other nodes reference it as parent_id)

@@ -68,6 +68,7 @@ def create_alignment_prompt(
     category: str,
     probtp_levels: list[str] | None = None,
     axa_levels: list[str] | None = None,
+    other_categories: list[str] | None = None,
     language: str = "French (France)"
 ) -> str:
     """
@@ -79,6 +80,7 @@ def create_alignment_prompt(
         category: Healthcare category to compare (e.g., "Dental", "Optical")
         probtp_levels: List of ProBTP contract levels
         axa_levels: List of AXA contract levels
+        other_categories: List of other categories being processed separately (for boundary guidance)
         language: Language for the output (default: "French (France)")
 
     Returns:
@@ -95,6 +97,12 @@ def create_alignment_prompt(
             levels_context += f"- ProBTP levels: {probtp_levels_str}\n"
         if axa_levels:
             levels_context += f"- AXA levels: {axa_levels_str}\n"
+
+    # Format category boundaries context
+    boundaries_context = ""
+    if other_categories:
+        boundaries_context = f"\n\n**Other Categories (DO NOT extract - handled separately):**\n"
+        boundaries_context += "\n".join(f"- {cat}" for cat in other_categories)
 
     prompt = f"""You are an expert insurance analyst specializing in French health insurance (mutuelle) contracts. Your task is to create a COMPLETE and ACCURATE comparison table for ProBTP's sales team.
 
@@ -455,7 +463,36 @@ TASK PARAMETERS
 
 **Category to Extract:** {category}
 
-**Contract Levels to Compare:**{levels_context}
+**Contract Levels to Compare:**{levels_context}{boundaries_context}
+
+**CRITICAL: Category Boundary Guidelines**
+
+To prevent gaps and redundancy in the final comparison reports:
+
+1. **Primary Rule - Follow Source Document Structure:**
+   - ONLY extract benefits that appear in tables explicitly labeled with "{category}" in the source documents
+   - If a benefit appears in a table with a different category header → SKIP IT (another extraction handles it)
+
+2. **Handling Ambiguous Benefits:**
+   - If a benefit appears in MULTIPLE category tables → extract it ONLY in the table where it's the primary focus
+   - Check the table header/title: if it explicitly shows "{category}" → EXTRACT
+   - If the table header shows a different category → SKIP
+
+3. **Dealing with Contract Organization Differences:**
+   - ProBTP and AXA may organize categories differently
+   - Always prioritize ProBTP's categorization (ProBTP is the reference)
+   - If AXA groups benefits differently, find the equivalent in AXA's structure
+   - Document the organizational difference in metadata if significant
+
+4. **When in Doubt:**
+   - Prefer inclusion over exclusion (false positive better than false negative)
+   - If a benefit seems to span categories, include it in the MOST SPECIFIC category
+   - Example: "Ostéopathie" → if there's a "Médecines Douces" category, put it there (not in "Soins Courants")
+
+5. **Validation Check Before Returning:**
+   - Verify that EVERY benefit from the "{category}" table in ProBTP source is extracted
+   - Count the rows in the source "{category}" table and compare to your output
+   - If counts don't match, review for missing benefits
 
 **Output Language:** {language}
 

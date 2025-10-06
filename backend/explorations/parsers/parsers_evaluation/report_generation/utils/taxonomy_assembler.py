@@ -26,8 +26,6 @@ def assemble_comparison_table(
         ComparisonTable dict matching alignment_prompt.py schema
     """
     category_name = taxonomy_category["name"]
-    category_id = taxonomy_category["node_id"]
-    # leaves should be passed separately - but let's keep this for backwards compatibility
     leaves = taxonomy_category.get("leaves", [])
 
     probtp_level = probtp_extraction["policy_level"]
@@ -36,6 +34,15 @@ def assemble_comparison_table(
     # Build value lookup dicts for fast access
     probtp_values = {v["leaf_id"]: v for v in probtp_extraction["extracted_values"]}
     axa_values = {v["leaf_id"]: v for v in axa_extraction["extracted_values"]}
+
+    # Integrate unmappable items as pseudo-leaves
+    leaves = _integrate_unmappable_items(
+        leaves,
+        probtp_extraction.get("unmappable_items"),
+        axa_extraction.get("unmappable_items"),
+        probtp_values,
+        axa_values,
+    )
 
     # Determine column structure
     # Structure: [Catégorie, Sous-catégorie(s)..., Prestation, Part S.S., ProBTP Level, AXA Level]
@@ -112,6 +119,123 @@ def assemble_comparison_table(
     return comparison_table
 
 
+def _integrate_unmappable_items(
+    taxonomy_leaves: list[dict[str, Any]],
+    probtp_unmappable: list[dict[str, Any]] | None,
+    axa_unmappable: list[dict[str, Any]] | None,
+    probtp_values: dict[str, dict],
+    axa_values: dict[str, dict],
+) -> list[dict[str, Any]]:
+    """
+    Integrate unmappable items from both vendors into the leaves list.
+
+    Unmappable items are inserted at their suggested position based on suggested_parent_id.
+    They're converted to pseudo-leaves with coverage data stored in the values dicts.
+
+    Args:
+        taxonomy_leaves: Existing taxonomy leaves
+        probtp_unmappable: Unmappable items from ProBTP (or None)
+        axa_unmappable: Unmappable items from AXA (or None)
+        probtp_values: ProBTP values dict (will be modified to add unmappable coverage)
+        axa_values: AXA values dict (will be modified to add unmappable coverage)
+
+    Returns:
+        Extended leaves list including unmappable items as pseudo-leaves
+    """
+    if not probtp_unmappable and not axa_unmappable:
+        return taxonomy_leaves
+
+    # Combine all unmappable items with vendor tag
+    all_unmappable = []
+
+    if probtp_unmappable:
+        for item in probtp_unmappable:
+            all_unmappable.append({"vendor": "probtp", "item": item})
+
+    if axa_unmappable:
+        for item in axa_unmappable:
+            all_unmappable.append({"vendor": "axa", "item": item})
+
+    # Convert unmappable items to pseudo-leaves
+    pseudo_leaves = []
+
+    for unmappable in all_unmappable:
+        vendor = unmappable["vendor"]
+        item = unmappable["item"]
+
+        leaf_id = item["suggested_leaf_id"]
+        path = item["suggested_path"]
+
+        # Create pseudo-leaf
+        pseudo_leaf = {
+            "path": path,
+            "leaf_id": leaf_id,
+            "description": item["description"],
+            "basis": None,
+            "securite_sociale_coverage": None,
+            "_unmappable_source": vendor,  # Track which vendor introduced this
+        }
+
+        # Add coverage data to appropriate values dict
+        coverage_data = {
+            "leaf_id": leaf_id,
+            "coverage": item["coverage"],
+            "source_cell_ids": item.get("source_cell_ids"),
+            "frequency": None,
+            "cap": None,
+            "age_restriction": None,
+            "other_universal_conditions": None,
+            "vendor_conditions": None,
+            "notes": f"Unmappable item: {item.get('reasoning', 'Not in taxonomy')}",
+        }
+
+        if vendor == "probtp":
+            probtp_values[leaf_id] = coverage_data
+            # Add placeholder to AXA indicating not covered
+            axa_values[leaf_id] = {
+                "leaf_id": leaf_id,
+                "coverage": "Non couvert",
+                "notes": "Benefit only present in ProBTP contract",
+            }
+        else:  # axa
+            axa_values[leaf_id] = coverage_data
+            # Add placeholder to ProBTP indicating not covered
+            probtp_values[leaf_id] = {
+                "leaf_id": leaf_id,
+                "coverage": "Non couvert",
+                "notes": "Benefit only present in AXA contract",
+            }
+
+        pseudo_leaves.append(pseudo_leaf)
+
+    # Merge pseudo-leaves into taxonomy leaves, preserving order
+    # Strategy: Insert each pseudo-leaf after its suggested parent's last child
+    if not pseudo_leaves:
+        return taxonomy_leaves
+
+    extended_leaves = list(taxonomy_leaves)
+
+    for pseudo_leaf in pseudo_leaves:
+        suggested_parent_id = pseudo_leaf["path"][-2] if len(pseudo_leaf["path"]) > 1 else None
+
+        # Find insertion position: after last leaf with matching parent prefix
+        insertion_idx = len(extended_leaves)  # default: append at end
+
+        for i in range(len(extended_leaves) - 1, -1, -1):
+            existing_leaf = extended_leaves[i]
+            # Check if this leaf shares the same parent path
+            if len(existing_leaf["path"]) >= len(pseudo_leaf["path"]) - 1:
+                # Check if parent paths match
+                parent_path = pseudo_leaf["path"][:-1]
+                if existing_leaf["path"][:len(parent_path)] == parent_path:
+                    insertion_idx = i + 1
+                    break
+
+        extended_leaves.insert(insertion_idx, pseudo_leaf)
+
+    return extended_leaves
+
+
 def _build_header_row(template_row: list[str], column_labels: list[str]) -> dict[str, Any]:
     """Build header row (row 1)."""
     total_columns = len(template_row)
@@ -156,22 +280,18 @@ def _build_data_row(
     # Dimension columns: fill path elements
     for i in range(max_depth):
         cell_id = f"{column_labels[i]}{row_number}"
-        if i < len(path):
-            cell_value = path[i]
-        else:
-            cell_value = ""
-
+        cell_value = path[i] if i < len(path) else ""
         cell = {
             "id": cell_id,
             "value": cell_value,
         }
         cells.append(cell)
 
-    # Part S.S. column (empty for now - could be extracted)
+    # Part S.S. column (populated from taxonomy securite_sociale_coverage)
     ss_col_idx = max_depth
     cells.append({
         "id": f"{column_labels[ss_col_idx]}{row_number}",
-        "value": "",
+        "value": leaf.get("securite_sociale_coverage") or "",
     })
 
     # ProBTP data column

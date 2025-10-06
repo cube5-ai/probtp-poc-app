@@ -19,7 +19,9 @@ class ExtractedValue(BaseModel):
     leaf_id: str = Field(..., description="ID of taxonomy leaf this value corresponds to")
 
     # Core coverage information
-    coverage: str = Field(..., description="Coverage amount/percentage (e.g., '100€', '150% BR', '100% BR - MR', 'Non couvert')")
+    coverage: str = Field(..., description="Coverage amount/percentage/yes-no (e.g., '100€', '150% BR', '100% BR - MR', 'Non couvert', 'Oui')")
+    # Traceability
+    source_cell_ids: list[str] | None = Field(None, description="Cell IDs from source document markdown. Omit for now (grounding deferred).")
 
     # Universal modifiers (apply to any insurer)
     frequency: str | None = Field(None, description="Frequency limit (e.g., 'par an', 'par œil', 'tous les 2 ans'). Omit if none.")
@@ -31,7 +33,6 @@ class ExtractedValue(BaseModel):
     vendor_conditions: list[VendorCondition] | None = Field(None, description="Vendor-specific modifiers. Omit if none.")
 
     # Traceability
-    source_cell_ids: list[str] | None = Field(None, description="Cell IDs from source document markdown. Omit for now (grounding deferred).")
     notes: str | None = Field(None, description="Extraction notes or ambiguities. Omit if straightforward.")
 
 
@@ -39,9 +40,11 @@ class UnmappableItem(BaseModel):
     """A benefit found in vendor document that doesn't map to existing taxonomy."""
     description: str = Field(..., description="Description of the unmapped benefit")
     suggested_path: list[str] = Field(..., description="Suggested taxonomy path for this item")
+    suggested_parent_id: str = Field(..., description="Suggested parent ID (snake_case)")
     suggested_leaf_id: str = Field(..., description="Suggested leaf ID (snake_case)")
     reasoning: str = Field(..., description="Why this doesn't map to existing taxonomy and should be added")
     coverage: str = Field(..., description="Coverage value for this item")
+    # Traceability
     source_cell_ids: list[str] | None = Field(None, description="Cell IDs from source. Omit for now.")
 
 
@@ -98,7 +101,7 @@ GOAL: EXTRACT VALUES MAPPED TO TAXONOMY
 
 **What You're Extracting:**
 
-For the **{vendor} {policy_level}** policy level, extract coverage values for the **"{category_name}"** category.
+For the **{vendor} {policy_level}** policy levels, extract coverage values for the **"{category_name}"** category.
 
 **Your Reference Taxonomy:**
 
@@ -166,6 +169,7 @@ Extract as:
   "leaf_id": "optique_lunettes_monture",
   "coverage": "100€",
   "frequency": "tous les 2 ans",
+  "source_cell_ids": ["0-2v", "0-4E"],
   "vendor_conditions": [
     {{
       "condition_type": "network_bonus",
@@ -203,6 +207,7 @@ If you find a benefit in {vendor} document that doesn't match any taxonomy leaf:
 {{
   "description": "Chirurgie réfractive (LASIK)",
   "suggested_path": ["Optique", "Chirurgie réfractive"],
+  "suggested_parent_id": "optique",
   "suggested_leaf_id": "optique_chirurgie_refractive",
   "reasoning": "AXA covers laser eye surgery but ProBTP taxonomy doesn't include it. This is a legitimate AXA-only benefit.",
   "coverage": "300€"
@@ -295,6 +300,7 @@ OUTPUT FORMAT
     {{
       "leaf_id": "optique_lunettes_monture",
       "coverage": "150€",
+      "source_cell_ids": ["3-5v", "2-2e"],
       "frequency": "tous les 2 ans",
       "cap": null,
       "age_restriction": null,
@@ -306,29 +312,28 @@ OUTPUT FORMAT
           "coverage_modifier": "+50€ (200€ total)"
         }}
       ],
-      "source_cell_ids": null,
       "notes": null
     }},
     {{
       "leaf_id": "optique_lunettes_verres_simples",
       "coverage": "100€",
+      "source_cell_ids": ["3-6v"],
       "frequency": "par an",
       "cap": "plafond 150€",
       "age_restriction": null,
       "other_universal_conditions": null,
       "vendor_conditions": null,
-      "source_cell_ids": null,
       "notes": null
     }},
     {{
       "leaf_id": "optique_lentilles_remboursees_ss",
       "coverage": "Non couvert",
+      "source_cell_ids": null,
       "frequency": null,
       "cap": null,
       "age_restriction": null,
       "other_universal_conditions": null,
       "vendor_conditions": null,
-      "source_cell_ids": null,
       "notes": "AXA ne couvre pas les lentilles remboursées SS dans {policy_level}"
     }}
   ],
@@ -336,6 +341,7 @@ OUTPUT FORMAT
     {{
       "description": "Chirurgie réfractive (LASIK)",
       "suggested_path": ["Optique", "Chirurgie réfractive"],
+      "suggested_parent_id": "optique",
       "suggested_leaf_id": "optique_chirurgie_refractive",
       "reasoning": "AXA covers laser eye surgery but not in ProBTP taxonomy. Legitimate AXA-only benefit.",
       "coverage": "300€",

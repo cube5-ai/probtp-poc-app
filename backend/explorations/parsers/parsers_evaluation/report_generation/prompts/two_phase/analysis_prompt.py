@@ -24,31 +24,44 @@ class CellSources(BaseModel):
 
 
 class TableCell(BaseModel):
-    """A single cell in the comparison table."""
+    """A single cell in the comparison table with Excel-style ID and enhanced span support."""
 
-    value: str = Field(
-        ..., description="Cell content (coverage amount, benefit name, etc.)"
+    id: str = Field(..., description="Excel-style cell ID (e.g., 'A1', 'B15', 'C2') - preserve from alignment")
+
+    # Real cells (first occurrence of a span or simple cells)
+    value: str | None = Field(
+        None, description="Cell content (coverage amount, benefit name, etc.). Required for real cells, omit for virtual cells."
     )
-    type: str = Field(
-        ...,
-        description="Cell type: 'dimension' (labels/headers) or 'data' (coverage values)",
+    type: str | None = Field(
+        None,
+        description="'data' for data cells. OMIT for dimension cells (labels/headers) to match alignment format.",
     )
-    colspan: int | None = Field(None, description="Column span (omit if 1)")
-    rowspan: int | None = Field(None, description="Row span (omit if 1)")
-    sources: CellSources = Field(
-        ..., description="Source cell IDs from original parsed documents"
+    colspan: int | None = Field(None, description="Column span (omit if 1) - preserve from alignment")
+    rowspan: int | None = Field(None, description="Row span (omit if 1) - preserve from alignment")
+    occupies: list[str] | None = Field(None, description="List of all cell IDs occupied by this span - preserve from alignment")
+
+    # Virtual cells (continuations of rowspan/colspan)
+    ref: str | None = Field(None, description="For virtual cells: ID of the cell that occupies this position - preserve from alignment")
+
+    # Metadata (optional)
+    sources: CellSources | None = Field(
+        None, description="Source cell IDs from original parsed documents (preserve exact structure from alignment)"
     )
-    metadata: CellMetadata | None = Field(None, description="Additional cell metadata")
+    metadata: CellMetadata | None = Field(None, description="Additional cell metadata - preserve from alignment")
+
+    # Analysis-specific field (NEW - only field that analysis should add)
     is_best: bool | None = Field(
         None,
-        description="For data cells: True if this coverage is better than competitor",
+        description="For data cells: True if this coverage is better than competitor. For dimension cells: null.",
     )
 
 
 class TableRow(BaseModel):
-    """A single row in the comparison table."""
+    """A single row in the comparison table with rowspan tracking."""
 
-    cells: list[TableCell] = Field(..., description="Cells in this row")
+    row_number: int = Field(..., description="1-indexed row number matching Excel notation - preserve from alignment")
+    inherited_from_above: list[str | None] = Field(..., description="Array showing rowspan inheritance - preserve from alignment")
+    cells: list[TableCell] = Field(..., description="Exactly total_columns cells (real + virtual) - preserve structure from alignment")
 
 
 class PolicyLevels(BaseModel):
@@ -69,11 +82,14 @@ class ComparisonTableMetadata(BaseModel):
         ..., description="Healthcare category (e.g., 'Soins courants', 'Dentaire')"
     )
     policy_levels: PolicyLevels = Field(..., description="Policy levels being compared")
+    total_columns: int = Field(..., description="Total number of columns in the table - preserve from alignment")
+    column_labels: list[str] = Field(..., description="Excel-style column labels - preserve from alignment")
 
 
 class AnnotatedComparisonTable(BaseModel):
     """Comparison table with is_best annotations for each data cell."""
 
+    template_row: list[str] = Field(..., description="Template row from alignment - preserve exactly")
     metadata: ComparisonTableMetadata = Field(..., description="Table metadata")
     rows: list[TableRow] = Field(
         ..., description="Table rows with is_best annotations on data cells"
@@ -197,13 +213,16 @@ def _format_comparison_table(
 
 
 def create_analysis_prompt(
-    comparison_table: dict, language: str = "French (France)"
+    comparison_table: dict,
+    other_categories: list[str] | None = None,
+    language: str = "French (France)"
 ) -> str:
     """
     Create a prompt for generating insights and analysis from a comparison table.
 
     Args:
         comparison_table: ComparisonTable output from alignment phase (dict with metadata and rows)
+        other_categories: List of other categories being analyzed separately (for context)
         language: Language for the output (default: "French (France)")
 
     Returns:
@@ -229,6 +248,13 @@ def create_analysis_prompt(
         if axa_levels:
             levels_context += f"\n- AXA: {', '.join(axa_levels)}"
 
+    # Format category boundaries context
+    boundaries_context = ""
+    if other_categories:
+        boundaries_context = f"\n\n**Other Categories (analyzed separately):**\n"
+        boundaries_context += "\n".join(f"- {cat}" for cat in other_categories)
+        boundaries_context += "\n\n*Note: This analysis focuses ONLY on the \"{category}\" category. Benefits from other categories are excluded to prevent redundancy.*"
+
     prompt = f"""You are an expert insurance analyst specializing in French health insurance. Your task is to generate comprehensive sales-ready insights and brutally objective analysis for a specific healthcare category.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -247,12 +273,31 @@ GENERAL TASK DESCRIPTION
 **Analysis Components Required:**
 
 1. **Annotated Comparison Table**
-   - Copy the structure from the input table (provided below as structured data)
+   - **CRITICAL**: Copy the EXACT enhanced structure from the input table (provided below as structured data)
+   - **ONLY add the `is_best` field** - do NOT modify any other fields
    - Add `is_best: true/false` to EVERY data cell
    - For ProBTP data cells: is_best = true if ProBTP coverage is better
    - For AXA data cells: is_best = true if AXA coverage is better
    - Dimension cells (labels/headers) should have is_best = null
-   - Preserve all existing fields: value, type, sources, metadata, colspan, rowspan
+
+   **Preserve EXACTLY from alignment:**
+   - **template_row**: The template showing column structure - preserve exactly as-is
+   - **Metadata**: total_columns, column_labels (Excel-style) - EXACT VALUES, even if labels start at "B"
+   - **Row structure**: row_number, inherited_from_above array
+   - **All cells**: id (Excel-style like "A1", "B15"), value, type, colspan, rowspan, occupies, ref
+   - **Cell metadata**: sources, metadata (footnotes, conditions)
+   - **Virtual cells**: Cells with `ref` field (rowspan/colspan continuations)
+
+   **Do NOT**:
+   - Add or remove ANY columns (total_columns and column_labels are FIXED from alignment)
+   - Add column "A" if alignment has column_labels starting with "B" - preserve ["B", "C", "D", "E", "F"] exactly
+   - Add `type` field where it was omitted (token optimization)
+   - Modify sources structure (keep null fields as omitted, not as explicit None)
+   - Change any cell IDs (preserve "B1", "B15" format if that's what alignment has)
+   - Change inherited_from_above arrays
+   - Change occupies lists
+   - Change cell count per row (must equal total_columns)
+   - Change row_number values
 
 2. **Key Differences** (2-3 sentences in plain language)
    - Main strategic differences between ProBTP and AXA for the category
@@ -415,11 +460,24 @@ Example comparisons:
 TASK PARAMETERS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Category:** {category}{levels_context}
+**Category:** {category}{levels_context}{boundaries_context}
 
 **Output Language:** {language}
 
-**Comparison Table Data (from alignment phase):**
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+REQUIRED OUTPUT STRUCTURE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+**Your annotated_table MUST have these exact metadata values from alignment:**
+- total_columns: {metadata.get("total_columns")} (FIXED - do NOT add or remove columns)
+- column_labels: {metadata.get("column_labels")} (FIXED - do NOT change to ["A", "B", "C", ...])
+
+**If column_labels starts with "B" (not "A"), this is intentional** - the category column was removed during validation.
+DO NOT add column "A" back. Preserve the exact column_labels array from the input.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+COMPARISON TABLE DATA (FROM ALIGNMENT PHASE)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ### Text Representation (for human readability):
 

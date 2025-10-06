@@ -13,6 +13,7 @@ Key benefits:
 - Selective re-run capability
 """
 
+import asyncio
 import json
 import os
 import sys
@@ -21,8 +22,6 @@ from datetime import datetime
 from typing import Any
 
 from dotenv import load_dotenv
-from google import genai
-from google.genai.types import GenerateContentConfig, GoogleSearch
 from langfuse import Langfuse, observe
 
 # Load environment variables
@@ -38,19 +37,42 @@ langfuse = Langfuse(
     host=os.getenv("LANGFUSE_HOST", "https://cloud.langfuse.com"),
 )
 
-from prompts.taxonomy_extraction_prompt import (
+# Default categories to analyze
+DEFAULT_CATEGORIES = [
+    "Soins Courants",
+    "Hospitalisation",
+    "Optique",
+    "Soins Dentaires",
+    "Audiologie",
+    "Prestations Complémentaires",
+]
+
+# Category to ProBTP level type mapping
+# "S" levels = Soins (care) categories
+# "P" levels = Prévoyance (prevention/specialized) categories
+CATEGORY_LEVEL_MAPPING = {
+    "Soins Courants": "S",
+    "Hospitalisation": "S",
+    "Optique": "P",
+    "Soins Dentaires": "P",
+    "Audiologie": "P",
+    "Prestations Complémentaires": "P",
+}
+
+from prompts.taxonomy_first.taxonomy_extraction_prompt import (
     ProBTPTaxonomy,
     create_taxonomy_extraction_prompt,
 )
-from prompts.value_extraction_prompt import (
+from prompts.taxonomy_first.value_extraction_prompt import (
     CategoryValueExtraction,
     create_value_extraction_prompt,
 )
-from prompts.analysis_prompt import (
+from prompts.two_phase.analysis_prompt import (
     AnalysisOutput,
     create_analysis_prompt,
 )
 from utils.document_loader import ParsedDocument
+from utils.gemini_client import generate_with_reasoning
 from utils.taxonomy_assembler import (
     assemble_comparison_table,
     validate_assembled_table,
@@ -93,6 +115,7 @@ def extract_leaves_from_flat_taxonomy(
                 "leaf_id": node["node_id"],
                 "description": node["description"],
                 "basis": node.get("basis"),
+                "securite_sociale_coverage": node.get("securite_sociale_coverage"),
             })
 
     return leaves
@@ -102,27 +125,64 @@ def get_descendants(nodes: list[dict[str, Any]], parent_id: str) -> list[dict[st
     """
     Get all descendant nodes of a given parent from a flat list.
 
+    Preserves the original depth-first order from the taxonomy.
+
     Args:
-        nodes: Flat list of all taxonomy nodes
+        nodes: Flat list of all taxonomy nodes (in depth-first order)
         parent_id: Parent node ID
 
     Returns:
-        List of all descendants (including direct children and their descendants)
+        List of all descendants (including direct children and their descendants) in original order
     """
-    descendants = []
+    # Build ancestor lookup for efficient checking
+    descendant_ids = set()
     nodes_by_id = {node["node_id"]: node for node in nodes}
 
-    # BFS to find all descendants
+    # Find all descendants using BFS to build the ID set
     queue = [parent_id]
     while queue:
         current_id = queue.pop(0)
-        # Find direct children
         for node in nodes:
-            if node.get("parent_id") == current_id:
-                descendants.append(node)
-                queue.append(node["node_id"])
+            node_id = node["node_id"]
+            if node.get("parent_id") == current_id and node_id not in descendant_ids:
+                descendant_ids.add(node_id)
+                queue.append(node_id)
+
+    # Return descendants in original order from nodes list
+    descendants = [node for node in nodes if node["node_id"] in descendant_ids]
 
     return descendants
+
+
+def filter_probtp_levels_for_category(
+    category_name: str, all_probtp_levels: list[str] | None
+) -> list[str] | None:
+    """
+    Filter ProBTP levels appropriate for a given category.
+
+    Args:
+        category_name: Category name
+        all_probtp_levels: All ProBTP levels provided
+
+    Returns:
+        Filtered list of levels appropriate for the category, or None if no levels provided
+    """
+    if not all_probtp_levels:
+        return None
+
+    # Get the level type for this category (S or P)
+    level_type = CATEGORY_LEVEL_MAPPING.get(category_name)
+
+    if not level_type:
+        # Category not in mapping, return all levels
+        return all_probtp_levels
+
+    # Filter levels that start with the appropriate type
+    filtered_levels = [
+        level for level in all_probtp_levels if level.startswith(level_type)
+    ]
+
+    return filtered_levels if filtered_levels else None
 
 
 class TaxonomyFirstPipeline:
@@ -171,13 +231,6 @@ class TaxonomyFirstPipeline:
         self.probtp_doc = ParsedDocument(self.probtp_doc_path)
         self.axa_doc = ParsedDocument(self.axa_doc_path)
 
-        # Initialize GenAI client (Vertex AI)
-        self.client = genai.Client(
-            vertexai=True,
-            project=os.getenv("GCP_PROJECT_ID", "probtp-poc-prod"),
-            location="global",
-        )
-
         # Pipeline state
         self.taxonomy: dict[str, Any] | None = None
         self.extractions: dict[str, dict[str, Any]] = {}  # category_id -> {probtp: ..., axa: ...}
@@ -185,10 +238,10 @@ class TaxonomyFirstPipeline:
         self.analyses: dict[str, dict[str, Any]] = {}  # category_id -> Analysis
 
     @observe(name="taxonomy_first_pipeline")
-    def run(
+    async def run(
         self,
-        probtp_level: str = "P4",
-        axa_level: str = "Base Obligatoire",
+        probtp_levels: list[str] | None = None,
+        axa_levels: list[str] | None = None,
         skip_taxonomy: bool = False,
         skip_extraction: bool = False,
         skip_assembly: bool = False,
@@ -198,8 +251,8 @@ class TaxonomyFirstPipeline:
         Run the complete pipeline.
 
         Args:
-            probtp_level: ProBTP policy level to extract
-            axa_level: AXA policy level to extract
+            probtp_levels: ProBTP policy levels to extract (will be filtered per category)
+            axa_levels: AXA policy levels to extract
             skip_taxonomy: Skip taxonomy extraction (load from checkpoint)
             skip_extraction: Skip value extraction (load from checkpoint)
             skip_assembly: Skip table assembly (load from checkpoint)
@@ -215,8 +268,8 @@ class TaxonomyFirstPipeline:
                 "pipeline_type": "taxonomy_first",
                 "probtp_document": self.probtp_doc.name,
                 "axa_document": self.axa_doc.name,
-                "probtp_level": probtp_level,
-                "axa_level": axa_level,
+                "probtp_levels": probtp_levels,
+                "axa_levels": axa_levels,
                 "categories_to_process": self.categories_to_process,
                 "skip_taxonomy": skip_taxonomy,
                 "skip_extraction": skip_extraction,
@@ -229,30 +282,36 @@ class TaxonomyFirstPipeline:
         print(f"{'='*80}")
         print(f"ProBTP document: {self.probtp_doc.name}")
         print(f"AXA document: {self.axa_doc.name}")
-        print(f"ProBTP level: {probtp_level}")
-        print(f"AXA level: {axa_level}")
+        print(f"ProBTP levels: {probtp_levels}")
+        print(f"AXA levels: {axa_levels}")
         print(f"Output directory: {self.output_dir}")
         print(f"{'='*80}\n")
 
         # Phase 1: Extract taxonomy
-        if not skip_taxonomy:
+        taxonomy_checkpoint = self.tmp_dir / "taxonomy.json"
+        if not skip_taxonomy and not taxonomy_checkpoint.exists():
             print(f"\n{'─'*80}")
             print(f"PHASE 1: Taxonomy Extraction")
             print(f"{'─'*80}")
-            self.taxonomy = self._extract_taxonomy()
+            self.taxonomy = await self._extract_taxonomy()
             self._save_checkpoint("taxonomy", self.taxonomy)
         else:
-            print(f"\n⏩ Skipping taxonomy extraction (loading from checkpoint)")
+            if taxonomy_checkpoint.exists():
+                print(f"\n⏩ Taxonomy checkpoint found, loading from checkpoint")
+            else:
+                print(f"\n⏩ Skipping taxonomy extraction (loading from checkpoint)")
             self.taxonomy = self._load_checkpoint("taxonomy")
 
         # Filter top-level categories if specified
         all_nodes = self.taxonomy["nodes"]
-        top_level_categories = [node for node in all_nodes if node.get("parent_id") is None]
+        top_level_categories = [node for node in all_nodes if node.get("parent_id")=="_root_"]
+        print(f"\n📋 Top-level categories: {[c['name'] for c in top_level_categories]}")
 
         if self.categories_to_process:
+            print(f"\n📋 Processing {len(self.categories_to_process)} categories: {self.categories_to_process}")
             categories = [
                 cat for cat in top_level_categories
-                if cat["node_id"] in self.categories_to_process
+                if cat["name"].lower() in [c.lower() for c in self.categories_to_process]
             ]
             print(f"\n📋 Processing {len(categories)} categories: {[c['node_id'] for c in categories]}")
         else:
@@ -271,28 +330,33 @@ class TaxonomyFirstPipeline:
                 # Extract leaves from flat taxonomy for this category
                 category_leaves = extract_leaves_from_flat_taxonomy(all_nodes, category_id)
 
+                # Filter ProBTP levels for this category
+                category_probtp_levels = filter_probtp_levels_for_category(category_name, probtp_levels)
+
                 print(f"\n📦 Category: {category_name} ({category_id})")
                 print(f"   Leaves: {len(category_leaves)}")
+                if category_probtp_levels and category_probtp_levels != probtp_levels:
+                    print(f"   → Filtered ProBTP levels for {category_name}: {category_probtp_levels}")
 
                 # Extract ProBTP values
-                probtp_extraction = self._extract_values(
+                probtp_extraction = await self._extract_values(
                     vendor="ProBTP",
                     vendor_doc=self.probtp_doc,
                     category_id=category_id,
                     category_name=category_name,
                     category_leaves=category_leaves,
-                    policy_level=probtp_level,
+                    policy_levels=category_probtp_levels,
                 )
                 self._save_checkpoint(f"{category_id}_probtp_values", probtp_extraction)
 
                 # Extract AXA values
-                axa_extraction = self._extract_values(
+                axa_extraction = await self._extract_values(
                     vendor="AXA",
                     vendor_doc=self.axa_doc,
                     category_id=category_id,
                     category_name=category_name,
                     category_leaves=category_leaves,
-                    policy_level=axa_level,
+                    policy_levels=axa_levels,
                 )
                 self._save_checkpoint(f"{category_id}_axa_values", axa_extraction)
 
@@ -369,7 +433,7 @@ class TaxonomyFirstPipeline:
 
                 print(f"\n📊 Analyzing: {category_name}")
 
-                analysis = self._generate_analysis(
+                analysis = await self._generate_analysis(
                     category_name=category_name,
                     comparison_table=self.comparison_tables[category_id],
                 )
@@ -425,7 +489,7 @@ class TaxonomyFirstPipeline:
         }
 
     @observe(name="extract_taxonomy")
-    def _extract_taxonomy(self) -> dict[str, Any]:
+    async def _extract_taxonomy(self) -> dict[str, Any]:
         """Extract ProBTP taxonomy."""
         print(f"Extracting taxonomy from ProBTP document...")
 
@@ -445,19 +509,19 @@ class TaxonomyFirstPipeline:
             }
         )
 
-        response = self.client.models.generate_content(
+        response = await generate_with_reasoning(
+            prompt=prompt,
             model=self.model_name,
-            contents=prompt,
-            config=GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=ProBTPTaxonomy,
-            ),
+            thinking_budget=4096,
+            temperature=0.2,
+            response_mime_type="application/json",
+            response_schema=ProBTPTaxonomy.model_json_schema(),
         )
 
-        taxonomy = json.loads(response.text)
+        taxonomy = json.loads(response)
 
         all_nodes = taxonomy["nodes"]
-        top_level_categories = [node for node in all_nodes if node.get("parent_id") is None]
+        top_level_categories = [node for node in all_nodes if node.get("parent_id")=="_root_"]
 
         print(f"   ✓ Extracted {len(top_level_categories)} top-level categories ({len(all_nodes)} total nodes)")
 
@@ -481,14 +545,14 @@ class TaxonomyFirstPipeline:
         return taxonomy
 
     @observe(name="extract_values")
-    def _extract_values(
+    async def _extract_values(
         self,
         vendor: str,
         vendor_doc: ParsedDocument,
         category_id: str,
         category_name: str,
         category_leaves: list[dict[str, Any]],
-        policy_level: str,
+        policy_levels: list[str] | None = None,
     ) -> dict[str, Any]:
         """Extract values for a category from vendor document."""
         print(f"   Extracting {vendor} values for {category_name}...")
@@ -499,7 +563,7 @@ class TaxonomyFirstPipeline:
             vendor_markdown=vendor_markdown,
             category_id=category_id,
             category_name=category_name,
-            policy_level=policy_level,
+            policy_level=policy_levels[0] if policy_levels else "Unknown",
             taxonomy_leaves=category_leaves,
         )
 
@@ -513,22 +577,22 @@ class TaxonomyFirstPipeline:
                 "vendor": vendor,
                 "category": category_name,
                 "category_id": category_id,
-                "policy_level": policy_level,
+                "policy_levels": policy_levels,
                 "taxonomy_leaves_count": len(category_leaves),
                 "model": self.model_name,
             }
         )
 
-        response = self.client.models.generate_content(
+        response = await generate_with_reasoning(
+            prompt=prompt,
             model=self.model_name,
-            contents=prompt,
-            config=GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=CategoryValueExtraction,
-            ),
+            thinking_budget=2048,
+            temperature=0.1,
+            response_mime_type="application/json",
+            response_schema=CategoryValueExtraction.model_json_schema(),
         )
 
-        extraction = json.loads(response.text)
+        extraction = json.loads(response)
 
         # Report unmappable items if any
         unmappable = extraction.get("unmappable_items") or []
@@ -550,7 +614,7 @@ class TaxonomyFirstPipeline:
         return extraction
 
     @observe(name="generate_analysis")
-    def _generate_analysis(
+    async def _generate_analysis(
         self,
         category_name: str,
         comparison_table: dict[str, Any],
@@ -572,16 +636,16 @@ class TaxonomyFirstPipeline:
             }
         )
 
-        response = self.client.models.generate_content(
+        response = await generate_with_reasoning(
+            prompt=prompt,
             model=self.model_name,
-            contents=prompt,
-            config=GenerateContentConfig(
-                response_mime_type="application/json",
-                response_schema=AnalysisOutput,
-            ),
+            thinking_budget=4096,
+            temperature=0.0,
+            response_mime_type="application/json",
+            response_schema=AnalysisOutput.model_json_schema(),
         )
 
-        analysis = json.loads(response.text)
+        analysis = json.loads(response)
 
         # Update trace with results
         langfuse.update_current_trace(
@@ -608,7 +672,7 @@ class TaxonomyFirstPipeline:
             return json.load(f)
 
 
-def main():
+async def main():
     """Example usage of taxonomy-first pipeline."""
     # Paths (matching two_phase_pipeline)
     base_dir = Path(__file__).parent.parent.parent
@@ -637,11 +701,11 @@ def main():
     )
 
     # Run pipeline
-    results = pipeline.run(
-        probtp_level="P4",
-        axa_level="Base Obligatoire",
-        skip_taxonomy=False,
-        skip_extraction=False,
+    results = await pipeline.run(
+        probtp_levels=["S2", "P4"],
+        axa_levels=["Base Obligatoire"],
+        skip_taxonomy=True,
+        skip_extraction=True,
         skip_assembly=False,
         skip_analysis=False,
     )
@@ -651,4 +715,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
