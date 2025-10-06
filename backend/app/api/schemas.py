@@ -2,6 +2,7 @@
 Schema API endpoints
 CRUD operations for user-defined schemas
 """
+import logging
 from typing import Optional
 from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query, status
@@ -10,16 +11,22 @@ from sqlalchemy.orm import Session
 from app.api.deps import get_current_user_id
 from app.utils import get_db_session
 from app.services.schema_service import SchemaService
+from app.services.ai_schema_service import AISchemaService
 from app.schemas.schema_schemas import (
     SchemaCreate,
     SchemaUpdate,
     SchemaResponse,
     SchemaListResponse,
-    SchemaCloneRequest
+    SchemaCloneRequest,
+    SchemaRefineRequest,
+    SchemaRefineResponse
 )
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/schemas", tags=["schemas"])
 schema_service = SchemaService()
+ai_schema_service = AISchemaService()
 
 
 @router.get("/", response_model=SchemaListResponse)
@@ -169,3 +176,45 @@ def clone_schema(
         )
     
     return cloned_schema
+
+
+@router.post("/refine", response_model=SchemaRefineResponse)
+def refine_schema(
+    refine_data: SchemaRefineRequest,
+    user_id: str = Depends(get_current_user_id)
+):
+    """Refine a schema using AI based on user instruction"""
+    logger.info("=" * 80)
+    logger.info(f"Refine schema endpoint called by user: {user_id}")
+    logger.info(f"Request data: {refine_data.model_dump()}")
+    
+    try:
+        logger.info("Calling AI schema service...")
+        refined_schema = ai_schema_service.refine_schema(
+            refine_data.schema_definition,
+            refine_data.instruction
+        )
+        
+        logger.info(f"AI service returned refined schema with {len(refined_schema.get('properties', {}))} properties")
+        
+        response = SchemaRefineResponse(refined_schema=refined_schema)
+        logger.info(f"Response object created")
+        logger.info(f"Response.model_dump(): {response.model_dump()}")
+        logger.info(f"Response.model_dump(by_alias=True): {response.model_dump(by_alias=True)}")
+        logger.info("=" * 80)
+        return response
+        
+    except ValueError as e:
+        logger.error(f"ValueError in schema refinement: {e}")
+        logger.error("=" * 80)
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail=str(e)
+        )
+    except Exception as e:
+        logger.error(f"Unexpected error in schema refinement: {e}", exc_info=True)
+        logger.error("=" * 80)
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail=f"Schema refinement failed: {str(e)}"
+        )

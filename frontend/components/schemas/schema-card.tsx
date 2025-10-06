@@ -37,6 +37,7 @@ import { Spinner } from "@/components/ui/spinner";
 
 interface SchemaCardProps {
   schema: Schema;
+  currentUserId?: string; // Current user ID for ownership checks
   onClick?: (schema: Schema) => void;
   onEdit?: (schema: Schema) => void;
   onDelete?: (schemaId: string) => void;
@@ -45,6 +46,7 @@ interface SchemaCardProps {
 
 export function SchemaCard({
   schema,
+  currentUserId,
   onClick,
   onEdit,
   onDelete,
@@ -52,6 +54,12 @@ export function SchemaCard({
 }: SchemaCardProps) {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+
+  // Check if current user owns this schema
+  const isOwner = currentUserId && schema.userId === currentUserId;
+
+  // Allow deletion if user owns the schema (even if it's a template)
+  const canDelete = isOwner;
 
   // Count fields in schema definition
   const fieldCount = schema.schemaDefinition?.properties
@@ -131,7 +139,7 @@ export function SchemaCard({
                     Clone
                   </DropdownMenuItem>
                 )}
-                {onDelete && !schema.isTemplate && (
+                {onDelete && canDelete && (
                   <DropdownMenuItem
                     onClick={(e) => {
                       e.stopPropagation();

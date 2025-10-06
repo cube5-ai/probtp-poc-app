@@ -32,7 +32,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export function SchemaList() {
   const router = useRouter();
-  const { loading: authLoading } = useAuth(); // Wait for auth to be ready
+  const { user, loading: authLoading } = useAuth(); // Get current user and auth loading state
   const [allSchemas, setAllSchemas] = useState<Schema[]>([]); // All schemas from backend
   const [loading, setLoading] = useState(false); // Changed to false, will be set by effect
   const [searchTerm, setSearchTerm] = useState("");
@@ -343,6 +343,7 @@ export function SchemaList() {
             <SchemaCard
               key={schema.id}
               schema={schema}
+              currentUserId={user?.uid}
               onClick={handleEdit}
               onEdit={handleEdit}
               onDelete={handleDelete}

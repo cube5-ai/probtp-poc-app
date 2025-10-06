@@ -7,3 +7,4 @@ pyjwt==2.9.0
 firebase-admin
 structlog
 psycopg2-binary==2.9.10
+google-genai==1.41.0

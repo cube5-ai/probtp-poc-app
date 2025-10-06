@@ -33,11 +33,15 @@ import {
   List,
   ChevronDown,
   ChevronRight,
+  Sparkles,
 } from "lucide-react";
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Spinner } from "@/components/ui/spinner";
 import {
   Select,
   SelectContent,
@@ -45,6 +49,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 
 interface Field {
   id: string;
@@ -67,6 +76,7 @@ interface SchemaDefinition {
   type: string;
   properties: Record<string, SchemaProperty>;
   required?: string[];
+  "x-order"?: string[]; // Extension property to preserve field order
 }
 
 interface ModernSchemaEditorProps {
@@ -141,54 +151,54 @@ function FieldRow({
       className={`group relative ${isDragging ? "z-50" : ""}`}
     >
       <Card
-        className={`p-4 transition-all ${
+        className={`p-3 transition-all ${
           isDragging ? "shadow-xl opacity-50" : "hover:shadow-md"
         } ${level > 0 ? "border-l-2 border-l-muted" : ""}`}
       >
-        <div className="flex items-start gap-3">
+        <div className="flex items-center gap-2">
           {/* Drag handle */}
           <button
             {...attributes}
             {...listeners}
-            className={`mt-2 p-1 rounded transition-colors ${
+            className={`p-1 rounded transition-colors ${
               readOnly
                 ? "cursor-default opacity-50"
                 : "cursor-grab active:cursor-grabbing hover:bg-muted"
             }`}
             disabled={readOnly}
           >
-            <GripVertical className="h-4 w-4 text-muted-foreground" />
+            <GripVertical className="h-3 w-3 text-muted-foreground" />
           </button>
 
           {/* Expand/collapse for objects */}
           {isObject && (
             <button
               onClick={() => onUpdate(field.id, { expanded: !field.expanded })}
-              className="mt-2 p-1 hover:bg-muted rounded transition-colors"
+              className="p-1 hover:bg-muted rounded transition-colors"
             >
               {field.expanded ? (
-                <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                <ChevronDown className="h-3 w-3 text-muted-foreground" />
               ) : (
-                <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                <ChevronRight className="h-3 w-3 text-muted-foreground" />
               )}
             </button>
           )}
 
           {/* Field content */}
-          <div className="flex-1 space-y-3">
+          <div className="flex-1 space-y-2">
             {/* Top row: Name and Type */}
-            <div className="flex gap-3">
+            <div className="flex gap-2 items-center">
               <div className="flex-1">
                 <Input
                   value={field.name}
                   onChange={(e) => onUpdate(field.id, { name: e.target.value })}
-                  placeholder="Field name (e.g., email, age)"
-                  className="font-medium"
+                  placeholder="Field name"
+                  className="font-medium h-8 text-sm"
                   disabled={readOnly}
                 />
                 {showPath && (
-                  <div className="text-xs text-muted-foreground mt-1">
-                    Path: {currentPath}
+                  <div className="text-xs text-muted-foreground mt-0.5">
+                    {currentPath}
                   </div>
                 )}
               </div>
@@ -198,11 +208,11 @@ function FieldRow({
                 onValueChange={(value) => onUpdate(field.id, { type: value })}
                 disabled={readOnly}
               >
-                <SelectTrigger className="w-[160px]">
+                <SelectTrigger className="w-[120px] h-8">
                   <SelectValue>
-                    <div className="flex items-center gap-2">
-                      <Icon className="h-4 w-4" />
-                      <span>{fieldType?.label}</span>
+                    <div className="flex items-center gap-1">
+                      <Icon className="h-3 w-3" />
+                      <span className="text-xs">{fieldType?.label}</span>
                     </div>
                   </SelectValue>
                 </SelectTrigger>
@@ -212,8 +222,8 @@ function FieldRow({
                     return (
                       <SelectItem key={type.value} value={type.value}>
                         <div className="flex items-center gap-2">
-                          <TypeIcon className="h-4 w-4" />
-                          <span>{type.label}</span>
+                          <TypeIcon className="h-3 w-3" />
+                          <span className="text-xs">{type.label}</span>
                         </div>
                       </SelectItem>
                     );
@@ -222,24 +232,23 @@ function FieldRow({
               </Select>
             </div>
 
-            {/* Bottom row: Description */}
-            <Input
-              value={field.description}
-              onChange={(e) =>
-                onUpdate(field.id, { description: e.target.value })
-              }
-              placeholder="Description (optional)"
-              className="text-sm"
-              disabled={readOnly}
-            />
+            {/* Bottom row: Description and Required */}
+            <div className="flex gap-2 items-center">
+              <Input
+                value={field.description}
+                onChange={(e) =>
+                  onUpdate(field.id, { description: e.target.value })
+                }
+                placeholder="Description (optional)"
+                className="text-xs h-7 flex-1"
+                disabled={readOnly}
+              />
 
-            {/* Required badge */}
-            <div className="flex items-center gap-2">
               <button
                 onClick={() =>
                   onUpdate(field.id, { required: !field.required })
                 }
-                className={`text-xs px-2 py-1 rounded-md transition-colors ${
+                className={`text-xs px-2 py-1 rounded transition-colors ${
                   field.required
                     ? "bg-orange-100 text-orange-700 hover:bg-orange-200"
                     : "bg-muted text-muted-foreground hover:bg-muted/80"
@@ -248,11 +257,6 @@ function FieldRow({
               >
                 {field.required ? "Required" : "Optional"}
               </button>
-              {field.required && level > 0 && (
-                <div className="text-xs text-muted-foreground">
-                  in {parentPath || "parent"}
-                </div>
-              )}
             </div>
           </div>
 
@@ -262,21 +266,21 @@ function FieldRow({
               variant="ghost"
               size="icon"
               onClick={() => onDelete(field.id)}
-              className="opacity-0 group-hover:opacity-100 transition-opacity mt-1 hover:bg-destructive/10 hover:text-destructive"
+              className="opacity-0 group-hover:opacity-100 transition-opacity h-6 w-6 hover:bg-destructive/10 hover:text-destructive"
             >
-              <Trash2 className="h-4 w-4" />
+              <Trash2 className="h-3 w-3" />
             </Button>
           )}
         </div>
 
         {/* Add nested field button for objects */}
         {isObject && !readOnly && (
-          <div className="mt-3 pt-3 border-t">
+          <div className="mt-2 pt-2 border-t">
             <Button
               variant="ghost"
               size="sm"
               onClick={() => onAddChild?.(field.id)}
-              className="w-full text-xs"
+              className="w-full text-xs h-7"
             >
               <Plus className="h-3 w-3 mr-1" />
               Add nested field
@@ -287,7 +291,7 @@ function FieldRow({
 
       {/* Nested fields */}
       {isObject && field.expanded && hasChildren && (
-        <div className="mt-2 space-y-2">
+        <div className="mt-1 space-y-1">
           <SortableContext
             items={field.children!.map((child) => child.id)}
             strategy={verticalListSortingStrategy}
@@ -323,6 +327,9 @@ export function ModernSchemaEditor({
   const [fields, setFields] = useState<Field[]>([]);
   const isInitialLoadRef = useRef<boolean>(true);
   const hasInitializedRef = useRef<boolean>(false);
+  const [aiInstruction, setAiInstruction] = useState("");
+  const [isRefining, setIsRefining] = useState(false);
+  const [showAiPanel, setShowAiPanel] = useState(true); // Always expanded by default
 
   // DnD sensors (disabled in read-only mode)
   const sensors = useSensors(
@@ -342,6 +349,7 @@ export function ModernSchemaEditor({
       const recursiveConvert = (
         properties: Record<string, SchemaProperty>,
         required?: string[],
+        order?: string[],
         depth: number = 0
       ): Field[] => {
         // Prevent infinite recursion
@@ -350,37 +358,48 @@ export function ModernSchemaEditor({
           return [];
         }
 
-        return Object.entries(properties).map(
-          ([name, prop]: [string, SchemaProperty]) => {
-            // Ensure all values are primitives, not objects
-            const field: Field = {
-              id: `field_${Date.now()}_${Math.random()}`,
-              name: String(name || ""),
-              type: String(prop.type || "string"),
-              description: String(prop.description || ""),
-              required: Boolean(required?.includes(name)),
-              expanded: true,
-            };
+        // Use x-order if available, otherwise use Object.entries order
+        const propertyNames =
+          order && order.length > 0
+            ? order.filter((name) => name in properties) // Only include names that exist in properties
+            : Object.keys(properties);
 
-            // Only add children if it's actually an object type with properties
-            if (
-              prop.type === "object" &&
-              prop.properties &&
-              typeof prop.properties === "object"
-            ) {
-              field.children = recursiveConvert(
-                prop.properties,
-                prop.required,
-                depth + 1
-              );
-            }
+        return propertyNames.map((name) => {
+          const prop = properties[name];
 
-            return field;
+          // Ensure all values are primitives, not objects
+          const field: Field = {
+            id: `field_${Date.now()}_${Math.random()}`,
+            name: String(name || ""),
+            type: String(prop.type || "string"),
+            description: String(prop.description || ""),
+            required: Boolean(required?.includes(name)),
+            expanded: true,
+          };
+
+          // Only add children if it's actually an object type with properties
+          if (
+            prop.type === "object" &&
+            prop.properties &&
+            typeof prop.properties === "object"
+          ) {
+            field.children = recursiveConvert(
+              prop.properties,
+              prop.required,
+              (prop as any)["x-order"], // Nested order
+              depth + 1
+            );
           }
-        );
+
+          return field;
+        });
       };
 
-      return recursiveConvert(schema.properties, schema.required);
+      return recursiveConvert(
+        schema.properties,
+        schema.required,
+        schema["x-order"]
+      );
     },
     []
   );
@@ -410,12 +429,17 @@ export function ModernSchemaEditor({
       ): {
         properties: Record<string, SchemaProperty>;
         required?: string[];
+        order?: string[];
       } => {
         const properties: Record<string, SchemaProperty> = {};
         const required: string[] = [];
+        const order: string[] = [];
 
         flds.forEach((field) => {
           if (field.name) {
+            // Track field order
+            order.push(field.name);
+
             properties[field.name] = {
               type: field.type,
               description: field.description || undefined,
@@ -436,6 +460,10 @@ export function ModernSchemaEditor({
               if (nestedResult.required && nestedResult.required.length > 0) {
                 properties[field.name].required = nestedResult.required;
               }
+              // Add nested order
+              if (nestedResult.order && nestedResult.order.length > 0) {
+                (properties[field.name] as any)["x-order"] = nestedResult.order;
+              }
             }
           }
         });
@@ -443,6 +471,7 @@ export function ModernSchemaEditor({
         return {
           properties,
           required: required.length > 0 ? required : undefined,
+          order: order.length > 0 ? order : undefined,
         };
       };
 
@@ -455,6 +484,11 @@ export function ModernSchemaEditor({
       // Only add required if it has values (to match loaded schema structure)
       if (result.required && result.required.length > 0) {
         schema.required = result.required;
+      }
+
+      // Add field order
+      if (result.order && result.order.length > 0) {
+        schema["x-order"] = result.order;
       }
 
       return schema;
@@ -607,37 +641,153 @@ export function ModernSchemaEditor({
     }
   };
 
+  // AI-driven schema builder
+  const handleAiRefine = async () => {
+    if (!aiInstruction.trim()) {
+      toast.error("Please enter instructions for AI builder");
+      return;
+    }
+
+    try {
+      setIsRefining(true);
+      console.log("=".repeat(80));
+      console.log("Starting AI schema refinement...");
+      console.log("Current fields:", fields);
+
+      const currentSchema = convertFieldsToSchema(fields);
+      console.log("Converted to schema:", currentSchema);
+      console.log("Instruction:", aiInstruction);
+
+      // Import API function dynamically
+      const { refineSchema } = await import("@/lib/api/schemas");
+
+      console.log("Calling refineSchema API...");
+      const refinedSchema = await refineSchema(currentSchema, aiInstruction);
+      console.log("Received refined schema:", refinedSchema);
+
+      // Convert refined schema back to fields
+      console.log("Converting refined schema back to fields...");
+      const refinedFields = convertSchemaToFields(refinedSchema);
+      console.log("Refined fields:", refinedFields);
+      console.log(`Field count: ${refinedFields.length}`);
+
+      setFields(refinedFields);
+      console.log("Fields updated in state");
+
+      toast.success("Schema built successfully!");
+      setAiInstruction(""); // Clear instruction after successful build
+      console.log("=".repeat(80));
+    } catch (error) {
+      console.error("=".repeat(80));
+      console.error("Error refining schema:", error);
+      console.error("Error details:", {
+        message: error instanceof Error ? error.message : String(error),
+        stack: error instanceof Error ? error.stack : undefined,
+      });
+      console.error("=".repeat(80));
+      toast.error("Failed to build schema. Please try again.");
+    } finally {
+      setIsRefining(false);
+    }
+  };
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-3">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Fields</h3>
-          <p className="text-sm text-muted-foreground">
+          <h3 className="text-base font-semibold">Fields</h3>
+          <p className="text-xs text-muted-foreground">
             Define the structure of your data
           </p>
         </div>
-        <Badge variant="secondary" className="text-xs">
-          {fields.length} {fields.length === 1 ? "field" : "fields"}
-        </Badge>
+        <div className="flex items-center gap-2">
+          <Badge variant="secondary" className="text-xs">
+            {fields.length} {fields.length === 1 ? "field" : "fields"}
+          </Badge>
+          {!readOnly && fields.length > 0 && (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => setShowAiPanel(!showAiPanel)}
+              className="gap-1 h-7 text-xs"
+            >
+              <Sparkles className="h-3 w-3" />
+              AI Builder
+            </Button>
+          )}
+        </div>
       </div>
+
+      {/* AI Builder Panel */}
+      {!readOnly && showAiPanel && (
+        <Collapsible open={showAiPanel} onOpenChange={setShowAiPanel}>
+          <CollapsibleContent>
+            <Card className="p-3 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-950/20 dark:to-blue-950/20 border-purple-200 dark:border-purple-800">
+              <div className="space-y-2">
+                <div className="flex items-start gap-2">
+                  <Sparkles className="h-4 w-4 text-purple-600 dark:text-purple-400 mt-0.5" />
+                  <div className="flex-1">
+                    <h4 className="font-semibold text-sm mb-1">
+                      AI Schema Builder
+                    </h4>
+                    <p className="text-xs text-muted-foreground mb-2">
+                      Describe how you want to improve or modify your schema.
+                    </p>
+                    <Textarea
+                      value={aiInstruction}
+                      onChange={(e) => setAiInstruction(e.target.value)}
+                      placeholder="e.g., 'Add address fields with street, city, and postal code'"
+                      className="min-h-[60px] resize-none bg-white dark:bg-gray-900 text-xs"
+                      disabled={isRefining}
+                    />
+                  </div>
+                </div>
+                <div className="flex justify-end gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => {
+                      setShowAiPanel(false);
+                      setAiInstruction("");
+                    }}
+                    disabled={isRefining}
+                    className="h-7 text-xs"
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    size="sm"
+                    onClick={handleAiRefine}
+                    disabled={isRefining || !aiInstruction.trim()}
+                    className="bg-purple-600 hover:bg-purple-700 text-white h-7 text-xs"
+                  >
+                    {isRefining && <Spinner className="mr-1 h-3 w-3" />}
+                    {isRefining ? "Building..." : "Build Schema"}
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </CollapsibleContent>
+        </Collapsible>
+      )}
 
       {/* Fields list */}
       {fields.length === 0 ? (
-        <Card className="p-12 text-center border-dashed">
-          <div className="flex flex-col items-center gap-4">
-            <div className="p-3 rounded-full bg-muted">
-              <Package className="h-8 w-8 text-muted-foreground" />
+        <Card className="p-6 text-center border-dashed">
+          <div className="flex flex-col items-center gap-3">
+            <div className="p-2 rounded-full bg-muted">
+              <Package className="h-6 w-6 text-muted-foreground" />
             </div>
             <div>
-              <h4 className="font-medium mb-1">No fields yet</h4>
-              <p className="text-sm text-muted-foreground">
+              <h4 className="font-medium mb-1 text-sm">No fields yet</h4>
+              <p className="text-xs text-muted-foreground">
                 Add your first field to get started
               </p>
             </div>
             {!readOnly && (
-              <Button onClick={addField} size="sm">
-                <Plus className="h-4 w-4 mr-2" />
+              <Button onClick={addField} size="sm" className="h-7 text-xs">
+                <Plus className="h-3 w-3 mr-1" />
                 Add Field
               </Button>
             )}
@@ -653,7 +803,7 @@ export function ModernSchemaEditor({
             items={fields.map((f) => f.id)}
             strategy={verticalListSortingStrategy}
           >
-            <div className="space-y-3">
+            <div className="space-y-2">
               {fields.map((field) => (
                 <FieldRow
                   key={field.id}
@@ -673,8 +823,12 @@ export function ModernSchemaEditor({
 
       {/* Add field button */}
       {fields.length > 0 && !readOnly && (
-        <Button onClick={addField} variant="outline" className="w-full">
-          <Plus className="h-4 w-4 mr-2" />
+        <Button
+          onClick={addField}
+          variant="outline"
+          className="w-full h-8 text-xs"
+        >
+          <Plus className="h-3 w-3 mr-1" />
           Add Field
         </Button>
       )}
