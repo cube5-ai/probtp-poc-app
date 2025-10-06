@@ -46,6 +46,49 @@ DEFAULT_CATEGORIES = [
     "Médecines Douces",
 ]
 
+# Category to ProBTP level type mapping
+# "S" levels = Soins (care) categories
+# "P" levels = Prévoyance (prevention/specialized) categories
+CATEGORY_LEVEL_MAPPING = {
+    "Soins Courants": "S",
+    "Hospitalisation": "S",
+    "Optique": "P",
+    "Soins Dentaires": "P",
+    "Audiologie": "P",
+    "Médecines Douces": "P",
+}
+
+
+def filter_probtp_levels_for_category(
+    category: str, all_probtp_levels: list[str] | None
+) -> list[str] | None:
+    """
+    Filter ProBTP levels appropriate for a given category.
+
+    Args:
+        category: Category name
+        all_probtp_levels: All ProBTP levels provided
+
+    Returns:
+        Filtered list of levels appropriate for the category, or None if no levels provided
+    """
+    if not all_probtp_levels:
+        return None
+
+    # Get the level type for this category (S or P)
+    level_type = CATEGORY_LEVEL_MAPPING.get(category)
+
+    if not level_type:
+        # Category not in mapping, return all levels
+        return all_probtp_levels
+
+    # Filter levels that start with the appropriate type
+    filtered_levels = [
+        level for level in all_probtp_levels if level.startswith(level_type)
+    ]
+
+    return filtered_levels if filtered_levels else None
+
 
 @observe(name="phase_1_alignment")
 async def extract_comparison_table(
@@ -171,7 +214,7 @@ async def generate_category_analysis(
         prompt=prompt,
         model="gemini-2.5-flash",
         thinking_budget=4096,
-        temperature=0.5,
+        temperature=0.0,
         response_mime_type="application/json",
         response_schema=AnalysisOutput.model_json_schema(),
     )
@@ -393,12 +436,18 @@ async def process_single_category(
     """
     print(f"\n[{index}/{total}] Processing: {category}")
 
+    # Filter ProBTP levels for this category
+    category_probtp_levels = filter_probtp_levels_for_category(category, probtp_levels)
+
+    if category_probtp_levels and category_probtp_levels != probtp_levels:
+        print(f"  → Filtered ProBTP levels for {category}: {category_probtp_levels}")
+
     # Phase 1: Extract comparison table (structured JSON)
     comparison_table = await extract_comparison_table(
         probtp_markdown=probtp_markdown,
         axa_markdown=axa_markdown,
         category=category,
-        probtp_levels=probtp_levels,
+        probtp_levels=category_probtp_levels,
         axa_levels=axa_levels,
         language=language,
     )
@@ -463,8 +512,10 @@ async def generate_two_phase_report(
     print(f"  ✓ ProBTP: {probtp_doc.name}")
     print(f"  ✓ AXA: {axa_doc.name}")
 
-    probtp_markdown = probtp_doc.get_full_markdown()
-    axa_markdown = axa_doc.get_full_markdown()
+    # Use expanded markdown with tables showing duplicated cell values for spans
+    # This helps the LLM understand the table structure better
+    probtp_markdown = probtp_doc.get_markdown_with_expanded_tables()
+    axa_markdown = axa_doc.get_markdown_with_expanded_tables()
 
     # Use default categories if not specified
     if categories is None:

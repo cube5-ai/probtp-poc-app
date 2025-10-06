@@ -190,10 +190,14 @@ ENHANCED SCHEMA CORRECTION RULES
    → Add missing virtual cells with refs OR remove extra cells
 
 2. **Wrong cell IDs:** Cell ID doesn't match column_labels[i] + row_number
-   → Regenerate IDs mechanically: column_labels[i] + str(row_number)
+   → **ALWAYS regenerate ALL cell IDs mechanically when correcting structure**
+   → Formula: For position i in row N: id = column_labels[i] + str(N)
+   → Example: Position 2 in row 15 with column_labels=['A','B','C'] → id = "C15"
+   → **This ensures consistency across the entire table**
 
 3. **Mismatched inherited_from_above and refs:**
    → If inherited_from_above[i] = "A1", ensure cells[i].ref = "A1"
+   → After regenerating IDs, update ALL refs to point to new IDs
 
 4. **Missing occupies lists:**
    → For cell with rowspan/colspan, generate complete occupies list
@@ -202,13 +206,32 @@ ENHANCED SCHEMA CORRECTION RULES
    → Check ALL previous rows for active rowspans
    → Mark positions with source cell ID or null
 
+**CRITICAL: Cell ID Regeneration Process**
+
+When there are structural inconsistencies, you MUST regenerate ALL cell IDs:
+
+1. **For each row:**
+   - For position i (0 to total_columns-1):
+     - Generate cell ID: column_labels[i] + str(row_number)
+     - Example: Row 5, position 2 → column_labels[2] + "5" = "C5"
+
+2. **Update all refs after ID regeneration:**
+   - If cell B3 had ref="A1" but A1 is now regenerated as "A2":
+     - Check the actual source cell's new ID and update ref
+   - All refs in occupies lists must also be updated
+
+3. **Update inherited_from_above arrays:**
+   - After regenerating IDs, update inherited arrays with new cell IDs
+   - If row 3 column A is inherited from row 1's rowspan:
+     - Find the new ID of that source cell and use it in inherited_from_above
+
 **What You Can Change:**
-- Fix cell IDs to match formula
+- **Cell IDs** - MUST regenerate ALL to ensure consistency
+- **refs in virtual cells** - update to match new IDs
+- **inherited_from_above arrays** - update with new cell IDs
+- **occupies lists** - regenerate with new cell IDs
 - Add/remove cells to reach {total_columns}
-- Add virtual cells with correct refs
-- Fix inherited_from_above arrays
-- Fix occupies lists
-- Adjust rowspan/colspan values
+- Adjust rowspan/colspan values if needed
 
 **What You MUST Preserve:**
 - Cell `value` text content (do not change the actual data)

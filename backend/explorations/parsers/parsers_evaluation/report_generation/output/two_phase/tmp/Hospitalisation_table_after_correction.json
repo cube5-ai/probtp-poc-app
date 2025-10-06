@@ -1,0 +1,728 @@
+{
+  "template_row": [
+    "Catégorie",
+    "Sous-catégorie",
+    "Prestation",
+    "Part S.S.",
+    "ProBTP S2",
+    "ProBTP S4",
+    "AXA Base Obligatoire"
+  ],
+  "metadata": {
+    "category": "Hospitalisation",
+    "policy_levels": {
+      "probtp": [
+        "S2",
+        "S4"
+      ],
+      "axa": [
+        "Base Obligatoire"
+      ]
+    },
+    "total_columns": 7,
+    "column_labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G"
+    ]
+  },
+  "rows": [
+    {
+      "row_number": 1,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A1",
+          "value": "",
+          "colspan": 3,
+          "occupies": [
+            "A1",
+            "B1",
+            "C1"
+          ]
+        },
+        {
+          "id": "B1",
+          "ref": "A1"
+        },
+        {
+          "id": "C1",
+          "ref": "A1"
+        },
+        {
+          "id": "D1",
+          "value": "Part S.S.*",
+          "sources": {
+            "probtp": [
+              "2-5"
+            ]
+          },
+          "metadata": {
+            "footnotes": [
+              "*"
+            ]
+          }
+        },
+        {
+          "id": "E1",
+          "value": "ProBTP S2"
+        },
+        {
+          "id": "F1",
+          "value": "ProBTP S4"
+        },
+        {
+          "id": "G1",
+          "value": "AXA Base Obligatoire"
+        }
+      ]
+    },
+    {
+      "row_number": 2,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A2",
+          "value": "Hospitalisation",
+          "rowspan": 5,
+          "occupies": [
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "A6"
+          ],
+          "sources": {
+            "probtp": [
+              "2-1A"
+            ]
+          }
+        },
+        {
+          "id": "B2",
+          "value": "Honoraires",
+          "rowspan": 4,
+          "occupies": [
+            "B2",
+            "B3",
+            "B4",
+            "B5"
+          ],
+          "sources": {
+            "probtp": [
+              "2-1B"
+            ]
+          }
+        },
+        {
+          "id": "C2",
+          "value": "Honoraires, frais de séjour",
+          "sources": {
+            "probtp": [
+              "2-1C"
+            ]
+          }
+        },
+        {
+          "id": "D2",
+          "value": "80%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1D"
+            ]
+          }
+        },
+        {
+          "id": "E2",
+          "value": "100%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1F"
+            ]
+          }
+        },
+        {
+          "id": "F2",
+          "value": "200% (Frais réels si OPTAM)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1I"
+            ]
+          },
+          "metadata": {
+            "conditions": "Frais réels si OPTAM"
+          }
+        },
+        {
+          "id": "G2",
+          "value": "480% BR-MR",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-C"
+            ]
+          },
+          "metadata": {
+            "conditions": "Consultation d'un médecin adhérent à l'un des DPTAM"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 3,
+      "inherited_from_above": [
+        "A2",
+        "B2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A3",
+          "ref": "A2"
+        },
+        {
+          "id": "B3",
+          "ref": "B2"
+        },
+        {
+          "id": "C3",
+          "value": "Chambre particulière",
+          "sources": {
+            "probtp": [
+              "2-1K"
+            ]
+          }
+        },
+        {
+          "id": "D3",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "E3",
+          "value": " - ",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1N"
+            ]
+          }
+        },
+        {
+          "id": "F3",
+          "value": "80 € / jour",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1Q"
+            ]
+          }
+        },
+        {
+          "id": "G3",
+          "value": "85 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-I"
+            ]
+          },
+          "metadata": {
+            "conditions": "par jour"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 4,
+      "inherited_from_above": [
+        "A2",
+        "B2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A4",
+          "ref": "A2"
+        },
+        {
+          "id": "B4",
+          "ref": "B2"
+        },
+        {
+          "id": "C4",
+          "value": "Lit accompagnant pour enfants de -12 ans ou bénéficiaires de + 70 ans",
+          "sources": {
+            "probtp": [
+              "2-1S"
+            ]
+          }
+        },
+        {
+          "id": "D4",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "E4",
+          "value": "23 € / jour",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1V"
+            ]
+          }
+        },
+        {
+          "id": "F4",
+          "value": "23 € / jour",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-1Y"
+            ]
+          }
+        },
+        {
+          "id": "G4",
+          "value": "40 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-R"
+            ]
+          },
+          "metadata": {
+            "conditions": "par jour, pour enfant de moins de 16 ans (30 jours)"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 5,
+      "inherited_from_above": [
+        "A2",
+        "B2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A5",
+          "ref": "A2"
+        },
+        {
+          "id": "B5",
+          "ref": "B2"
+        },
+        {
+          "id": "C5",
+          "value": "Participation forfaitaire pour les actes supérieurs à 120€",
+          "sources": {
+            "probtp": [
+              "2-20"
+            ]
+          }
+        },
+        {
+          "id": "D5",
+          "value": "100% - 1 forfait",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-21"
+            ]
+          }
+        },
+        {
+          "id": "E5",
+          "value": "100% du forfait",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-23"
+            ]
+          }
+        },
+        {
+          "id": "F5",
+          "value": "100% du forfait",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-26"
+            ]
+          }
+        },
+        {
+          "id": "G5",
+          "value": "100% du forfait",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-O"
+            ]
+          },
+          "metadata": {
+            "conditions": "Forfait actes lourds"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 6,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A6",
+          "ref": "A2"
+        },
+        {
+          "id": "B6",
+          "value": "Forfait journalier[3] [4] et forfait urgences [3] [4bis] en établissement hospitalier",
+          "colspan": 2,
+          "occupies": [
+            "B6",
+            "C6"
+          ],
+          "sources": {
+            "probtp": [
+              "2-28"
+            ]
+          },
+          "metadata": {
+            "footnotes": [
+              "3",
+              "4",
+              "4bis"
+            ]
+          }
+        },
+        {
+          "id": "C6",
+          "ref": "B6"
+        },
+        {
+          "id": "D6",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "E6",
+          "value": "oui",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2b"
+            ]
+          }
+        },
+        {
+          "id": "F6",
+          "value": "oui",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2e"
+            ]
+          }
+        },
+        {
+          "id": "G6",
+          "value": "100% du forfait",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-L"
+            ]
+          },
+          "metadata": {
+            "conditions": "Forfait journalier hospitalier"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 7,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A7",
+          "value": "Garanties supplémentaires AXA",
+          "colspan": 3,
+          "occupies": [
+            "A7",
+            "B7",
+            "C7"
+          ]
+        },
+        {
+          "id": "B7",
+          "ref": "A7"
+        },
+        {
+          "id": "C7",
+          "ref": "A7"
+        },
+        {
+          "id": "D7",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "E7",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "F7",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "G7",
+          "value": "100% FR-SS",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-b"
+            ]
+          },
+          "metadata": {
+            "conditions": "Frais de séjour en hospitalisation médicale dans un établissement conventionné"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 8,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A8",
+          "value": "",
+          "colspan": 3,
+          "occupies": [
+            "A8",
+            "B8",
+            "C8"
+          ]
+        },
+        {
+          "id": "B8",
+          "ref": "A8"
+        },
+        {
+          "id": "C8",
+          "ref": "A8"
+        },
+        {
+          "id": "D8",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "E8",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "F8",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "G8",
+          "value": "90% FR-SS",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-g"
+            ]
+          },
+          "metadata": {
+            "conditions": "Frais de séjour en hospitalisation médicale dans un établissement non conventionné"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 9,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A9",
+          "value": "",
+          "colspan": 3,
+          "occupies": [
+            "A9",
+            "B9",
+            "C9"
+          ]
+        },
+        {
+          "id": "B9",
+          "ref": "A9"
+        },
+        {
+          "id": "C9",
+          "ref": "A9"
+        },
+        {
+          "id": "D9",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "E9",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "F9",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "G9",
+          "value": "100% FR-SS",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-p"
+            ]
+          },
+          "metadata": {
+            "conditions": "Frais de séjour en hospitalisation chirurgicale dans un établissement conventionné"
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 10,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A10",
+          "value": "",
+          "colspan": 3,
+          "occupies": [
+            "A10",
+            "B10",
+            "C10"
+          ]
+        },
+        {
+          "id": "B10",
+          "ref": "A10"
+        },
+        {
+          "id": "C10",
+          "ref": "A10"
+        },
+        {
+          "id": "D10",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "E10",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "F10",
+          "value": "Non couvert",
+          "type": "data"
+        },
+        {
+          "id": "G10",
+          "value": "90% FR-SS",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "2-s"
+            ]
+          },
+          "metadata": {
+            "conditions": "Frais de séjour en hospitalisation chirurgicale dans un établissement non conventionné"
+          }
+        }
+      ]
+    }
+  ]
+}

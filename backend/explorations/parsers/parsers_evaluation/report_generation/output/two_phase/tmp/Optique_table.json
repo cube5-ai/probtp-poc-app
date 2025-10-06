@@ -1,0 +1,986 @@
+{
+  "template_row": [
+    "Catégorie",
+    "Sous-catégorie",
+    "Prestation",
+    "Détail Prestation 1",
+    "Détail Prestation 2",
+    "Part S.S.",
+    "ProBTP P4",
+    "AXA Base Obligatoire"
+  ],
+  "metadata": {
+    "category": "Optique",
+    "policy_levels": {
+      "probtp": [
+        "P4"
+      ],
+      "axa": [
+        "Base Obligatoire"
+      ]
+    },
+    "total_columns": 8,
+    "column_labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "G",
+      "H"
+    ]
+  },
+  "rows": [
+    {
+      "row_number": 1,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A1",
+          "value": "Catégorie"
+        },
+        {
+          "id": "B1",
+          "value": "Sous-catégorie"
+        },
+        {
+          "id": "C1",
+          "value": "Prestation"
+        },
+        {
+          "id": "D1",
+          "value": "Détail Prestation 1"
+        },
+        {
+          "id": "E1",
+          "value": "Détail Prestation 2"
+        },
+        {
+          "id": "F1",
+          "value": "Part S.S."
+        },
+        {
+          "id": "G1",
+          "value": "ProBTP P4"
+        },
+        {
+          "id": "H1",
+          "value": "AXA Base Obligatoire"
+        }
+      ]
+    },
+    {
+      "row_number": 2,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A2",
+          "value": "Optique",
+          "rowspan": 11,
+          "occupies": [
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "A6",
+            "A7",
+            "A8",
+            "A9",
+            "A10",
+            "A11",
+            "A12"
+          ],
+          "sources": {
+            "probtp": [
+              "2-2u"
+            ]
+          }
+        },
+        {
+          "id": "B2",
+          "value": "Équipement 100% santé",
+          "colspan": 4,
+          "occupies": [
+            "B2",
+            "C2",
+            "D2",
+            "E2"
+          ],
+          "sources": {
+            "probtp": [
+              "2-2v"
+            ]
+          }
+        },
+        {
+          "id": "C2",
+          "ref": "B2"
+        },
+        {
+          "id": "D2",
+          "ref": "B2"
+        },
+        {
+          "id": "E2",
+          "ref": "B2"
+        },
+        {
+          "id": "F2",
+          "value": "60% (a)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2w"
+            ]
+          }
+        },
+        {
+          "id": "G2",
+          "value": "Frais réels",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2B"
+            ]
+          }
+        },
+        {
+          "id": "H2",
+          "value": "100% PLV",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "7-o",
+              "7-p"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 3,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A3",
+          "ref": "A2"
+        },
+        {
+          "id": "B3",
+          "value": "Autre équipement optique (verres et monture)",
+          "rowspan": 6,
+          "occupies": [
+            "B3",
+            "B4",
+            "B5",
+            "B6",
+            "B7",
+            "B8"
+          ],
+          "sources": {
+            "probtp": [
+              "2-2E"
+            ]
+          }
+        },
+        {
+          "id": "C3",
+          "value": "Équipement combinant des verres 100% Santé et une monture libre (17)",
+          "colspan": 3,
+          "occupies": [
+            "C3",
+            "D3",
+            "E3"
+          ],
+          "sources": {
+            "probtp": [
+              "2-2F"
+            ]
+          }
+        },
+        {
+          "id": "D3",
+          "ref": "C3"
+        },
+        {
+          "id": "E3",
+          "ref": "C3"
+        },
+        {
+          "id": "F3",
+          "value": "60% (b)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2G"
+            ]
+          }
+        },
+        {
+          "id": "G3",
+          "value": "Verres: frais réels Monture: 100 €",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2M"
+            ]
+          }
+        },
+        {
+          "id": "H3",
+          "value": "Voir grille détaillée OPTI 4 (Hors réseau Itelis) + Monture 100€",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "7-b",
+              "7-c",
+              "7-e",
+              "7-g",
+              "8-1",
+              "8-y",
+              "8-A"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 4,
+      "inherited_from_above": [
+        "A2",
+        "B3",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A4",
+          "ref": "A2"
+        },
+        {
+          "id": "B4",
+          "ref": "B3"
+        },
+        {
+          "id": "C4",
+          "value": "Équipement libre (장비)",
+          "rowspan": 5,
+          "occupies": [
+            "C4",
+            "C5",
+            "C6",
+            "C7",
+            "C8"
+          ],
+          "sources": {
+            "probtp": [
+              "2-2O"
+            ]
+          }
+        },
+        {
+          "id": "D4",
+          "value": "Équipement à verres unifocaux",
+          "rowspan": 2,
+          "occupies": [
+            "D4",
+            "D5"
+          ],
+          "sources": {
+            "probtp": [
+              "2-2P"
+            ]
+          }
+        },
+        {
+          "id": "E4",
+          "value": "Si partenaire opticien Sévéane",
+          "sources": {
+            "probtp": [
+              "2-2Q"
+            ]
+          }
+        },
+        {
+          "id": "F4",
+          "value": "60% (infinity symbol)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2R"
+            ]
+          }
+        },
+        {
+          "id": "G4",
+          "value": "350 €",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2W"
+            ]
+          }
+        },
+        {
+          "id": "H4",
+          "value": "Voir grille détaillée OPTI 4 (Hors réseau Itelis)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "8-1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 5,
+      "inherited_from_above": [
+        "A2",
+        "B3",
+        "C4",
+        "D4",
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A5",
+          "ref": "A2"
+        },
+        {
+          "id": "B5",
+          "ref": "B3"
+        },
+        {
+          "id": "C5",
+          "ref": "C4"
+        },
+        {
+          "id": "D5",
+          "ref": "D4"
+        },
+        {
+          "id": "E5",
+          "value": "Dans les autres cas",
+          "sources": {
+            "probtp": [
+              "2-2Z"
+            ]
+          }
+        },
+        {
+          "id": "F5",
+          "value": "60% (infinity symbol)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2R"
+            ]
+          }
+        },
+        {
+          "id": "G5",
+          "value": "250 €",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-33"
+            ]
+          }
+        },
+        {
+          "id": "H5",
+          "value": "Voir grille détaillée OPTI 4 (Hors réseau Itelis)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "8-1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 6,
+      "inherited_from_above": [
+        "A2",
+        "B3",
+        "C4",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A6",
+          "ref": "A2"
+        },
+        {
+          "id": "B6",
+          "ref": "B3"
+        },
+        {
+          "id": "C6",
+          "ref": "C4"
+        },
+        {
+          "id": "D6",
+          "value": "Équipement à verres progressifs¶",
+          "rowspan": 2,
+          "occupies": [
+            "D6",
+            "D7"
+          ],
+          "sources": {
+            "probtp": [
+              "2-36"
+            ]
+          }
+        },
+        {
+          "id": "E6",
+          "value": "Si partenaire opticien Sévéane",
+          "sources": {
+            "probtp": [
+              "2-37"
+            ]
+          }
+        },
+        {
+          "id": "F6",
+          "value": "60% (infinity symbol)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2R"
+            ]
+          }
+        },
+        {
+          "id": "G6",
+          "value": "500€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3c"
+            ]
+          }
+        },
+        {
+          "id": "H6",
+          "value": "Voir grille détaillée OPTI 4 (Hors réseau Itelis)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "8-1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 7,
+      "inherited_from_above": [
+        "A2",
+        "B3",
+        "C4",
+        "D6",
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A7",
+          "ref": "A2"
+        },
+        {
+          "id": "B7",
+          "ref": "B3"
+        },
+        {
+          "id": "C7",
+          "ref": "C4"
+        },
+        {
+          "id": "D7",
+          "ref": "D6"
+        },
+        {
+          "id": "E7",
+          "value": "Dans les autres cas",
+          "sources": {
+            "probtp": [
+              "2-3f"
+            ]
+          }
+        },
+        {
+          "id": "F7",
+          "value": "60% (infinity symbol)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2R"
+            ]
+          }
+        },
+        {
+          "id": "G7",
+          "value": "400€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3k"
+            ]
+          }
+        },
+        {
+          "id": "H7",
+          "value": "Voir grille détaillée OPTI 4 (Hors réseau Itelis)",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "8-1"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 8,
+      "inherited_from_above": [
+        "A2",
+        "B3",
+        "C4",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A8",
+          "ref": "A2"
+        },
+        {
+          "id": "B8",
+          "ref": "B3"
+        },
+        {
+          "id": "C8",
+          "ref": "C4"
+        },
+        {
+          "id": "D8",
+          "value": "Supplément forte correction (11)",
+          "colspan": 2,
+          "occupies": [
+            "D8",
+            "E8"
+          ],
+          "sources": {
+            "probtp": [
+              "2-3m"
+            ]
+          }
+        },
+        {
+          "id": "E8",
+          "ref": "D8"
+        },
+        {
+          "id": "F8",
+          "value": "60% (infinity symbol)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-2R"
+            ]
+          }
+        },
+        {
+          "id": "G8",
+          "value": "+ 50€/verre",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3r"
+            ]
+          },
+          "metadata": {
+            "footnotes": [
+              "(11)"
+            ]
+          }
+        },
+        {
+          "id": "H8",
+          "value": "Non couvert",
+          "type": "data"
+        }
+      ]
+    },
+    {
+      "row_number": 9,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A9",
+          "ref": "A2"
+        },
+        {
+          "id": "B9",
+          "value": "Lentilles (12)",
+          "rowspan": 2,
+          "occupies": [
+            "B9",
+            "B10"
+          ],
+          "sources": {
+            "probtp": [
+              "2-3u"
+            ]
+          }
+        },
+        {
+          "id": "C9",
+          "value": "Lentilles remboursées par la S.S.",
+          "colspan": 3,
+          "occupies": [
+            "C9",
+            "D9",
+            "E9"
+          ],
+          "sources": {
+            "probtp": [
+              "2-3v"
+            ]
+          }
+        },
+        {
+          "id": "D9",
+          "ref": "C9"
+        },
+        {
+          "id": "E9",
+          "ref": "C9"
+        },
+        {
+          "id": "F9",
+          "value": "60%",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3w"
+            ]
+          }
+        },
+        {
+          "id": "G9",
+          "value": "100% + 200€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3B"
+            ]
+          },
+          "metadata": {
+            "footnotes": [
+              "(12)"
+            ]
+          }
+        },
+        {
+          "id": "H9",
+          "value": "200 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "7-z",
+              "7-A",
+              "7-C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 10,
+      "inherited_from_above": [
+        "A2",
+        "B9",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A10",
+          "ref": "A2"
+        },
+        {
+          "id": "B10",
+          "ref": "B9"
+        },
+        {
+          "id": "C10",
+          "value": "Lentilles non remboursées par la S.S.",
+          "colspan": 3,
+          "occupies": [
+            "C10",
+            "D10",
+            "E10"
+          ],
+          "sources": {
+            "probtp": [
+              "2-3E"
+            ]
+          }
+        },
+        {
+          "id": "D10",
+          "ref": "C10"
+        },
+        {
+          "id": "E10",
+          "ref": "C10"
+        },
+        {
+          "id": "F10",
+          "value": "",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3F"
+            ]
+          }
+        },
+        {
+          "id": "G10",
+          "value": "150€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3K"
+            ]
+          }
+        },
+        {
+          "id": "H10",
+          "value": "200 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "7-z",
+              "7-A",
+              "7-C"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 11,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A11",
+          "ref": "A2"
+        },
+        {
+          "id": "B11",
+          "value": "Chirurgie réfractive de la vue (13)",
+          "colspan": 4,
+          "occupies": [
+            "B11",
+            "C11",
+            "D11",
+            "E11"
+          ],
+          "sources": {
+            "probtp": [
+              "2-3N"
+            ]
+          }
+        },
+        {
+          "id": "C11",
+          "ref": "B11"
+        },
+        {
+          "id": "D11",
+          "ref": "B11"
+        },
+        {
+          "id": "E11",
+          "ref": "B11"
+        },
+        {
+          "id": "F11",
+          "value": "",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3O"
+            ]
+          }
+        },
+        {
+          "id": "G11",
+          "value": "400€/ceil",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-3T"
+            ]
+          },
+          "metadata": {
+            "footnotes": [
+              "(13)"
+            ]
+          }
+        },
+        {
+          "id": "H11",
+          "value": "800 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "7-K",
+              "7-L"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 12,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A12",
+          "ref": "A2"
+        },
+        {
+          "id": "B12",
+          "value": "Renouvellement équipement",
+          "colspan": 4,
+          "occupies": [
+            "B12",
+            "C12",
+            "D12",
+            "E12"
+          ]
+        },
+        {
+          "id": "C12",
+          "ref": "B12"
+        },
+        {
+          "id": "D12",
+          "ref": "B12"
+        },
+        {
+          "id": "E12",
+          "ref": "B12"
+        },
+        {
+          "id": "F12",
+          "value": "",
+          "type": "data"
+        },
+        {
+          "id": "G12",
+          "value": "Après 24 mois (16+ ans) / 12 mois (<16 ans)",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "00212be6-bc14-4e38-8abf-7c3ac6dcda6e"
+            ]
+          }
+        },
+        {
+          "id": "H12",
+          "value": "Après 2 ans",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "7-i",
+              "7-j"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

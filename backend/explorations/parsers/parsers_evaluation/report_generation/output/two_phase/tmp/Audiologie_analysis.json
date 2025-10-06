@@ -1,0 +1,604 @@
+{
+  "category": "Audiologie",
+  "annotated_table": {
+    "template_row": [
+      "Catégorie",
+      "Sous-catégorie",
+      "Sous-sous-catégorie",
+      "Prestation",
+      "Part S.S.",
+      "ProBTP P4",
+      "AXA Base Obligatoire"
+    ],
+    "metadata": {
+      "category": "Audiologie",
+      "policy_levels": {
+        "probtp": [
+          "P4"
+        ],
+        "axa": [
+          "Base Obligatoire"
+        ]
+      },
+      "total_columns": 7,
+      "column_labels": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ]
+    },
+    "rows": [
+      {
+        "row_number": 1,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A1",
+            "value": "Catégorie",
+            "rowspan": 2,
+            "occupies": [
+              "A1",
+              "A2"
+            ]
+          },
+          {
+            "id": "B1",
+            "value": "Sous-catégorie",
+            "rowspan": 2,
+            "occupies": [
+              "B1",
+              "B2"
+            ]
+          },
+          {
+            "id": "C1",
+            "value": "Sous-sous-catégorie",
+            "rowspan": 2,
+            "occupies": [
+              "C1",
+              "C2"
+            ]
+          },
+          {
+            "id": "D1",
+            "value": "Prestation",
+            "rowspan": 2,
+            "occupies": [
+              "D1",
+              "D2"
+            ]
+          },
+          {
+            "id": "E1",
+            "value": "Part S.S.*",
+            "rowspan": 2,
+            "occupies": [
+              "E1",
+              "E2"
+            ]
+          },
+          {
+            "id": "F1",
+            "value": "ProBTP P4",
+            "rowspan": 2,
+            "occupies": [
+              "F1",
+              "F2"
+            ]
+          },
+          {
+            "id": "G1",
+            "value": "AXA Base Obligatoire",
+            "rowspan": 2,
+            "occupies": [
+              "G1",
+              "G2"
+            ]
+          }
+        ]
+      },
+      {
+        "row_number": 2,
+        "inherited_from_above": [
+          "A1",
+          "B1",
+          "C1",
+          "D1",
+          "E1",
+          "F1",
+          "G1"
+        ],
+        "cells": [
+          {
+            "id": "A2",
+            "ref": "A1"
+          },
+          {
+            "id": "B2",
+            "ref": "B1"
+          },
+          {
+            "id": "C2",
+            "ref": "C1"
+          },
+          {
+            "id": "D2",
+            "ref": "D1"
+          },
+          {
+            "id": "E2",
+            "ref": "E1"
+          },
+          {
+            "id": "F2",
+            "ref": "F1"
+          },
+          {
+            "id": "G2",
+            "ref": "G1"
+          }
+        ]
+      },
+      {
+        "row_number": 3,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A3",
+            "value": "Aides auditives",
+            "rowspan": 5,
+            "occupies": [
+              "A3",
+              "A4",
+              "A5",
+              "A6",
+              "A7"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5s"
+              ]
+            }
+          },
+          {
+            "id": "B3",
+            "value": "Equipements auditifs 100% santé",
+            "colspan": 3,
+            "occupies": [
+              "B3",
+              "C3",
+              "D3"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5t"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(18)"
+              ]
+            }
+          },
+          {
+            "id": "C3",
+            "ref": "B3"
+          },
+          {
+            "id": "D3",
+            "ref": "B3"
+          },
+          {
+            "id": "E3",
+            "value": "60%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5u"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F3",
+            "value": "Frais réels",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5y"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "G3",
+            "value": "100% PLV-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-d"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(4)"
+              ],
+              "conditions": "Dans la limite d'une prise en charge tous les 4 ans"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 4,
+        "inherited_from_above": [
+          "A3",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A4",
+            "ref": "A3"
+          },
+          {
+            "id": "B4",
+            "value": "Prothèse auditive",
+            "rowspan": 3,
+            "occupies": [
+              "B4",
+              "B5",
+              "B6"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5C"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(2)",
+                "(18)"
+              ]
+            }
+          },
+          {
+            "id": "C4",
+            "value": "Pour les bénéficiaires de > 20 ans",
+            "rowspan": 2,
+            "occupies": [
+              "C4",
+              "C5"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5D"
+              ]
+            }
+          },
+          {
+            "id": "D4",
+            "value": "Si partenaire audioprothésiste Sévéane",
+            "sources": {
+              "probtp": [
+                "2-5E"
+              ]
+            }
+          },
+          {
+            "id": "E4",
+            "value": "60%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5u"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F4",
+            "value": "1 350€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5J"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G4",
+            "value": "1400 Euros-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-j"
+              ]
+            },
+            "metadata": {
+              "conditions": "Dans la limite d'une prise en charge tous les 4 ans"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 5,
+        "inherited_from_above": [
+          "A3",
+          "B4",
+          "C4",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A5",
+            "ref": "A3"
+          },
+          {
+            "id": "B5",
+            "ref": "B4"
+          },
+          {
+            "id": "C5",
+            "ref": "C4"
+          },
+          {
+            "id": "D5",
+            "value": "Dans les autres cas",
+            "sources": {
+              "probtp": [
+                "2-5M"
+              ]
+            }
+          },
+          {
+            "id": "E5",
+            "value": "60%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5u"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F5",
+            "value": "1 100€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5R"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G5",
+            "value": "1400 Euros-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-j"
+              ]
+            },
+            "metadata": {
+              "conditions": "Dans la limite d'une prise en charge tous les 4 ans"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 6,
+        "inherited_from_above": [
+          "A3",
+          "B4",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A6",
+            "ref": "A3"
+          },
+          {
+            "id": "B6",
+            "ref": "B4"
+          },
+          {
+            "id": "C6",
+            "value": "Pour les bénéficiaires de ≤ 20 ans",
+            "colspan": 2,
+            "occupies": [
+              "C6",
+              "D6"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5U"
+              ]
+            }
+          },
+          {
+            "id": "D6",
+            "ref": "C6"
+          },
+          {
+            "id": "E6",
+            "value": "60%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5u"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F6",
+            "value": "1400€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5Z"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G6",
+            "value": "1700 Euros-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-p"
+              ]
+            },
+            "metadata": {
+              "conditions": "Dans la limite d'une prise en charge tous les 4 ans"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 7,
+        "inherited_from_above": [
+          "A3",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A7",
+            "ref": "A3"
+          },
+          {
+            "id": "B7",
+            "value": "Accessoires",
+            "colspan": 3,
+            "occupies": [
+              "B7",
+              "C7",
+              "D7"
+            ],
+            "sources": {
+              "probtp": [
+                "2-62"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(20)"
+              ]
+            }
+          },
+          {
+            "id": "C7",
+            "ref": "B7"
+          },
+          {
+            "id": "D7",
+            "ref": "B7"
+          },
+          {
+            "id": "E7",
+            "value": "60%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5u"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F7",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-67"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G7",
+            "value": "300% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-v"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      }
+    ]
+  },
+  "key_differences": "Les deux contrats assurent une prise en charge intégrale pour les équipements auditifs 100% santé. Cependant, AXA se distingue par des plafonds de remboursement significativement plus élevés pour les prothèses auditives hors 100% santé, en particulier pour les jeunes bénéficiaires et les accessoires, tandis que ProBTP offre un avantage via son réseau partenaire Sévéane pour les adultes.",
+  "concrete_examples": [
+    "Pour un équipement auditif 100% santé coûtant 950€ (PLV), la Sécurité Sociale rembourse 240€ (60% de la BR de 400€). ProBTP P4 et AXA Base Obligatoire remboursent tous deux les 710€ restants, soit un reste à charge de 0€ dans les deux cas.",
+    "Pour une prothèse auditive hors 100% santé pour un adulte de plus de 20 ans, coûtant 2000€ (BR 400€, SS 240€): ProBTP P4 rembourse jusqu'à 1350€ (via Sévéane) ou 1100€ (hors réseau), laissant un reste à charge de 410€ ou 660€. AXA Base Obligatoire rembourse jusqu'à 1400€, laissant un reste à charge de 360€.",
+    "Pour une prothèse auditive hors 100% santé pour un bénéficiaire de moins de 20 ans, coûtant 2500€ (BR 1400€, SS 840€): ProBTP P4 rembourse jusqu'à 1400€, laissant un reste à charge de 260€. AXA Base Obligatoire rembourse jusqu'à 1700€, laissant un reste à charge de 0€ (si le coût est inférieur ou égal à 2540€)."
+  ],
+  "critical_thinking": "L'audiologie représente un poste de dépense très important et souvent inévitable avec l'âge. Le dispositif 100% santé a considérablement réduit le risque financier pour une gamme d'équipements, et les deux assureurs couvrent parfaitement ce segment. Cependant, pour les besoins spécifiques ou les préférences esthétiques qui mènent à des équipements hors 100% santé, les coûts peuvent s'envoler. C'est là qu'AXA offre une meilleure protection financière grâce à ses plafonds de remboursement supérieurs, particulièrement critiques pour les jeunes bénéficiaires où la BR est déjà plus élevée. Le réseau Sévéane de ProBTP est un atout, mais son impact financier est moindre que les plafonds plus élevés d'AXA pour les prothèses non 100% santé. Le segment des accessoires, bien que moins coûteux, montre également un avantage net pour AXA.",
+  "best_coverage": "ProBTP P4 offre une couverture solide et rassurante en audiologie, notamment grâce à sa prise en charge intégrale des équipements 100% santé, garantissant un reste à charge zéro pour vos clients. C'est un argument majeur qui répond à la principale préoccupation de nombreux assurés. Pour les prothèses auditives hors 100% santé, notre partenariat avec le réseau Sévéane permet à nos adhérents de bénéficier de tarifs négociés et d'une prise en charge pouvant atteindre 1350€, offrant une solution de qualité et un accompagnement privilégié. Bien qu'AXA propose des plafonds légèrement supérieurs sur certains postes hors 100% santé, l'approche globale de ProBTP, combinant le 100% santé et les avantages de notre réseau, assure une excellente protection et une gestion simplifiée pour nos adhérents.",
+  "salesperson_talking_points": [
+    "Mettez en avant le 'reste à charge zéro' pour tous les équipements auditifs 100% santé, une garantie de tranquillité pour le client.",
+    "Soulignez l'avantage du réseau Sévéane de ProBTP pour les prothèses auditives hors 100% santé, offrant des tarifs préférentiels et un accompagnement de qualité.",
+    "Expliquez que ProBTP P4 assure une couverture complète pour les besoins essentiels, avec une gestion simplifiée et un service client dédié.",
+    "Si AXA est mentionné pour ses plafonds plus élevés, contextualisez en expliquant que ProBTP offre un excellent rapport qualité-prix pour la grande majorité des besoins en audiologie, et que la différence de remboursement hors 100% santé est souvent compensée par d'autres avantages du contrat ProBTP."
+  ],
+  "objective_assessment": {
+    "overall_winner": "axa",
+    "confidence": "high",
+    "reasoning": "AXA Base Obligatoire est objectivement meilleure dans la catégorie Audiologie. Bien que les deux contrats couvrent entièrement les équipements 100% santé, AXA offre des plafonds de remboursement systématiquement plus élevés pour les prothèses auditives hors 100% santé, que ce soit pour les adultes (1400€ contre 1100€/1350€ pour ProBTP) ou, de manière encore plus significative, pour les bénéficiaires de moins de 20 ans (1700€ contre 1400€ pour ProBTP). De plus, AXA propose une bien meilleure prise en charge pour les accessoires (300% BR contre 100% pour ProBTP). L'avantage du réseau Sévéane de ProBTP est minime face aux plafonds monétaires supérieurs d'AXA.",
+    "probtp_weaknesses": [
+      "Plafonds de remboursement inférieurs pour les prothèses auditives hors 100% santé, en particulier pour les jeunes bénéficiaires.",
+      "Prise en charge des accessoires moins généreuse (100% BR contre 300% BR pour AXA)."
+    ],
+    "axa_weaknesses": [
+      "Aucune faiblesse significative n'est identifiée par rapport à l'offre ProBTP dans cette catégorie."
+    ]
+  }
+}

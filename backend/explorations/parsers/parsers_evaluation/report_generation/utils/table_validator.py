@@ -32,6 +32,11 @@ def validate_enhanced_table_structure(table: dict) -> tuple[bool, list[str]]:
     """
     issues = []
 
+    # Validate template_row
+    template_row = table.get("template_row", [])
+    if not template_row:
+        issues.append("Missing template_row")
+
     metadata = table.get("metadata", {})
     total_columns = metadata.get("total_columns")
     column_labels = metadata.get("column_labels", [])
@@ -44,6 +49,11 @@ def validate_enhanced_table_structure(table: dict) -> tuple[bool, list[str]]:
     if len(column_labels) != total_columns:
         issues.append(
             f"column_labels length ({len(column_labels)}) != total_columns ({total_columns})"
+        )
+
+    if len(template_row) != total_columns:
+        issues.append(
+            f"template_row length ({len(template_row)}) != total_columns ({total_columns})"
         )
 
     # Validate each row
@@ -338,10 +348,11 @@ async def validate_and_fix_table(
 
     print(f"  → Validating table structure for '{category}'")
 
-    # Try removing category column first
-    table, was_removed = remove_category_column(table)
-    if was_removed:
-        log["category_column_removed"] = True
+    # NOTE: Category column removal disabled - it messes up cell IDs
+    # The LLM should generate the correct structure from the start
+    # table, was_removed = remove_category_column(table)
+    # if was_removed:
+    #     log["category_column_removed"] = True
 
     # Validate enhanced schema
     is_valid, issues = validate_enhanced_table_structure(table)

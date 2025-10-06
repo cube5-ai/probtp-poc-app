@@ -30,6 +30,15 @@ def validate_table_structure_preserved(
     """
     issues = []
 
+    # Check template_row preservation
+    align_template = alignment_table.get("template_row", [])
+    analysis_template = analysis_table.get("template_row", [])
+
+    if align_template != analysis_template:
+        issues.append(
+            f"template_row changed: {align_template} → {analysis_template}"
+        )
+
     # Check metadata preservation
     align_meta = alignment_table.get("metadata", {})
     analysis_meta = analysis_table.get("metadata", {})
@@ -189,6 +198,9 @@ def fix_analysis_table_structure(
         "column_labels": align_meta.get("column_labels"),
     }
 
+    # Preserve template_row from alignment
+    corrected_template_row = alignment_table.get("template_row", [])
+
     corrected_rows = []
 
     for row_idx, (align_row, analysis_row) in enumerate(zip(align_rows, analysis_rows)):
@@ -223,6 +235,7 @@ def fix_analysis_table_structure(
 
     corrected_table = {
         **analysis_table,
+        "template_row": corrected_template_row,
         "metadata": corrected_metadata,
         "rows": corrected_rows,
     }

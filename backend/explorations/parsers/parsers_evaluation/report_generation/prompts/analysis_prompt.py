@@ -89,6 +89,7 @@ class ComparisonTableMetadata(BaseModel):
 class AnnotatedComparisonTable(BaseModel):
     """Comparison table with is_best annotations for each data cell."""
 
+    template_row: list[str] = Field(..., description="Template row from alignment - preserve exactly")
     metadata: ComparisonTableMetadata = Field(..., description="Table metadata")
     rows: list[TableRow] = Field(
         ..., description="Table rows with is_best annotations on data cells"
@@ -270,6 +271,7 @@ GENERAL TASK DESCRIPTION
    - Dimension cells (labels/headers) should have is_best = null
 
    **Preserve EXACTLY from alignment:**
+   - **template_row**: The template showing column structure - preserve exactly as-is
    - **Metadata**: total_columns, column_labels (Excel-style) - EXACT VALUES, even if labels start at "B"
    - **Row structure**: row_number, inherited_from_above array
    - **All cells**: id (Excel-style like "A1", "B15"), value, type, colspan, rowspan, occupies, ref

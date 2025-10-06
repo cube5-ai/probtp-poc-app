@@ -11,10 +11,13 @@
     "category": "Soins courants",
     "policy_levels": {
       "probtp": [
-        "S2"
+        "S1",
+        "S2",
+        "S3"
       ],
       "axa": [
-        "Base Obligatoire"
+        "Option 1",
+        "Option 2"
       ]
     },
     "total_columns": 6,
@@ -164,7 +167,8 @@
             "probtp": [
               "2-h"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F2",
@@ -179,7 +183,8 @@
               "4-r",
               "4-u"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -228,7 +233,8 @@
             "probtp": [
               "2-h"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F3",
@@ -239,7 +245,8 @@
               "4-x",
               "4-A"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -288,7 +295,8 @@
             "probtp": [
               "2-h"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F4",
@@ -299,7 +307,8 @@
               "4-D",
               "4-G"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -348,7 +357,8 @@
             "probtp": [
               "2-h"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F5",
@@ -361,7 +371,8 @@
           },
           "metadata": {
             "conditions": "AXA covers 'Actes pratiqués par les auxiliaires médicaux' which is the closest match."
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -422,7 +433,8 @@
             "probtp": [
               "2-w"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F6",
@@ -433,7 +445,8 @@
               "4-S",
               "4-T"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -482,7 +495,8 @@
             "probtp": [
               "2-E"
             ]
-          }
+          },
+          "is_best": true
         },
         {
           "id": "F7",
@@ -493,7 +507,8 @@
               "5-A",
               "5-B"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -542,7 +557,8 @@
             "probtp": [
               "2-E"
             ]
-          }
+          },
+          "is_best": true
         },
         {
           "id": "F8",
@@ -550,7 +566,8 @@
           "type": "data",
           "metadata": {
             "conditions": "AXA covers 'Psychologie' under 'Médecines non conventionnelles' but not specifically 'remboursées par la SS'."
-          }
+          },
+          "is_best": false
         }
       ]
     },
@@ -599,7 +616,8 @@
             "probtp": [
               "2-O"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F9",
@@ -610,7 +628,8 @@
               "4-L",
               "4-M"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -670,7 +689,8 @@
             "probtp": [
               "2-X"
             ]
-          }
+          },
+          "is_best": true
         },
         {
           "id": "F10",
@@ -681,7 +701,8 @@
               "4-Y",
               "4-Z"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -730,7 +751,8 @@
             "probtp": [
               "2-15"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F11",
@@ -744,7 +766,8 @@
           },
           "metadata": {
             "conditions": "Par année civile et par bénéficiaire"
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -793,7 +816,8 @@
             "probtp": [
               "2-1d"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F12",
@@ -807,7 +831,8 @@
           },
           "metadata": {
             "conditions": "Par année civile et par bénéficiaire"
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -861,7 +886,8 @@
             "probtp": [
               "2-1m"
             ]
-          }
+          },
+          "is_best": true
         },
         {
           "id": "F13",
@@ -872,7 +898,8 @@
               "4-1a",
               "4-1b"
             ]
-          }
+          },
+          "is_best": false
         }
       ]
     },
@@ -993,7 +1020,8 @@
             "probtp": [
               "2-6g"
             ]
-          }
+          },
+          "is_best": false
         },
         {
           "id": "F15",
@@ -1006,7 +1034,8 @@
           },
           "metadata": {
             "conditions": "Dans la limite de 3 séances par an et par bénéficiaire. Covers Acupuncture, Chiropraxie, Diététique, Ostéopathie, Psychologie, Psychomotricité, Tabacologie."
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -1071,7 +1100,8 @@
               "(23)"
             ],
             "conditions": "Limité à une cure par an et par bénéficiaire"
-          }
+          },
+          "is_best": true
         },
         {
           "id": "F16",
@@ -1085,7 +1115,8 @@
           },
           "metadata": {
             "conditions": "Frais médicaux, frais de séjour et frais de transport pris en charge par la Sécurité sociale"
-          }
+          },
+          "is_best": false
         }
       ]
     },
@@ -1121,17 +1152,20 @@
         {
           "id": "C17",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "D17",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "E17",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "F17",
@@ -1144,7 +1178,8 @@
           },
           "metadata": {
             "conditions": "Avec Autorisation de Mise sur le Marché ou norme Afnor, par année civile et par bénéficiaire"
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -1180,17 +1215,20 @@
         {
           "id": "C18",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "D18",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "E18",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "F18",
@@ -1203,7 +1241,8 @@
           },
           "metadata": {
             "conditions": "Prescrite par un médecin, dans la limite d'une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans."
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -1239,17 +1278,20 @@
         {
           "id": "C19",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "D19",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "E19",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "F19",
@@ -1262,7 +1304,8 @@
           },
           "metadata": {
             "conditions": "Non pris en charge par la Sécurité sociale, dans la limite d'une prise en charge tous les 3 ans."
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -1298,17 +1341,20 @@
         {
           "id": "C20",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "D20",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "E20",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "F20",
@@ -1318,7 +1364,8 @@
             "axa": [
               "6-A"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -1354,17 +1401,20 @@
         {
           "id": "C21",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "D21",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "E21",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "F21",
@@ -1374,7 +1424,8 @@
             "axa": [
               "6-D"
             ]
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -1410,17 +1461,20 @@
         {
           "id": "C22",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "D22",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "E22",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "F22",
@@ -1433,7 +1487,8 @@
           },
           "metadata": {
             "conditions": "Sur prescription du médecin traitant, par année civile et par bénéficiaire."
-          }
+          },
+          "is_best": true
         }
       ]
     },
@@ -1469,17 +1524,20 @@
         {
           "id": "C23",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "D23",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "E23",
           "value": "Non couvert",
-          "type": "data"
+          "type": "data",
+          "is_best": false
         },
         {
           "id": "F23",
@@ -1492,7 +1550,8 @@
           },
           "metadata": {
             "conditions": "Sur prescription médicale, une fois par année civile et par bénéficiaire."
-          }
+          },
+          "is_best": true
         }
       ]
     }

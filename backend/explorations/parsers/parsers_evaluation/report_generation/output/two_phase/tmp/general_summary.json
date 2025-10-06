@@ -1,0 +1,150 @@
+{
+  "key_differences": "ProBTP adopte une approche axée sur une couverture prévisible et complète pour les soins courants et les besoins spécifiques à forte valeur ajoutée, souvent via des réseaux partenaires. Leur philosophie vise à minimiser le reste à charge pour les services essentiels et fréquents, ainsi que pour des postes ciblés comme l'orthopédie ou l'orthodontie adulte. AXA, en revanche, privilégie des pourcentages de remboursement plus élevés pour les actes médicaux avec dépassements d'honoraires importants, une couverture supérieure pour les traitements spécialisés très coûteux (chirurgie réfractive, audiologie haut de gamme) et des programmes de prévention solides. La stratégie d'AXA offre une protection plus robuste contre les chocs financiers majeurs et moins fréquents, tandis que ProBTP cherche à apporter une valeur quotidienne constante et des avantages ciblés.",
+  "category_strengths": [
+    {
+      "category": "Soins courants",
+      "probtp_strengths": [
+        "Remboursement à 100% BR pour les soins essentiels (consultations, actes techniques, radiologie, pharmacie, auxiliaires médicaux).",
+        "Excellente couverture pour les appareillages orthopédiques (jusqu'à 250% BR).",
+        "Prise en charge des séances de psychologie remboursées par la Sécurité Sociale."
+      ],
+      "axa_strengths": [
+        "Remboursements significativement plus élevés pour les honoraires médicaux et paramédicaux (150-170% BR-MR), couvrant mieux les dépassements d'honoraires.",
+        "Package de prévention complet et innovant.",
+        "Meilleure couverture pour les vaccins non remboursés par la SS et la contraception non remboursée."
+      ]
+    },
+    {
+      "category": "Hospitalisation",
+      "probtp_strengths": [
+        "Couverture des honoraires jusqu'aux frais réels pour les praticiens OPTAM (ProBTP S4).",
+        "Prise en charge intégrale du forfait journalier hospitalier.",
+        "Garantie solide pour la chambre particulière (80 €/jour en S4)."
+      ],
+      "axa_strengths": [
+        "Indemnités journalières plus élevées pour la chambre particulière (100 €/jour) et le lit accompagnant.",
+        "Couverture de frais de séjour spécifiques (médical/chirurgical, conventionné/non conventionné).",
+        "Remboursement très élevé des honoraires (480% BR-MR)."
+      ]
+    },
+    {
+      "category": "Optique",
+      "probtp_strengths": [
+        "Forfaits clairs et avantageux pour les équipements libres, surtout via le réseau Sévéane.",
+        "Prise en charge du supplément forte correction.",
+        "Renouvellement plus flexible pour les mineurs (12 mois)."
+      ],
+      "axa_strengths": [
+        "Couverture supérieure pour la chirurgie réfractive (jusqu'à 800€).",
+        "Remboursement des lentilles non remboursées par la S.S. légèrement supérieur.",
+        "Offre compétitive pour les équipements 100% Santé."
+      ]
+    },
+    {
+      "category": "Soins Dentaires",
+      "probtp_strengths": [
+        "Prise en charge en 'Frais réels' pour les soins et prothèses 100% santé et à honoraires maîtrisés.",
+        "Couverture supérieure pour l'orthodontie adulte non prise en charge par la SS (400€/semestre).",
+        "Remboursement compétitif des implants via le réseau Sévéane (800€)."
+      ],
+      "axa_strengths": [
+        "Pourcentages de remboursement plus élevés pour les soins dentaires courants (inlay/onlay, autres soins SS).",
+        "Meilleure prise en charge des implants hors réseau partenaire (jusqu'à 1200€).",
+        "Meilleure couverture pour l'orthodontie prise en charge par la SS."
+      ]
+    },
+    {
+      "category": "Audiologie",
+      "probtp_strengths": [
+        "Prise en charge intégrale des équipements auditifs 100% santé (reste à charge zéro).",
+        "Avantages via le réseau partenaire Sévéane pour les prothèses hors 100% santé (jusqu'à 1350€).",
+        "Couverture solide pour les besoins essentiels."
+      ],
+      "axa_strengths": [
+        "Plafonds de remboursement significativement plus élevés pour les prothèses auditives hors 100% santé (adultes et jeunes).",
+        "Meilleure prise en charge des accessoires (300% BR).",
+        "Couverture intégrale des équipements auditifs 100% santé."
+      ]
+    },
+    {
+      "category": "Médecines Douces",
+      "probtp_strengths": [
+        "Plafond annuel familial de 320€ pour les médecines douces.",
+        "Jusqu'à 4 séances de médecines douces par an.",
+        "Couverture nettement supérieure pour les cures thermales (100% BR + 100€)."
+      ],
+      "axa_strengths": [
+        "Remboursement par séance légèrement plus élevé pour les médecines douces (50€/séance).",
+        "Plafond individuel de 150€ pour les médecines douces.",
+        "Couverture pour les cures thermales (300€ forfaitaire)."
+      ]
+    }
+  ],
+  "probtp_overall_strengths": [
+    "Excellente maîtrise du reste à charge pour les prestations 100% Santé et à honoraires maîtrisés (dentaire, audioprothèse).",
+    "Couverture solide et prévisible pour les soins courants et essentiels, minimisant les dépenses quotidiennes.",
+    "Avantages significatifs pour les familles (plafond familial médecines douces, renouvellement optique mineurs).",
+    "Prise en charge ciblée sur des postes coûteux et spécifiques (orthopédie, orthodontie adulte, psychologie SS).",
+    "Bénéfices du réseau Sévéane pour des tarifs négociés et une meilleure prise en charge (optique, dentaire, audio)."
+  ],
+  "axa_overall_strengths": [
+    "Remboursements très élevés pour les dépassements d'honoraires en soins courants et hospitalisation.",
+    "Couverture supérieure pour les traitements spécialisés très coûteux (chirurgie réfractive, prothèses auditives haut de gamme, implants dentaires hors réseau).",
+    "Programmes de prévention complets et innovants, favorisant le bien-être à long terme.",
+    "Indemnités journalières plus généreuses pour le confort en hospitalisation (chambre particulière).",
+    "Offre compétitive pour les soins dentaires courants et l'orthodontie prise en charge par la SS."
+  ],
+  "objective_evaluation": {
+    "overall_winner": "mixed",
+    "confidence": "medium",
+    "reasoning": "La comparaison révèle un équilibre entre les deux assureurs, chacun excellant dans des domaines distincts. ProBTP est plus avantageux pour les besoins quotidiens, les familles et la maîtrise du reste à charge sur le 100% Santé, tandis qu'AXA se démarque par une meilleure couverture des dépassements d'honoraires et des traitements spécialisés très coûteux. Le choix optimal dépendra fortement du profil de consommation de soins de l'assuré."
+  },
+  "category_winners": [
+    {
+      "category": "Soins courants",
+      "winner": "axa",
+      "confidence": "high",
+      "key_reason": "Ses taux de remboursement plus élevés couvrent mieux les dépassements d'honoraires fréquents et incluent la prévention."
+    },
+    {
+      "category": "Hospitalisation",
+      "winner": "probtp",
+      "confidence": "medium",
+      "key_reason": "La garantie 'Frais réels si OPTAM' de ProBTP S4 est cruciale pour les honoraires, le plus gros risque financier."
+    },
+    {
+      "category": "Optique",
+      "winner": "probtp",
+      "confidence": "medium",
+      "key_reason": "ProBTP P4 offre des forfaits clairs et généreux pour les équipements libres, répondant aux besoins majoritaires."
+    },
+    {
+      "category": "Soins Dentaires",
+      "winner": "axa",
+      "confidence": "medium",
+      "key_reason": "AXA est plus généreux sur un plus grand nombre de prestations courantes et les implants hors réseau partenaire."
+    },
+    {
+      "category": "Audiologie",
+      "winner": "axa",
+      "confidence": "high",
+      "key_reason": "AXA propose des plafonds de remboursement significativement plus élevés pour les prothèses hors 100% santé et les accessoires."
+    },
+    {
+      "category": "Médecines Douces",
+      "winner": "probtp",
+      "confidence": "medium",
+      "key_reason": "ProBTP offre un plafond familial plus généreux, plus de séances et une meilleure couverture des cures thermales."
+    }
+  ],
+  "selling_points": [
+    "ProBTP garantit un reste à charge zéro sur le 100% Santé (optique, dentaire, audio), offrant une sérénité financière inégalée sur ces postes essentiels.",
+    "Bénéficiez d'une couverture prévisible et solide pour vos soins courants, avec des avantages ciblés sur l'orthopédie et la psychologie remboursée par la SS.",
+    "Notre offre est particulièrement avantageuse pour les familles, avec un plafond familial pour les médecines douces et un renouvellement optique flexible pour les enfants.",
+    "Avec ProBTP S4, protégez-vous des dépassements d'honoraires en hospitalisation grâce à la couverture 'Frais réels si OPTAM', là où le risque financier est le plus élevé.",
+    "Le réseau Sévéane vous donne accès à des tarifs négociés et une meilleure prise en charge en optique, dentaire et audiologie, optimisant votre budget santé.",
+    "Choisissez ProBTP pour une mutuelle qui se concentre sur vos besoins réels et fréquents, vous offrant une meilleure maîtrise de votre budget santé au quotidien.",
+    "Contrairement à AXA qui excelle sur des postes très spécifiques et moins fréquents, ProBTP assure une protection globale et constante pour votre bien-être et celui de votre famille."
+  ],
+  "target_customer_fit": "ProBTP est idéalement adapté aux familles, aux individus ayant des besoins de santé réguliers ou chroniques, et à ceux qui recherchent une excellente maîtrise du reste à charge sur les prestations 100% Santé. Sa couverture prévisible pour les soins courants, ses avantages familiaux (médecines douces, optique enfants) et sa prise en charge ciblée sur des postes coûteux comme l'orthopédie ou l'orthodontie adulte en font un choix pertinent pour une protection quotidienne et structurante. C'est la solution pour ceux qui privilégient la tranquillité d'esprit sur les dépenses fréquentes et essentielles.AXA convient mieux aux jeunes adultes en bonne santé, aux personnes ayant des revenus plus élevés et consultant des praticiens avec dépassements d'honoraires, ou à celles qui anticipent des dépenses très spécifiques et onéreuses comme une chirurgie réfractive ou des prothèses auditives haut de gamme. Son accent sur la prévention et les remboursements élevés pour des actes spécialisés en fait un choix intéressant pour une protection contre les risques majeurs et une approche proactive de la santé, même si cela peut impliquer un reste à charge plus important sur les soins courants de base."
+}

@@ -57,6 +57,7 @@ class ComparisonTableMetadata(BaseModel):
 
 class ComparisonTable(BaseModel):
     """Structured comparison table with enhanced span support and cell-level grounding."""
+    template_row: list[str] = Field(..., description="Template of the longest row showing column structure. List of column names/purposes (e.g., ['Catégorie', 'Sous-catégorie', 'Prestation', 'Part S.S.', 'ProBTP S2', 'AXA Base']). This helps validate total_columns.")
     metadata: ComparisonTableMetadata = Field(..., description="Table metadata")
     rows: list[TableRow] = Field(..., description="Table rows (first row should be header)")
 
@@ -216,24 +217,57 @@ class TableCell(BaseModel):
 STEP-BY-STEP GENERATION PROCESS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**STEP 0: Determine Table Structure**
+**STEP 0: Determine Table Structure** (REASONING PHASE - Think Before You Generate!)
 
-Before extracting any content, analyze the ProBTP table to determine:
+**This step is CRITICAL. Take your time to analyze the table structure carefully.**
 
-1. **Count total_columns**: Look at the ProBTP table header
-   - Count dimension columns (benefit categories, names, etc.)
-   - Count "Part S.S.*" column (if present)
-   - Count policy level columns (S1, S2, S3, P3+, etc.)
-   - Count AXA policy level columns
-   - **CRITICAL**: Think carefully about the grid structure needed
-   - Example: If you have 3 dimension columns, 1 Part SS column, 1 ProBTP level column, 1 AXA level column → total_columns = 6
+**0.1: Count the maximum number of columns needed**
 
-2. **Generate column_labels**: Create Excel-style labels
-   - ["A", "B", "C", "D", "E", "F"] for 6 columns
-   - ["A", "B", "C", "D", "E"] for 5 columns
-   - etc.
+Analyze the ProBTP table structure and count:
 
-3. **Double-check your column count**: This is critical for the entire structure!
+1. **Dimension columns** (left side - benefit organization):
+   - **Catégorie** column: Does the table have a main category column? (usually 1)
+   - **Sous-catégorie** column: Does it have a subcategory level? (0 or 1)
+   - **Sous-sous-catégorie** column: Are there additional subcategory levels? (0 or 1)
+   - **Prestation** column: Specific benefit/service name column? (usually 1)
+   - **Other dimension columns**: Any other classification columns?
+
+   **Dimension column count** = Sum of all dimension columns found
+
+2. **Data columns** (right side - coverage information):
+   - **Part S.S.** column: Social security base coverage? (0 or 1)
+   - **ProBTP policy columns**: How many ProBTP levels being compared? (count: S1, S2, S3, P3+, P4, etc.)
+   - **AXA policy columns**: How many AXA levels being compared? (count: Base, Option 1, Option 2, etc.)
+
+   **Data column count** = Part S.S. + ProBTP levels + AXA levels
+
+3. **Calculate total_columns**:
+   ```
+   total_columns = dimension_column_count + data_column_count
+   ```
+
+**0.2: Create template_row (validate your column count)**
+
+Based on your column analysis, create a template showing what the longest row will contain:
+- List the purpose/name of each column from left to right
+- Example: `["Catégorie", "Sous-catégorie", "Prestation", "Part S.S.", "ProBTP S2", "AXA Base Obligatoire"]`
+- This template has 6 elements → confirms total_columns = 6
+
+**0.3: Generate column_labels**
+
+Create Excel-style labels for total_columns:
+- total_columns = 6 → `["A", "B", "C", "D", "E", "F"]`
+- total_columns = 5 → `["A", "B", "C", "D", "E"]`
+- total_columns = 7 → `["A", "B", "C", "D", "E", "F", "G"]`
+
+**0.4: Validation check**
+
+✓ template_row.length === total_columns === column_labels.length
+✓ template_row accurately represents the table structure
+✓ All dimension columns accounted for (Catégorie, Sous-catégorie, Prestation, etc.)
+✓ All data columns accounted for (Part S.S., all ProBTP levels, all AXA levels)
+
+**Output your reasoning** for this step before proceeding to content extraction.
 
 **STEP 1: Two-Pass Semantic Extraction** (ProBTP First!)
 

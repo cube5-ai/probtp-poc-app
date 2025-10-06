@@ -1,0 +1,1593 @@
+{
+  "category": "Soins courants",
+  "annotated_table": {
+    "template_row": [
+      "Catégorie",
+      "Sous-catégorie",
+      "Prestation",
+      "Part S.S.",
+      "ProBTP S2",
+      "AXA Base Obligatoire"
+    ],
+    "metadata": {
+      "category": "Soins courants",
+      "policy_levels": {
+        "probtp": [
+          "S1",
+          "S2",
+          "S3"
+        ],
+        "axa": [
+          "Option 1",
+          "Option 2"
+        ]
+      },
+      "total_columns": 6,
+      "column_labels": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ]
+    },
+    "rows": [
+      {
+        "row_number": 1,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A1",
+            "value": "",
+            "colspan": 3,
+            "occupies": [
+              "A1",
+              "B1",
+              "C1"
+            ]
+          },
+          {
+            "id": "B1",
+            "ref": "A1"
+          },
+          {
+            "id": "C1",
+            "ref": "A1"
+          },
+          {
+            "id": "D1",
+            "value": "Part S.S.*",
+            "sources": {
+              "probtp": [
+                "2-5"
+              ]
+            }
+          },
+          {
+            "id": "E1",
+            "value": "S2",
+            "sources": {
+              "probtp": [
+                "2-7"
+              ]
+            }
+          },
+          {
+            "id": "F1",
+            "value": "Base Obligatoire",
+            "sources": {
+              "axa": [
+                "2-2"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "row_number": 2,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A2",
+            "value": "Soins courants",
+            "rowspan": 13,
+            "occupies": [
+              "A2",
+              "A3",
+              "A4",
+              "A5",
+              "A6",
+              "A7",
+              "A8",
+              "A9",
+              "A10",
+              "A11",
+              "A12",
+              "A13",
+              "A14"
+            ],
+            "sources": {
+              "probtp": [
+                "2-c"
+              ]
+            }
+          },
+          {
+            "id": "B2",
+            "value": "Honoraires médicaux",
+            "rowspan": 4,
+            "occupies": [
+              "B2",
+              "B3",
+              "B4",
+              "B5"
+            ],
+            "sources": {
+              "probtp": [
+                "2-d"
+              ]
+            }
+          },
+          {
+            "id": "C2",
+            "value": "Consultations et visites (généralistes et spécialistes)",
+            "sources": {
+              "probtp": [
+                "2-e"
+              ]
+            }
+          },
+          {
+            "id": "D2",
+            "value": "70%",
+            "sources": {
+              "probtp": [
+                "2-f"
+              ]
+            }
+          },
+          {
+            "id": "E2",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-h"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F2",
+            "value": "150% BR-MR à 170% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-f",
+                "4-i",
+                "4-l",
+                "4-o",
+                "4-r",
+                "4-u"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 3,
+        "inherited_from_above": [
+          "A2",
+          "B2",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A3",
+            "ref": "A2"
+          },
+          {
+            "id": "B3",
+            "ref": "B2"
+          },
+          {
+            "id": "C3",
+            "value": "Actes techniques médicaux",
+            "sources": {
+              "probtp": [
+                "2-m"
+              ]
+            }
+          },
+          {
+            "id": "D3",
+            "value": "70%",
+            "sources": {
+              "probtp": [
+                "2-n"
+              ]
+            }
+          },
+          {
+            "id": "E3",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-h"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F3",
+            "value": "150% BR-MR à 170% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-x",
+                "4-A"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 4,
+        "inherited_from_above": [
+          "A2",
+          "B2",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A4",
+            "ref": "A2"
+          },
+          {
+            "id": "B4",
+            "ref": "B2"
+          },
+          {
+            "id": "C4",
+            "value": "Radiologie",
+            "sources": {
+              "probtp": [
+                "2-o"
+              ]
+            }
+          },
+          {
+            "id": "D4",
+            "value": "70%",
+            "sources": {
+              "probtp": [
+                "2-p"
+              ]
+            }
+          },
+          {
+            "id": "E4",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-h"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F4",
+            "value": "150% BR-MR à 170% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-D",
+                "4-G"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 5,
+        "inherited_from_above": [
+          "A2",
+          "B2",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A5",
+            "ref": "A2"
+          },
+          {
+            "id": "B5",
+            "ref": "B2"
+          },
+          {
+            "id": "C5",
+            "value": "Soins externes",
+            "sources": {
+              "probtp": [
+                "2-q"
+              ]
+            }
+          },
+          {
+            "id": "D5",
+            "value": "60% à 70%",
+            "sources": {
+              "probtp": [
+                "2-r"
+              ]
+            }
+          },
+          {
+            "id": "E5",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-h"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F5",
+            "value": "160% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-T"
+              ]
+            },
+            "metadata": {
+              "conditions": "AXA covers 'Actes pratiqués par les auxiliaires médicaux' which is the closest match."
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 6,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A6",
+            "ref": "A2"
+          },
+          {
+            "id": "B6",
+            "value": "Honoraires paramédicaux",
+            "rowspan": 4,
+            "occupies": [
+              "B6",
+              "B7",
+              "B8",
+              "B9"
+            ],
+            "sources": {
+              "probtp": [
+                "2-s"
+              ]
+            }
+          },
+          {
+            "id": "C6",
+            "value": "Auxiliaires médicaux, soins infirmiers",
+            "sources": {
+              "probtp": [
+                "2-t"
+              ]
+            }
+          },
+          {
+            "id": "D6",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-u"
+              ]
+            }
+          },
+          {
+            "id": "E6",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-w"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F6",
+            "value": "160% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-S",
+                "4-T"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 7,
+        "inherited_from_above": [
+          "A2",
+          "B6",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A7",
+            "ref": "A2"
+          },
+          {
+            "id": "B7",
+            "ref": "B6"
+          },
+          {
+            "id": "C7",
+            "value": "Transport",
+            "sources": {
+              "probtp": [
+                "2-B"
+              ]
+            }
+          },
+          {
+            "id": "D7",
+            "value": "55%",
+            "sources": {
+              "probtp": [
+                "2-C"
+              ]
+            }
+          },
+          {
+            "id": "E7",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-E"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F7",
+            "value": "100% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-A",
+                "5-B"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 8,
+        "inherited_from_above": [
+          "A2",
+          "B6",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A8",
+            "ref": "A2"
+          },
+          {
+            "id": "B8",
+            "ref": "B6"
+          },
+          {
+            "id": "C8",
+            "value": "Séances d'accompagnement psychologique remboursées par la SS",
+            "sources": {
+              "probtp": [
+                "2-J"
+              ]
+            }
+          },
+          {
+            "id": "D8",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-K"
+              ]
+            }
+          },
+          {
+            "id": "E8",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-E"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F8",
+            "value": "Non couvert",
+            "type": "data",
+            "metadata": {
+              "conditions": "AXA covers 'Psychologie' under 'Médecines non conventionnelles' but not specifically 'remboursées par la SS'."
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 9,
+        "inherited_from_above": [
+          "A2",
+          "B6",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A9",
+            "ref": "A2"
+          },
+          {
+            "id": "B9",
+            "ref": "B6"
+          },
+          {
+            "id": "C9",
+            "value": "Analyses et examens de laboratoires",
+            "sources": {
+              "probtp": [
+                "2-L"
+              ]
+            }
+          },
+          {
+            "id": "D9",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-M"
+              ]
+            }
+          },
+          {
+            "id": "E9",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-O"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F9",
+            "value": "160% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-L",
+                "4-M"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 10,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A10",
+            "ref": "A2"
+          },
+          {
+            "id": "B10",
+            "value": "Médicaments",
+            "rowspan": 3,
+            "occupies": [
+              "B10",
+              "B11",
+              "B12"
+            ],
+            "sources": {
+              "probtp": [
+                "2-T"
+              ]
+            }
+          },
+          {
+            "id": "C10",
+            "value": "Pharmacie remboursée par la S.S.",
+            "sources": {
+              "probtp": [
+                "2-U"
+              ]
+            }
+          },
+          {
+            "id": "D10",
+            "value": "65% 30% 15%",
+            "sources": {
+              "probtp": [
+                "2-V"
+              ]
+            }
+          },
+          {
+            "id": "E10",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-X"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F10",
+            "value": "100% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-Y",
+                "4-Z"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 11,
+        "inherited_from_above": [
+          "A2",
+          "B10",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A11",
+            "ref": "A2"
+          },
+          {
+            "id": "B11",
+            "ref": "B10"
+          },
+          {
+            "id": "C11",
+            "value": "Vaccins non remboursés par la S.S.",
+            "sources": {
+              "probtp": [
+                "2-12"
+              ]
+            }
+          },
+          {
+            "id": "D11",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-13"
+              ]
+            }
+          },
+          {
+            "id": "E11",
+            "value": "Vaccin anti-grippe 15€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-15"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F11",
+            "value": "6 % PMSS",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-b",
+                "6-c"
+              ]
+            },
+            "metadata": {
+              "conditions": "Par année civile et par bénéficiaire"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 12,
+        "inherited_from_above": [
+          "A2",
+          "B10",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A12",
+            "ref": "A2"
+          },
+          {
+            "id": "B12",
+            "ref": "B10"
+          },
+          {
+            "id": "C12",
+            "value": "Contraception prescrite, non remboursée par la S.S.",
+            "sources": {
+              "probtp": [
+                "2-1a"
+              ]
+            }
+          },
+          {
+            "id": "D12",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-1b"
+              ]
+            }
+          },
+          {
+            "id": "E12",
+            "value": "",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-1d"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F12",
+            "value": "50 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-14",
+                "4-15"
+              ]
+            },
+            "metadata": {
+              "conditions": "Par année civile et par bénéficiaire"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 13,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A13",
+            "ref": "A2"
+          },
+          {
+            "id": "B13",
+            "value": "Matériel médical",
+            "sources": {
+              "probtp": [
+                "2-1i"
+              ]
+            }
+          },
+          {
+            "id": "C13",
+            "value": "Appareillages orthopédiques et autres prothèses",
+            "sources": {
+              "probtp": [
+                "2-1j"
+              ]
+            }
+          },
+          {
+            "id": "D13",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-1k"
+              ]
+            }
+          },
+          {
+            "id": "E13",
+            "value": "250%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-1m"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "F13",
+            "value": "170% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "4-1a",
+                "4-1b"
+              ]
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 14,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A14",
+            "ref": "A2"
+          },
+          {
+            "id": "B14",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-1s"
+              ]
+            }
+          },
+          {
+            "id": "C14",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-1t"
+              ]
+            }
+          },
+          {
+            "id": "D14",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-1u"
+              ]
+            }
+          },
+          {
+            "id": "E14",
+            "value": "",
+            "colspan": 2,
+            "occupies": [
+              "E14",
+              "F14"
+            ],
+            "sources": {
+              "probtp": [
+                "2-1v"
+              ]
+            }
+          },
+          {
+            "id": "F14",
+            "ref": "E14"
+          }
+        ]
+      },
+      {
+        "row_number": 15,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A15",
+            "value": "Médecines douces agréées",
+            "sources": {
+              "probtp": [
+                "2-6b"
+              ]
+            }
+          },
+          {
+            "id": "B15",
+            "value": "Ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.",
+            "sources": {
+              "probtp": [
+                "2-6c"
+              ]
+            }
+          },
+          {
+            "id": "C15",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-6d"
+              ]
+            }
+          },
+          {
+            "id": "D15",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-6e"
+              ]
+            }
+          },
+          {
+            "id": "E15",
+            "value": "2x40€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-6g"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "F15",
+            "value": "50 € / séance",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-9"
+              ]
+            },
+            "metadata": {
+              "conditions": "Dans la limite de 3 séances par an et par bénéficiaire. Covers Acupuncture, Chiropraxie, Diététique, Ostéopathie, Psychologie, Psychomotricité, Tabacologie."
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 16,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A16",
+            "value": "Cures thermales",
+            "sources": {
+              "probtp": [
+                "2-6l"
+              ]
+            }
+          },
+          {
+            "id": "B16",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-6m"
+              ]
+            }
+          },
+          {
+            "id": "C16",
+            "value": "65%",
+            "sources": {
+              "probtp": [
+                "2-6n"
+              ]
+            }
+          },
+          {
+            "id": "D16",
+            "value": "100% + 100€",
+            "sources": {
+              "probtp": [
+                "2-6o"
+              ]
+            }
+          },
+          {
+            "id": "E16",
+            "value": "100% + 150€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-6p"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(23)"
+              ],
+              "conditions": "Limité à une cure par an et par bénéficiaire"
+            },
+            "is_best": true
+          },
+          {
+            "id": "F16",
+            "value": "300 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-D",
+                "5-E"
+              ]
+            },
+            "metadata": {
+              "conditions": "Frais médicaux, frais de séjour et frais de transport pris en charge par la Sécurité sociale"
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 17,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A17",
+            "value": "Prévention",
+            "sources": {
+              "axa": [
+                "6-a"
+              ]
+            }
+          },
+          {
+            "id": "B17",
+            "value": "Médicaments et produits à base de nicotine pour sevrage tabagique",
+            "sources": {
+              "axa": [
+                "6-h"
+              ]
+            }
+          },
+          {
+            "id": "C17",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "D17",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "E17",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "F17",
+            "value": "50 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-i"
+              ]
+            },
+            "metadata": {
+              "conditions": "Avec Autorisation de Mise sur le Marché ou norme Afnor, par année civile et par bénéficiaire"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 18,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A18",
+            "value": "Prévention",
+            "sources": {
+              "axa": [
+                "6-a"
+              ]
+            }
+          },
+          {
+            "id": "B18",
+            "value": "Consultation chez un diététicien",
+            "sources": {
+              "axa": [
+                "6-n"
+              ]
+            }
+          },
+          {
+            "id": "C18",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "D18",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "E18",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "F18",
+            "value": "1,25% PMSS",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-o"
+              ]
+            },
+            "metadata": {
+              "conditions": "Prescrite par un médecin, dans la limite d'une prise en charge durant la vie du contrat. Par enfant de moins de 12 ans."
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 19,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A19",
+            "value": "Prévention",
+            "sources": {
+              "axa": [
+                "6-a"
+              ]
+            }
+          },
+          {
+            "id": "B19",
+            "value": "Test de dépistage des virus impliqués dans le cancer du col de l'utérus (Test HPV)",
+            "sources": {
+              "axa": [
+                "6-t"
+              ]
+            }
+          },
+          {
+            "id": "C19",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "D19",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "E19",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "F19",
+            "value": "170% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-u"
+              ]
+            },
+            "metadata": {
+              "conditions": "Non pris en charge par la Sécurité sociale, dans la limite d'une prise en charge tous les 3 ans."
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 20,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A20",
+            "value": "Prévention",
+            "sources": {
+              "axa": [
+                "6-a"
+              ]
+            }
+          },
+          {
+            "id": "B20",
+            "value": "Tout acte de prévention prévu à l'article R 871-2 du code de la Sécurité sociale",
+            "sources": {
+              "axa": [
+                "6-z"
+              ]
+            }
+          },
+          {
+            "id": "C20",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "D20",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "E20",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "F20",
+            "value": "Inclus",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-A"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 21,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A21",
+            "value": "Prévention",
+            "sources": {
+              "axa": [
+                "6-a"
+              ]
+            }
+          },
+          {
+            "id": "B21",
+            "value": "Téléconsultation",
+            "sources": {
+              "axa": [
+                "6-C"
+              ]
+            }
+          },
+          {
+            "id": "C21",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "D21",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "E21",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "F21",
+            "value": "Inclus",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-D"
+              ]
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 22,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A22",
+            "value": "Prévention",
+            "sources": {
+              "axa": [
+                "6-a"
+              ]
+            }
+          },
+          {
+            "id": "B22",
+            "value": "Séances d'activité physique adaptée",
+            "sources": {
+              "axa": [
+                "6-F"
+              ]
+            }
+          },
+          {
+            "id": "C22",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "D22",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "E22",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "F22",
+            "value": "200 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-G"
+              ]
+            },
+            "metadata": {
+              "conditions": "Sur prescription du médecin traitant, par année civile et par bénéficiaire."
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 23,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A23",
+            "value": "Prévention",
+            "sources": {
+              "axa": [
+                "6-a"
+              ]
+            }
+          },
+          {
+            "id": "B23",
+            "value": "Connecteur Bluetooth aux stylos à insuline et aux glucomètres",
+            "sources": {
+              "axa": [
+                "6-L"
+              ]
+            }
+          },
+          {
+            "id": "C23",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "D23",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "E23",
+            "value": "Non couvert",
+            "type": "data",
+            "is_best": false
+          },
+          {
+            "id": "F23",
+            "value": "100 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "6-M"
+              ]
+            },
+            "metadata": {
+              "conditions": "Sur prescription médicale, une fois par année civile et par bénéficiaire."
+            },
+            "is_best": true
+          }
+        ]
+      }
+    ]
+  },
+  "key_differences": "AXA offre des remboursements nettement supérieurs pour la plupart des honoraires médicaux (consultations, actes techniques, radiologie) et paramédicaux, couvrant mieux les dépassements d'honoraires. De plus, AXA propose un package de prévention complet, absent chez ProBTP. ProBTP se distingue par une meilleure couverture pour les appareillages orthopédiques et la prise en charge des séances de psychologie remboursées par la Sécurité Sociale.",
+  "concrete_examples": [
+    "Pour une consultation chez un spécialiste de secteur 2 coûtant 70€ (BR 26.50€), ProBTP S2 rembourse 26.50€ (100% BR), laissant 43.50€ à votre charge. AXA Base Obligatoire, avec 150% BR, rembourse 39.75€, laissant 30.25€ à votre charge.",
+    "Pour une séance d'ostéopathie à 60€ (non remboursée par la SS), ProBTP S2 rembourse 40€ (limite 2/an), laissant 20€ à votre charge. AXA Base Obligatoire rembourse 50€ (limite 3/an), laissant 10€ à votre charge.",
+    "Pour un appareillage orthopédique coûtant 200€ (BR 100€), ProBTP S2 rembourse 250% BR, soit 200€, ne laissant aucun reste à charge. AXA Base Obligatoire rembourse 170% BR, soit 170€, laissant 30€ à votre charge."
+  ],
+  "critical_thinking": "La fréquence d'utilisation des consultations et actes médicaux avec dépassements d'honoraires est très élevée, rendant la couverture supérieure d'AXA financièrement plus protectrice pour la majorité des assurés. Le package de prévention d'AXA représente une valeur ajoutée significative pour les individus soucieux de leur bien-être à long terme, même si ces actes sont moins fréquents. ProBTP est plus avantageux pour des besoins spécifiques et potentiellement coûteux comme les prothèses orthopédiques ou le soutien psychologique remboursé, mais ces situations sont moins courantes que les consultations généralistes ou spécialistes. Le choix dépendra donc du profil de dépenses de santé de l'assuré : fréquents dépassements d'honoraires et prévention pour AXA, ou besoins spécifiques en orthopédie/psychologie pour ProBTP.",
+  "best_coverage": "ProBTP, avec sa formule S2, assure une base solide de remboursement à 100% de la Base de Remboursement (BR) pour l'ensemble des soins courants essentiels : consultations, actes techniques, radiologie, pharmacie, auxiliaires médicaux et transport. Cela garantit une prise en charge intégrale pour les professionnels de santé respectant les tarifs conventionnés (secteur 1). Notre offre se distingue particulièrement sur les postes à fort impact financier comme les appareillages orthopédiques, où nous remboursons jusqu'à 250% BR, et la prise en charge des séances de psychologie remboursées par la SS, un atout majeur pour le bien-être mental de nos adhérents. Bien qu'AXA propose des pourcentages plus élevés sur certains actes, notre approche garantit une couverture claire et efficace sur les fondamentaux, avec des avantages ciblés sur des besoins spécifiques et coûteux.",
+  "salesperson_talking_points": [
+    "Mettez en avant notre 100% BR sur tous les soins courants essentiels, garantissant une absence de reste à charge pour les médecins de secteur 1 et une grande simplicité pour l'adhérent.",
+    "Soulignez notre excellente couverture pour les appareillages orthopédiques (250% BR), un point fort pour les besoins importants en matériel médical.",
+    "Insistez sur la prise en charge des séances de psychologie remboursées par la SS, une prestation que notre concurrent ne couvre pas et qui répond à un besoin croissant.",
+    "Expliquez que si AXA propose des pourcentages plus élevés, notre couverture à 100% BR est souvent suffisante pour les besoins habituels et que nos avantages ciblés apportent une valeur supérieure sur des postes clés.",
+    "Positionnez ProBTP comme la solution qui protège efficacement sur les dépenses imprévues et importantes, tout en assurant une couverture fiable au quotidien."
+  ],
+  "objective_assessment": {
+    "overall_winner": "axa",
+    "confidence": "high",
+    "reasoning": "AXA Base Obligatoire est objectivement meilleure pour la catégorie Soins courants. Elle offre des taux de remboursement significativement plus élevés (150-170% BR-MR) pour les consultations, actes médicaux, radiologie et analyses de laboratoire, ce qui est crucial pour couvrir les dépassements d'honoraires très fréquents en France. De plus, AXA propose un ensemble complet de prestations de prévention, un domaine où ProBTP S2 est totalement absent. Bien que ProBTP excelle sur les appareillages orthopédiques et la psychologie remboursée par la SS, ces postes sont moins universels et fréquents que les consultations médicales courantes et la prévention.",
+    "probtp_weaknesses": [
+      "Remboursements limités à 100% BR pour la plupart des honoraires médicaux, insuffisant pour les dépassements d'honoraires.",
+      "Absence totale de couverture pour les actes de prévention.",
+      "Couverture inférieure pour les vaccins non remboursés par la SS et la contraception non remboursée.",
+      "Couverture plus faible pour les médecines douces."
+    ],
+    "axa_weaknesses": [
+      "Absence de couverture pour les séances de psychologie remboursées par la Sécurité Sociale.",
+      "Couverture moins avantageuse pour les appareillages orthopédiques (170% BR-MR contre 250% BR pour ProBTP).",
+      "Moins bonne couverture pour les cures thermales."
+    ]
+  }
+}

@@ -1,0 +1,214 @@
+{
+  "template_row": [
+    "Catégorie",
+    "Sous-catégorie",
+    "Prestation",
+    "Part S.S.",
+    "ProBTP P4/S2",
+    "AXA Base Obligatoire"
+  ],
+  "metadata": {
+    "category": "Médecines Douces",
+    "policy_levels": {
+      "probtp": [
+        "S2",
+        "P4"
+      ],
+      "axa": [
+        "Base Obligatoire"
+      ]
+    },
+    "total_columns": 6,
+    "column_labels": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F"
+    ]
+  },
+  "rows": [
+    {
+      "row_number": 1,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A1",
+          "value": "Catégorie"
+        },
+        {
+          "id": "B1",
+          "value": "Sous-catégorie"
+        },
+        {
+          "id": "C1",
+          "value": "Prestation"
+        },
+        {
+          "id": "D1",
+          "value": "Part S.S."
+        },
+        {
+          "id": "E1",
+          "value": "ProBTP P4/S2"
+        },
+        {
+          "id": "F1",
+          "value": "AXA Base Obligatoire"
+        }
+      ]
+    },
+    {
+      "row_number": 2,
+      "inherited_from_above": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A2",
+          "value": "Prestations complémentaires",
+          "rowspan": 2,
+          "occupies": [
+            "A2",
+            "A3"
+          ]
+        },
+        {
+          "id": "B2",
+          "value": "Médecines douces"
+        },
+        {
+          "id": "C2",
+          "value": "Ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.",
+          "sources": {
+            "probtp": [
+              "2-6c"
+            ]
+          }
+        },
+        {
+          "id": "D2",
+          "value": "",
+          "sources": {
+            "probtp": [
+              "2-6d"
+            ]
+          }
+        },
+        {
+          "id": "E2",
+          "value": "4x40€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-6i"
+            ]
+          },
+          "metadata": {
+            "footnotes": [
+              "(21)",
+              "(22)"
+            ],
+            "conditions": "4 séances x 40€, plafond annuel 320€/an/famille. Soins effectués en France métropolitaine. Remboursement sur la base de factures acquittées."
+          }
+        },
+        {
+          "id": "F2",
+          "value": "50 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "5-7",
+              "5-9"
+            ]
+          },
+          "metadata": {
+            "conditions": "Forfait actes thérapeutiques (Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie). 50€ par séance, dans la limite de 3 séances par année civile et par bénéficiaire."
+          }
+        }
+      ]
+    },
+    {
+      "row_number": 3,
+      "inherited_from_above": [
+        "A2",
+        null,
+        null,
+        null,
+        null,
+        null
+      ],
+      "cells": [
+        {
+          "id": "A3",
+          "ref": "A2"
+        },
+        {
+          "id": "B3",
+          "value": ""
+        },
+        {
+          "id": "C3",
+          "value": "Cures thermales",
+          "sources": {
+            "probtp": [
+              "2-6l"
+            ]
+          }
+        },
+        {
+          "id": "D3",
+          "value": "65%",
+          "sources": {
+            "probtp": [
+              "2-6m"
+            ]
+          }
+        },
+        {
+          "id": "E3",
+          "value": "100% + 100€",
+          "type": "data",
+          "sources": {
+            "probtp": [
+              "2-6o"
+            ]
+          },
+          "metadata": {
+            "footnotes": [
+              "(23)"
+            ],
+            "conditions": "Limité à une cure par an et par bénéficiaire."
+          }
+        },
+        {
+          "id": "F3",
+          "value": "300 €",
+          "type": "data",
+          "sources": {
+            "axa": [
+              "5-E",
+              "5-G"
+            ]
+          },
+          "metadata": {
+            "conditions": "Frais médicaux, frais de séjour et frais de transport pris en charge par la Sécurité sociale."
+          }
+        }
+      ]
+    }
+  ]
+}

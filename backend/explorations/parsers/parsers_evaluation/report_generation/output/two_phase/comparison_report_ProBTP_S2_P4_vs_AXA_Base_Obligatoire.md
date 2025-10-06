@@ -1,5 +1,5 @@
 ---
-Generated: 2025-10-04T19:01:44.307656
+Generated: 2025-10-04T23:16:21.163393
 Model: gemini-2.5-flash
 ProBTP Document: File #3 - Panorama FMC 2025
 AXA Document: File #1 - Laurent M - Conditions particulières - Socle AXA - SAE
@@ -12,138 +12,140 @@ Categories: Soins Courants, Hospitalisation, Optique, Soins Dentaires, Audiologi
 
 ## Différences Stratégiques
 
-ProBTP et AXA adoptent des philosophies de couverture distinctes. ProBTP se concentre sur une protection complète et prévisible pour les soins courants et les besoins spécifiques comme l'optique hors 100% Santé, les soins externes ou l'accompagnement psychologique, souvent avec des remboursements du ticket modérateur ou des forfaits généreux via des réseaux partenaires comme Sévéane. Leur approche vise à minimiser le reste à charge sur les dépenses de santé fréquentes et essentielles.
-AXA, en revanche, excelle dans la couverture des postes de dépenses élevés et moins fréquents, tels que l'hospitalisation (notamment les dépassements d'honoraires), les soins dentaires complexes (prothèses, implants, orthodontie) et l'audiologie hors 100% Santé. Leurs offres sont souvent conditionnées par l'adhésion des professionnels de santé au DPTAM pour les honoraires médicaux, et proposent des forfaits élevés pour les médecines douces ou les cures thermales, s'adressant à ceux qui recherchent une protection maximale contre les risques financiers majeurs.
+ProBTP adopte une approche axée sur une couverture prévisible et complète pour les soins courants et les besoins spécifiques à forte valeur ajoutée, souvent via des réseaux partenaires. Leur philosophie vise à minimiser le reste à charge pour les services essentiels et fréquents, ainsi que pour des postes ciblés comme l'orthopédie ou l'orthodontie adulte. AXA, en revanche, privilégie des pourcentages de remboursement plus élevés pour les actes médicaux avec dépassements d'honoraires importants, une couverture supérieure pour les traitements spécialisés très coûteux (chirurgie réfractive, audiologie haut de gamme) et des programmes de prévention solides. La stratégie d'AXA offre une protection plus robuste contre les chocs financiers majeurs et moins fréquents, tandis que ProBTP cherche à apporter une valeur quotidienne constante et des avantages ciblés.
 
 ## Forces par Catégorie
 
 ### Soins courants
 
 **ProBTP:**
-- Couverture à 100% des soins externes, un avantage unique
-- Prise en charge intégrale de l'accompagnement psychologique remboursé par la SS
-- 250% BR pour les appareillages orthopédiques
+- Remboursement à 100% BR pour les soins essentiels (consultations, actes techniques, radiologie, pharmacie, auxiliaires médicaux).
+- Excellente couverture pour les appareillages orthopédiques (jusqu'à 250% BR).
+- Prise en charge des séances de psychologie remboursées par la Sécurité Sociale.
 
 **AXA:**
-- Remboursements plus élevés pour consultations et actes techniques (DPTAM)
-- Meilleure couverture vaccins et contraception non remboursés
-- Prise en charge des médecines non conventionnelles
+- Remboursements significativement plus élevés pour les honoraires médicaux et paramédicaux (150-170% BR-MR), couvrant mieux les dépassements d'honoraires.
+- Package de prévention complet et innovant.
+- Meilleure couverture pour les vaccins non remboursés par la SS et la contraception non remboursée.
 
 ### Hospitalisation
 
 **ProBTP:**
-- Prise en charge intégrale du forfait journalier et participation forfaitaire
-- Couverture du ticket modérateur pour les honoraires
-- Solution économique pour une couverture essentielle
+- Couverture des honoraires jusqu'aux frais réels pour les praticiens OPTAM (ProBTP S4).
+- Prise en charge intégrale du forfait journalier hospitalier.
+- Garantie solide pour la chambre particulière (80 €/jour en S4).
 
 **AXA:**
-- Couverture des honoraires jusqu'à 500% BR, protégeant des dépassements
-- Remboursements plus élevés pour chambre particulière (85€/jour)
-- Remboursements plus élevés pour lit accompagnant (40€/jour)
+- Indemnités journalières plus élevées pour la chambre particulière (100 €/jour) et le lit accompagnant.
+- Couverture de frais de séjour spécifiques (médical/chirurgical, conventionné/non conventionné).
+- Remboursement très élevé des honoraires (480% BR-MR).
 
 ### Optique
 
 **ProBTP:**
-- Forfaits généreux pour équipements optiques libres (verres/montures)
-- Suppléments forte correction pris en charge
-- Avantages via le réseau Sévéane pour des remboursements optimisés
+- Forfaits clairs et avantageux pour les équipements libres, surtout via le réseau Sévéane.
+- Prise en charge du supplément forte correction.
+- Renouvellement plus flexible pour les mineurs (12 mois).
 
 **AXA:**
-- Meilleure couverture pour les lentilles (remboursées ou non par la SS)
-- Meilleure couverture pour la chirurgie réfractive de la vue
+- Couverture supérieure pour la chirurgie réfractive (jusqu'à 800€).
+- Remboursement des lentilles non remboursées par la S.S. légèrement supérieur.
+- Offre compétitive pour les équipements 100% Santé.
 
-### Dentaire
+### Soins Dentaires
 
 **ProBTP:**
-- Prise en charge à frais réels des soins et prothèses 100% Santé
-- Offre économique adaptée aux besoins dentaires basiques
+- Prise en charge en 'Frais réels' pour les soins et prothèses 100% santé et à honoraires maîtrisés.
+- Couverture supérieure pour l'orthodontie adulte non prise en charge par la SS (400€/semestre).
+- Remboursement compétitif des implants via le réseau Sévéane (800€).
 
 **AXA:**
-- Remboursements significativement plus élevés pour inlays/onlays et prothèses
-- Meilleure prise en charge de l'orthodontie
-- Prise en charge forfaitaire pour parodontologie et implants
+- Pourcentages de remboursement plus élevés pour les soins dentaires courants (inlay/onlay, autres soins SS).
+- Meilleure prise en charge des implants hors réseau partenaire (jusqu'à 1200€).
+- Meilleure couverture pour l'orthodontie prise en charge par la SS.
 
 ### Audiologie
 
 **ProBTP:**
-- Prise en charge intégrale des équipements 100% santé
-- Remboursement hors 100% santé via Sévéane
-- Couverture des accessoires à 100% BR
+- Prise en charge intégrale des équipements auditifs 100% santé (reste à charge zéro).
+- Avantages via le réseau partenaire Sévéane pour les prothèses hors 100% santé (jusqu'à 1350€).
+- Couverture solide pour les besoins essentiels.
 
 **AXA:**
-- Remboursements totaux plus élevés pour prothèses auditives hors 100% santé (adultes et enfants)
-- Couverture plus généreuse des accessoires (300% BR)
+- Plafonds de remboursement significativement plus élevés pour les prothèses auditives hors 100% santé (adultes et jeunes).
+- Meilleure prise en charge des accessoires (300% BR).
+- Couverture intégrale des équipements auditifs 100% santé.
 
 ### Médecines Douces
 
 **ProBTP:**
-- Plus de séances autorisées (4/an et par bénéficiaire)
-- Plafond annuel familial de 320€
-- Bonne couverture des cures thermales (100% BR + 150€)
+- Plafond annuel familial de 320€ pour les médecines douces.
+- Jusqu'à 4 séances de médecines douces par an.
+- Couverture nettement supérieure pour les cures thermales (100% BR + 100€).
 
 **AXA:**
-- Remboursement par séance plus élevé (50€)
-- Forfait cures thermales plus généreux (300€)
+- Remboursement par séance légèrement plus élevé pour les médecines douces (50€/séance).
+- Plafond individuel de 150€ pour les médecines douces.
+- Couverture pour les cures thermales (300€ forfaitaire).
 
 ## Forces Globales
 
 ### ProBTP
 
-- Excellente couverture pour les soins courants et les dépenses de santé fréquentes
-- Protection forte sur des postes spécifiques souvent mal couverts par la concurrence (soins externes, accompagnement psychologique)
-- Avantages significatifs pour les équipements optiques hors 100% Santé, offrant choix et flexibilité
-- Approche familiale avec des plafonds ou nombres de séances adaptés (médecines douces)
-- Simplicité et prévisibilité des remboursements du ticket modérateur sur de nombreux postes
+- Excellente maîtrise du reste à charge pour les prestations 100% Santé et à honoraires maîtrisés (dentaire, audioprothèse).
+- Couverture solide et prévisible pour les soins courants et essentiels, minimisant les dépenses quotidiennes.
+- Avantages significatifs pour les familles (plafond familial médecines douces, renouvellement optique mineurs).
+- Prise en charge ciblée sur des postes coûteux et spécifiques (orthopédie, orthodontie adulte, psychologie SS).
+- Bénéfices du réseau Sévéane pour des tarifs négociés et une meilleure prise en charge (optique, dentaire, audio).
 
 ### AXA
 
-- Protection supérieure contre les risques financiers majeurs (hospitalisation, dentaire complexe)
-- Remboursements très élevés pour les dépassements d'honoraires médicaux (sous condition DPTAM)
-- Couverture généreuse pour les soins spécialisés coûteux (prothèses dentaires, implants, audioprothèses hors 100% Santé)
-- Prise en charge de prestations non remboursées par la Sécurité Sociale (médecines douces, vaccins, contraception)
-- Forfaits élevés pour les postes spécifiques (cures thermales, chirurgie réfractive)
+- Remboursements très élevés pour les dépassements d'honoraires en soins courants et hospitalisation.
+- Couverture supérieure pour les traitements spécialisés très coûteux (chirurgie réfractive, prothèses auditives haut de gamme, implants dentaires hors réseau).
+- Programmes de prévention complets et innovants, favorisant le bien-être à long terme.
+- Indemnités journalières plus généreuses pour le confort en hospitalisation (chambre particulière).
+- Offre compétitive pour les soins dentaires courants et l'orthodontie prise en charge par la SS.
 
 ## Évaluation Objective Globale
 
 **Gagnant Global:** MIXED
-**Confiance:** high
+**Confiance:** medium
 
-Le choix du contrat le plus avantageux dépend fortement du profil et des besoins de l'assuré. AXA offre une protection supérieure pour les dépenses de santé majeures et coûteuses, tandis que ProBTP excelle dans la couverture des soins courants, de l'optique libre et de besoins spécifiques, offrant une meilleure gestion du budget quotidien.
+La comparaison révèle un équilibre entre les deux assureurs, chacun excellant dans des domaines distincts. ProBTP est plus avantageux pour les besoins quotidiens, les familles et la maîtrise du reste à charge sur le 100% Santé, tandis qu'AXA se démarque par une meilleure couverture des dépassements d'honoraires et des traitements spécialisés très coûteux. Le choix optimal dépendra fortement du profil de consommation de soins de l'assuré.
 
 ### Gagnants par Catégorie
 
-**Soins courants:** AXA (confiance: medium)
-  ↳ AXA offre globalement des taux de remboursement plus élevés pour les consultations et actes techniques, même si conditionnés au DPTAM, et couvre mieux les vaccins/médecines douces.
+**Soins courants:** AXA (confiance: high)
+  ↳ Ses taux de remboursement plus élevés couvrent mieux les dépassements d'honoraires fréquents et incluent la prévention.
 
-**Hospitalisation:** AXA (confiance: high)
-  ↳ La couverture des honoraires jusqu'à 500% BR et les remboursements plus élevés pour la chambre particulière d'AXA sont décisifs face aux coûts élevés.
+**Hospitalisation:** PROBTP (confiance: medium)
+  ↳ La garantie 'Frais réels si OPTAM' de ProBTP S4 est cruciale pour les honoraires, le plus gros risque financier.
 
-**Optique:** PROBTP (confiance: high)
-  ↳ ProBTP P4 offre des forfaits substantiels pour les équipements optiques libres (verres et montures), une catégorie non couverte par AXA.
+**Optique:** PROBTP (confiance: medium)
+  ↳ ProBTP P4 offre des forfaits clairs et généreux pour les équipements libres, répondant aux besoins majoritaires.
 
-**Dentaire:** AXA (confiance: high)
-  ↳ AXA propose des remboursements significativement plus élevés pour les prothèses, l'orthodontie, la parodontologie et les implants, des postes très coûteux.
+**Soins Dentaires:** AXA (confiance: medium)
+  ↳ AXA est plus généreux sur un plus grand nombre de prestations courantes et les implants hors réseau partenaire.
 
 **Audiologie:** AXA (confiance: high)
-  ↳ AXA offre des remboursements totaux plus élevés pour les prothèses auditives hors 100% Santé et une couverture plus généreuse des accessoires.
+  ↳ AXA propose des plafonds de remboursement significativement plus élevés pour les prothèses hors 100% santé et les accessoires.
 
 **Médecines Douces:** PROBTP (confiance: medium)
-  ↳ ProBTP P4 offre un nombre de séances plus élevé et un plafond annuel familial, ce qui est plus avantageux pour une utilisation régulière.
+  ↳ ProBTP offre un plafond familial plus généreux, plus de séances et une meilleure couverture des cures thermales.
 
 ## Points de Vente ProBTP
 
-- ProBTP offre une tranquillité d'esprit sur les dépenses de santé quotidiennes et fréquentes, avec un reste à charge maîtrisé.
-- Nous couvrons des postes essentiels et souvent coûteux comme les soins externes et l'accompagnement psychologique, là où la concurrence est absente ou limitée.
-- Avec ProBTP, vous avez la liberté de choisir vos équipements optiques hors 100% Santé, grâce à des forfaits généreux et les avantages de notre réseau Sévéane.
-- Notre approche familiale pour les médecines douces, avec un plafond annuel et plus de séances, est idéale pour le bien-être de toute la famille.
-- ProBTP garantit une couverture solide et prévisible du ticket modérateur sur la majorité des postes, évitant les mauvaises surprises.
-- Pour les soins et prothèses 100% Santé, ProBTP assure un reste à charge de 0€, une garantie fondamentale pour l'accès aux soins.
-- Choisissez ProBTP pour une mutuelle qui s'adapte à votre budget et à vos besoins réels, sans payer pour des garanties de très haut niveau que vous n'utiliserez pas.
+- ProBTP garantit un reste à charge zéro sur le 100% Santé (optique, dentaire, audio), offrant une sérénité financière inégalée sur ces postes essentiels.
+- Bénéficiez d'une couverture prévisible et solide pour vos soins courants, avec des avantages ciblés sur l'orthopédie et la psychologie remboursée par la SS.
+- Notre offre est particulièrement avantageuse pour les familles, avec un plafond familial pour les médecines douces et un renouvellement optique flexible pour les enfants.
+- Avec ProBTP S4, protégez-vous des dépassements d'honoraires en hospitalisation grâce à la couverture 'Frais réels si OPTAM', là où le risque financier est le plus élevé.
+- Le réseau Sévéane vous donne accès à des tarifs négociés et une meilleure prise en charge en optique, dentaire et audiologie, optimisant votre budget santé.
+- Choisissez ProBTP pour une mutuelle qui se concentre sur vos besoins réels et fréquents, vous offrant une meilleure maîtrise de votre budget santé au quotidien.
+- Contrairement à AXA qui excelle sur des postes très spécifiques et moins fréquents, ProBTP assure une protection globale et constante pour votre bien-être et celui de votre famille.
 
 ## Adéquation Client
 
-ProBTP est idéal pour les familles, les individus ayant des besoins de santé réguliers (consultations, lunettes, médecines douces), ceux qui privilégient la liberté de choix pour l'optique hors 100% Santé, et ceux qui recherchent une couverture solide et prévisible pour les dépenses courantes. C'est la solution pour une gestion sereine du budget santé quotidien, avec une protection ciblée sur des postes importants et une approche familiale.
-AXA convient mieux aux individus qui souhaitent une protection maximale contre les risques financiers majeurs et imprévus, comme une hospitalisation avec dépassements d'honoraires importants, des soins dentaires complexes (implants, orthodontie), ou des équipements auditifs haut de gamme. C'est un choix pertinent pour les personnes plus jeunes et en bonne santé qui veulent se prémunir contre des coûts exceptionnels, ou ceux qui consultent des spécialistes adhérant au DPTAM et utilisent des médecines alternatives.
+ProBTP est idéalement adapté aux familles, aux individus ayant des besoins de santé réguliers ou chroniques, et à ceux qui recherchent une excellente maîtrise du reste à charge sur les prestations 100% Santé. Sa couverture prévisible pour les soins courants, ses avantages familiaux (médecines douces, optique enfants) et sa prise en charge ciblée sur des postes coûteux comme l'orthopédie ou l'orthodontie adulte en font un choix pertinent pour une protection quotidienne et structurante. C'est la solution pour ceux qui privilégient la tranquillité d'esprit sur les dépenses fréquentes et essentielles.AXA convient mieux aux jeunes adultes en bonne santé, aux personnes ayant des revenus plus élevés et consultant des praticiens avec dépassements d'honoraires, ou à celles qui anticipent des dépenses très spécifiques et onéreuses comme une chirurgie réfractive ou des prothèses auditives haut de gamme. Son accent sur la prévention et les remboursements élevés pour des actes spécialisés en fait un choix intéressant pour une protection contre les risques majeurs et une approche proactive de la santé, même si cela peut impliquer un reste à charge plus important sur les soins courants de base.
 
 
 ---
@@ -156,20 +158,10 @@ AXA convient mieux aux individus qui souhaitent une protection maximale contre l
 
 <table>
   <tr>
-    <th> </th>
-    <th> </th>
-    <th> </th>
+    <th colspan="3"> </th>
     <th>Part S.S.*</th>
-    <th>ProBTP S2</th>
-    <th>AXA Base Obligatoire</th>
-  </tr>
-  <tr>
-    <th>Catégorie</th>
-    <th>Sous-catégorie</th>
-    <th>Prestation</th>
-    <th> </th>
-    <th> </th>
-    <th> </th>
+    <th>S2</th>
+    <th>Base Obligatoire</th>
   </tr>
   <tr>
     <th rowspan="13">Soins courants</th>
@@ -177,25 +169,25 @@ AXA convient mieux aux individus qui souhaitent une protection maximale contre l
     <th>Consultations et visites (généralistes et spécialistes)</th>
     <th>70%</th>
     <td>100%</td>
-    <td><strong>170% BR-MR</strong> ✓</td>
+    <td><strong>150% BR-MR à 170% BR-MR</strong> ✓</td>
   </tr>
   <tr>
     <th>Actes techniques médicaux</th>
     <th>70%</th>
     <td>100%</td>
-    <td><strong>170% BR-MR</strong> ✓</td>
+    <td><strong>150% BR-MR à 170% BR-MR</strong> ✓</td>
   </tr>
   <tr>
     <th>Radiologie</th>
     <th>70%</th>
     <td>100%</td>
-    <td><strong>170% BR-MR</strong> ✓</td>
+    <td><strong>150% BR-MR à 170% BR-MR</strong> ✓</td>
   </tr>
   <tr>
     <th>Soins externes</th>
     <th>60% à 70%</th>
-    <td><strong>100%</strong> ✓</td>
-    <td>Non couvert</td>
+    <td>100%</td>
+    <td><strong>160% BR-MR</strong> ✓</td>
   </tr>
   <tr>
     <th rowspan="4">Honoraires paramédicaux</th>
@@ -226,7 +218,7 @@ AXA convient mieux aux individus qui souhaitent une protection maximale contre l
     <th rowspan="3">Médicaments</th>
     <th>Pharmacie remboursée par la S.S.</th>
     <th>65% 30% 15%</th>
-    <td><strong>100% 30% 15%</strong> ✓</td>
+    <td><strong>100%</strong> ✓</td>
     <td><strong>100% BR-MR</strong> ✓</td>
   </tr>
   <tr>
@@ -238,7 +230,7 @@ AXA convient mieux aux individus qui souhaitent une protection maximale contre l
   <tr>
     <th>Contraception prescrite, non remboursée par la S.S.</th>
     <th> </th>
-    <td>30€/an/bénéf.</td>
+    <td> </td>
     <td><strong>50 €</strong> ✓</td>
   </tr>
   <tr>
@@ -249,56 +241,128 @@ AXA convient mieux aux individus qui souhaitent une protection maximale contre l
     <td>170% BR-MR</td>
   </tr>
   <tr>
-    <th>Médecines non conventionnelles</th>
-    <th>Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie</th>
     <th> </th>
+    <th> </th>
+    <th> </th>
+    <th colspan="2"> </th>
+  </tr>
+  <tr>
+    <th>Médecines douces agréées</th>
+    <th>Ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.</th>
+    <th> </th>
+    <th> </th>
+    <td>2x40€</td>
+    <td><strong>50 € / séance</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Cures thermales</th>
+    <th> </th>
+    <th>65%</th>
+    <th>100% + 100€</th>
+    <td><strong>100% + 150€ (23)</strong> ✓</td>
+    <td>300 €</td>
+  </tr>
+  <tr>
+    <th>Prévention</th>
+    <th>Médicaments et produits à base de nicotine pour sevrage tabagique</th>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
     <td>Non couvert</td>
     <td><strong>50 €</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Prévention</th>
+    <th>Consultation chez un diététicien</th>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>1,25% PMSS</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Prévention</th>
+    <th>Test de dépistage des virus impliqués dans le cancer du col de l'utérus (Test HPV)</th>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>170% BR-MR</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Prévention</th>
+    <th>Tout acte de prévention prévu à l'article R 871-2 du code de la Sécurité sociale</th>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>Inclus</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Prévention</th>
+    <th>Téléconsultation</th>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>Inclus</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Prévention</th>
+    <th>Séances d'activité physique adaptée</th>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>200 €</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Prévention</th>
+    <th>Connecteur Bluetooth aux stylos à insuline et aux glucomètres</th>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>100 €</strong> ✓</td>
   </tr>
 </table>
 
 ### Différences Clés
 
-AXA Base Obligatoire offre des remboursements plus élevés pour les consultations médicales, les actes techniques, la radiologie, les auxiliaires médicaux et les analyses de laboratoire, à condition que le médecin adhère au DPTAM. ProBTP S2 se distingue par une meilleure couverture des soins externes, de l'accompagnement psychologique et des appareillages orthopédiques, ainsi qu'une prise en charge explicite pour certains médicaments.
+AXA offre des remboursements nettement supérieurs pour la plupart des honoraires médicaux (consultations, actes techniques, radiologie) et paramédicaux, couvrant mieux les dépassements d'honoraires. De plus, AXA propose un package de prévention complet, absent chez ProBTP. ProBTP se distingue par une meilleure couverture pour les appareillages orthopédiques et la prise en charge des séances de psychologie remboursées par la Sécurité Sociale.
 
 ### Exemples Concrets
 
-- Pour une consultation chez un médecin généraliste de secteur 1 (BR 26,50 €) adhérent DPTAM: ProBTP S2 rembourse 26,50 € (reste à charge 0 €), AXA Base Obligatoire rembourse 45,05 € (170% de 26,50 € - 1€ PF = 45,05€ - 1€ = 44,05€, reste à charge 0 € et dépassement possible couvert). Si la consultation est à 30€, ProBTP rembourse 26,50€ (reste à charge 3,50€), AXA rembourse 30€ (reste à charge 0€).
-- Pour une séance de psychologue remboursée par la SS (BR 40 €): ProBTP S2 rembourse 40 € (reste à charge 0 €), AXA Base Obligatoire ne couvre pas (reste à charge 40 €).
-- Pour un appareillage orthopédique d'une valeur de 200 € (BR 100 €): ProBTP S2 rembourse jusqu'à 250 € (250% de BR), couvrant entièrement l'appareillage (reste à charge 0 €). AXA Base Obligatoire rembourse jusqu'à 170 € (170% de BR), laissant un reste à charge de 30 €.
+- Pour une consultation chez un spécialiste de secteur 2 coûtant 70€ (BR 26.50€), ProBTP S2 rembourse 26.50€ (100% BR), laissant 43.50€ à votre charge. AXA Base Obligatoire, avec 150% BR, rembourse 39.75€, laissant 30.25€ à votre charge.
+- Pour une séance d'ostéopathie à 60€ (non remboursée par la SS), ProBTP S2 rembourse 40€ (limite 2/an), laissant 20€ à votre charge. AXA Base Obligatoire rembourse 50€ (limite 3/an), laissant 10€ à votre charge.
+- Pour un appareillage orthopédique coûtant 200€ (BR 100€), ProBTP S2 rembourse 250% BR, soit 200€, ne laissant aucun reste à charge. AXA Base Obligatoire rembourse 170% BR, soit 170€, laissant 30€ à votre charge.
 
 ### Analyse de Valeur
 
-La valeur réelle de chaque contrat dépend fortement des besoins de l'assuré. AXA est avantageux pour ceux qui consultent fréquemment des spécialistes ou généralistes adhérents au DPTAM et qui ont des besoins en analyses ou auxiliaires médicaux. ProBTP est plus protecteur pour des besoins spécifiques comme les soins externes, le soutien psychologique et les appareillages. Le risque financier le plus élevé se situe souvent dans les dépassements d'honoraires, où AXA offre une meilleure protection si le professionnel de santé est conventionné DPTAM. AXA offre également une couverture pour les médecines douces, ce qui peut être un avantage pour certains, tandis que ProBTP se démarque sur des postes comme les soins externes qui peuvent être coûteux et imprévus.
+La fréquence d'utilisation des consultations et actes médicaux avec dépassements d'honoraires est très élevée, rendant la couverture supérieure d'AXA financièrement plus protectrice pour la majorité des assurés. Le package de prévention d'AXA représente une valeur ajoutée significative pour les individus soucieux de leur bien-être à long terme, même si ces actes sont moins fréquents. ProBTP est plus avantageux pour des besoins spécifiques et potentiellement coûteux comme les prothèses orthopédiques ou le soutien psychologique remboursé, mais ces situations sont moins courantes que les consultations généralistes ou spécialistes. Le choix dépendra donc du profil de dépenses de santé de l'assuré : fréquents dépassements d'honoraires et prévention pour AXA, ou besoins spécifiques en orthopédie/psychologie pour ProBTP.
 
 ### Meilleure Couverture (Perspective ProBTP)
 
-ProBTP S2 offre une couverture solide et protectrice pour les besoins essentiels et inattendus en soins courants. Notre offre se distingue particulièrement sur des postes clés comme les soins externes, souvent non couverts par la concurrence, et un remboursement intégral des séances d'accompagnement psychologique remboursées par la Sécurité Sociale, un besoin croissant. De plus, notre prise en charge à 250% pour les appareillages orthopédiques assure une excellente protection contre les coûts élevés. Bien qu'AXA puisse offrir des pourcentages plus élevés sur certains actes médicaux sous condition de DPTAM, ProBTP garantit une couverture à 100% de la BR sur la plupart des postes, assurant une prise en charge complète du ticket modérateur, sans conditions restrictives. Nous offrons une tranquillité d'esprit sur les dépenses courantes et une protection ciblée sur des postes importants.
+ProBTP, avec sa formule S2, assure une base solide de remboursement à 100% de la Base de Remboursement (BR) pour l'ensemble des soins courants essentiels : consultations, actes techniques, radiologie, pharmacie, auxiliaires médicaux et transport. Cela garantit une prise en charge intégrale pour les professionnels de santé respectant les tarifs conventionnés (secteur 1). Notre offre se distingue particulièrement sur les postes à fort impact financier comme les appareillages orthopédiques, où nous remboursons jusqu'à 250% BR, et la prise en charge des séances de psychologie remboursées par la SS, un atout majeur pour le bien-être mental de nos adhérents. Bien qu'AXA propose des pourcentages plus élevés sur certains actes, notre approche garantit une couverture claire et efficace sur les fondamentaux, avec des avantages ciblés sur des besoins spécifiques et coûteux.
 
 ### Points de Vente
 
-- Mettez en avant la couverture à 100% des soins externes par ProBTP, un avantage unique qui protège contre des dépenses imprévues et potentiellement élevées, là où AXA ne couvre rien.
-- Soulignez notre prise en charge intégrale des séances d'accompagnement psychologique remboursées par la SS, un soutien essentiel pour le bien-être, sans reste à charge pour nos adhérents.
-- Insistez sur notre remboursement à 250% de la BR pour les appareillages orthopédiques, offrant une protection supérieure face aux coûts importants pour la mobilité et le confort.
-- Expliquez que si AXA propose des pourcentages plus élevés sur certains actes médicaux, ceux-ci sont souvent conditionnés à l'adhésion du médecin au DPTAM, ce qui n'est pas toujours le cas. ProBTP assure une couverture simple et efficace à 100% de la BR sur la majorité des postes, garantissant le remboursement du ticket modérateur sans conditions complexes.
-- Mentionnez que pour la pharmacie remboursée par la SS, ProBTP garantit une couverture complète du ticket modérateur pour les médicaments les plus importants, offrant une clarté et une sécurité pour les dépenses quotidiennes.
+- Mettez en avant notre 100% BR sur tous les soins courants essentiels, garantissant une absence de reste à charge pour les médecins de secteur 1 et une grande simplicité pour l'adhérent.
+- Soulignez notre excellente couverture pour les appareillages orthopédiques (250% BR), un point fort pour les besoins importants en matériel médical.
+- Insistez sur la prise en charge des séances de psychologie remboursées par la SS, une prestation que notre concurrent ne couvre pas et qui répond à un besoin croissant.
+- Expliquez que si AXA propose des pourcentages plus élevés, notre couverture à 100% BR est souvent suffisante pour les besoins habituels et que nos avantages ciblés apportent une valeur supérieure sur des postes clés.
+- Positionnez ProBTP comme la solution qui protège efficacement sur les dépenses imprévues et importantes, tout en assurant une couverture fiable au quotidien.
 
 ### Évaluation Objective
 
 **Gagnant:** AXA
-**Confiance:** medium
+**Confiance:** high
 
-**Raisonnement:** AXA Base Obligatoire est globalement plus avantageux pour les soins courants, notamment grâce à des taux de remboursement plus élevés (170% BR-MR et 160% BR-MR) pour les consultations, actes techniques, radiologie, auxiliaires médicaux et analyses de laboratoire, même si ces derniers sont conditionnés à l'adhésion au DPTAM pour les honoraires médicaux. Ces postes représentent une part significative des dépenses de santé courantes. De plus, AXA offre une meilleure couverture pour les vaccins et la contraception non remboursés par la SS, ainsi que la prise en charge des médecines non conventionnelles, des avantages que ProBTP ne propose pas ou de manière limitée.
+**Raisonnement:** AXA Base Obligatoire est objectivement meilleure pour la catégorie Soins courants. Elle offre des taux de remboursement significativement plus élevés (150-170% BR-MR) pour les consultations, actes médicaux, radiologie et analyses de laboratoire, ce qui est crucial pour couvrir les dépassements d'honoraires très fréquents en France. De plus, AXA propose un ensemble complet de prestations de prévention, un domaine où ProBTP S2 est totalement absent. Bien que ProBTP excelle sur les appareillages orthopédiques et la psychologie remboursée par la SS, ces postes sont moins universels et fréquents que les consultations médicales courantes et la prévention.
 
 **Faiblesses ProBTP:**
-- Remboursements à 100% BR pour les honoraires médicaux, actes techniques, radiologie, auxiliaires médicaux et analyses de laboratoire, ce qui est inférieur aux 160-170% BR d'AXA et ne couvre pas les dépassements d'honoraires.
-- Couverture très limitée pour les vaccins non remboursés (seulement 15€ pour le vaccin anti-grippe) et la contraception non remboursée (30€/an).
-- Absence de couverture pour les médecines non conventionnelles.
+- Remboursements limités à 100% BR pour la plupart des honoraires médicaux, insuffisant pour les dépassements d'honoraires.
+- Absence totale de couverture pour les actes de prévention.
+- Couverture inférieure pour les vaccins non remboursés par la SS et la contraception non remboursée.
+- Couverture plus faible pour les médecines douces.
 
 **Faiblesses AXA:**
-- Ne couvre pas les soins externes.
-- Ne couvre pas les séances d'accompagnement psychologique remboursées par la SS.
-- Les remboursements plus élevés pour les honoraires médicaux sont conditionnés à l'adhésion du médecin au DPTAM, ce qui peut ne pas être toujours le cas et réduire l'avantage perçu.
+- Absence de couverture pour les séances de psychologie remboursées par la Sécurité Sociale.
+- Couverture moins avantageuse pour les appareillages orthopédiques (170% BR-MR contre 250% BR pour ProBTP).
+- Moins bonne couverture pour les cures thermales.
 
 
 ---
@@ -311,86 +375,118 @@ ProBTP S2 offre une couverture solide et protectrice pour les besoins essentiels
 
 <table>
   <tr>
-    <th> </th>
-    <th> </th>
-    <th>Part S.S.*</th>
-    <th>S2</th>
-    <th>Base Obligatoire</th>
+    <th colspan="3"> </th>
+    <th>Part S.S.* *</th>
+    <th>ProBTP S2</th>
+    <th>ProBTP S4</th>
+    <th>AXA Base Obligatoire</th>
   </tr>
   <tr>
+    <th rowspan="5">Hospitalisation</th>
     <th rowspan="4">Honoraires</th>
     <th>Honoraires, frais de séjour</th>
-    <th>80%</th>
+    <td>80%</td>
     <td>100%</td>
-    <td><strong>100% FR-SS (conventionné)</strong> ✓</td>
+    <td><strong>200% (Frais réels si OPTAM)</strong> ✓</td>
+    <td>480% BR-MR</td>
   </tr>
   <tr>
     <th>Chambre particulière</th>
-    <th>Non couvert</th>
-    <td>50 € / jour</td>
+    <td> </td>
+    <td>-</td>
+    <td>80 € / jour</td>
     <td><strong>85 €</strong> ✓</td>
   </tr>
   <tr>
     <th>Lit accompagnant pour enfants de -12 ans ou bénéficiaires de + 70 ans</th>
-    <th>23€/jour</th>
+    <td> </td>
+    <td>23 € / jour</td>
     <td>23 € / jour</td>
     <td><strong>40 €</strong> ✓</td>
   </tr>
   <tr>
     <th>Participation forfaitaire pour les actes supérieurs à 120€</th>
-    <th>100% - 1 forfait</th>
+    <td>100% - 1 forfait</td>
+    <td><strong>100% du forfait</strong> ✓</td>
     <td><strong>100% du forfait</strong> ✓</td>
     <td><strong>100% du forfait</strong> ✓</td>
   </tr>
   <tr>
-    <th colspan="2">Forfait journalier et forfait urgences en établissement hospitalier 344bis</th>
-    <th> </th>
+    <th colspan="2">Forfait journalier[3] [4] et forfait urgences [3] [4bis] en établissement hospitalier 344bis</th>
+    <td> </td>
+    <td><strong>oui</strong> ✓</td>
     <td><strong>oui</strong> ✓</td>
     <td><strong>100% du forfait</strong> ✓</td>
+  </tr>
+  <tr>
+    <th colspan="3">Garanties supplémentaires AXA</th>
+    <td> </td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>100% FR-SS</strong> ✓</td>
+  </tr>
+  <tr>
+    <th colspan="3"> </th>
+    <td> </td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>90% FR-SS</strong> ✓</td>
+  </tr>
+  <tr>
+    <th colspan="3"> </th>
+    <td> </td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>100% FR-SS</strong> ✓</td>
+  </tr>
+  <tr>
+    <th colspan="3"> </th>
+    <td> </td>
+    <td>Non couvert</td>
+    <td>Non couvert</td>
+    <td><strong>90% FR-SS</strong> ✓</td>
   </tr>
 </table>
 
 ### Différences Clés
 
-AXA Base Obligatoire offre une couverture nettement supérieure pour les honoraires médicaux en cas d'hospitalisation, avec une limite de 500% de la Base de Remboursement (BR), là où ProBTP S2 se limite à 100% BR, couvrant principalement le Ticket Modérateur. De plus, AXA propose des remboursements quotidiens plus élevés pour la chambre particulière et le lit accompagnant, avec des conditions plus favorables pour les familles.
+ProBTP S4 se distingue par une couverture des honoraires pouvant aller jusqu'aux frais réels si le praticien est OPTAM, offrant une protection maximale contre les dépassements d'honoraires. AXA Base Obligatoire propose des indemnisations journalières plus élevées pour le confort (chambre particulière, lit accompagnant) et couvre des frais de séjour spécifiques non pris en charge par ProBTP. ProBTP S2 est une offre plus basique avec des garanties limitées sur ces postes.
 
 ### Exemples Concrets
 
-- Pour une intervention chirurgicale avec des honoraires de 1500 € (BR 500 €, dépassement 1000 €), la Sécurité Sociale rembourse 350 €. ProBTP S2, avec 100% BR, rembourse 150 € (le Ticket Modérateur), laissant 1000 € à votre charge. AXA Base Obligatoire, avec sa limite de 500% BR, rembourse les 1150 € restants, ne laissant rien à votre charge.
-- Pour une hospitalisation nécessitant une chambre particulière à 70 € par jour, ProBTP S2 rembourse 50 €/jour, vous laissant 20 €/jour à payer. AXA Base Obligatoire rembourse 85 €/jour, couvrant intégralement le coût de la chambre.
-- Pour un lit accompagnant pour un enfant de 10 ans coûtant 30 € par jour, ProBTP S2 rembourse 23 €/jour, laissant 7 €/jour à votre charge. AXA Base Obligatoire rembourse 40 €/jour et couvre l'intégralité, avec une limite d'âge plus avantageuse (jusqu'à 16 ans).
+- Pour une intervention chirurgicale complexe avec des honoraires de 1500 € (BR 200 €) par un chirurgien OPTAM: ProBTP S4 couvrirait les frais réels (reste à charge 0 €), tandis qu'AXA avec 480% BR-MR rembourserait 960 € (reste à charge 540 €). ProBTP S2 rembourserait 200 € (reste à charge 1300 €).
+- Pour une hospitalisation de 5 jours avec chambre particulière coûtant 100 €/jour: ProBTP S4 rembourserait 80 €/jour (reste à charge 100 €), AXA rembourserait 85 €/jour (reste à charge 75 €). ProBTP S2 ne couvrirait pas la chambre particulière (reste à charge 500 €).
+- Pour un enfant de 10 ans hospitalisé 3 jours nécessitant un lit accompagnant à 50 €/jour: AXA rembourserait 40 €/jour (reste à charge 30 €), tandis que ProBTP S2 et S4 rembourseraient 23 €/jour (reste à charge 81 €).
 
 ### Analyse de Valeur
 
-L'hospitalisation, bien que moins fréquente, représente un risque financier majeur en raison des dépassements d'honoraires et des frais de confort qui peuvent s'accumuler rapidement. La couverture des honoraires jusqu'à 500% BR d'AXA est un avantage crucial pour se prémunir contre les dépenses imprévues et très élevées. Les frais de chambre particulière et de lit accompagnant, bien que de confort, sont souvent des priorités pour les patients et les familles. AXA est donc plus adapté aux personnes recherchant une protection maximale contre les coûts élevés d'hospitalisation et un meilleur confort, notamment les familles avec de jeunes enfants. ProBTP S2 offre une couverture de base, mais laisse une part importante des dépassements d'honoraires et des frais de confort à la charge de l'adhérent.
+L'hospitalisation représente l'un des risques financiers les plus élevés en santé. La couverture des honoraires est primordiale, et la capacité de ProBTP S4 à couvrir les frais réels pour les praticiens OPTAM est un atout majeur, protégeant contre les dépassements souvent très importants. La chambre particulière et le lit accompagnant, bien qu'importants pour le confort, représentent un risque financier moindre. AXA se positionne bien sur ces postes de confort et sur des frais de séjour spécifiques, ce qui peut être attrayant pour les familles ou les personnes soucieuses de leur confort. Cependant, l'absence de couverture des frais de séjour spécifiques chez ProBTP S2 et S4 est une lacune notable. Le choix dépendra de la priorité du client entre une protection maximale contre les gros risques financiers (honoraires) et le confort, ainsi que la couverture de frais annexes.
 
 ### Meilleure Couverture (Perspective ProBTP)
 
-Dans la catégorie Hospitalisation, ProBTP S2 offre une couverture essentielle et économique, garantissant la prise en charge du forfait journalier hospitalier et de la participation forfaitaire pour les actes importants à 100%. Cela assure une protection solide sur les postes de dépenses incompressibles. Pour les adhérents soucieux de maîtriser leur budget tout en étant bien couverts sur l'essentiel, ProBTP S2 est une solution pertinente. Il est important de souligner que notre offre couvre le Ticket Modérateur pour les honoraires, ce qui est la base de toute bonne mutuelle. Bien que l'offre AXA puisse paraître plus généreuse sur certains postes de confort ou les dépassements d'honoraires, ProBTP S2 se positionne comme un choix judicieux pour ceux qui privilégient une protection efficace et abordable, sans les coûts supplémentaires liés à des garanties de très haut niveau qui ne correspondent pas toujours aux besoins de tous.
+Du point de vue des ventes ProBTP, l'offre S4 est clairement supérieure pour les postes les plus critiques de l'hospitalisation. La garantie des honoraires aux frais réels pour les praticiens OPTAM est un argument de vente inégalé, car c'est là que se situent les plus gros restes à charge potentiels. Il faut souligner que cette couverture protège nos adhérents des dépenses imprévues et souvent très élevées. Bien qu'AXA offre des montants légèrement supérieurs pour la chambre particulière et le lit accompagnant, ProBTP S4 propose des garanties solides qui répondent aux besoins essentiels. Pour ProBTP S2, il est important de positionner cette offre comme une solution d'entrée de gamme qui couvre l'essentiel, mais d'encourager la montée en gamme vers S4 pour une sérénité totale en cas d'hospitalisation.
 
 ### Points de Vente
 
-- ProBTP S2 assure la prise en charge intégrale du forfait journalier hospitalier et de la participation forfaitaire pour les actes supérieurs à 120€, des postes essentiels qui représentent une part importante des frais d'hospitalisation.
-- Notre garantie 100% BR sur les honoraires couvre le Ticket Modérateur, vous assurant une base solide de remboursement et une protection contre les frais imprévus liés aux soins.
-- Pour les frais de confort comme la chambre particulière ou le lit accompagnant, ProBTP S2 offre une contribution significative, aidant à alléger le coût de ces services importants pour le bien-être de nos adhérents ou de leurs proches.
-- ProBTP S2 est une solution équilibrée, offrant une protection efficace en hospitalisation à un tarif compétitif, idéale pour les adhérents qui recherchent une bonne couverture sans payer pour des options de très haut niveau dont ils n'auraient pas l'utilité.
-- Nous nous concentrons sur l'essentiel pour vous garantir la tranquillité d'esprit en cas d'hospitalisation, en vous assurant que les coûts fondamentaux sont couverts.
+- Mettez en avant la garantie 'Frais réels si OPTAM' de ProBTP S4 pour les honoraires, expliquant que c'est la meilleure protection contre les dépassements d'honoraires, souvent la plus grande source de reste à charge en hospitalisation.
+- Soulignez que ProBTP S4 offre une couverture robuste pour la chambre particulière (80 €/jour), assurant un confort appréciable pendant l'hospitalisation, même si AXA est légèrement supérieur sur ce point.
+- Expliquez que ProBTP S2 et S4 couvrent intégralement le forfait journalier hospitalier, un poste de dépense obligatoire pour tous les séjours.
+- Pour les garanties supplémentaires d'AXA (frais de séjour spécifiques), mentionnez que ProBTP se concentre sur les postes de dépenses les plus lourds et les plus fréquents, et que ces frais sont souvent pris en charge par l'Assurance Maladie ou moins significatifs que les honoraires.
+- Positionnez ProBTP S4 comme la solution idéale pour une tranquillité d'esprit maximale face aux imprévus de l'hospitalisation, en particulier pour les familles et les personnes actives.
 
 ### Évaluation Objective
 
-**Gagnant:** AXA
-**Confiance:** high
+**Gagnant:** PROBTP
+**Confiance:** medium
 
-**Raisonnement:** AXA Base Obligatoire est objectivement meilleure pour la catégorie Hospitalisation. Sa couverture des honoraires jusqu'à 500% BR est un avantage décisif face aux dépassements d'honoraires potentiellement très élevés. De plus, les remboursements pour la chambre particulière (85 €/jour vs 50 €/jour) et le lit accompagnant (40 €/jour vs 23 €/jour, avec une limite d'âge plus large pour les enfants) sont significativement plus généreux. ProBTP S2 est clairement en retrait sur ces postes qui représentent des risques financiers importants ou des besoins de confort prioritaires.
+**Raisonnement:** ProBTP S4 est objectivement légèrement supérieur pour la catégorie Hospitalisation, principalement grâce à sa couverture des honoraires pouvant aller jusqu'aux frais réels si le praticien est OPTAM. Cette garantie est cruciale car les dépassements d'honoraires représentent le risque financier le plus important lors d'une hospitalisation. Bien qu'AXA offre des indemnisations plus généreuses pour la chambre particulière et le lit accompagnant, et couvre des frais de séjour spécifiques, ces postes sont généralement moins coûteux que les honoraires d'un chirurgien ou d'un anesthésiste en cas de chirurgie lourde.
 
 **Faiblesses ProBTP:**
-- Couverture des honoraires limitée à 100% BR, ce qui est insuffisant pour couvrir les dépassements d'honoraires fréquents en hospitalisation.
-- Remboursement plus faible pour la chambre particulière (50 €/jour), laissant un reste à charge conséquent.
-- Remboursement plus faible (23 €/jour) et âge limite plus restrictif (enfants de -12 ans) pour le lit accompagnant.
+- Indemnités journalières pour la chambre particulière et le lit accompagnant légèrement inférieures à celles d'AXA.
+- Absence de couverture pour certains frais de séjour hospitaliers spécifiques couverts par AXA (médical/chirurgical, conventionné/non conventionné).
 
 **Faiblesses AXA:**
-- La couverture des honoraires est de 90% FR-SS si non conventionné, mais la limite de 500% BR compense largement ce léger inconvénient.
-- La limite de 30 jours/an pour le lit accompagnant pourrait être une contrainte dans des cas d'hospitalisation très prolongée, bien que cela reste une couverture solide.
+- La couverture des honoraires, bien que très élevée (480% BR-MR), reste un pourcentage et ne garantit pas les frais réels comme ProBTP S4 avec les praticiens OPTAM, pouvant laisser un reste à charge conséquent sur les honoraires très élevés.
 
 
 ---
@@ -403,156 +499,176 @@ Dans la catégorie Hospitalisation, ProBTP S2 offre une couverture essentielle e
 
 <table>
   <tr>
-    <th rowspan="2"> </th>
-    <th rowspan="2"> </th>
-    <th rowspan="2"> </th>
-    <th>Part S.S.*</th>
-    <th>ProBTP</th>
-    <th>AXA</th>
+    <th>Catégorie</th>
+    <th>Sous-catégorie</th>
+    <th>Prestation</th>
+    <th>Détail Prestation 1</th>
+    <th>Détail Prestation 2</th>
+    <th>Part S.S.</th>
+    <th>ProBTP P4</th>
+    <th>AXA Base Obligatoire</th>
   </tr>
   <tr>
-    <th> </th>
-    <th>P4</th>
-    <th>Base Obligatoire</th>
-  </tr>
-  <tr>
-    <th rowspan="10">Optique</th>
-    <th colspan="2">Équipement 100% santé</th>
-    <td>60% (a) (a)</td>
+    <th rowspan="11">Optique</th>
+    <th colspan="4">Équipement 100% santé</th>
+    <td>60% (a)</td>
     <td><strong>Frais réels</strong> ✓</td>
-    <td><strong>100% PLV-MR</strong> ✓</td>
+    <td><strong>100% PLV</strong> ✓</td>
   </tr>
   <tr>
     <th rowspan="6">Autre équipement optique (verres et monture)</th>
-    <th>Équipement combinant des verres 100% Santé et une monture libre (17)</th>
-    <td>60% (b) (b)</td>
+    <th colspan="3">Équipement combinant des verres 100% Santé et une monture libre (17)</th>
+    <td>60% (b)</td>
     <td><strong>Verres: frais réels Monture: 100 €</strong> ✓</td>
-    <td>Non couvert</td>
+    <td>Voir grille détaillée OPTI 4 (Hors réseau Itelis) + Monture 100€</td>
   </tr>
   <tr>
-    <th rowspan="5">Équipement libre</th>
-    <th>Équipement à verres unifocaux - Si partenaire opticien Sévéane</th>
+    <th rowspan="5">Équipement libre (장비)</th>
+    <th rowspan="2">Équipement à verres unifocaux</th>
+    <th>Si partenaire opticien Sévéane</th>
+    <td>60% (infinity symbol)</td>
     <td><strong>350 €</strong> ✓</td>
-    <td>Non couvert</td>
+    <td>Voir grille détaillée OPTI 4 (Hors réseau Itelis)</td>
   </tr>
   <tr>
-    <th>Équipement à verres unifocaux - Dans les autres cas</th>
+    <th>Dans les autres cas</th>
+    <td>60% (infinity symbol)</td>
     <td><strong>250 €</strong> ✓</td>
-    <td>Non couvert</td>
+    <td>Voir grille détaillée OPTI 4 (Hors réseau Itelis)</td>
   </tr>
   <tr>
-    <th>Équipement à verres progressifs - Si partenaire opticien Sévéane</th>
+    <th rowspan="2">Équipement à verres progressifs¶</th>
+    <th>Si partenaire opticien Sévéane</th>
+    <td>60% (infinity symbol)</td>
     <td><strong>500€</strong> ✓</td>
-    <td>Non couvert</td>
+    <td>Voir grille détaillée OPTI 4 (Hors réseau Itelis)</td>
   </tr>
   <tr>
-    <th>Équipement à verres progressifs - Dans les autres cas</th>
+    <th>Dans les autres cas</th>
+    <td>60% (infinity symbol)</td>
     <td><strong>400€</strong> ✓</td>
-    <td>Non couvert</td>
+    <td>Voir grille détaillée OPTI 4 (Hors réseau Itelis)</td>
   </tr>
   <tr>
-    <th>Supplément forte correction (11)</th>
-    <td><strong>+ 50€/verre</strong> ✓</td>
+    <th colspan="2">Supplément forte correction (11)</th>
+    <td>60% (infinity symbol)</td>
+    <td><strong>+ 50€/verre (11)</strong> ✓</td>
     <td>Non couvert</td>
   </tr>
   <tr>
     <th rowspan="2">Lentilles (12)</th>
-    <th colspan="2">Lentilles remboursées par la S.S.</th>
-    <td>100% + 150€</td>
-    <td><strong>200 €</strong> ✓</td>
+    <th colspan="3">Lentilles remboursées par la S.S.</th>
+    <td>60%</td>
+    <td><strong>100% + 200€ (12)</strong> ✓</td>
+    <td>200 €</td>
   </tr>
   <tr>
-    <th colspan="2">Lentilles non remboursées par la S.S.</th>
+    <th colspan="3">Lentilles non remboursées par la S.S.</th>
+    <td> </td>
     <td>150€</td>
     <td><strong>200 €</strong> ✓</td>
   </tr>
   <tr>
-    <th colspan="2">Chirurgie réfractive de la vue (13)</th>
+    <th colspan="4">Chirurgie réfractive de la vue (13)</th>
     <td> </td>
-    <td>400€/ceil</td>
+    <td>400€/ceil (13)</td>
     <td><strong>800 €</strong> ✓</td>
+  </tr>
+  <tr>
+    <th colspan="4">Renouvellement équipement</th>
+    <td> </td>
+    <td><strong>Après 24 mois (16+ ans) / 12 mois (<16 ans)</strong> ✓</td>
+    <td>Après 2 ans</td>
   </tr>
 </table>
 
 ### Différences Clés
 
-ProBTP P4 offre une couverture très étendue pour l'équipement optique hors 100% Santé, incluant des forfaits généreux pour les verres et montures libres, ainsi que des suppléments pour forte correction, des catégories où AXA Base Obligatoire ne propose aucune prise en charge. En revanche, AXA se distingue par une meilleure couverture pour les lentilles et la chirurgie réfractive, des postes moins fréquents mais potentiellement coûteux.
+ProBTP P4 se distingue par une couverture optique très complète, en particulier pour les équipements libres où elle propose des forfaits clairs et avantageux, surtout via son réseau Sévéane. AXA Base Obligatoire, bien que couvrant l'essentiel, est moins transparente sur ses remboursements pour l'équipement libre et offre une couverture supérieure pour la chirurgie réfractive.
 
 ### Exemples Concrets
 
-- Pour un équipement 100% Santé (verres et monture) coûtant 300 €, ProBTP P4 rembourse 300 € (reste à charge 0 €), et AXA Base Obligatoire rembourse également 300 € (reste à charge 0 €).
-- Pour un équipement optique libre (verres progressifs et monture) acheté hors réseau Sévéane, coûtant 700 € (monture 150 €, verres 550 €), ProBTP P4 rembourse 400 € (reste à charge 300 €). AXA Base Obligatoire ne couvre pas cette catégorie, laissant un reste à charge de 689,95 € (après déduction de la très faible part de la Sécurité sociale).
-- Pour des lentilles non remboursées par la Sécurité sociale, coûtant 250 € par an, ProBTP P4 rembourse 150 € (reste à charge 100 €). AXA Base Obligatoire rembourse 200 € (reste à charge 50 €).
+- Pour l'achat de lunettes unifocales hors 100% Santé coûtant 400€, ProBTP P4 (via Sévéane) rembourse 350€ (reste à charge 50€), tandis qu'AXA Base Obligatoire, avec sa grille OPTI 4 non détaillée, laisserait un reste à charge potentiellement plus élevé (estimation 200€).
+- Pour l'achat de lunettes progressives hors 100% Santé coûtant 800€, ProBTP P4 (via Sévéane) rembourse 500€ (reste à charge 300€), alors qu'AXA Base Obligatoire, avec sa grille OPTI 4, laisserait probablement un reste à charge plus important (estimation 500€).
+- Pour une chirurgie réfractive de la vue coûtant 1500€ par œil, ProBTP P4 rembourse 400€ par œil (reste à charge 1100€), tandis qu'AXA Base Obligatoire rembourse 800€ par œil (reste à charge 700€), étant nettement plus avantageux sur ce poste.
 
 ### Analyse de Valeur
 
-L'optique est une dépense fréquente et souvent significative. La couverture 100% Santé est un socle, mais de nombreux assurés souhaitent des équipements hors de ce cadre. ProBTP P4 répond parfaitement à ce besoin en offrant des forfaits substantiels pour les équipements libres, particulièrement avantageux via le réseau Sévéane. C'est un avantage majeur car cela protège contre un risque financier élevé pour une dépense courante. AXA, en ne couvrant pas du tout cette catégorie, expose ses assurés à des restes à charge très importants. Bien qu'AXA soit plus généreux sur les lentilles et la chirurgie réfractive, ces besoins sont moins universels ou moins fréquents que le renouvellement de lunettes. Le réseau Sévéane de ProBTP représente une valeur ajoutée non négligeable, permettant d'optimiser les remboursements.
+L'optique représente une dépense significative et récurrente pour de nombreux assurés. Le "100% Santé" a considérablement réduit le reste à charge pour les équipements de base, mais les équipements libres (plus esthétiques ou techniques) restent coûteux. ProBTP se positionne très bien sur cette catégorie en offrant des forfaits clairs et généreux pour les équipements libres, surtout en utilisant le réseau Sévéane. Cela réduit le risque financier pour les assurés souhaitant des équipements de qualité supérieure. AXA est plus avantageuse pour la chirurgie réfractive, une dépense ponctuelle mais élevée. Le renouvellement plus fréquent pour les mineurs chez ProBTP est un atout pour les familles. Le manque de transparence d'AXA sur sa grille OPTI 4 rend difficile une comparaison directe et peut générer de l'incertitude pour l'assuré.
 
 ### Meilleure Couverture (Perspective ProBTP)
 
-ProBTP P4 se positionne comme la solution de choix pour une couverture optique complète et flexible. Notre offre excelle dans la prise en charge des équipements optiques libres, là où AXA ne propose aucune solution. C'est essentiel pour nos adhérents qui recherchent la liberté de choisir leurs verres et montures, sans se limiter au panier 100% Santé. Avec des forfaits allant jusqu'à 500 € pour les verres progressifs via le réseau Sévéane, ProBTP garantit un reste à charge maîtrisé pour des équipements de qualité. Bien qu'AXA offre un avantage sur les lentilles et la chirurgie réfractive, ces besoins sont moins fréquents que le renouvellement des lunettes. ProBTP assure la tranquillité d'esprit sur les dépenses optiques les plus courantes et les plus importantes pour le quotidien de nos adhérents.
+ProBTP P4 offre une couverture optique très solide et avantageuse pour la majorité des besoins courants. Nos forfaits clairs pour les équipements libres, notamment avec le réseau Sévéane, garantissent un reste à charge maîtrisé pour des lunettes de qualité. C'est un argument de poids face à la concurrence qui propose souvent des grilles complexes et moins généreuses. De plus, la prise en charge du supplément forte correction et la flexibilité pour le renouvellement des équipements pour les mineurs sont des atouts différenciants. Pour la chirurgie réfractive, bien qu'AXA offre un remboursement plus élevé, cette dépense est moins fréquente et notre couverture reste significative. Mettez en avant la transparence, la générosité des forfaits et les avantages du réseau Sévéane pour rassurer nos clients sur leurs dépenses optiques.
 
 ### Points de Vente
 
-- Mettez en avant la couverture inégalée de ProBTP P4 pour les équipements optiques libres (verres et montures), soulignant qu'AXA ne propose aucune prise en charge dans cette catégorie cruciale.
-- Insistez sur l'avantage du réseau Sévéane, qui permet d'obtenir des remboursements encore plus élevés (ex: 500€ pour des verres progressifs), offrant ainsi une qualité supérieure à moindre coût.
-- Expliquez que ProBTP P4 couvre aussi bien que AXA les équipements 100% Santé, garantissant ainsi le socle de base tout en offrant bien plus pour ceux qui veulent plus de choix.
-- Reconnaissez la meilleure couverture d'AXA pour les lentilles et la chirurgie réfractive, mais contextualisez-la comme des besoins moins fréquents que le renouvellement des lunettes, qui représente la dépense optique majeure et la plus récurrente.
-- Soulignez la flexibilité et le choix offerts par ProBTP, permettant aux adhérents de sélectionner l'équipement qui leur convient le mieux sans contraintes financières excessives.
+- Soulignez la clarté et la générosité des forfaits ProBTP pour les équipements optiques libres, en particulier avec le réseau Sévéane.
+- Mettez en avant la prise en charge du supplément forte correction, un avantage que AXA ne propose pas.
+- Expliquez la flexibilité de ProBTP pour le renouvellement des équipements des enfants (12 mois vs 2 ans pour AXA).
+- Pour la chirurgie réfractive, reconnaissez le niveau de remboursement d'AXA, mais repositionnez ProBTP en insistant sur la fréquence plus faible de cette dépense et la solidité de notre offre sur les besoins optiques quotidiens.
+- Insistez sur la prévisibilité du reste à charge chez ProBTP grâce à des montants forfaitaires, contrairement à la grille AXA qui manque de transparence.
 
 ### Évaluation Objective
 
 **Gagnant:** PROBTP
-**Confiance:** high
+**Confiance:** medium
 
-**Raisonnement:** ProBTP P4 est objectivement supérieur pour la catégorie Optique. La raison principale est la couverture quasi inexistante d'AXA Base Obligatoire pour les 'Autres équipements optiques' (verres et montures libres), qui représente une part très significative des dépenses optiques des assurés. ProBTP offre des forfaits substantiels pour ces postes, y compris des suppléments pour forte correction, ce qui est un avantage majeur. Bien qu'AXA propose des remboursements plus élevés pour les lentilles et la chirurgie réfractive, ces deux catégories sont moins fréquentes et moins universelles que le besoin de lunettes personnalisées. L'absence totale de couverture pour les équipements libres chez AXA crée un risque financier considérable pour l'assuré.
+**Raisonnement:** ProBTP P4 est globalement plus avantageux pour la catégorie Optique, couvrant mieux la majorité des besoins (équipements libres, supplément forte correction, renouvellement pour mineurs) avec des forfaits clairs. Bien qu'AXA soit nettement supérieure sur la chirurgie réfractive, cette prestation est moins fréquente que l'achat de lunettes ou lentilles. Le manque de transparence de la grille AXA pour les équipements libres rend son offre moins prévisible et potentiellement moins généreuse que les forfaits ProBTP.
 
 **Faiblesses ProBTP:**
-- Couverture moins élevée pour les lentilles (remboursées ou non par la SS) comparée à AXA.
-- Couverture moins élevée pour la chirurgie réfractive de la vue comparée à AXA.
+- Remboursement de la chirurgie réfractive de la vue inférieur à celui d'AXA.
+- Remboursement des lentilles non remboursées par la S.S. légèrement inférieur à celui d'AXA.
 
 **Faiblesses AXA:**
-- Absence totale de couverture pour les 'Autres équipements optiques' (verres et montures libres), y compris les équipements unifocaux et progressifs.
-- Absence de prise en charge pour les suppléments forte correction hors 100% Santé.
-- Pas de prise en charge pour les équipements combinant des verres 100% Santé et une monture libre.
+- Manque de transparence sur les remboursements des équipements optiques libres (grille OPTI 4 non détaillée).
+- Absence de prise en charge du supplément forte correction.
+- Remboursement des lentilles remboursées par la S.S. moins avantageux (pas de '100% BR' en plus du forfait).
+- Conditions de renouvellement moins flexibles pour les mineurs (2 ans vs 12 mois chez ProBTP).
 
 
 ---
 
-## Dentaire
+## Soins Dentaires
 
 ### Tableau de Comparaison
 
-### Dentaire
+### Soins Dentaires
 
 <table>
   <tr>
+    <th>Catégorie</th>
     <th>Sous-catégorie</th>
     <th>Prestation</th>
+    <th>Détail Prestation</th>
     <th>Part S.S.*</th>
     <th>ProBTP P4</th>
     <th>AXA Base Obligatoire</th>
   </tr>
   <tr>
-    <th colspan="2">Soins et prothèses 100% santé (2)(14)(1)</th>
+    <th rowspan="10">Dentaire</th>
+    <th colspan="2">Soins et prothèses 100% santé (2)(14)</th>
+    <th> </th>
     <th>60%</th>
     <td><strong>Frais réels</strong> ✓</td>
-    <td><strong>100% PLV-MR</strong> ✓</td>
+    <td>100% PLV-MR (1)</td>
   </tr>
   <tr>
     <th rowspan="3">Soins dentaires</th>
     <th colspan="2">Inlay/onlay (par acte)</th>
     <th>60%</th>
-    <td><strong>370% BR-MR (2)(3)</strong> ✓</td>
+    <td>200%</td>
+    <td><strong>370% BR-MR (2)</strong> ✓</td>
   </tr>
   <tr>
     <th colspan="2">Autres soins dentaires pris en charge par la S.S. (19)</th>
     <th>60%</th>
+    <td>100%</td>
     <td><strong>200% BR-MR</strong> ✓</td>
   </tr>
   <tr>
-    <th colspan="2">Parodontologie non prise en charge par la S.S. (/an /bénéf.) (12)</th>
-    <th>(small dot)</th>
+    <th colspan="2">Parodontologie non prise en charge par la S.S. (12)</th>
+    <th>Non couvert</th>
+    <td><strong>300 €</strong> ✓</td>
     <td><strong>300 €</strong> ✓</td>
   </tr>
   <tr>
@@ -560,77 +676,92 @@ ProBTP P4 se positionne comme la solution de choix pour une couverture optique c
     <th rowspan="2">Prothèses dentaires remboursées par la S.S. :</th>
     <th>prothèses à honoraires maîtrisés (1a)</th>
     <th>60%</th>
-    <td><strong>370% BR-MR (2)</strong> ✓</td>
+    <td><strong>Frais réels</strong> ✓</td>
+    <td>370% BR-MR (2)</td>
   </tr>
   <tr>
     <th>autres prothèses</th>
     <th>60%</th>
-    <td><strong>370% BR-MR (3)</strong> ✓</td>
+    <td><strong>500 %</strong> ✓</td>
+    <td>370% BR-MR (3)</td>
   </tr>
   <tr>
     <th rowspan="2">Orthodontie</th>
-    <th colspan="2">Orthodontie acceptée par la S.S. (par semestre)</th>
+    <th colspan="2">Orthodontie acceptée par la S.S.</th>
     <th>100%</th>
+    <td>350 %</td>
     <td><strong>370 % BR-MR</strong> ✓</td>
   </tr>
   <tr>
-    <th colspan="2">Orthodontie adulte non prise en charge par la S.S. (par semestre) (17)</th>
-    <th>* (asterisk)</th>
-    <td><strong>300 €</strong> ✓</td>
+    <th colspan="2">Orthodontie adulte non prise en charge par la S.S. (17)</th>
+    <th>Non couvert</th>
+    <td><strong>400 €</strong> ✓</td>
+    <td>300 €</td>
   </tr>
   <tr>
-    <th rowspan="2">Implants (/an/bénéf.) (12)</th>
+    <th rowspan="2">Implants</th>
     <th colspan="2">Si partenaire implantologue Sévéane</th>
-    <th>- (minus sign)</th>
-    <td><strong>616 €</strong> ✓</td>
+    <th>Non couvert</th>
+    <td><strong>800 €</strong> ✓</td>
+    <td><strong>616 € (pose) + 184 € (faux-moignon)</strong> ✓</td>
   </tr>
   <tr>
     <th colspan="2">Dans les autres cas</th>
     <th>Non couvert</th>
-    <td><strong>616 €</strong> ✓</td>
+    <td>400 €</td>
+    <td><strong>616 € (pose) + 184 € (faux-moignon)</strong> ✓</td>
+  </tr>
+  <tr>
+    <th>Garanties supplémentaires AXA</th>
+    <th colspan="3">Prothèses fixes non prises en charge par la Sécurité sociale</th>
+    <th>Non couvert</th>
+    <th>Non couvert</th>
+    <td><strong>300 €</strong> ✓</td>
   </tr>
 </table>
 
 ### Différences Clés
 
-AXA Base Obligatoire offre des remboursements significativement plus élevés pour la majorité des soins dentaires, incluant les inlays/onlays, les prothèses et l'orthodontie. De plus, AXA propose une prise en charge forfaitaire pour des actes non remboursés par la Sécurité Sociale comme la parodontologie et les implants, des prestations que ProBTP P4 ne couvre pas ou très peu. ProBTP P4 se concentre principalement sur une couverture intégrale des soins 100% Santé.
+ProBTP P4 se distingue par une couverture en "Frais réels" pour les soins et prothèses 100% santé, ainsi que pour les prothèses à honoraires maîtrisés, offrant une excellente maîtrise du reste à charge sur ces postes. AXA Base Obligatoire propose des pourcentages de remboursement plus élevés pour les soins dentaires courants et l'orthodontie prise en charge par la SS, et une meilleure prise en charge des implants hors réseau partenaire, ainsi que des garanties supplémentaires spécifiques.
 
 ### Exemples Concrets
 
-- Pour un Inlay/Onlay coûtant 300€ (Base de Remboursement Sécurité Sociale : 100€), la Sécurité Sociale rembourse 60€. ProBTP P4 rembourse 60% de la BR, soit 60€, laissant un reste à charge de 180€. AXA Base Obligatoire, avec 370% BR-MR, couvre les 240€ restants, soit un reste à charge de 0€.
-- Pour une couronne dentaire (hors 100% Santé) coûtant 700€ (BR : 107,50€), la Sécurité Sociale rembourse 64,50€. ProBTP P4 rembourse 60% de la BR, soit 64,50€, laissant un reste à charge de 571€. AXA Base Obligatoire, avec 370% BR-MR, couvre 333,25€, laissant un reste à charge de 302,25€.
-- Pour la pose d'un implant dentaire coûtant 1000€ (non remboursé par la Sécurité Sociale). ProBTP P4 ne couvre pas cette prestation, le reste à charge est de 1000€. AXA Base Obligatoire rembourse 616€, laissant un reste à charge de 384€.
+- Pour une couronne dentaire "autres prothèses" (non 100% santé) coûtant 750€ (BR 107.5€), la Sécurité Sociale rembourse 64.5€. ProBTP P4 rembourse 473€ (500% BR - part SS), laissant un reste à charge de 212.5€. AXA Base Obligatoire rembourse 333.25€ (370% BR - part SS), laissant un reste à charge de 352.25€. ProBTP est ici plus avantageux.
+- Pour un soin dentaire (carie) coûtant 40€ (BR 28.92€), la Sécurité Sociale rembourse 17.35€. ProBTP P4 rembourse 11.57€ (100% BR - part SS), laissant un reste à charge de 11.08€. AXA Base Obligatoire rembourse 22.65€ (200% BR - part SS, plafonné au coût réel), laissant un reste à charge de 0€. AXA est ici plus avantageux.
+- Pour la pose d'un implant dentaire hors réseau Sévéane coûtant 1200€ (non couvert par la SS), ProBTP P4 rembourse 400€, laissant un reste à charge de 800€. AXA Base Obligatoire rembourse 800€ (616€ pose + 184€ faux-moignon), laissant un reste à charge de 400€. AXA est ici plus avantageux.
 
 ### Analyse de Valeur
 
-Les soins dentaires, notamment les prothèses et implants, représentent un risque financier élevé pour les assurés. ProBTP P4, en dehors du 100% Santé, offre une protection très limitée, ce qui peut engendrer des restes à charge importants. AXA Base Obligatoire, en revanche, propose une couverture bien plus robuste pour les actes coûteux. ProBTP P4 conviendrait à une clientèle ayant des besoins dentaires très basiques et privilégiant un prix d'appel, ou à ceux qui ne prévoient que des soins 100% Santé. Pour toute personne nécessitant des soins plus complexes ou souhaitant une meilleure couverture des risques, AXA est clairement plus avantageux. La parodontologie et l'orthodontie adulte, bien que moins fréquentes que les prothèses, peuvent également représenter des dépenses conséquentes, où AXA apporte une aide financière concrète.
+Les soins dentaires représentent un poste de dépense significatif. ProBTP P4 excelle sur les prestations 100% santé et les prothèses à honoraires maîtrisés avec le "Frais réels", ce qui est crucial pour éviter des restes à charge importants sur des actes fréquents et coûteux. AXA, bien que moins généreux sur ces points, offre une meilleure couverture sur les soins courants et les implants hors réseau, ce qui peut être pertinent pour ceux qui ne sont pas éligibles ou n'optent pas pour le 100% santé, ou qui consultent des praticiens hors réseau. L'orthodontie adulte non prise en charge par la SS est un avantage notable de ProBTP pour une clientèle spécifique. Le risque financier le plus élevé se situe sur les prothèses et implants, où les deux offres ont leurs points forts selon le type de prestation et le réseau choisi. La limite de 3 actes par an chez AXA pour les implants est une condition à ne pas négliger pour les besoins complexes.
 
 ### Meilleure Couverture (Perspective ProBTP)
 
-Pour les équipes commerciales de ProBTP, il est essentiel de mettre en avant la prise en charge à frais réels des soins et prothèses 100% Santé avec la formule P4, garantissant un reste à charge nul pour ces prestations essentielles. Cela positionne ProBTP comme un acteur engagé pour l'accès aux soins fondamentaux. Pour les autres postes dentaires où la couverture P4 est plus limitée, il convient de présenter P4 comme une offre d'entrée de gamme, adaptée aux budgets les plus contraints ou aux assurés ayant des besoins dentaires très ponctuels. Il est crucial de souligner que ProBTP propose une gamme de garanties supérieures qui offrent des remboursements bien plus compétitifs pour les prothèses, l'orthodontie ou les implants, et d'orienter le client vers ces options si ses besoins sont plus importants, afin de ne pas le laisser comparer P4 avec des offres concurrentes de niveau supérieur.
+ProBTP P4 propose une couverture dentaire de premier ordre, particulièrement axée sur la suppression du reste à charge pour les prestations essentielles. Notre prise en charge en "Frais réels" pour l'intégralité du panier 100% santé et les prothèses à honoraires maîtrisés est un atout majeur, garantissant à nos adhérents une sérénité financière totale sur ces actes. Nous offrons également une protection supérieure pour l'orthodontie adulte non prise en charge par la Sécurité sociale, un besoin croissant, et une excellente prise en charge des implants via notre réseau partenaire Sévéane. Bien qu'AXA puisse offrir des pourcentages de remboursement légèrement supérieurs sur certains soins courants ou implants hors réseau, ProBTP se concentre sur la valeur réelle et la suppression des dépenses imprévues sur les postes les plus onéreux et structurants de la santé dentaire.
 
 ### Points de Vente
 
-- Avec ProBTP P4, vos soins et prothèses 100% Santé sont pris en charge à frais réels, vous garantissant un reste à charge de 0€ pour l'essentiel, une priorité pour votre santé.
-- Notre offre P4 est une solution économique, parfaite si vos besoins dentaires sont majoritairement couverts par le 100% Santé ou si vous privilégiez un budget maîtrisé pour votre complémentaire.
-- ProBTP dispose d'une gamme complète de garanties. Si vous anticipez des dépenses dentaires plus importantes (prothèses, implants, orthodontie), nous pouvons vous présenter des niveaux supérieurs offrant des remboursements bien plus avantageux.
-- Nous vous assurons une excellente prise en charge des soins courants et préventifs, éléments clés pour maintenir une bonne santé bucco-dentaire sur le long terme.
+- Mettez en avant le "Frais réels" de ProBTP P4 sur le 100% santé et les prothèses à honoraires maîtrisés : c'est un argument de poids pour un reste à charge zéro sur des prestations coûteuses et essentielles.
+- Soulignez notre avantage sur l'orthodontie adulte non prise en charge par la SS (400€ par semestre), une garantie spécifique et très appréciée par les adultes concernés.
+- Valorisez notre réseau partenaire Sévéane pour les implants, offrant un remboursement de 800€, ce qui est très compétitif et assure une bonne prise en charge pour les adhérents utilisant ce réseau.
+- Expliquez que si AXA a des pourcentages BR plus élevés sur certains soins courants, ProBTP se focalise sur la protection contre les dépenses les plus lourdes, là où l'impact financier est le plus fort pour nos adhérents.
+- Positionnez ProBTP comme le choix de la tranquillité d'esprit pour les dépenses dentaires importantes et imprévues, grâce à une couverture ciblée et généreuse.
 
 ### Évaluation Objective
 
 **Gagnant:** AXA
-**Confiance:** high
+**Confiance:** medium
 
-**Raisonnement:** AXA Base Obligatoire surpasse ProBTP P4 dans presque toutes les catégories de soins dentaires, à l'exception du 100% Santé où les deux garantissent un reste à charge nul. AXA offre des pourcentages de remboursement bien plus élevés pour les soins conservateurs (inlays/onlays, autres soins SS), les prothèses dentaires (maîtrisées et libres), et l'orthodontie. De plus, AXA propose une prise en charge forfaitaire pour des actes non remboursés par la Sécurité Sociale comme la parodontologie et les implants, là où ProBTP P4 n'offre aucune couverture ou une couverture non spécifiée/très limitée. L'écart de couverture est considérable et en faveur d'AXA.
+**Raisonnement:** Bien que ProBTP P4 offre une excellente couverture en "Frais réels" pour le 100% santé et les prothèses à honoraires maîtrisés, ce qui est un avantage indéniable, AXA Base Obligatoire se montre globalement plus généreux sur un plus grand nombre de prestations dentaires courantes (inlay/onlay, autres soins SS), l'orthodontie prise en charge par la SS, et surtout sur les implants dans les cas généraux (hors réseau partenaire ProBTP), qui représentent un coût significatif. L'avantage d'AXA sur les garanties supplémentaires pour des prothèses fixes non prises en charge par la SS est également un plus.
 
 **Faiblesses ProBTP:**
-- Remboursements très faibles (60% BR) pour les soins conservateurs et les prothèses dentaires hors 100% Santé, engendrant des restes à charge importants.
-- Absence de prise en charge ou montant non spécifié pour la parodontologie non remboursée par la S.S.
-- Absence de prise en charge pour les implants dentaires, même via un réseau partenaire.
-- Couverture insuffisante pour l'orthodontie (acceptée S.S. et adulte non S.S.) par rapport à la concurrence.
+- Remboursements inférieurs pour les soins dentaires courants (inlay/onlay, autres soins SS) par rapport à AXA.
+- Couverture moins avantageuse pour les implants en dehors du réseau partenaire Sévéane.
+- Légèrement moins performant sur l'orthodontie acceptée par la SS.
 
 **Faiblesses AXA:**
-- Pour les soins et prothèses 100% Santé, la mention '100% PLV-MR' est moins explicite que 'Frais réels' de ProBTP, bien que le résultat final (reste à charge 0€) soit le même.
+- Absence de la garantie "Frais réels" pour les soins et prothèses 100% santé et les prothèses à honoraires maîtrisés, ce qui peut laisser un reste à charge si les prix dépassent les PLV-MR ou les BR.
+- Remboursement inférieur pour l'orthodontie adulte non prise en charge par la SS et limitée dans le temps.
+- Limite de 3 actes par an pour les implants, ce qui peut être restrictif pour des besoins importants.
 
 
 ---
@@ -643,79 +774,89 @@ Pour les équipes commerciales de ProBTP, il est essentiel de mettre en avant la
 
 <table>
   <tr>
-    <th>Part S.S.*</th>
-    <th>ProBTP P4</th>
-    <th>AXA Base Obligatoire</th>
+    <th rowspan="2">Catégorie</th>
+    <th rowspan="2">Sous-catégorie</th>
+    <th rowspan="2">Sous-sous-catégorie</th>
+    <th rowspan="2">Prestation</th>
+    <th rowspan="2">Part S.S.*</th>
+    <th rowspan="2">ProBTP P4</th>
+    <th rowspan="2">AXA Base Obligatoire</th>
   </tr>
   <tr>
-    <th colspan="2">Equipements auditifs 100% santé</th>
-    <td>60%</td>
-    <td><strong>Frais réels (18)</strong> ✓</td>
-    <td><strong>100% PLV-MR</strong> ✓</td>
   </tr>
   <tr>
-    <th rowspan="3">Prothèse auditive</th>
+    <th rowspan="5">Aides auditives</th>
+    <th colspan="3">Equipements auditifs 100% santé (18)</th>
+    <td><strong>60%</strong> ✓</td>
+    <td><strong>Frais réels</strong> ✓</td>
+    <td><strong>100% PLV-MR (4)</strong> ✓</td>
+  </tr>
+  <tr>
+    <th rowspan="3">Prothèse auditive (2)(18)</th>
     <th rowspan="2">Pour les bénéficiaires de > 20 ans</th>
-    <td>60%</td>
-    <td>1 350€ (2)(18)</td>
+    <th>Si partenaire audioprothésiste Sévéane</th>
+    <td><strong>60%</strong> ✓</td>
+    <td>1 350€</td>
     <td><strong>1400 Euros-MR</strong> ✓</td>
   </tr>
   <tr>
-    <td>60%</td>
-    <td>1 100€ (2)(18)</td>
+    <th>Dans les autres cas</th>
+    <td><strong>60%</strong> ✓</td>
+    <td>1 100€</td>
+    <td><strong>1400 Euros-MR</strong> ✓</td>
   </tr>
   <tr>
-    <th>Pour les bénéficiaires de ≤ 20 ans</th>
-    <td>60%</td>
-    <td>1400€ (2)(18)</td>
+    <th colspan="2">Pour les bénéficiaires de ≤ 20 ans</th>
+    <td><strong>60%</strong> ✓</td>
+    <td>1400€</td>
     <td><strong>1700 Euros-MR</strong> ✓</td>
   </tr>
   <tr>
-    <th colspan="2">Accessoires</th>
-    <td>60%</td>
-    <td>100% (20)</td>
+    <th colspan="3">Accessoires (20)</th>
+    <td><strong>60%</strong> ✓</td>
+    <td>100%</td>
     <td><strong>300% BR-MR</strong> ✓</td>
   </tr>
 </table>
 
 ### Différences Clés
 
-ProBTP P4 et AXA Base Obligatoire offrent une prise en charge intégrale pour les équipements auditifs 100% santé. Cependant, pour les prothèses auditives hors 100% santé, AXA propose des remboursements totaux significativement plus élevés, notamment pour les enfants et pour les adultes sans partenariat Sévéane. AXA se distingue également par une meilleure couverture des accessoires.
+Les deux contrats assurent une prise en charge intégrale pour les équipements auditifs 100% santé. Cependant, AXA se distingue par des plafonds de remboursement significativement plus élevés pour les prothèses auditives hors 100% santé, en particulier pour les jeunes bénéficiaires et les accessoires, tandis que ProBTP offre un avantage via son réseau partenaire Sévéane pour les adultes.
 
 ### Exemples Concrets
 
-- Pour un équipement auditif 100% santé coûtant 950€ (PLV), ProBTP P4 et AXA Base Obligatoire remboursent tous deux 950€, garantissant un reste à charge de 0€.
-- Pour une prothèse auditive non 100% santé pour adulte coûtant 1800€ (Base de Remboursement Sécurité Sociale 400€), ProBTP P4 rembourse 1100€ (reste à charge 700€) si l'audioprothésiste n'est pas partenaire Sévéane, tandis qu'AXA Base Obligatoire rembourse 1400€ (reste à charge 400€).
-- Pour une prothèse auditive non 100% santé pour enfant (<20 ans) coûtant 2000€, ProBTP P4 rembourse 1400€ (reste à charge 600€), alors qu'AXA Base Obligatoire rembourse 1700€ (reste à charge 300€).
+- Pour un équipement auditif 100% santé coûtant 950€ (PLV), la Sécurité Sociale rembourse 240€ (60% de la BR de 400€). ProBTP P4 et AXA Base Obligatoire remboursent tous deux les 710€ restants, soit un reste à charge de 0€ dans les deux cas.
+- Pour une prothèse auditive hors 100% santé pour un adulte de plus de 20 ans, coûtant 2000€ (BR 400€, SS 240€): ProBTP P4 rembourse jusqu'à 1350€ (via Sévéane) ou 1100€ (hors réseau), laissant un reste à charge de 410€ ou 660€. AXA Base Obligatoire rembourse jusqu'à 1400€, laissant un reste à charge de 360€.
+- Pour une prothèse auditive hors 100% santé pour un bénéficiaire de moins de 20 ans, coûtant 2500€ (BR 1400€, SS 840€): ProBTP P4 rembourse jusqu'à 1400€, laissant un reste à charge de 260€. AXA Base Obligatoire rembourse jusqu'à 1700€, laissant un reste à charge de 0€ (si le coût est inférieur ou égal à 2540€).
 
 ### Analyse de Valeur
 
-Les aides auditives représentent un coût important, même si leur acquisition est peu fréquente. Le dispositif 100% santé réduit considérablement le risque financier pour une partie des équipements. Toutefois, pour ceux qui optent pour des prothèses auditives plus performantes (hors 100% santé), le reste à charge peut être très élevé. Dans ce cas, AXA offre une meilleure protection financière, en particulier pour les enfants pour qui les besoins peuvent être plus spécifiques et les équipements plus coûteux. La clientèle soucieuse d'avoir le choix de son équipement, au-delà du 100% santé, trouvera l'offre AXA plus avantageuse. Le partenariat Sévéane de ProBTP peut offrir des avantages complémentaires (prix négociés, services) qui ne sont pas reflétés dans les montants de remboursement bruts, mais cela nécessite une démarche active du client.
+L'audiologie représente un poste de dépense très important et souvent inévitable avec l'âge. Le dispositif 100% santé a considérablement réduit le risque financier pour une gamme d'équipements, et les deux assureurs couvrent parfaitement ce segment. Cependant, pour les besoins spécifiques ou les préférences esthétiques qui mènent à des équipements hors 100% santé, les coûts peuvent s'envoler. C'est là qu'AXA offre une meilleure protection financière grâce à ses plafonds de remboursement supérieurs, particulièrement critiques pour les jeunes bénéficiaires où la BR est déjà plus élevée. Le réseau Sévéane de ProBTP est un atout, mais son impact financier est moindre que les plafonds plus élevés d'AXA pour les prothèses non 100% santé. Le segment des accessoires, bien que moins coûteux, montre également un avantage net pour AXA.
 
 ### Meilleure Couverture (Perspective ProBTP)
 
-ProBTP P4 assure une couverture solide et essentielle en audiologie, notamment grâce à la prise en charge intégrale des équipements 100% santé, garantissant un reste à charge nul pour une large gamme de dispositifs. C'est un point fort majeur à souligner, car il répond à un besoin fondamental de la population. Pour les équipements hors 100% santé, ProBTP P4 offre un remboursement substantiel, atteignant 1350€ pour les adultes partenaires Sévéane, ce qui représente une aide financière significative. Bien qu'AXA propose des montants plus élevés pour ces postes, il est important de positionner l'offre P4 de ProBTP comme une solution complète et équilibrée, s'inscrivant dans une protection globale de la santé, et de valoriser les avantages de notre réseau de partenaires.
+ProBTP P4 offre une couverture solide et rassurante en audiologie, notamment grâce à sa prise en charge intégrale des équipements 100% santé, garantissant un reste à charge zéro pour vos clients. C'est un argument majeur qui répond à la principale préoccupation de nombreux assurés. Pour les prothèses auditives hors 100% santé, notre partenariat avec le réseau Sévéane permet à nos adhérents de bénéficier de tarifs négociés et d'une prise en charge pouvant atteindre 1350€, offrant une solution de qualité et un accompagnement privilégié. Bien qu'AXA propose des plafonds légèrement supérieurs sur certains postes hors 100% santé, l'approche globale de ProBTP, combinant le 100% santé et les avantages de notre réseau, assure une excellente protection et une gestion simplifiée pour nos adhérents.
 
 ### Points de Vente
 
-- « Avec ProBTP P4, vos clients bénéficient d'une prise en charge intégrale pour les équipements auditifs du panier 100% santé, garantissant un reste à charge de 0€, une garantie essentielle pour leur budget santé. »
-- « Pour les prothèses auditives hors 100% santé, nous offrons un excellent niveau de remboursement, atteignant 1350€ de prise en charge totale pour les adultes via nos partenaires Sévéane, ce qui représente une aide financière très significative pour des équipements coûteux. »
-- « Notre offre P4 est conçue pour une couverture santé globale et équilibrée. Même si AXA propose des montants légèrement supérieurs sur certains postes d'audiologie, ProBTP assure une protection fiable et complète, avec des services et un accompagnement adaptés à nos adhérents. »
-- « La prise en charge des accessoires à 100% de la Base de Remboursement de la Sécurité Sociale par ProBTP assure que les besoins essentiels d'entretien et de consommables sont couverts. »
+- Mettez en avant le 'reste à charge zéro' pour tous les équipements auditifs 100% santé, une garantie de tranquillité pour le client.
+- Soulignez l'avantage du réseau Sévéane de ProBTP pour les prothèses auditives hors 100% santé, offrant des tarifs préférentiels et un accompagnement de qualité.
+- Expliquez que ProBTP P4 assure une couverture complète pour les besoins essentiels, avec une gestion simplifiée et un service client dédié.
+- Si AXA est mentionné pour ses plafonds plus élevés, contextualisez en expliquant que ProBTP offre un excellent rapport qualité-prix pour la grande majorité des besoins en audiologie, et que la différence de remboursement hors 100% santé est souvent compensée par d'autres avantages du contrat ProBTP.
 
 ### Évaluation Objective
 
 **Gagnant:** AXA
 **Confiance:** high
 
-**Raisonnement:** Pour la catégorie Audiologie, AXA Base Obligatoire est objectivement supérieur à ProBTP P4. Bien que les deux contrats couvrent entièrement les équipements 100% santé, AXA offre des remboursements totaux systématiquement plus élevés pour les prothèses auditives hors 100% santé, que ce soit pour les adultes (1400€ vs 1350€/1100€ pour ProBTP) ou les enfants (1700€ vs 1400€ pour ProBTP). De plus, la couverture des accessoires par AXA (300% BR) est nettement plus généreuse que celle de ProBTP (100% BR). Ces différences se traduisent par un reste à charge potentiellement beaucoup plus faible pour l'assuré chez AXA, en particulier pour les équipements les plus coûteux.
+**Raisonnement:** AXA Base Obligatoire est objectivement meilleure dans la catégorie Audiologie. Bien que les deux contrats couvrent entièrement les équipements 100% santé, AXA offre des plafonds de remboursement systématiquement plus élevés pour les prothèses auditives hors 100% santé, que ce soit pour les adultes (1400€ contre 1100€/1350€ pour ProBTP) ou, de manière encore plus significative, pour les bénéficiaires de moins de 20 ans (1700€ contre 1400€ pour ProBTP). De plus, AXA propose une bien meilleure prise en charge pour les accessoires (300% BR contre 100% pour ProBTP). L'avantage du réseau Sévéane de ProBTP est minime face aux plafonds monétaires supérieurs d'AXA.
 
 **Faiblesses ProBTP:**
-- Remboursements pour les prothèses auditives hors 100% santé inférieurs à ceux d'AXA, surtout pour les enfants et les adultes n'utilisant pas de partenaires Sévéane.
-- Couverture des accessoires moins généreuse (100% BR vs 300% BR pour AXA).
+- Plafonds de remboursement inférieurs pour les prothèses auditives hors 100% santé, en particulier pour les jeunes bénéficiaires.
+- Prise en charge des accessoires moins généreuse (100% BR contre 300% BR pour AXA).
 
 **Faiblesses AXA:**
-- Aucune faiblesse spécifique identifiée par rapport à ProBTP dans cette catégorie, selon les données fournies.
+- Aucune faiblesse significative n'est identifiée par rapport à l'offre ProBTP dans cette catégorie.
 
 
 ---
@@ -728,128 +869,128 @@ ProBTP P4 assure une couverture solide et essentielle en audiologie, notamment g
 
 <table>
   <tr>
-    <th>P4</th>
-    <th>Base Obligatoire</th>
+    <th>Catégorie</th>
+    <th>Sous-catégorie</th>
+    <th>Prestation</th>
+    <th>Part S.S.</th>
+    <th>ProBTP P4/S2</th>
+    <th>AXA Base Obligatoire</th>
   </tr>
   <tr>
-    <th>Médecines douces agréées (21)(22) ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.</th>
+    <th rowspan="2">Prestations complémentaires</th>
+    <th>Médecines douces</th>
+    <th>Ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.</th>
+    <th> </th>
     <td><strong>4x40€ (21)(22)</strong> ✓</td>
-    <td>50€/séance</td>
+    <td>50 €</td>
   </tr>
   <tr>
-    <th>Cures thermales (23)</th>
-    <td>100% + 150€ (23)</td>
-    <td><strong>300 €</strong> ✓</td>
+    <th> </th>
+    <th>Cures thermales</th>
+    <th>65%</th>
+    <td><strong>100% + 100€ (23)</strong> ✓</td>
+    <td>300 €</td>
   </tr>
 </table>
 
 ### Différences Clés
 
-ProBTP P4 offre une meilleure couverture annuelle pour les médecines douces avec plus de séances autorisées et un plafond familial, tandis qu'AXA Base Obligatoire propose un remboursement par séance plus élevé mais un nombre de séances limité. Pour les cures thermales, AXA offre un montant forfaitaire plus généreux et prévisible que la combinaison 100% BR + forfait de ProBTP.
+ProBTP offre une couverture plus généreuse pour les médecines douces, notamment en nombre de séances et avec un plafond familial, ainsi qu'une meilleure prise en charge des cures thermales. AXA propose un remboursement par séance légèrement plus élevé pour les médecines douces, mais avec un nombre de séances et un plafond total inférieurs.
 
 ### Exemples Concrets
 
-- Pour une séance d'ostéopathie coûtant 60€: ProBTP P4 rembourse 40€ (reste à charge 20€), AXA Base Obligatoire rembourse 50€ (reste à charge 10€).
-- Pour quatre séances d'acupuncture à 60€ chacune (coût total 240€) sur une année: ProBTP P4 rembourse 4 x 40€ = 160€ (reste à charge 80€), tandis qu'AXA Base Obligatoire ne rembourse que 3 x 50€ = 150€ (reste à charge 90€) en raison de sa limite de 3 séances.
-- Pour une cure thermale dont la Base de Remboursement SS est de 100€ et un coût total de 400€: ProBTP P4 rembourse 100% BR (100€) + 150€ = 250€ (reste à charge 150€), alors qu'AXA Base Obligatoire rembourse un forfait de 300€ (reste à charge 100€).
+- Pour 3 séances d'ostéopathie à 60€ chacune (total 180€) : ProBTP rembourse 3 x 40€ = 120€ (reste à charge 60€), AXA rembourse 3 x 50€ = 150€ (reste à charge 30€). Dans ce cas, AXA est plus avantageux.
+- Pour 4 séances d'ostéopathie à 60€ chacune (total 240€) : ProBTP rembourse 4 x 40€ = 160€ (reste à charge 80€), AXA rembourse 3 x 50€ = 150€ (plafond atteint, reste à charge 90€). Dans ce cas, ProBTP est plus avantageux.
+- Pour une cure thermale dont les actes médicaux ont une Base de Remboursement (BR) de 400€ : La Sécurité Sociale rembourse 65% de la BR, soit 260€. ProBTP rembourse 100% de la BR + 100€, soit 260€ + 100€ = 360€ (reste à charge 240€). AXA propose un forfait de 300€ (reste à charge 300€). ProBTP est plus avantageux.
 
 ### Analyse de Valeur
 
-Les médecines douces sont de plus en plus utilisées, et le risque financier, bien que modéré par séance, peut devenir significatif sur l'année. L'offre de ProBTP P4 est avantageuse pour les utilisateurs réguliers ou les familles grâce à un nombre de séances plus élevé et un plafond familial. AXA, avec un remboursement par séance supérieur, est plus adaptée aux usages ponctuels. Les cures thermales, moins fréquentes, représentent un coût important où la prévisibilité du forfait AXA peut être un atout majeur.
+Les médecines douces, bien que de plus en plus plébiscitées, sont souvent mal ou pas du tout remboursées par la Sécurité Sociale, représentant un risque financier non négligeable pour les assurés. Une bonne couverture dans ce domaine est donc très valorisée. Les cures thermales sont moins fréquentes mais peuvent représenter un coût important. ProBTP se distingue par un plafond familial pour les médecines douces, ce qui est un atout majeur pour les familles. AXA, avec son montant par séance plus élevé, peut séduire les personnes ayant des besoins ponctuels et limités. Cependant, la couverture globale et la prise en charge des cures thermales de ProBTP offrent une meilleure protection contre les dépenses imprévues et récurrentes dans cette catégorie.
 
 ### Meilleure Couverture (Perspective ProBTP)
 
-ProBTP P4 se distingue par une approche plus globale et généreuse pour les médecines douces, un poste de dépense courant pour de nombreux assurés. La possibilité de bénéficier de 4 séances par an et un plafond familial de 320€ offrent une flexibilité et une meilleure protection face aux dépenses récurrentes, ce qui est un argument de poids pour les familles ou les personnes ayant des besoins réguliers. Bien qu'AXA propose un meilleur remboursement par séance, la limite de 3 séances peut rapidement être atteinte. Pour les cures thermales, même si le forfait d'AXA est attractif, ProBTP assure une bonne base de remboursement avec 100% de la BR plus un complément, garantissant une prise en charge solide pour ces soins spécifiques.
+ProBTP offre une couverture très compétitive et complète pour les médecines douces et les cures thermales. Pour les médecines douces, bien que le remboursement par séance d'AXA soit légèrement supérieur, ProBTP permet un plus grand nombre de séances (4 contre 3) et propose un plafond annuel familial de 320€, ce qui est un avantage considérable pour les foyers. Pour les cures thermales, ProBTP surclasse clairement AXA avec une prise en charge de 100% de la BR et un forfait supplémentaire de 100€, garantissant un meilleur remboursement face à des frais souvent élevés. Il est essentiel de mettre en avant la vision de ProBTP qui est de soutenir le bien-être de toute la famille sur le long terme, et non pas seulement des remboursements ponctuels.
 
 ### Points de Vente
 
-- Mettez en avant le nombre supérieur de séances de médecines douces couvertes par ProBTP P4 (4 séances contre 3 chez AXA), offrant une meilleure continuité des soins.
-- Soulignez le plafond annuel familial de 320€ pour les médecines douces chez ProBTP, un avantage clé pour les familles où plusieurs membres peuvent avoir recours à ces soins.
-- Expliquez que ProBTP P4 propose une couverture complète pour les médecines douces, même si le remboursement par séance est légèrement inférieur, le volume de séances couvertes sur l'année est plus avantageux.
-- Pour les cures thermales, valorisez la prise en charge de 100% de la Base de Remboursement de la Sécurité Sociale plus un complément de 150€, qui assure une bonne couverture pour des traitements souvent coûteux.
+- Mettez en avant le plafond familial de 320€ pour les médecines douces chez ProBTP, un atout majeur pour les familles par rapport à l'approche individuelle d'AXA.
+- Soulignez que ProBTP couvre jusqu'à 4 séances de médecines douces par an, offrant une meilleure flexibilité et un soutien plus continu que les 3 séances proposées par AXA.
+- Insistez sur la supériorité de ProBTP pour les cures thermales, avec un remboursement de 100% de la BR + 100€, garantissant une prise en charge nettement plus élevée qu'AXA.
+- Expliquez que, même si AXA propose 50€ par séance contre 40€ pour ProBTP, notre offre permet une meilleure prise en charge globale et un accompagnement plus complet sur l'année, surtout pour les besoins réguliers ou familiaux.
+- Positionnez ProBTP comme le choix idéal pour une approche globale du bien-être et de la prévention, avec des garanties adaptées aux besoins réels et aux dépenses importantes.
 
 ### Évaluation Objective
 
 **Gagnant:** PROBTP
 **Confiance:** medium
 
-**Raisonnement:** Pour les médecines douces, ProBTP P4 offre un total annuel de remboursement potentiellement plus élevé par personne (160€ vs 150€) et surtout un plafond familial de 320€, ce qui est un avantage significatif pour les familles. Bien qu'AXA propose un remboursement par séance plus élevé, la limite de 3 séances est restrictive. Pour les cures thermales, le forfait fixe de 300€ d'AXA est généralement plus avantageux que la combinaison 100% BR + 150€ de ProBTP, compte tenu de la BR souvent basse. Cependant, la meilleure couverture annuelle et la flexibilité pour les médecines douces, plus fréquemment utilisées, donnent un léger avantage à ProBTP dans cette catégorie.
+**Raisonnement:** ProBTP est globalement plus avantageux dans la catégorie des médecines douces et cures thermales. Bien qu'AXA offre un remboursement par séance légèrement supérieur pour les médecines douces, ProBTP compense par un nombre de séances plus élevé (4 contre 3), un plafond annuel familial plus généreux (320€ contre 150€ par bénéficiaire max chez AXA) et surtout une couverture nettement supérieure pour les cures thermales (100% BR + 100€ contre 300€ forfaitaire). L'avantage global et la protection contre les dépenses importantes penchent en faveur de ProBTP.
 
 **Faiblesses ProBTP:**
-- Remboursement par séance légèrement inférieur pour les médecines douces.
-- Couverture des cures thermales potentiellement moins généreuse que le forfait AXA si la BR est faible.
+- Remboursement par séance légèrement inférieur pour les médecines douces (40€ contre 50€ chez AXA).
 
 **Faiblesses AXA:**
-- Nombre de séances limité pour les médecines douces (3 par an et par bénéficiaire).
-- Plafond annuel global plus bas pour les médecines douces par bénéficiaire.
-- Absence de plafond familial explicite pour les médecines douces.
+- Nombre de séances limité pour les médecines douces (3 contre 4 chez ProBTP).
+- Plafond individuel pour les médecines douces, sans avantage familial.
+- Remboursement des cures thermales significativement inférieur à ProBTP.
 
 
 ---
 
 ## Recommandations Globales
 
-## Recommandation Générale
+En tant qu'expert en analyse d'assurances, voici une recommandation globale pour nos contrats ProBTP, en comparaison avec l'offre AXA.
 
-En tant qu'expert en assurance, l'analyse comparative des offres met en lumière des positionnements distincts entre ProBTP et AXA, chacun avec ses atouts spécifiques. ProBTP se distingue par une approche axée sur la simplicité, l'efficacité et une protection robuste sur des postes clés, souvent sans reste à charge et sans les conditions complexes parfois rencontrées ailleurs.
+---
 
-### 1. Synthèse des Forces et Faiblesses
+### Synthèse des Points Forts et Faiblesses
 
-**ProBTP (Général)**
-*   **Points Forts :**
-    *   Couverture unique et intégrale à 100% des soins externes, protégeant contre les dépenses imprévues et potentiellement élevées.
-    *   Prise en charge complète du ticket modérateur pour les séances d'accompagnement psychologique remboursées par la Sécurité Sociale (SS) et les médicaments importants.
-    *   Remboursement supérieur (250% de la Base de Remboursement - BR) pour les appareillages orthopédiques.
-    *   Simplicité et efficacité : couverture à 100% de la BR sur la majorité des postes, garantissant le remboursement du ticket modérateur sans conditions complexes (contrairement aux exigences DPTAM d'AXA).
-    *   Garantie 100% BR sur les honoraires, assurant une base solide de remboursement.
-*   **Points Faibles :**
-    *   Peut-être moins de "très hauts pourcentages" sur certains actes que AXA, mais avec une approche plus directe et moins conditionnée.
+**Contrat ProBTP S2**
+*   **Points forts :**
+    *   **Soins Courants :** Couverture 100% BR sur tous les soins courants essentiels (médecins secteur 1), garantissant une absence de reste à charge et une grande simplicité. Prise en charge des séances de psychologie remboursées par la SS.
+    *   **Hospitalisation :** Couverture intégrale du forfait journalier hospitalier.
+    *   **Optique & Audiologie :** Reste à charge zéro sur les équipements 100% Santé.
+*   **Points à considérer :**
+    *   Niveau de remboursement pour les dépassements d'honoraires et le confort hospitalier (chambre particulière) plus limité que S4.
+    *   Moins de garanties spécifiques sur le dentaire et l'optique "hors 100% Santé" que les niveaux supérieurs.
 
-**ProBTP S2 (Hospitalisation)**
-*   **Points Forts :**
-    *   Prise en charge intégrale du forfait journalier hospitalier et de la participation forfaitaire pour les actes supérieurs à 120€.
-    *   Contribution significative aux frais de confort (chambre particulière, lit accompagnant).
-    *   Solution équilibrée et compétitive pour une protection efficace en hospitalisation, ciblant l'essentiel sans surcoût pour des options superflues.
+**Contrat ProBTP S4**
+*   **Points forts :**
+    *   **Tous les avantages de S2.**
+    *   **Hospitalisation :** Garantie "Frais réels si OPTAM" pour les honoraires, offrant la meilleure protection contre les dépassements d'honoraires. Couverture robuste pour la chambre particulière (80 €/jour).
+    *   **Soins Courants :** Excellente couverture pour les appareillages orthopédiques (250% BR).
+    *   **Optique :** Clarté et générosité des forfaits optiques libres (notamment avec le réseau Sévéane), incluant le supplément forte correction (non couvert par AXA) et un renouvellement flexible pour les enfants (12 mois).
+    *   **Médecines Douces :** Plafond familial de 320€ et jusqu'à 4 séances par an, ainsi qu'une supériorité sur les cures thermales (100% BR + 100€).
+*   **Points à considérer :**
+    *   Si AXA propose des pourcentages BR plus élevés sur certains postes, ProBTP S4 se concentre sur les dépenses les plus lourdes et imprévues, offrant une valeur supérieure sur des postes clés.
 
-**ProBTP P4 (Optique, Dentaire, Audiologie, Médecines Douces)**
-*   **Points Forts :**
-    *   **Optique :** Couverture inégalée des équipements optiques libres (verres et montures), avec des avantages réseau Sévéane (ex: 500€ pour verres progressifs). Couvre aussi bien le 100% Santé.
-    *   **Dentaire :** Prise en charge à frais réels (Reste à Charge 0€) pour les soins et prothèses 100% Santé. Excellente couverture des soins courants et préventifs.
-    *   **Audiologie :** Prise en charge intégrale (RAC 0€) pour les équipements 100% Santé. Excellent niveau hors 100% Santé (jusqu'à 1350€ via Sévéane). Couverture des accessoires à 100% BR SS.
-    *   **Médecines Douces :** Nombre supérieur de séances (4 contre 3 chez AXA) et plafond annuel familial avantageux (320€).
-    *   **Cures Thermales :** Bonne couverture (100% BR SS + 150€).
-*   **Points Faibles :**
-    *   **Optique :** Moins avantageux qu'AXA pour les lentilles et la chirurgie réfractive (besoins moins fréquents que le renouvellement de lunettes).
-    *   **Dentaire :** Si les besoins dentaires sont importants (prothèses, implants, orthodontie) hors 100% Santé, d'autres niveaux de garantie ProBTP seraient à considérer.
-    *   **Audiologie :** Montants légèrement inférieurs sur certains postes que AXA, mais avec une protection fiable et complète.
+**Contrat ProBTP P4**
+*   **Points forts :**
+    *   **Tous les avantages de S4.**
+    *   **Dentaire :** "Frais réels" sur le 100% Santé et les prothèses à honoraires maîtrisés, assurant un reste à charge zéro sur des prestations coûteuses. Avantage sur l'orthodontie adulte non prise en charge par la SS (400€/semestre). Remboursement très compétitif pour les implants via le réseau Sévéane (800€).
+    *   **Audiologie :** Reste à charge zéro sur tous les équipements 100% Santé. Avantage du réseau Sévéane pour les prothèses auditives hors 100% Santé (tarifs préférentiels et accompagnement).
+*   **Points à considérer :**
+    *   AXA peut afficher des pourcentages BR plus élevés sur certains soins dentaires courants, mais ProBTP P4 se distingue par sa protection ciblée contre les dépenses les plus lourdes et imprévues, là où l'impact financier est le plus fort.
 
-**AXA (Général)**
-*   **Points Forts :**
-    *   Pourcentages plus élevés sur certains actes médicaux (mais souvent conditionnés à l'adhésion du médecin au DPTAM).
-    *   **Optique :** Meilleure couverture pour les lentilles et la chirurgie réfractive.
-    *   **Audiologie :** Montants légèrement supérieurs sur certains postes.
-*   **Points Faibles :**
-    *   Absence de couverture pour les soins externes.
-    *   Conditions DPTAM pour bénéficier des pourcentages élevés, ce qui peut complexifier le remboursement.
-    *   **Optique :** Aucune prise en charge des équipements optiques libres (verres et montures), un poste de dépense majeur et récurrent.
-    *   **Médecines Douces :** Moins de séances couvertes (3 contre 4 chez ProBTP P4).
+---
 
-### 2. Facteurs de Décision Clés pour le Client
+### Facteurs Décisionnels Clés pour le Vendeur
 
-Pour orienter au mieux le client, le commercial devrait poser les questions suivantes :
+Pour orienter au mieux le client, le vendeur doit poser les questions suivantes :
 
-*   **Quels sont vos besoins prioritaires en matière de santé ?** (Ex: hospitalisation, optique, dentaire, médecines douces, soins externes)
-*   **Accordez-vous de l'importance à la simplicité de remboursement et à l'absence de reste à charge sur les postes essentiels ?**
-*   **Quelle est votre fréquence de recours aux soins optiques (lunettes, lentilles, chirurgie) et auditifs ?**
-*   **Utilisez-vous régulièrement des médecines douces ? Si oui, combien de séances par an et pour combien de membres de votre famille ?**
-*   **Souhaitez-vous une couverture complète pour les soins 100% Santé, avec un reste à charge zéro ?**
-*   **Êtes-vous prêt à payer plus cher pour des garanties très élevées sur des postes spécifiques, quitte à avoir des conditions de remboursement plus complexes (ex: DPTAM) ?**
-*   **La prise en charge des frais de confort en hospitalisation (chambre particulière, lit accompagnant) est-elle importante pour vous ?**
-*   **Avez-vous des antécédents ou des prévisions de dépenses importantes pour des appareillages orthopédiques ou des soins externes ?**
+1.  **Quelles sont vos priorités en matière de santé ?** (Ex: "Je veux être bien couvert en cas d'hospitalisation", "Mes enfants ont des besoins optiques", "Je consulte régulièrement des médecines douces", "Je prévois des soins dentaires importants").
+2.  **Avez-vous des antécédents médicaux ou des besoins spécifiques ?** (Ex: "J'ai des problèmes de dos qui nécessitent des appareillages", "Je suis sujet aux dépassements d'honoraires", "Je porte des lunettes à forte correction", "Je pense à des implants dentaires").
+3.  **Quel est votre budget pour votre complémentaire santé ?** (Permet d'orienter vers S2, S4 ou P4 en fonction du niveau de couverture souhaité et des moyens).
+4.  **Êtes-vous sensible au confort en cas d'hospitalisation ?** (Chambre particulière, protection contre les dépassements).
+5.  **Utilisez-vous des médecines douces ou envisagez-vous des cures thermales ?** (Pour valoriser les avantages familiaux et les montants de remboursement de ProBTP).
+6.  **Avez-vous des enfants ?** (Pour l'optique, le renouvellement, et les plafonds familiaux des médecines douces).
+7.  **Recherchez-vous une solution simple, claire et prévisible en termes de reste à charge ?** (Pour mettre en avant la transparence de nos forfaits et le "Frais réels").
 
-### 3. Orientation Finale
+---
 
-ProBTP se positionne comme un partenaire de santé fiable et transparent, particulièrement adapté aux clients recherchant une couverture complète et sans surprise sur les postes de dépenses les plus fréquents et potentiellement les plus coûteux. Notre force réside dans la prise en charge intégrale des soins externes, la simplicité de nos garanties (notamment le 100% BR sur de nombreux postes sans conditions DPTAM), et des niveaux de remboursement très avantageux sur l'optique libre, les appareillages orthopédiques, et les médecines douces. Pour les besoins en hospitalisation, ProBTP S2 offre une protection équilibrée et compétitive, couvrant l'essentiel avec efficacité.
+### Orientation Finale
 
-Si le client privilégie la clarté, la sécurité financière face aux imprévus, et une excellente couverture sur les postes optiques (lunettes), dentaires (100% Santé et soins courants), auditifs (100% Santé et hors 100% Santé via Sévéane) et les médecines douces, ProBTP, notamment avec la garantie P4, représente un choix supérieur. Bien qu'AXA puisse offrir des pourcentages légèrement plus élevés sur des postes très spécifiques ou des besoins moins fréquents comme la chirurgie réfractive, ProBTP garantit une tranquillité d'esprit au quotidien grâce à une protection globale, un reste à charge maîtrisé et un accompagnement adapté à la vie de nos adhérents.
+ProBTP se positionne comme la solution de choix pour une protection santé complète, fiable et particulièrement efficace face aux dépenses imprévues et importantes. Alors qu'AXA peut parfois afficher des pourcentages de Base de Remboursement (BR) plus élevés, nos contrats ProBTP, notamment S4 et P4, offrent une valeur supérieure grâce à des garanties ciblées sur les postes clés qui génèrent le plus de reste à charge pour nos adhérents. Notre approche "100% BR" sur les soins courants essentiels, la garantie "Frais réels si OPTAM" en hospitalisation, nos forfaits optiques généreux et nos avantages dentaires spécifiques (orthodontie adulte, implants via Sévéane) sont autant d'arguments qui assurent une tranquillité d'esprit maximale.
+
+Nous mettons l'accent sur la clarté, la prévisibilité du reste à charge et la protection contre les dépenses les plus lourdes, comme en témoignent nos couvertures sur le 100% Santé, les appareillages orthopédiques, ou encore les médecines douces avec un plafond familial avantageux. ProBTP est la solution idéale pour les individus et les familles qui recherchent non seulement une couverture robuste au quotidien, mais aussi une protection solide contre les aléas de santé, garantissant ainsi une gestion simplifiée et un service client dédié. Choisissez ProBTP pour une mutuelle qui protège efficacement votre budget et votre bien-être.
 

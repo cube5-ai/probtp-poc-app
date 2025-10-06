@@ -1,0 +1,249 @@
+{
+  "category": "Médecines Douces",
+  "annotated_table": {
+    "template_row": [
+      "Catégorie",
+      "Sous-catégorie",
+      "Prestation",
+      "Part S.S.",
+      "ProBTP P4/S2",
+      "AXA Base Obligatoire"
+    ],
+    "metadata": {
+      "category": "Médecines Douces",
+      "policy_levels": {
+        "probtp": [
+          "S2",
+          "P4"
+        ],
+        "axa": [
+          "Base Obligatoire"
+        ]
+      },
+      "total_columns": 6,
+      "column_labels": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F"
+      ]
+    },
+    "rows": [
+      {
+        "row_number": 1,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A1",
+            "value": "Catégorie"
+          },
+          {
+            "id": "B1",
+            "value": "Sous-catégorie"
+          },
+          {
+            "id": "C1",
+            "value": "Prestation"
+          },
+          {
+            "id": "D1",
+            "value": "Part S.S."
+          },
+          {
+            "id": "E1",
+            "value": "ProBTP P4/S2"
+          },
+          {
+            "id": "F1",
+            "value": "AXA Base Obligatoire"
+          }
+        ]
+      },
+      {
+        "row_number": 2,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A2",
+            "value": "Prestations complémentaires",
+            "rowspan": 2,
+            "occupies": [
+              "A2",
+              "A3"
+            ]
+          },
+          {
+            "id": "B2",
+            "value": "Médecines douces"
+          },
+          {
+            "id": "C2",
+            "value": "Ostéopathes, chiropracteurs, acupuncteurs, diététiciens, séances de psychologues non remboursées par la S.S.",
+            "sources": {
+              "probtp": [
+                "2-6c"
+              ]
+            }
+          },
+          {
+            "id": "D2",
+            "value": "",
+            "sources": {
+              "probtp": [
+                "2-6d"
+              ]
+            }
+          },
+          {
+            "id": "E2",
+            "value": "4x40€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-6i"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(21)",
+                "(22)"
+              ],
+              "conditions": "4 séances x 40€, plafond annuel 320€/an/famille. Soins effectués en France métropolitaine. Remboursement sur la base de factures acquittées."
+            },
+            "is_best": true
+          },
+          {
+            "id": "F2",
+            "value": "50 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-7",
+                "5-9"
+              ]
+            },
+            "metadata": {
+              "conditions": "Forfait actes thérapeutiques (Acupuncture, Chiropraxie, Diététique, Ostéopathie, Pédicurie-podologie, Psychologie, Psychomotricité, Tabacologie). 50€ par séance, dans la limite de 3 séances par année civile et par bénéficiaire."
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 3,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A3",
+            "ref": "A2"
+          },
+          {
+            "id": "B3",
+            "value": ""
+          },
+          {
+            "id": "C3",
+            "value": "Cures thermales",
+            "sources": {
+              "probtp": [
+                "2-6l"
+              ]
+            }
+          },
+          {
+            "id": "D3",
+            "value": "65%",
+            "sources": {
+              "probtp": [
+                "2-6m"
+              ]
+            }
+          },
+          {
+            "id": "E3",
+            "value": "100% + 100€",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-6o"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(23)"
+              ],
+              "conditions": "Limité à une cure par an et par bénéficiaire."
+            },
+            "is_best": true
+          },
+          {
+            "id": "F3",
+            "value": "300 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "5-E",
+                "5-G"
+              ]
+            },
+            "metadata": {
+              "conditions": "Frais médicaux, frais de séjour et frais de transport pris en charge par la Sécurité sociale."
+            },
+            "is_best": false
+          }
+        ]
+      }
+    ]
+  },
+  "key_differences": "ProBTP offre une couverture plus généreuse pour les médecines douces, notamment en nombre de séances et avec un plafond familial, ainsi qu'une meilleure prise en charge des cures thermales. AXA propose un remboursement par séance légèrement plus élevé pour les médecines douces, mais avec un nombre de séances et un plafond total inférieurs.",
+  "concrete_examples": [
+    "Pour 3 séances d'ostéopathie à 60€ chacune (total 180€) : ProBTP rembourse 3 x 40€ = 120€ (reste à charge 60€), AXA rembourse 3 x 50€ = 150€ (reste à charge 30€). Dans ce cas, AXA est plus avantageux.",
+    "Pour 4 séances d'ostéopathie à 60€ chacune (total 240€) : ProBTP rembourse 4 x 40€ = 160€ (reste à charge 80€), AXA rembourse 3 x 50€ = 150€ (plafond atteint, reste à charge 90€). Dans ce cas, ProBTP est plus avantageux.",
+    "Pour une cure thermale dont les actes médicaux ont une Base de Remboursement (BR) de 400€ : La Sécurité Sociale rembourse 65% de la BR, soit 260€. ProBTP rembourse 100% de la BR + 100€, soit 260€ + 100€ = 360€ (reste à charge 240€). AXA propose un forfait de 300€ (reste à charge 300€). ProBTP est plus avantageux."
+  ],
+  "critical_thinking": "Les médecines douces, bien que de plus en plus plébiscitées, sont souvent mal ou pas du tout remboursées par la Sécurité Sociale, représentant un risque financier non négligeable pour les assurés. Une bonne couverture dans ce domaine est donc très valorisée. Les cures thermales sont moins fréquentes mais peuvent représenter un coût important. ProBTP se distingue par un plafond familial pour les médecines douces, ce qui est un atout majeur pour les familles. AXA, avec son montant par séance plus élevé, peut séduire les personnes ayant des besoins ponctuels et limités. Cependant, la couverture globale et la prise en charge des cures thermales de ProBTP offrent une meilleure protection contre les dépenses imprévues et récurrentes dans cette catégorie.",
+  "best_coverage": "ProBTP offre une couverture très compétitive et complète pour les médecines douces et les cures thermales. Pour les médecines douces, bien que le remboursement par séance d'AXA soit légèrement supérieur, ProBTP permet un plus grand nombre de séances (4 contre 3) et propose un plafond annuel familial de 320€, ce qui est un avantage considérable pour les foyers. Pour les cures thermales, ProBTP surclasse clairement AXA avec une prise en charge de 100% de la BR et un forfait supplémentaire de 100€, garantissant un meilleur remboursement face à des frais souvent élevés. Il est essentiel de mettre en avant la vision de ProBTP qui est de soutenir le bien-être de toute la famille sur le long terme, et non pas seulement des remboursements ponctuels.",
+  "salesperson_talking_points": [
+    "Mettez en avant le plafond familial de 320€ pour les médecines douces chez ProBTP, un atout majeur pour les familles par rapport à l'approche individuelle d'AXA.",
+    "Soulignez que ProBTP couvre jusqu'à 4 séances de médecines douces par an, offrant une meilleure flexibilité et un soutien plus continu que les 3 séances proposées par AXA.",
+    "Insistez sur la supériorité de ProBTP pour les cures thermales, avec un remboursement de 100% de la BR + 100€, garantissant une prise en charge nettement plus élevée qu'AXA.",
+    "Expliquez que, même si AXA propose 50€ par séance contre 40€ pour ProBTP, notre offre permet une meilleure prise en charge globale et un accompagnement plus complet sur l'année, surtout pour les besoins réguliers ou familiaux.",
+    "Positionnez ProBTP comme le choix idéal pour une approche globale du bien-être et de la prévention, avec des garanties adaptées aux besoins réels et aux dépenses importantes."
+  ],
+  "objective_assessment": {
+    "overall_winner": "probtp",
+    "confidence": "medium",
+    "reasoning": "ProBTP est globalement plus avantageux dans la catégorie des médecines douces et cures thermales. Bien qu'AXA offre un remboursement par séance légèrement supérieur pour les médecines douces, ProBTP compense par un nombre de séances plus élevé (4 contre 3), un plafond annuel familial plus généreux (320€ contre 150€ par bénéficiaire max chez AXA) et surtout une couverture nettement supérieure pour les cures thermales (100% BR + 100€ contre 300€ forfaitaire). L'avantage global et la protection contre les dépenses importantes penchent en faveur de ProBTP.",
+    "probtp_weaknesses": [
+      "Remboursement par séance légèrement inférieur pour les médecines douces (40€ contre 50€ chez AXA)."
+    ],
+    "axa_weaknesses": [
+      "Nombre de séances limité pour les médecines douces (3 contre 4 chez ProBTP).",
+      "Plafond individuel pour les médecines douces, sans avantage familial.",
+      "Remboursement des cures thermales significativement inférieur à ProBTP."
+    ]
+  }
+}

@@ -1,0 +1,1046 @@
+{
+  "category": "Soins Dentaires",
+  "annotated_table": {
+    "template_row": [
+      "Catégorie",
+      "Sous-catégorie",
+      "Prestation",
+      "Détail Prestation",
+      "Part S.S.",
+      "ProBTP P4",
+      "AXA Base Obligatoire"
+    ],
+    "metadata": {
+      "category": "Soins Dentaires",
+      "policy_levels": {
+        "probtp": [
+          "P4"
+        ],
+        "axa": [
+          "Base Obligatoire"
+        ]
+      },
+      "total_columns": 7,
+      "column_labels": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "G"
+      ]
+    },
+    "rows": [
+      {
+        "row_number": 1,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A1",
+            "value": "Catégorie"
+          },
+          {
+            "id": "B1",
+            "value": "Sous-catégorie"
+          },
+          {
+            "id": "C1",
+            "value": "Prestation"
+          },
+          {
+            "id": "D1",
+            "value": "Détail Prestation"
+          },
+          {
+            "id": "E1",
+            "value": "Part S.S.*",
+            "sources": {
+              "probtp": [
+                "2-3m"
+              ]
+            }
+          },
+          {
+            "id": "F1",
+            "value": "ProBTP P4",
+            "sources": {
+              "probtp": [
+                "2-2r"
+              ]
+            }
+          },
+          {
+            "id": "G1",
+            "value": "AXA Base Obligatoire",
+            "sources": {
+              "axa": [
+                "3-3"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "row_number": 2,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A2",
+            "value": "Dentaire",
+            "rowspan": 10,
+            "occupies": [
+              "A2",
+              "A3",
+              "A4",
+              "A5",
+              "A6",
+              "A7",
+              "A8",
+              "A9",
+              "A10",
+              "A11"
+            ],
+            "sources": {
+              "probtp": [
+                "2-3X"
+              ]
+            }
+          },
+          {
+            "id": "B2",
+            "value": "Soins et prothèses 100% santé",
+            "colspan": 2,
+            "occupies": [
+              "B2",
+              "C2"
+            ],
+            "sources": {
+              "probtp": [
+                "2-3Y"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(2)",
+                "(14)"
+              ]
+            }
+          },
+          {
+            "id": "C2",
+            "ref": "B2"
+          },
+          {
+            "id": "D2",
+            "value": ""
+          },
+          {
+            "id": "E2",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-3Z"
+              ]
+            }
+          },
+          {
+            "id": "F2",
+            "value": "Frais réels",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-44"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "G2",
+            "value": "100% PLV-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-E"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(1)"
+              ]
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 3,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A3",
+            "ref": "A2"
+          },
+          {
+            "id": "B3",
+            "value": "Soins dentaires",
+            "rowspan": 3,
+            "occupies": [
+              "B3",
+              "B4",
+              "B5"
+            ],
+            "sources": {
+              "probtp": [
+                "2-47"
+              ]
+            }
+          },
+          {
+            "id": "C3",
+            "value": "Inlay/onlay (par acte)",
+            "colspan": 2,
+            "occupies": [
+              "C3",
+              "D3"
+            ],
+            "sources": {
+              "probtp": [
+                "2-48"
+              ]
+            }
+          },
+          {
+            "id": "D3",
+            "ref": "C3"
+          },
+          {
+            "id": "E3",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-49"
+              ]
+            }
+          },
+          {
+            "id": "F3",
+            "value": "200%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-4e"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G3",
+            "value": "370% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-I"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(2)"
+              ],
+              "conditions": "Y compris Inlay Onlay"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 4,
+        "inherited_from_above": [
+          "A2",
+          "B3",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A4",
+            "ref": "A2"
+          },
+          {
+            "id": "B4",
+            "ref": "B3"
+          },
+          {
+            "id": "C4",
+            "value": "Autres soins dentaires pris en charge par la S.S.",
+            "colspan": 2,
+            "occupies": [
+              "C4",
+              "D4"
+            ],
+            "sources": {
+              "probtp": [
+                "2-4h"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(19)"
+              ]
+            }
+          },
+          {
+            "id": "D4",
+            "ref": "C4"
+          },
+          {
+            "id": "E4",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-4i"
+              ]
+            }
+          },
+          {
+            "id": "F4",
+            "value": "100%",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-4n"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G4",
+            "value": "200% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-o"
+              ]
+            },
+            "metadata": {
+              "conditions": "Hors inlays onlays d'obturation"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 5,
+        "inherited_from_above": [
+          "A2",
+          "B3",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A5",
+            "ref": "A2"
+          },
+          {
+            "id": "B5",
+            "ref": "B3"
+          },
+          {
+            "id": "C5",
+            "value": "Parodontologie non prise en charge par la S.S.",
+            "colspan": 2,
+            "occupies": [
+              "C5",
+              "D5"
+            ],
+            "sources": {
+              "probtp": [
+                "2-4q"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(12)"
+              ],
+              "conditions": "/an /bénéf."
+            }
+          },
+          {
+            "id": "D5",
+            "ref": "C5"
+          },
+          {
+            "id": "E5",
+            "value": "Non couvert",
+            "sources": {
+              "probtp": [
+                "2-4r"
+              ]
+            }
+          },
+          {
+            "id": "F5",
+            "value": "300 €",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-4w"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "G5",
+            "value": "300 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-r"
+              ]
+            },
+            "metadata": {
+              "conditions": "Par année civile et par bénéficiaire"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 6,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A6",
+            "ref": "A2"
+          },
+          {
+            "id": "B6",
+            "value": "Prothèses dentaires",
+            "rowspan": 2,
+            "occupies": [
+              "B6",
+              "B7"
+            ],
+            "sources": {
+              "probtp": [
+                "2-4z"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(2)"
+              ]
+            }
+          },
+          {
+            "id": "C6",
+            "value": "Prothèses dentaires remboursées par la S.S. :",
+            "rowspan": 2,
+            "occupies": [
+              "C6",
+              "C7"
+            ],
+            "sources": {
+              "probtp": [
+                "2-4A"
+              ]
+            }
+          },
+          {
+            "id": "D6",
+            "value": "prothèses à honoraires maîtrisés",
+            "sources": {
+              "probtp": [
+                "2-4B"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(1a)"
+              ]
+            }
+          },
+          {
+            "id": "E6",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-4C"
+              ]
+            }
+          },
+          {
+            "id": "F6",
+            "value": "Frais réels",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-4H"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "G6",
+            "value": "370% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-I"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(2)"
+              ],
+              "conditions": "Y compris Inlay Onlay"
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 7,
+        "inherited_from_above": [
+          "A2",
+          "B6",
+          "C6",
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A7",
+            "ref": "A2"
+          },
+          {
+            "id": "B7",
+            "ref": "B6"
+          },
+          {
+            "id": "C7",
+            "ref": "C6"
+          },
+          {
+            "id": "D7",
+            "value": "autres prothèses",
+            "sources": {
+              "probtp": [
+                "2-4K"
+              ]
+            }
+          },
+          {
+            "id": "E7",
+            "value": "60%",
+            "sources": {
+              "probtp": [
+                "2-4C"
+              ]
+            }
+          },
+          {
+            "id": "F7",
+            "value": "500 %",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-4P"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "G7",
+            "value": "370% BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-O"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(3)"
+              ],
+              "conditions": "Y compris Inlay Onlay"
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 8,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A8",
+            "ref": "A2"
+          },
+          {
+            "id": "B8",
+            "value": "Orthodontie",
+            "rowspan": 2,
+            "occupies": [
+              "B8",
+              "B9"
+            ],
+            "sources": {
+              "probtp": [
+                "2-4S"
+              ]
+            }
+          },
+          {
+            "id": "C8",
+            "value": "Orthodontie acceptée par la S.S.",
+            "colspan": 2,
+            "occupies": [
+              "C8",
+              "D8"
+            ],
+            "sources": {
+              "probtp": [
+                "2-4T"
+              ]
+            },
+            "metadata": {
+              "conditions": "par semestre"
+            }
+          },
+          {
+            "id": "D8",
+            "ref": "C8"
+          },
+          {
+            "id": "E8",
+            "value": "100%",
+            "sources": {
+              "probtp": [
+                "2-4U"
+              ]
+            }
+          },
+          {
+            "id": "F8",
+            "value": "350 %",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-4Z"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G8",
+            "value": "370 % BR-MR",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-Y"
+              ]
+            },
+            "metadata": {
+              "conditions": "par semestre"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 9,
+        "inherited_from_above": [
+          "A2",
+          "B8",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A9",
+            "ref": "A2"
+          },
+          {
+            "id": "B9",
+            "ref": "B8"
+          },
+          {
+            "id": "C9",
+            "value": "Orthodontie adulte non prise en charge par la S.S.",
+            "colspan": 2,
+            "occupies": [
+              "C9",
+              "D9"
+            ],
+            "sources": {
+              "probtp": [
+                "2-52"
+              ]
+            },
+            "metadata": {
+              "footnotes": [
+                "(17)"
+              ],
+              "conditions": "par semestre"
+            }
+          },
+          {
+            "id": "D9",
+            "ref": "C9"
+          },
+          {
+            "id": "E9",
+            "value": "Non couvert",
+            "sources": {
+              "probtp": [
+                "2-53"
+              ]
+            }
+          },
+          {
+            "id": "F9",
+            "value": "400 €",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-58"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "G9",
+            "value": "300 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-11"
+              ]
+            },
+            "metadata": {
+              "conditions": "par semestre, limitée à 4 semestres consécutifs"
+            },
+            "is_best": false
+          }
+        ]
+      },
+      {
+        "row_number": 10,
+        "inherited_from_above": [
+          "A2",
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A10",
+            "ref": "A2"
+          },
+          {
+            "id": "B10",
+            "value": "Implants",
+            "rowspan": 2,
+            "occupies": [
+              "B10",
+              "B11"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5b"
+              ]
+            },
+            "metadata": {
+              "conditions": "/an/bénéf."
+            }
+          },
+          {
+            "id": "C10",
+            "value": "Si partenaire implantologue Sévéane",
+            "colspan": 2,
+            "occupies": [
+              "C10",
+              "D10"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5c"
+              ]
+            }
+          },
+          {
+            "id": "D10",
+            "ref": "C10"
+          },
+          {
+            "id": "E10",
+            "value": "Non couvert",
+            "sources": {
+              "probtp": [
+                "2-5d"
+              ]
+            }
+          },
+          {
+            "id": "F10",
+            "value": "800 €",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5i"
+              ]
+            },
+            "is_best": true
+          },
+          {
+            "id": "G10",
+            "value": "616 € (pose) + 184 € (faux-moignon)",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-1a",
+                "3-1g"
+              ]
+            },
+            "metadata": {
+              "conditions": "Limite de 3 actes par an et par bénéficiaire pour chaque prestation"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 11,
+        "inherited_from_above": [
+          "A2",
+          "B10",
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A11",
+            "ref": "A2"
+          },
+          {
+            "id": "B11",
+            "ref": "B10"
+          },
+          {
+            "id": "C11",
+            "value": "Dans les autres cas",
+            "colspan": 2,
+            "occupies": [
+              "C11",
+              "D11"
+            ],
+            "sources": {
+              "probtp": [
+                "2-5l"
+              ]
+            }
+          },
+          {
+            "id": "D11",
+            "ref": "C11"
+          },
+          {
+            "id": "E11",
+            "value": "Non couvert",
+            "sources": {
+              "probtp": [
+                "2-5d"
+              ]
+            }
+          },
+          {
+            "id": "F11",
+            "value": "400 €",
+            "type": "data",
+            "sources": {
+              "probtp": [
+                "2-5o"
+              ]
+            },
+            "is_best": false
+          },
+          {
+            "id": "G11",
+            "value": "616 € (pose) + 184 € (faux-moignon)",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-1a",
+                "3-1g"
+              ]
+            },
+            "metadata": {
+              "conditions": "Limite de 3 actes par an et par bénéficiaire pour chaque prestation"
+            },
+            "is_best": true
+          }
+        ]
+      },
+      {
+        "row_number": 12,
+        "inherited_from_above": [
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "cells": [
+          {
+            "id": "A12",
+            "value": "Garanties supplémentaires AXA",
+            "rowspan": 1,
+            "occupies": [
+              "A12"
+            ]
+          },
+          {
+            "id": "B12",
+            "value": "Prothèses fixes non prises en charge par la Sécurité sociale",
+            "colspan": 3,
+            "occupies": [
+              "B12",
+              "C12",
+              "D12"
+            ],
+            "sources": {
+              "axa": [
+                "3-Q"
+              ]
+            },
+            "metadata": {
+              "conditions": "Piliers de bridge sur dent saine, élément supplémentaire de bridge, prothèses fixes unitaires sur dent saine"
+            }
+          },
+          {
+            "id": "C12",
+            "ref": "B12"
+          },
+          {
+            "id": "D12",
+            "ref": "B12"
+          },
+          {
+            "id": "E12",
+            "value": "Non couvert"
+          },
+          {
+            "id": "F12",
+            "value": "Non couvert",
+            "is_best": false
+          },
+          {
+            "id": "G12",
+            "value": "300 €",
+            "type": "data",
+            "sources": {
+              "axa": [
+                "3-R"
+              ]
+            },
+            "metadata": {
+              "conditions": "Limite de 3 actes par an et par bénéficiaire"
+            },
+            "is_best": true
+          }
+        ]
+      }
+    ]
+  },
+  "key_differences": "ProBTP P4 se distingue par une couverture en \"Frais réels\" pour les soins et prothèses 100% santé, ainsi que pour les prothèses à honoraires maîtrisés, offrant une excellente maîtrise du reste à charge sur ces postes. AXA Base Obligatoire propose des pourcentages de remboursement plus élevés pour les soins dentaires courants et l'orthodontie prise en charge par la SS, et une meilleure prise en charge des implants hors réseau partenaire, ainsi que des garanties supplémentaires spécifiques.",
+  "concrete_examples": [
+    "Pour une couronne dentaire \"autres prothèses\" (non 100% santé) coûtant 750€ (BR 107.5€), la Sécurité Sociale rembourse 64.5€. ProBTP P4 rembourse 473€ (500% BR - part SS), laissant un reste à charge de 212.5€. AXA Base Obligatoire rembourse 333.25€ (370% BR - part SS), laissant un reste à charge de 352.25€. ProBTP est ici plus avantageux.",
+    "Pour un soin dentaire (carie) coûtant 40€ (BR 28.92€), la Sécurité Sociale rembourse 17.35€. ProBTP P4 rembourse 11.57€ (100% BR - part SS), laissant un reste à charge de 11.08€. AXA Base Obligatoire rembourse 22.65€ (200% BR - part SS, plafonné au coût réel), laissant un reste à charge de 0€. AXA est ici plus avantageux.",
+    "Pour la pose d'un implant dentaire hors réseau Sévéane coûtant 1200€ (non couvert par la SS), ProBTP P4 rembourse 400€, laissant un reste à charge de 800€. AXA Base Obligatoire rembourse 800€ (616€ pose + 184€ faux-moignon), laissant un reste à charge de 400€. AXA est ici plus avantageux."
+  ],
+  "critical_thinking": "Les soins dentaires représentent un poste de dépense significatif. ProBTP P4 excelle sur les prestations 100% santé et les prothèses à honoraires maîtrisés avec le \"Frais réels\", ce qui est crucial pour éviter des restes à charge importants sur des actes fréquents et coûteux. AXA, bien que moins généreux sur ces points, offre une meilleure couverture sur les soins courants et les implants hors réseau, ce qui peut être pertinent pour ceux qui ne sont pas éligibles ou n'optent pas pour le 100% santé, ou qui consultent des praticiens hors réseau. L'orthodontie adulte non prise en charge par la SS est un avantage notable de ProBTP pour une clientèle spécifique. Le risque financier le plus élevé se situe sur les prothèses et implants, où les deux offres ont leurs points forts selon le type de prestation et le réseau choisi. La limite de 3 actes par an chez AXA pour les implants est une condition à ne pas négliger pour les besoins complexes.",
+  "best_coverage": "ProBTP P4 propose une couverture dentaire de premier ordre, particulièrement axée sur la suppression du reste à charge pour les prestations essentielles. Notre prise en charge en \"Frais réels\" pour l'intégralité du panier 100% santé et les prothèses à honoraires maîtrisés est un atout majeur, garantissant à nos adhérents une sérénité financière totale sur ces actes. Nous offrons également une protection supérieure pour l'orthodontie adulte non prise en charge par la Sécurité sociale, un besoin croissant, et une excellente prise en charge des implants via notre réseau partenaire Sévéane. Bien qu'AXA puisse offrir des pourcentages de remboursement légèrement supérieurs sur certains soins courants ou implants hors réseau, ProBTP se concentre sur la valeur réelle et la suppression des dépenses imprévues sur les postes les plus onéreux et structurants de la santé dentaire.",
+  "salesperson_talking_points": [
+    "Mettez en avant le \"Frais réels\" de ProBTP P4 sur le 100% santé et les prothèses à honoraires maîtrisés : c'est un argument de poids pour un reste à charge zéro sur des prestations coûteuses et essentielles.",
+    "Soulignez notre avantage sur l'orthodontie adulte non prise en charge par la SS (400€ par semestre), une garantie spécifique et très appréciée par les adultes concernés.",
+    "Valorisez notre réseau partenaire Sévéane pour les implants, offrant un remboursement de 800€, ce qui est très compétitif et assure une bonne prise en charge pour les adhérents utilisant ce réseau.",
+    "Expliquez que si AXA a des pourcentages BR plus élevés sur certains soins courants, ProBTP se focalise sur la protection contre les dépenses les plus lourdes, là où l'impact financier est le plus fort pour nos adhérents.",
+    "Positionnez ProBTP comme le choix de la tranquillité d'esprit pour les dépenses dentaires importantes et imprévues, grâce à une couverture ciblée et généreuse."
+  ],
+  "objective_assessment": {
+    "overall_winner": "axa",
+    "confidence": "medium",
+    "reasoning": "Bien que ProBTP P4 offre une excellente couverture en \"Frais réels\" pour le 100% santé et les prothèses à honoraires maîtrisés, ce qui est un avantage indéniable, AXA Base Obligatoire se montre globalement plus généreux sur un plus grand nombre de prestations dentaires courantes (inlay/onlay, autres soins SS), l'orthodontie prise en charge par la SS, et surtout sur les implants dans les cas généraux (hors réseau partenaire ProBTP), qui représentent un coût significatif. L'avantage d'AXA sur les garanties supplémentaires pour des prothèses fixes non prises en charge par la SS est également un plus.",
+    "probtp_weaknesses": [
+      "Remboursements inférieurs pour les soins dentaires courants (inlay/onlay, autres soins SS) par rapport à AXA.",
+      "Couverture moins avantageuse pour les implants en dehors du réseau partenaire Sévéane.",
+      "Légèrement moins performant sur l'orthodontie acceptée par la SS."
+    ],
+    "axa_weaknesses": [
+      "Absence de la garantie \"Frais réels\" pour les soins et prothèses 100% santé et les prothèses à honoraires maîtrisés, ce qui peut laisser un reste à charge si les prix dépassent les PLV-MR ou les BR.",
+      "Remboursement inférieur pour l'orthodontie adulte non prise en charge par la SS et limitée dans le temps.",
+      "Limite de 3 actes par an pour les implants, ce qui peut être restrictif pour des besoins importants."
+    ]
+  }
+}
