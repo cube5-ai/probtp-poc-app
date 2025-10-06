@@ -15,7 +15,7 @@ export default function SettingsPage() {
 
   // Set breadcrumbs for the settings page
   useEffect(() => {
-    setBreadcrumbs([{ label: "Home", href: "/" }, { label: "Settings" }]);
+    setBreadcrumbs([{ label: "Projects", href: "/projects" }, { label: "Settings" }]);
   }, [setBreadcrumbs]);
 
   return (

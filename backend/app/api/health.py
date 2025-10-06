@@ -1,8 +1,9 @@
 """
 Health check API endpoints
 """
-from fastapi import APIRouter
 from datetime import datetime
+
+from fastapi import APIRouter  # type: ignore
 
 router = APIRouter()
 
@@ -26,7 +27,6 @@ async def readiness_check():
         "status": "ready",
         "timestamp": datetime.utcnow().isoformat(),
         "checks": {
-            "database": "ok",
-            "redis": "ok"
+            "database": "ok"
         }
     }

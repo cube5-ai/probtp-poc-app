@@ -4,9 +4,10 @@ CRUD operations for user-defined schemas
 """
 from typing import Optional
 from uuid import UUID
-from fastapi import APIRouter, Depends, HTTPException, Query, status, Header
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 
+from app.api.deps import get_current_user_id
 from app.utils import get_db_session
 from app.services.schema_service import SchemaService
 from app.schemas.schema_schemas import (
@@ -16,29 +17,6 @@ from app.schemas.schema_schemas import (
     SchemaListResponse,
     SchemaCloneRequest
 )
-
-
-def get_current_user_id(authorization: Optional[str] = Header(None)) -> str:
-    """Extract user ID from Authorization header or use demo user"""
-    if authorization and authorization.startswith("Bearer "):
-        # Decode the Firebase JWT to get the actual user ID
-        token = authorization.replace("Bearer ", "")
-        
-        try:
-            # Decode Firebase JWT (without verification for development)
-            import jwt
-            decoded = jwt.decode(token, options={"verify_signature": False})
-            user_id = decoded.get("user_id") or decoded.get("sub")
-            return user_id
-        except Exception as e:
-            # Fallback: use a hash of the token as user ID
-            import hashlib
-            user_id = hashlib.md5(token.encode()).hexdigest()[:12]
-            return f"user_{user_id}"
-    
-    # Fallback to demo user for development
-    return "demo_user"
-
 
 router = APIRouter(prefix="/schemas", tags=["schemas"])
 schema_service = SchemaService()

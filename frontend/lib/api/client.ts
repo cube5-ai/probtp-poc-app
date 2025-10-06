@@ -6,7 +6,9 @@ import axios from "axios";
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
 
 // API Configuration
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "";
+const RAW_API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_BASE_URL = `${RAW_API_BASE_URL.replace(/\/$/, "")}/api/v1`;
 
 class ApiClient {
   private client: AxiosInstance;
@@ -139,7 +141,8 @@ class ApiClient {
    * GET request
    */
   async get<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.get(url, config);
+    const normalizedUrl = url.replace(/^\/+/, "");
+    const response = await this.client.get(normalizedUrl, config);
     return response.data;
   }
 
@@ -151,7 +154,8 @@ class ApiClient {
     data?: unknown,
     config?: AxiosRequestConfig
   ): Promise<T> {
-    const response = await this.client.post(url, data, config);
+    const normalizedUrl = url.replace(/^\/+/, "");
+    const response = await this.client.post(normalizedUrl, data, config);
     return response.data;
   }
 
@@ -163,7 +167,8 @@ class ApiClient {
     data?: unknown,
     config?: AxiosRequestConfig
   ): Promise<T> {
-    const response = await this.client.put(url, data, config);
+    const normalizedUrl = url.replace(/^\/+/, "");
+    const response = await this.client.put(normalizedUrl, data, config);
     return response.data;
   }
 
@@ -171,7 +176,8 @@ class ApiClient {
    * DELETE request
    */
   async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {
-    const response = await this.client.delete(url, config);
+    const normalizedUrl = url.replace(/^\/+/, "");
+    const response = await this.client.delete(normalizedUrl, config);
     return response.data;
   }
 

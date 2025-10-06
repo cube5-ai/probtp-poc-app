@@ -9,12 +9,23 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.core.config import get_settings
 
 
-def test_database_connection():
+def _resolve_database_url() -> str:
+    """Return the database URL from environment or settings."""
+    settings = get_settings()
+    database_url = os.getenv("DATABASE_URL") or settings.get_database_url()
+
+    if not database_url:
+        raise RuntimeError(
+            "DATABASE_URL is not configured. Set it in backend/.env or export it before running the script."
+        )
+
+    return database_url
+
+
+def test_database_connection() -> bool:
     """Test the database connection using the configured DATABASE_URL"""
     try:
-        # Get settings to access DATABASE_URL
-        # Using localhost since Cloud SQL Proxy is running on port 5433
-        database_url = "postgresql://probtp-poc_user:X0i7!W0e3/CIgg@localhost:5433/probtp-poc_prod"
+        database_url = _resolve_database_url()
         
         print(f"Testing database connection...")
         print(f"Database URL: {database_url[:50]}...")  # Show first 50 chars for security
@@ -66,12 +77,6 @@ def main():
     print("=" * 50)
     print("Google Cloud SQL Connection Test")
     print("=" * 50)
-    
-    # Check if DATABASE_URL is set
-    # if not os.getenv("DATABASE_URL"):
-    #     print("❌ DATABASE_URL environment variable is not set!")
-    #     print("Please set DATABASE_URL in your .env file or environment variables.")
-    #     sys.exit(1)
     
     success = test_database_connection()
     

@@ -16,12 +16,15 @@ export default function Home() {
 
   // Set breadcrumbs for the home page
   useEffect(() => {
-    setBreadcrumbs([{ label: "Home" }]);
+    setBreadcrumbs([{ label: "Projects" }]);
   }, [setBreadcrumbs]);
 
   useEffect(() => {
     if (!loading && !user) {
       router.push("/signin");
+    } else if (!loading && user) {
+      // Redirect authenticated users to projects
+      router.push("/projects");
     }
   }, [loading, user, router]);
 
