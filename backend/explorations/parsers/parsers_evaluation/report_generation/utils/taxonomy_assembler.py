@@ -25,9 +25,10 @@ def assemble_comparison_table(
     Returns:
         ComparisonTable dict matching alignment_prompt.py schema
     """
-    category_name = taxonomy_category["category_name"]
-    category_id = taxonomy_category["category_id"]
-    leaves = taxonomy_category["leaves"]
+    category_name = taxonomy_category["name"]
+    category_id = taxonomy_category["node_id"]
+    # leaves should be passed separately - but let's keep this for backwards compatibility
+    leaves = taxonomy_category.get("leaves", [])
 
     probtp_level = probtp_extraction["policy_level"]
     axa_level = axa_extraction["policy_level"]

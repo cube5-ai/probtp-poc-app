@@ -60,6 +60,71 @@ from utils.markdown_generator import (
 )
 
 
+def extract_leaves_from_flat_taxonomy(
+    nodes: list[dict[str, Any]],
+    parent_id: str | None = None
+) -> list[dict[str, Any]]:
+    """
+    Extract all leaf nodes that are descendants of a given parent from a flat taxonomy.
+
+    Args:
+        nodes: Flat list of all taxonomy nodes
+        parent_id: Parent node ID to extract leaves for (None for all top-level categories)
+
+    Returns:
+        List of leaf nodes (nodes where is_leaf=True) under the specified parent
+    """
+    leaves = []
+
+    # If parent_id is specified, find all descendants
+    if parent_id is not None:
+        # Get all nodes that are descendants of parent_id
+        descendants = get_descendants(nodes, parent_id)
+        candidate_nodes = descendants
+    else:
+        # Extract from all nodes
+        candidate_nodes = nodes
+
+    # Filter for leaves
+    for node in candidate_nodes:
+        if node.get("is_leaf", False):
+            leaves.append({
+                "path": node["path"],
+                "leaf_id": node["node_id"],
+                "description": node["description"],
+                "basis": node.get("basis"),
+            })
+
+    return leaves
+
+
+def get_descendants(nodes: list[dict[str, Any]], parent_id: str) -> list[dict[str, Any]]:
+    """
+    Get all descendant nodes of a given parent from a flat list.
+
+    Args:
+        nodes: Flat list of all taxonomy nodes
+        parent_id: Parent node ID
+
+    Returns:
+        List of all descendants (including direct children and their descendants)
+    """
+    descendants = []
+    nodes_by_id = {node["node_id"]: node for node in nodes}
+
+    # BFS to find all descendants
+    queue = [parent_id]
+    while queue:
+        current_id = queue.pop(0)
+        # Find direct children
+        for node in nodes:
+            if node.get("parent_id") == current_id:
+                descendants.append(node)
+                queue.append(node["node_id"])
+
+    return descendants
+
+
 class TaxonomyFirstPipeline:
     """
     Taxonomy-first pipeline for insurance contract comparison.
@@ -180,15 +245,18 @@ class TaxonomyFirstPipeline:
             print(f"\n⏩ Skipping taxonomy extraction (loading from checkpoint)")
             self.taxonomy = self._load_checkpoint("taxonomy")
 
-        # Filter categories if specified
-        categories = self.taxonomy["categories"]
+        # Filter top-level categories if specified
+        all_nodes = self.taxonomy["nodes"]
+        top_level_categories = [node for node in all_nodes if node.get("parent_id") is None]
+
         if self.categories_to_process:
             categories = [
-                cat for cat in categories
-                if cat["category_id"] in self.categories_to_process
+                cat for cat in top_level_categories
+                if cat["node_id"] in self.categories_to_process
             ]
-            print(f"\n📋 Processing {len(categories)} categories: {[c['category_id'] for c in categories]}")
+            print(f"\n📋 Processing {len(categories)} categories: {[c['node_id'] for c in categories]}")
         else:
+            categories = top_level_categories
             print(f"\n📋 Processing all {len(categories)} categories")
 
         # Phase 2: Extract values per category
@@ -197,17 +265,22 @@ class TaxonomyFirstPipeline:
             print(f"PHASE 2: Value Extraction")
             print(f"{'─'*80}")
             for category in categories:
-                category_id = category["category_id"]
-                category_name = category["category_name"]
+                category_id = category["node_id"]
+                category_name = category["name"]
+
+                # Extract leaves from flat taxonomy for this category
+                category_leaves = extract_leaves_from_flat_taxonomy(all_nodes, category_id)
 
                 print(f"\n📦 Category: {category_name} ({category_id})")
-                print(f"   Leaves: {len(category['leaves'])}")
+                print(f"   Leaves: {len(category_leaves)}")
 
                 # Extract ProBTP values
                 probtp_extraction = self._extract_values(
                     vendor="ProBTP",
                     vendor_doc=self.probtp_doc,
-                    category=category,
+                    category_id=category_id,
+                    category_name=category_name,
+                    category_leaves=category_leaves,
                     policy_level=probtp_level,
                 )
                 self._save_checkpoint(f"{category_id}_probtp_values", probtp_extraction)
@@ -216,7 +289,9 @@ class TaxonomyFirstPipeline:
                 axa_extraction = self._extract_values(
                     vendor="AXA",
                     vendor_doc=self.axa_doc,
-                    category=category,
+                    category_id=category_id,
+                    category_name=category_name,
+                    category_leaves=category_leaves,
                     policy_level=axa_level,
                 )
                 self._save_checkpoint(f"{category_id}_axa_values", axa_extraction)
@@ -231,7 +306,7 @@ class TaxonomyFirstPipeline:
         else:
             print(f"\n⏩ Skipping value extraction (loading from checkpoints)")
             for category in categories:
-                category_id = category["category_id"]
+                category_id = category["node_id"]
                 probtp_extraction = self._load_checkpoint(f"{category_id}_probtp_values")
                 axa_extraction = self._load_checkpoint(f"{category_id}_axa_values")
                 self.extractions[category_id] = {
@@ -245,13 +320,19 @@ class TaxonomyFirstPipeline:
             print(f"PHASE 3: Table Assembly")
             print(f"{'─'*80}")
             for category in categories:
-                category_id = category["category_id"]
-                category_name = category["category_name"]
+                category_id = category["node_id"]
+                category_name = category["name"]
 
                 print(f"\n🔧 Assembling: {category_name}")
 
+                # Extract leaves for this category to pass to assembler
+                category_leaves = extract_leaves_from_flat_taxonomy(all_nodes, category_id)
+
+                # Create category dict with leaves for assembler
+                category_with_leaves = {**category, "leaves": category_leaves}
+
                 comparison_table = assemble_comparison_table(
-                    taxonomy_category=category,
+                    taxonomy_category=category_with_leaves,
                     probtp_extraction=self.extractions[category_id]["probtp"],
                     axa_extraction=self.extractions[category_id]["axa"],
                 )
@@ -273,7 +354,7 @@ class TaxonomyFirstPipeline:
         else:
             print(f"\n⏩ Skipping table assembly (loading from checkpoints)")
             for category in categories:
-                category_id = category["category_id"]
+                category_id = category["node_id"]
                 comparison_table = self._load_checkpoint(f"{category_id}_comparison_table")
                 self.comparison_tables[category_id] = comparison_table
 
@@ -283,8 +364,8 @@ class TaxonomyFirstPipeline:
             print(f"PHASE 4: Analysis Generation")
             print(f"{'─'*80}")
             for category in categories:
-                category_id = category["category_id"]
-                category_name = category["category_name"]
+                category_id = category["node_id"]
+                category_name = category["name"]
 
                 print(f"\n📊 Analyzing: {category_name}")
 
@@ -300,7 +381,7 @@ class TaxonomyFirstPipeline:
         else:
             print(f"\n⏩ Skipping analysis (loading from checkpoints)")
             for category in categories:
-                category_id = category["category_id"]
+                category_id = category["node_id"]
                 analysis = self._load_checkpoint(f"{category_id}_analysis")
                 self.analyses[category_id] = analysis
 
@@ -310,8 +391,8 @@ class TaxonomyFirstPipeline:
         print(f"{'─'*80}")
 
         for category in categories:
-            category_id = category["category_id"]
-            category_name = category["category_name"]
+            category_id = category["node_id"]
+            category_name = category["name"]
 
             print(f"\n📝 Generating report: {category_name}")
 
@@ -375,16 +456,25 @@ class TaxonomyFirstPipeline:
 
         taxonomy = json.loads(response.text)
 
-        print(f"   ✓ Extracted {len(taxonomy['categories'])} categories")
-        for cat in taxonomy["categories"]:
-            print(f"     - {cat['category_name']}: {len(cat['leaves'])} leaves")
+        all_nodes = taxonomy["nodes"]
+        top_level_categories = [node for node in all_nodes if node.get("parent_id") is None]
+
+        print(f"   ✓ Extracted {len(top_level_categories)} top-level categories ({len(all_nodes)} total nodes)")
+
+        # Extract leaves from flat taxonomy and count them per category
+        total_leaves = 0
+        for cat in top_level_categories:
+            cat_leaves = extract_leaves_from_flat_taxonomy(all_nodes, cat["node_id"])
+            total_leaves += len(cat_leaves)
+            print(f"     - {cat['name']}: {len(cat_leaves)} leaves")
 
         # Update trace with results
         langfuse.update_current_trace(
             metadata={
                 "phase": "taxonomy_extraction",
-                "categories_count": len(taxonomy['categories']),
-                "total_leaves": sum(len(cat['leaves']) for cat in taxonomy['categories']),
+                "categories_count": len(top_level_categories),
+                "total_nodes": len(all_nodes),
+                "total_leaves": total_leaves,
             }
         )
 
@@ -395,14 +485,12 @@ class TaxonomyFirstPipeline:
         self,
         vendor: str,
         vendor_doc: ParsedDocument,
-        category: dict[str, Any],
+        category_id: str,
+        category_name: str,
+        category_leaves: list[dict[str, Any]],
         policy_level: str,
     ) -> dict[str, Any]:
         """Extract values for a category from vendor document."""
-        category_id = category["category_id"]
-        category_name = category["category_name"]
-        leaves = category["leaves"]
-
         print(f"   Extracting {vendor} values for {category_name}...")
 
         vendor_markdown = vendor_doc.get_full_markdown()
@@ -412,11 +500,11 @@ class TaxonomyFirstPipeline:
             category_id=category_id,
             category_name=category_name,
             policy_level=policy_level,
-            taxonomy_leaves=leaves,
+            taxonomy_leaves=category_leaves,
         )
 
         print(f"      Model: {self.model_name}")
-        print(f"      Taxonomy leaves: {len(leaves)}")
+        print(f"      Taxonomy leaves: {len(category_leaves)}")
 
         # Update Langfuse trace metadata
         langfuse.update_current_trace(
@@ -426,7 +514,7 @@ class TaxonomyFirstPipeline:
                 "category": category_name,
                 "category_id": category_id,
                 "policy_level": policy_level,
-                "taxonomy_leaves_count": len(leaves),
+                "taxonomy_leaves_count": len(category_leaves),
                 "model": self.model_name,
             }
         )
@@ -443,7 +531,7 @@ class TaxonomyFirstPipeline:
         extraction = json.loads(response.text)
 
         # Report unmappable items if any
-        unmappable = extraction.get("unmappable_items", [])
+        unmappable = extraction.get("unmappable_items") or []
         if unmappable:
             print(f"      ⚠️  {len(unmappable)} unmappable items:")
             for item in unmappable[:3]:  # Show first 3
@@ -454,7 +542,7 @@ class TaxonomyFirstPipeline:
         # Update trace with results
         langfuse.update_current_trace(
             metadata={
-                "extracted_values_count": len(extraction.get("extracted_values", [])),
+                "extracted_values_count": len(extraction.get("extracted_values") or []),
                 "unmappable_items_count": len(unmappable),
             }
         )
