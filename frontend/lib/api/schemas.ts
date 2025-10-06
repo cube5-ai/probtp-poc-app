@@ -9,6 +9,7 @@ import type {
   SchemaCreateRequest,
   SchemaUpdateRequest,
   SchemaCloneRequest,
+  SchemaDefinition,
 } from "@/types/schema.types";
 
 // List all schemas with optional search
@@ -85,4 +86,25 @@ export async function cloneSchema(
     data
   );
   return response;
+}
+
+// AI-driven schema refinement
+export async function refineSchema(
+  schemaDefinition: SchemaDefinition,
+  instruction: string
+): Promise<SchemaDefinition> {
+  console.log("refineSchema called with:", { schemaDefinition, instruction });
+
+  const response = await apiClient.post<{ refinedSchema: SchemaDefinition }>(
+    "/schemas/refine",
+    {
+      schemaDefinition: schemaDefinition,
+      instruction: instruction,
+    }
+  );
+
+  console.log("API response:", response);
+  console.log("Refined schema from response:", response.refinedSchema);
+
+  return response.refinedSchema;
 }

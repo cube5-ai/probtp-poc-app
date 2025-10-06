@@ -4,10 +4,12 @@
  */
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Save, Copy, Download, Upload, Eye, Edit3, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { JsonView, allExpanded, defaultStyles } from "react-json-view-lite";
+import "react-json-view-lite/dist/index.css";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,6 +18,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Kbd } from "@/components/ui/kbd";
 import { getSchema, updateSchema, createSchema } from "@/lib/api/schemas";
 import type {
   Schema,
@@ -49,9 +52,109 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
   const [isTemplate, setIsTemplate] = useState(false);
   const [viewMode, setViewMode] = useState<"builder" | "preview">("builder");
 
+  // Track original values for diff detection
+  const [originalData, setOriginalData] = useState<{
+    name: string;
+    description: string;
+    definition: SchemaDefinition;
+    isTemplate: boolean;
+  } | null>(null);
+
   // Check if user can edit this schema - strict ownership only
   const canEdit = !schemaId || (schema && user && schema.userId === user.uid);
   const isReadOnly = !canEdit;
+
+  // Helper to normalize schema for comparison (removes undefined values and empty arrays, sorts keys)
+  const normalizeSchemaForComparison = (schema: SchemaDefinition): string => {
+    const normalized = JSON.parse(
+      JSON.stringify(schema, (key, value) => {
+        // Remove undefined and null values
+        if (value === undefined || value === null) return undefined;
+        // Remove empty arrays
+        if (Array.isArray(value) && value.length === 0) return undefined;
+        return value;
+      })
+    );
+
+    // Deep sort keys to ensure consistent order
+    const sortKeys = (obj: any): any => {
+      if (Array.isArray(obj)) {
+        return obj.map(sortKeys);
+      } else if (obj !== null && typeof obj === "object") {
+        return Object.keys(obj)
+          .sort()
+          .reduce((result: any, key) => {
+            result[key] = sortKeys(obj[key]);
+            return result;
+          }, {});
+      }
+      return obj;
+    };
+
+    return JSON.stringify(sortKeys(normalized));
+  };
+
+  // Detect if there are unsaved changes
+  const hasChanges =
+    originalData &&
+    (schemaName.trim() !== originalData.name ||
+      schemaDescription.trim() !== originalData.description ||
+      isTemplate !== originalData.isTemplate ||
+      normalizeSchemaForComparison(schemaDefinition) !==
+        normalizeSchemaForComparison(originalData.definition));
+
+  // Debug changes detection
+  useEffect(() => {
+    if (originalData && process.env.NODE_ENV === "development") {
+      const currentNormalized = normalizeSchemaForComparison(schemaDefinition);
+      const originalNormalized = normalizeSchemaForComparison(
+        originalData.definition
+      );
+      const schemaChanged = currentNormalized !== originalNormalized;
+
+      console.log("Change detection:", {
+        hasChanges,
+        nameChanged: schemaName.trim() !== originalData.name,
+        descChanged: schemaDescription.trim() !== originalData.description,
+        templateChanged: isTemplate !== originalData.isTemplate,
+        schemaChanged,
+      });
+
+      if (schemaChanged) {
+        console.log("Schema difference:", {
+          currentSchema: currentNormalized,
+          originalSchema: originalNormalized,
+          currentLength: currentNormalized.length,
+          originalLength: originalNormalized.length,
+        });
+      }
+    }
+  }, [
+    schemaName,
+    schemaDescription,
+    isTemplate,
+    schemaDefinition,
+    originalData,
+    hasChanges,
+    normalizeSchemaForComparison,
+  ]);
+
+  // Navigation guard for unsaved changes
+  useEffect(() => {
+    // Browser navigation guard (refresh, close tab, etc.)
+    const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+      if (hasChanges) {
+        e.preventDefault();
+        e.returnValue = ""; // Modern browsers require this
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener("beforeunload", handleBeforeUnload);
+    };
+  }, [hasChanges]);
 
   // Debug ownership check
   useEffect(() => {
@@ -110,20 +213,46 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
           setSchemaDescription(existingSchema.description || "");
           setSchemaDefinition(existingSchema.schemaDefinition);
           setIsTemplate(existingSchema.isTemplate);
+
+          // Store original data for diff detection
+          setOriginalData({
+            name: existingSchema.name,
+            description: existingSchema.description || "",
+            definition: existingSchema.schemaDefinition,
+            isTemplate: existingSchema.isTemplate,
+          });
         } else if (cloneFromId) {
           // Clone from existing schema
           console.log("Cloning schema:", cloneFromId);
           const sourceSchema = await getSchema(cloneFromId);
-          setSchemaName(`${sourceSchema.name} (Copy)`);
+          const clonedName = `${sourceSchema.name} (Copy)`;
+          setSchemaName(clonedName);
           setSchemaDescription(sourceSchema.description || "");
           setSchemaDefinition(sourceSchema.schemaDefinition);
           setIsTemplate(false);
+
+          // Store original data (for new clone, consider it as changed)
+          setOriginalData({
+            name: clonedName,
+            description: sourceSchema.description || "",
+            definition: sourceSchema.schemaDefinition,
+            isTemplate: false,
+          });
         } else {
           // Create new schema
+          const emptyDefinition = { type: "object", properties: {} };
           setSchemaName("");
           setSchemaDescription("");
-          setSchemaDefinition({ type: "object", properties: {} });
+          setSchemaDefinition(emptyDefinition);
           setIsTemplate(false);
+
+          // Store original data (empty for new schema)
+          setOriginalData({
+            name: "",
+            description: "",
+            definition: emptyDefinition,
+            isTemplate: false,
+          });
         }
       } catch (err) {
         const error = err as {
@@ -164,7 +293,7 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [schemaId, cloneFromId]);
 
-  const handleSave = async () => {
+  const handleSave = useCallback(async () => {
     if (!schemaName.trim()) {
       toast.error("Schema name is required");
       return;
@@ -185,6 +314,21 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
         console.log("Updating schema:", schemaId, schemaData);
         const updatedSchema = await updateSchema(schemaId, schemaData);
         setSchema(updatedSchema); // Update local state with the latest data
+
+        // Update the current schema definition to match what was saved
+        setSchemaDefinition(updatedSchema.schemaDefinition);
+        setSchemaName(updatedSchema.name);
+        setSchemaDescription(updatedSchema.description || "");
+        setIsTemplate(updatedSchema.isTemplate);
+
+        // Update original data to reflect saved state
+        setOriginalData({
+          name: updatedSchema.name,
+          description: updatedSchema.description || "",
+          definition: updatedSchema.schemaDefinition,
+          isTemplate: updatedSchema.isTemplate,
+        });
+
         toast.success("Schema updated successfully");
         // Stay on the current page for updates
       } else {
@@ -219,7 +363,41 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
     } finally {
       setSaving(false);
     }
-  };
+  }, [
+    schemaName,
+    schemaDescription,
+    schemaDefinition,
+    isTemplate,
+    schemaId,
+    router,
+  ]);
+
+  // Keyboard shortcut for save (Cmd+S / Ctrl+S)
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      // Check for Cmd+S (Mac) or Ctrl+S (Windows/Linux)
+      if ((event.metaKey || event.ctrlKey) && event.key === "s") {
+        event.preventDefault(); // Prevent browser's default save action
+
+        // Only trigger save if conditions are met
+        if (!saving && schemaName.trim() && hasChanges && !isReadOnly) {
+          handleSave();
+        } else if (!hasChanges) {
+          toast.info("No changes to save");
+        } else if (isReadOnly) {
+          toast.error("You don't have permission to edit this schema");
+        } else if (!schemaName.trim()) {
+          toast.error("Schema name is required");
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [saving, schemaName, hasChanges, isReadOnly, handleSave]);
 
   const handleExport = () => {
     const dataStr = JSON.stringify(schemaDefinition, null, 2);
@@ -324,10 +502,26 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
               </Button>
               <Button
                 onClick={handleSave}
-                disabled={saving || !schemaName.trim()}
+                disabled={
+                  saving || !schemaName.trim() || !hasChanges || isReadOnly
+                }
+                title={
+                  isReadOnly
+                    ? "You don't have permission to edit this schema"
+                    : !hasChanges
+                    ? "No changes to save"
+                    : undefined
+                }
+                className="gap-2"
               >
-                <Save className="mr-2 h-4 w-4" />
-                {saving ? "Saving..." : "Save Schema"}
+                <Save className="h-4 w-4" />
+                <span>{saving ? "Saving..." : "Save"}</span>
+                {!saving && (
+                  <span className="hidden sm:inline-flex items-center gap-1 ml-2 opacity-60">
+                    <Kbd>⌘</Kbd>
+                    <Kbd>S</Kbd>
+                  </span>
+                )}
               </Button>
             </>
           )}
@@ -453,19 +647,31 @@ export function SchemaEditor({ schemaId, cloneFromId }: SchemaEditorProps) {
                 <CardHeader>
                   <CardTitle>Schema Preview</CardTitle>
                   <p className="text-sm text-muted-foreground">
-                    Preview the generated JSON schema
+                    Interactive JSON schema viewer
                   </p>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
-                    <div className="bg-muted p-4 rounded-lg">
-                      <pre className="text-sm overflow-auto max-h-96">
-                        {JSON.stringify(schemaDefinition, null, 2)}
-                      </pre>
+                    <div className="bg-muted p-4 rounded-lg border">
+                      <JsonView
+                        data={schemaDefinition}
+                        shouldExpandNode={allExpanded}
+                        style={{
+                          ...defaultStyles,
+                          container: "font-mono text-sm",
+                          label: "text-blue-600 dark:text-blue-400",
+                          nullValue: "text-gray-500 dark:text-gray-400",
+                          undefinedValue: "text-gray-500 dark:text-gray-400",
+                          stringValue: "text-green-600 dark:text-green-400",
+                          booleanValue: "text-purple-600 dark:text-purple-400",
+                          numberValue: "text-orange-600 dark:text-orange-400",
+                          otherValue: "text-gray-600 dark:text-gray-300",
+                        }}
+                      />
                     </div>
                     <div className="text-xs text-muted-foreground">
                       This is the JSON schema that will be used for data
-                      extraction
+                      extraction. Click on objects to expand/collapse them.
                     </div>
                   </div>
                 </CardContent>

@@ -4,7 +4,7 @@ Request/Response validation for schema endpoints
 """
 from datetime import datetime
 from typing import Optional, Dict, Any
-from pydantic import BaseModel, Field, UUID4
+from pydantic import BaseModel, Field, UUID4, ConfigDict
 
 
 class SchemaBase(BaseModel):
@@ -68,3 +68,32 @@ class SchemaCloneRequest(BaseModel):
     """Request to clone a schema"""
     name: str = Field(..., min_length=1, max_length=255, description="Name for cloned schema")
     description: Optional[str] = Field(None, description="Description for cloned schema")
+
+
+class SchemaRefineRequest(BaseModel):
+    """Request to refine a schema using AI"""
+    schema_definition: Dict[str, Any] = Field(
+        ..., 
+        description="Current schema definition to refine",
+        validation_alias="schemaDefinition"
+    )
+    instruction: str = Field(
+        ..., 
+        min_length=1, 
+        max_length=1000,
+        description="AI instruction for schema refinement"
+    )
+    
+    class Config:
+        populate_by_name = True
+
+
+class SchemaRefineResponse(BaseModel):
+    """Response from schema refinement"""
+    refined_schema: Dict[str, Any] = Field(
+        ..., 
+        description="AI-refined schema definition",
+        serialization_alias="refinedSchema"
+    )
+    
+    model_config = ConfigDict(populate_by_name=True)

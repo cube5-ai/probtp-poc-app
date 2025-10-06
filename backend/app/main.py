@@ -5,7 +5,7 @@ import logging
 
 # Configure logging FIRST, before any other imports
 logging.basicConfig(
-    level=logging.WARNING,  # Reduced from INFO to WARNING
+    level=logging.INFO,  # Set to INFO to see application logs
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
 )
 
