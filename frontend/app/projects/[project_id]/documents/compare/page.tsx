@@ -3,10 +3,9 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useBreadcrumbs } from "@/contexts/BreadcrumbContext";
-import { useRouter, useParams } from "next/navigation";
-import { Menu, ArrowLeft } from "lucide-react";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import DocumentSidebar from "@/components/documents/DocumentSidebar";
 import ComparisonArea from "@/components/documents/ComparisonArea";
 import Loading from "@/components/common/loading";
 import { documentService } from "@/lib/api/documents";
@@ -25,12 +24,15 @@ const ProjectDocumentComparePage = () => {
   const { setBreadcrumbs } = useBreadcrumbs();
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const projectId = params.project_id as string;
 
   const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([]);
   const [selectedFiles, setSelectedFiles] = useState<string[]>([]);
   const [isComparing, setIsComparing] = useState(false);
-  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
+  const [hasAppliedUrlSelection, setHasAppliedUrlSelection] = useState(false);
+  const [autoStartRequested, setAutoStartRequested] = useState(false);
+  const [autoStartToken, setAutoStartToken] = useState(0);
 
   useEffect(() => {
     if (!loading && !user) {
@@ -78,14 +80,6 @@ const ProjectDocumentComparePage = () => {
     }
   }, [projectId, setBreadcrumbs]);
 
-  const handleFilesChange = (files: UploadedFile[]) => {
-    setUploadedFiles(files);
-  };
-
-  const handleSelectionChange = (selectedIds: string[]) => {
-    setSelectedFiles(selectedIds);
-  };
-
   const handleStartComparison = () => {
     if (selectedFiles.length < 2) {
       alert("Please select at least 2 documents to compare");
@@ -98,13 +92,53 @@ const ProjectDocumentComparePage = () => {
     // which now uses real backend APIs
   };
 
-  const handleToggleSidebar = () => {
-    setIsSidebarCollapsed(!isSidebarCollapsed);
-  };
-
   const getSelectedFileObjects = (): UploadedFile[] => {
     return uploadedFiles.filter((file) => selectedFiles.includes(file.id));
   };
+
+  useEffect(() => {
+    if (!searchParams) return;
+    if (hasAppliedUrlSelection) return;
+
+    const urlSelected = searchParams.getAll("selected");
+    const autoStartParam = searchParams.get("autoStart");
+
+    if (urlSelected.length === 0) {
+      if (autoStartParam === "1") {
+        setAutoStartRequested(true);
+      }
+      setHasAppliedUrlSelection(true);
+      return;
+    }
+
+    if (uploadedFiles.length === 0) {
+      return;
+    }
+
+    const uploadedIds = new Set(uploadedFiles.map((file) => file.id));
+    const validSelection = urlSelected.filter((id) => uploadedIds.has(id));
+
+    if (validSelection.length === 0) {
+      setHasAppliedUrlSelection(true);
+      return;
+    }
+
+    setSelectedFiles(validSelection);
+
+    if (autoStartParam === "1" && validSelection.length >= 2) {
+      setAutoStartRequested(true);
+    }
+
+    setHasAppliedUrlSelection(true);
+  }, [searchParams, uploadedFiles, hasAppliedUrlSelection]);
+
+  useEffect(() => {
+    if (!autoStartRequested) return;
+    if (selectedFiles.length < 2) return;
+
+    setAutoStartToken((token) => token + 1);
+    setAutoStartRequested(false);
+  }, [autoStartRequested, selectedFiles]);
 
   if (loading) {
     return (
@@ -122,60 +156,36 @@ const ProjectDocumentComparePage = () => {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container  px-4 py-4">
-          <div className="flex items-center justify-between">
-            <h1 className="text-2xl font-bold">Compare Documents</h1>
+      <div className="container  px-4 py-4">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl font-bold">Compare Documents</h1>
 
-            <div className="flex items-center gap-2">
-              {/* Mobile sidebar toggle */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleToggleSidebar}
-                className="lg:hidden"
-                aria-label="Toggle sidebar"
-              >
-                <Menu className="h-4 w-4" />
-              </Button>
-
-              {/* Back to Documents */}
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => router.push(`/projects/${projectId}/documents`)}
-                className="gap-2"
-              >
-                <ArrowLeft className="w-4 h-4" />
-                Back to Documents
-              </Button>
-            </div>
-          </div>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => router.push(`/projects/${projectId}/documents`)}
+            className="gap-2"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back to Documents
+          </Button>
         </div>
       </div>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar */}
-        <DocumentSidebar
-          uploadedFiles={uploadedFiles}
-          selectedFiles={selectedFiles}
-          onFilesChange={handleFilesChange}
-          onSelectionChange={handleSelectionChange}
-          isCollapsed={isSidebarCollapsed}
-          onToggleCollapse={handleToggleSidebar}
-          className="flex-shrink-0"
-        />
-
-        {/* Main Comparison Area */}
-        <ComparisonArea
-          selectedFiles={getSelectedFileObjects()}
-          onStartComparison={handleStartComparison}
-          isComparing={isComparing}
-          className="flex-1 overflow-y-auto"
-        />
-      </div>
     </div>
-  );
+
+    {/* Main Content Area */}
+    <div className="flex-1 overflow-hidden">
+      <ComparisonArea
+        selectedFiles={getSelectedFileObjects()}
+        onStartComparison={handleStartComparison}
+        isComparing={isComparing}
+        className="h-full overflow-y-auto"
+        autoStartToken={autoStartToken}
+        onComparisonComplete={() => setIsComparing(false)}
+      />
+    </div>
+  </div>
+);
 };
 
 export default ProjectDocumentComparePage;

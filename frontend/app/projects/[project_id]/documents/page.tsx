@@ -90,7 +90,13 @@ const DocumentManagementPage = () => {
     }
 
     // Navigate to comparison page with selected files
-    router.push(`/projects/${projectId}/documents/compare`);
+    const params = new URLSearchParams();
+    selectedFiles.forEach((id) => params.append("selected", id));
+    params.set("autoStart", "1");
+
+    router.push(
+      `/projects/${projectId}/documents/compare?${params.toString()}`
+    );
   };
 
   if (loading) {

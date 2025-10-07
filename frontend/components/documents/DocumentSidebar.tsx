@@ -46,6 +46,7 @@ interface DocumentSidebarProps {
   isCollapsed?: boolean;
   onToggleCollapse?: () => void;
   className?: string;
+  disableUpload?: boolean;
 }
 
 const ALLOWED_FILE_TYPES = [
@@ -66,6 +67,7 @@ const DocumentSidebar = ({
   isCollapsed = false,
   onToggleCollapse,
   className,
+  disableUpload = false,
 }: DocumentSidebarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
@@ -109,6 +111,7 @@ const DocumentSidebar = ({
 
   const handleFiles = useCallback(
     async (files: FileList) => {
+      if (disableUpload) return;
       if (isUploading) return;
 
       const validFiles: File[] = [];
@@ -214,7 +217,7 @@ const DocumentSidebar = ({
 
       setIsUploading(false);
     },
-    [uploadedFiles, onFilesChange, isUploading, validateFile]
+    [uploadedFiles, onFilesChange, isUploading, validateFile, disableUpload]
   );
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
@@ -241,11 +244,16 @@ const DocumentSidebar = ({
 
   const handleFileInput = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (disableUpload) {
+        e.target.value = "";
+        return;
+      }
+
       if (e.target.files) {
         handleFiles(e.target.files);
       }
     },
-    [handleFiles]
+    [handleFiles, disableUpload]
   );
 
   const handleRemoveFile = useCallback(
@@ -500,8 +508,8 @@ const DocumentSidebar = ({
       )}
     >
       {/* Header */}
-      <div className="p-4 border-b">
-        <div className="flex items-center justify-between mb-4">
+      <div className="p-4 border-b space-y-4">
+        <div className="flex items-center justify-between">
           <h2 className="font-semibold">Documents</h2>
           <Button
             variant="ghost"
@@ -514,51 +522,52 @@ const DocumentSidebar = ({
           </Button>
         </div>
 
-        {/* Upload Zone */}
-        <div
-          onDragOver={handleDragOver}
-          onDragLeave={handleDragLeave}
-          onDrop={handleDrop}
-          className={cn(
-            "border-2 border-dashed rounded-lg p-4 text-center transition-colors cursor-pointer",
-            isDragOver
-              ? "border-primary bg-primary/5"
-              : "border-muted-foreground/25",
-            isUploading && "opacity-50 cursor-not-allowed"
-          )}
-        >
-          <input
-            type="file"
-            multiple
-            accept=".pdf,.doc,.docx,.txt,.rtf"
-            onChange={handleFileInput}
-            className="hidden"
-            id="sidebar-file-upload"
-            disabled={isUploading}
-          />
-
-          <label
-            htmlFor="sidebar-file-upload"
-            className="cursor-pointer block"
-            tabIndex={0}
-            role="button"
-            aria-label="Upload files"
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                document.getElementById("sidebar-file-upload")?.click();
-              }
-            }}
+        {!disableUpload && (
+          <div
+            onDragOver={handleDragOver}
+            onDragLeave={handleDragLeave}
+            onDrop={handleDrop}
+            className={cn(
+              "border-2 border-dashed rounded-lg p-4 text-center transition-colors cursor-pointer",
+              isDragOver
+                ? "border-primary bg-primary/5"
+                : "border-muted-foreground/25",
+              isUploading && "opacity-50 cursor-not-allowed"
+            )}
           >
-            <Upload className="mx-auto h-6 w-6 text-muted-foreground mb-2" />
-            <p className="text-sm font-medium">
-              {isUploading ? "Uploading..." : "Upload new files"}
-            </p>
-            <p className="text-xs text-muted-foreground">
-              {isUploading ? "Please wait..." : "Click or drag files to upload"}
-            </p>
-          </label>
-        </div>
+            <input
+              type="file"
+              multiple
+              accept=".pdf,.doc,.docx,.txt,.rtf"
+              onChange={handleFileInput}
+              className="hidden"
+              id="sidebar-file-upload"
+              disabled={isUploading}
+            />
+
+            <label
+              htmlFor="sidebar-file-upload"
+              className="cursor-pointer block"
+              tabIndex={0}
+              role="button"
+              aria-label="Upload files"
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  document.getElementById("sidebar-file-upload")?.click();
+                }
+              }}
+            >
+              <Upload className="mx-auto h-6 w-6 text-muted-foreground mb-2" />
+              <p className="text-sm font-medium">
+                {isUploading ? "Uploading..." : "Upload new files"}
+              </p>
+              <p className="text-xs text-muted-foreground">
+                {isUploading ? "Please wait..." : "Click or drag files to upload"}
+              </p>
+            </label>
+          </div>
+        )}
       </div>
 
       {/* Search */}

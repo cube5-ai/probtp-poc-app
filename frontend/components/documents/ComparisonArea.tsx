@@ -1,14 +1,14 @@
 "use client";
 
-import { useState } from "react";
-import { GitCompare, FileText, BarChart3, Download, Share } from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { CheckCircle2, GitCompare, FileText, Loader2, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
-import { documentService, type ComparisonResult } from "@/lib/api/documents";
 import { toast } from "sonner";
+import demoComparison from "@/fixtures/comparison-demo.json";
+import DemoComparisonResults from "./DemoComparisonResults";
 
 interface UploadedFile {
   id: string;
@@ -19,11 +19,15 @@ interface UploadedFile {
   fileSize?: number; // Store actual file size from backend
 }
 
+type DemoComparisonResult = typeof demoComparison;
+
 interface ComparisonAreaProps {
   selectedFiles: UploadedFile[];
   onStartComparison: () => void;
   isComparing: boolean;
   className?: string;
+  onComparisonComplete?: () => void;
+  autoStartToken?: number;
 }
 
 const ComparisonArea = ({
@@ -31,11 +35,14 @@ const ComparisonArea = ({
   onStartComparison,
   isComparing,
   className,
+  onComparisonComplete,
+  autoStartToken = 0,
 }: ComparisonAreaProps) => {
   const [comparisonResults, setComparisonResults] =
-    useState<ComparisonResult | null>(null);
+    useState<DemoComparisonResult | null>(null);
   const [comparisonProgress, setComparisonProgress] = useState(0);
-  const [comparisonStep, setComparisonStep] = useState("");
+  const [comparisonStep, setComparisonStep] = useState<string>("");
+  const lastAutoStartTokenRef = useRef(0);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";
@@ -45,15 +52,22 @@ const ComparisonArea = ({
     return parseFloat((bytes / Math.pow(k, i)).toFixed(1)) + " " + sizes[i];
   };
 
-  const handleStartComparison = async () => {
+  const demoSteps = useMemo(
+    () => [
+      { label: "Preparing documents", progress: 10 },
+      { label: "Extracting key data", progress: 35 },
+      { label: "Analyzing differences", progress: 65 },
+      { label: "Summarizing findings", progress: 85 },
+      { label: "Generating comparison report", progress: 100 },
+    ],
+    []
+  );
+
+  const handleStartComparison = useCallback(() => {
     if (selectedFiles.length < 2) return;
 
-    // Only proceed with files that have completed upload
     const completedFiles = selectedFiles.filter(
-      (file) =>
-        file.status === "completed" ||
-        !file.status ||
-        !file.id.startsWith("temp_")
+      (file) => file.status !== "uploading" && file.status !== "failed"
     );
 
     if (completedFiles.length < 2) {
@@ -66,52 +80,34 @@ const ComparisonArea = ({
     onStartComparison();
     setComparisonResults(null);
     setComparisonProgress(0);
-    setComparisonStep("Initializing comparison...");
+    setComparisonStep("Preparing comparison workspace...");
 
-    try {
-      // Get file IDs (filter out temporary IDs)
-      const fileIds = completedFiles
-        .filter((file) => !file.id.startsWith("temp_")) // Only real backend IDs
-        .map((file) => file.id);
+    demoSteps.forEach((step, index) => {
+      const delay = 900 * (index + 1);
+      setTimeout(() => {
+        setComparisonProgress(step.progress);
+        setComparisonStep(step.label);
 
-      if (fileIds.length < 2) {
-        throw new Error(
-          "Not enough uploaded files to compare. Please ensure files are fully uploaded."
-        );
-      }
-
-      const result = await documentService.compareDocuments(
-        fileIds,
-        (progress) => {
-          setComparisonProgress(progress);
-
-          // Update step based on progress
-          if (progress <= 25) {
-            setComparisonStep("Loading document details...");
-          } else if (progress <= 70) {
-            setComparisonStep("Parsing documents and extracting content...");
-          } else if (progress <= 90) {
-            setComparisonStep("Analyzing similarities and differences...");
-          } else {
-            setComparisonStep("Finalizing comparison results...");
-          }
+        if (index === demoSteps.length - 1) {
+          setTimeout(() => {
+            setComparisonResults(demoComparison);
+            setComparisonStep("Comparison completed. Enjoy the findings!");
+            toast.success("Document comparison completed successfully!");
+            onComparisonComplete?.();
+          }, 600);
         }
-      );
+      }, delay);
+    });
+  }, [demoSteps, onComparisonComplete, onStartComparison, selectedFiles]);
 
-      setComparisonResults(result);
-      setComparisonStep("Comparison completed successfully!");
-      toast.success("Document comparison completed successfully!");
-    } catch (error) {
-      console.error("Comparison failed:", error);
-      const errorMessage =
-        error instanceof Error ? error.message : "Unknown error occurred";
-      toast.error(`Comparison failed: ${errorMessage}`);
+  useEffect(() => {
+    if (!autoStartToken) return;
+    if (autoStartToken === lastAutoStartTokenRef.current) return;
+    if (selectedFiles.length < 2) return;
 
-      // Reset states on error
-      setComparisonProgress(0);
-      setComparisonStep("");
-    }
-  };
+    lastAutoStartTokenRef.current = autoStartToken;
+    handleStartComparison();
+  }, [autoStartToken, handleStartComparison, selectedFiles]);
 
   if (selectedFiles.length === 0) {
     return (
@@ -201,23 +197,43 @@ const ComparisonArea = ({
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-primary" />
-              Analyzing Documents...
+              <Loader2 className="h-5 w-5 animate-spin text-primary" />
+              Running Comparison...
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
-              <div className="flex justify-between text-sm">
+              <div className="flex justify-between text-sm font-medium">
                 <span>{comparisonStep || "Processing documents"}</span>
                 <span>{comparisonProgress}%</span>
               </div>
               <Progress value={comparisonProgress} className="w-full" />
             </div>
-            <div className="text-sm text-muted-foreground space-y-1">
-              <p>• Loading document metadata and storage paths</p>
-              <p>• Parsing documents using AI-powered extraction</p>
-              <p>• Analyzing content blocks and document structure</p>
-              <p>• Computing similarity metrics and generating insights</p>
+            <div className="text-sm text-muted-foreground space-y-2">
+              <p className="flex items-center gap-2">
+                <Play className="h-4 w-4" />
+                Hang tight while we analyze the selected documents.
+              </p>
+              <div className="grid gap-2 md:grid-cols-2">
+                {demoSteps.map((step) => (
+                  <div
+                    key={step.label}
+                    className={cn(
+                      "flex items-center gap-2 rounded-md border p-2 text-xs",
+                      comparisonStep === step.label
+                        ? "border-primary bg-primary/10 text-primary"
+                        : "text-muted-foreground"
+                    )}
+                  >
+                    {comparisonProgress >= step.progress ? (
+                      <CheckCircle2 className="h-3.5 w-3.5" />
+                    ) : (
+                      <Loader2 className="h-3.5 w-3.5 animate-spin" />
+                    )}
+                    {step.label}
+                  </div>
+                ))}
+              </div>
             </div>
           </CardContent>
         </Card>
@@ -225,148 +241,10 @@ const ComparisonArea = ({
 
       {/* Comparison Results */}
       {comparisonResults && !isComparing && (
-        <div className="space-y-6">
-          {/* Overall Results */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center gap-2">
-                  <BarChart3 className="w-5 h-5" />
-                  Comparison Results
-                </CardTitle>
-                <div className="flex gap-2">
-                  <Button variant="outline" size="sm">
-                    <Download className="w-4 h-4 mr-2" />
-                    Export
-                  </Button>
-                  <Button variant="outline" size="sm">
-                    <Share className="w-4 h-4 mr-2" />
-                    Share
-                  </Button>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              {/* Overall Similarity Score */}
-              <div className="text-center space-y-2">
-                <div className="text-3xl font-bold text-primary">
-                  {comparisonResults.overallSimilarity}%
-                </div>
-                <p className="text-muted-foreground">
-                  Overall Similarity Score
-                </p>
-                <Badge
-                  variant={
-                    comparisonResults.overallSimilarity > 70
-                      ? "default"
-                      : "secondary"
-                  }
-                  className="mt-2"
-                >
-                  {comparisonResults.overallSimilarity > 70
-                    ? "High Similarity"
-                    : "Moderate Similarity"}
-                </Badge>
-              </div>
-
-              {/* Document Pair Comparisons */}
-              <div className="space-y-4">
-                <h4 className="font-semibold">Pairwise Comparisons</h4>
-                {comparisonResults.documentPairs.map((pair, index) => (
-                  <div key={index} className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="truncate">
-                        {pair.doc1} ↔ {pair.doc2}
-                      </span>
-                      <span className="font-medium">{pair.similarity}%</span>
-                    </div>
-                    <Progress value={pair.similarity} className="w-full" />
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Key Insights */}
-          <div className="grid gap-6 md:grid-cols-2">
-            {/* Key Differences */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Key Differences</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {comparisonResults.keyDifferences.map((diff, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 bg-red-500 rounded-full mt-2 flex-shrink-0" />
-                      <span>{diff}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-
-            {/* Common Elements */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-lg">Common Elements</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <ul className="space-y-2">
-                  {comparisonResults.commonElements.map((element, index) => (
-                    <li key={index} className="flex items-start gap-2 text-sm">
-                      <div className="w-1.5 h-1.5 bg-green-500 rounded-full mt-2 flex-shrink-0" />
-                      <span>{element}</span>
-                    </li>
-                  ))}
-                </ul>
-              </CardContent>
-            </Card>
-          </div>
-
-          {/* Detailed Analysis */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Detailed Analysis</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">
-                      {comparisonResults.textSimilarity}%
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Text Similarity
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">
-                      {comparisonResults.structureMatch}%
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Structure Match
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">
-                      {comparisonResults.semanticSimilarity}%
-                    </div>
-                    <div className="text-sm text-muted-foreground">
-                      Semantic Similarity
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-muted/50 p-4 rounded-lg">
-                  <p className="text-sm text-muted-foreground">
-                    {comparisonResults.summary}
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </div>
+        <DemoComparisonResults
+          data={comparisonResults}
+          onShare={() => toast.info("Sharing is disabled in demo mode")}
+        />
       )}
     </div>
   );
