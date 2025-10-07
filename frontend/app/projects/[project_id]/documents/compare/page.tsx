@@ -42,11 +42,8 @@ const ProjectDocumentComparePage = () => {
   }, [user, loading, router]);
 
   useEffect(() => {
-    if (projectId) {
-      // Set the project context for document operations
+    if (projectId && user) {
       documentService.setDefaultProject(projectId);
-
-      // Set breadcrumbs
       setBreadcrumbs([
         { label: "Projects", href: "/projects" },
         { label: "Project", href: `/projects/${projectId}` },
@@ -54,7 +51,6 @@ const ProjectDocumentComparePage = () => {
         { label: "Compare" },
       ]);
 
-      // Load existing files from the backend
       const loadFiles = async () => {
         try {
           const fileListResponse = await documentService.getFiles(projectId);
@@ -64,7 +60,7 @@ const ProjectDocumentComparePage = () => {
               file: new File([], file.original_name, {
                 type: file.mime_type || "application/pdf",
               }),
-              preview: "", // No preview for existing files
+              preview: "",
               category: "All",
               status: "completed",
             })
@@ -72,13 +68,12 @@ const ProjectDocumentComparePage = () => {
           setUploadedFiles(existingFiles);
         } catch (error) {
           console.error("Failed to load existing files:", error);
-          // Continue without showing error to user
         }
       };
 
       loadFiles();
     }
-  }, [projectId, setBreadcrumbs]);
+  }, [projectId, user, setBreadcrumbs]);
 
   const handleStartComparison = () => {
     if (selectedFiles.length < 2) {
@@ -156,36 +151,37 @@ const ProjectDocumentComparePage = () => {
     <div className="min-h-screen bg-background flex flex-col">
       {/* Header */}
       <div className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container  px-4 py-4">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl font-bold">Compare Documents</h1>
+        <div className="container  px-4 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-2xl font-bold">Compare Documents</h1>
 
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push(`/projects/${projectId}/documents`)}
-            className="gap-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            Back to Documents
-          </Button>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => router.push(`/projects/${projectId}/documents`)}
+              className="gap-2"
+            >
+              <ArrowLeft className="w-4 h-4" />
+              Back to Documents
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
 
-    {/* Main Content Area */}
-    <div className="flex-1 overflow-hidden">
-      <ComparisonArea
-        selectedFiles={getSelectedFileObjects()}
-        onStartComparison={handleStartComparison}
-        isComparing={isComparing}
-        className="h-full overflow-y-auto"
-        autoStartToken={autoStartToken}
-        onComparisonComplete={() => setIsComparing(false)}
-      />
+      {/* Main Content Area */}
+      <div className="flex-1 overflow-hidden">
+        <ComparisonArea
+          selectedFiles={getSelectedFileObjects()}
+          onStartComparison={handleStartComparison}
+          isComparing={isComparing}
+          className="h-full overflow-y-auto"
+          autoStartToken={autoStartToken}
+          onComparisonComplete={() => setIsComparing(false)}
+          projectId={projectId}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
 };
 
 export default ProjectDocumentComparePage;

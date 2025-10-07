@@ -13,7 +13,10 @@ interface AuthContextType {
   signUp: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
   getIdToken: () => Promise<string | null>;
-  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
+  changePassword: (
+    currentPassword: string,
+    newPassword: string
+  ) => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -103,7 +106,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return await authService.getIdToken();
   };
 
-  const changePassword = async (currentPassword: string, newPassword: string) => {
+  const changePassword = async (
+    currentPassword: string,
+    newPassword: string
+  ) => {
     return authService.changePassword(currentPassword, newPassword);
   };
 

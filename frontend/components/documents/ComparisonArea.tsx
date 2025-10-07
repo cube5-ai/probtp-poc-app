@@ -1,13 +1,19 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { CheckCircle2, GitCompare, FileText, Loader2, Play } from "lucide-react";
+import {
+  CheckCircle2,
+  GitCompare,
+  FileText,
+  Loader2,
+  Play,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import demoComparison from "@/fixtures/comparison-demo.json";
+import demoComparison from "@/fixtures/comparison_report_new.json";
 import DemoComparisonResults from "./DemoComparisonResults";
 
 interface UploadedFile {
@@ -28,6 +34,7 @@ interface ComparisonAreaProps {
   className?: string;
   onComparisonComplete?: () => void;
   autoStartToken?: number;
+  projectId: string;
 }
 
 const COMPARISON_STORAGE_KEY = "comparisonArea:demoResults";
@@ -39,6 +46,7 @@ const ComparisonArea = ({
   className,
   onComparisonComplete,
   autoStartToken = 0,
+  projectId,
 }: ComparisonAreaProps) => {
   const [comparisonResults, setComparisonResults] =
     useState<DemoComparisonResult | null>(null);
@@ -172,7 +180,9 @@ const ComparisonArea = ({
             <h2 className="text-2xl font-bold">Document Comparison</h2>
             <p className="text-muted-foreground">
               {hasSelectedFiles
-                ? `${selectedFiles.length} document${selectedFiles.length !== 1 ? "s" : ""} selected for analysis`
+                ? `${selectedFiles.length} document${
+                    selectedFiles.length !== 1 ? "s" : ""
+                  } selected for analysis`
                 : "Showing the most recent comparison results"}
             </p>
           </div>
@@ -281,6 +291,8 @@ const ComparisonArea = ({
         <DemoComparisonResults
           data={comparisonResults}
           onShare={() => toast.info("Sharing is disabled in demo mode")}
+          projectId={projectId}
+          selectedProjectFiles={selectedFiles}
         />
       )}
     </div>

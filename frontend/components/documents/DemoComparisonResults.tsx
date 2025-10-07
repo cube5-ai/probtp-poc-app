@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,16 +9,43 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
 import { Download, Share, Trophy, ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { documentService } from "@/lib/api/documents";
+import { transformDataToHighlights } from "../../lib/pdf";
+import demoComparison from "@/fixtures/comparison_report_new.json";
 import { makeIsGreen } from "@/lib/report/isBest";
-import demoComparison from "@/fixtures/comparison-demo.json";
+import { CustomHighlight } from "../pdf/types";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+} from "@/components/ui/hover-card";
+
+const PdfHighlighter = dynamic(() => import("../pdf/PdfHighlighter"), {
+  ssr: false,
+});
 
 const demoJsonString = JSON.stringify(demoComparison, null, 2);
+
+type BoundingBox = {
+  bottom: number;
+  left: number;
+  right: number;
+  top: number;
+};
 
 type DemoComparisonResult = typeof demoComparison;
 
 interface DemoComparisonResultsProps {
   data: DemoComparisonResult;
   onShare?: () => void;
+  projectId: string;
+  selectedProjectFiles: { id: string; file: { name: string } }[];
 }
 
 const toArray = (value: unknown): string[] => {
@@ -27,7 +55,9 @@ const toArray = (value: unknown): string[] => {
 
   if (Array.isArray(value)) {
     return value
-      .map((entry) => (typeof entry === "string" ? entry.trim() : String(entry)))
+      .map((entry) =>
+        typeof entry === "string" ? entry.trim() : String(entry)
+      )
       .filter(Boolean);
   }
 
@@ -41,14 +71,30 @@ const toArray = (value: unknown): string[] => {
   return [String(value)];
 };
 
-const DemoComparisonResults = ({ data, onShare }: DemoComparisonResultsProps) => {
+const DemoComparisonResults = ({
+  data,
+  onShare,
+  projectId,
+  selectedProjectFiles,
+}: DemoComparisonResultsProps) => {
+  const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
+  const [activeHighlights, setActiveHighlights] = useState<CustomHighlight[]>(
+    []
+  );
+  const [allHighlights, setAllHighlights] = useState<
+    Record<string, CustomHighlight[]>
+  >({});
+  const [pdfUrls, setPdfUrls] = useState<Record<string, string>>({});
+
   const {
     analyses,
     general_summary: generalSummary,
     comparison_tables: comparisonTables,
   } = data;
 
-  const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({});
+  const [expandedCategories, setExpandedCategories] = useState<
+    Record<string, boolean>
+  >({});
 
   const categorySummary = useMemo(
     () =>
@@ -70,12 +116,16 @@ const DemoComparisonResults = ({ data, onShare }: DemoComparisonResultsProps) =>
     }
 
     return comparisonTables.map((table, tableIndex) => {
-      const headers = Array.isArray(table.template_row) ? table.template_row : [];
+      const headers = Array.isArray(table.template_row)
+        ? table.template_row
+        : [];
       const rows = Array.isArray(table.rows) ? table.rows : [];
       const metadata = table.metadata ?? {};
       const columnOrder = Array.isArray(metadata.column_labels)
         ? metadata.column_labels
-        : headers.map((_, headerIndex) => String.fromCharCode(65 + headerIndex));
+        : headers.map((_, headerIndex) =>
+            String.fromCharCode(65 + headerIndex)
+          );
       const dataRows = rows.filter((_, rowIndex) => rowIndex !== 0);
       const displayCategory = metadata.category ?? "Comparison Table";
       const id = `${displayCategory}-${tableIndex}`;
@@ -111,299 +161,442 @@ const DemoComparisonResults = ({ data, onShare }: DemoComparisonResultsProps) =>
     }
   };
 
+  const getColumnIndexFromId = (cellId: string | undefined): number => {
+    if (!cellId) return -1;
+    const match = cellId.match(/[A-Za-z]+/);
+    if (!match) return -1;
+    const columnLetter = match[0].toUpperCase();
+    if (columnLetter.length === 1) {
+      return columnLetter.charCodeAt(0) - "A".charCodeAt(0);
+    }
+    if (columnLetter.length === 2) {
+      return (
+        (columnLetter.charCodeAt(0) - "A".charCodeAt(0) + 1) * 26 +
+        (columnLetter.charCodeAt(1) - "A".charCodeAt(0))
+      );
+    }
+    return -1;
+  };
+
+  const handleCellClick = async (cell: any) => {
+    const highlightsByFile = transformDataToHighlights(
+      data,
+      selectedProjectFiles
+    );
+    setAllHighlights(highlightsByFile);
+
+    const urls: Record<string, string> = {};
+    for (const file of selectedProjectFiles) {
+      const fileData = await documentService.getFile(file.id, projectId);
+      if (fileData.view_url) {
+        urls[file.id] = fileData.view_url;
+      }
+    }
+    setPdfUrls(urls);
+
+    // Set the first file as active
+    const firstFileId = selectedProjectFiles[0]?.id;
+    if (firstFileId) {
+      setActivePdfUrl(urls[firstFileId]);
+      setActiveHighlights(highlightsByFile[firstFileId] || []);
+    }
+  };
+
+  const switchPdf = (fileId: string) => {
+    setActivePdfUrl(pdfUrls[fileId]);
+    setActiveHighlights(allHighlights[fileId] || []);
+  };
+
   return (
-    <div className="space-y-6">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
-        <div className="flex gap-2 justify-end">
-          <Button variant="outline" size="sm" onClick={handleDownloadJson}>
-            <Download className="mr-2 h-4 w-4" />
-            Download JSON
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => {
-              onShare?.();
-            }}
-          >
-            <Share className="mr-2 h-4 w-4" />
-            Share
-          </Button>
-        </div>
-      </div>
-
-      <Tabs
-        defaultValue={generalSummary ? "recommendation" : "analysis"}
-        className="space-y-4"
+    <>
+      <Dialog
+        open={!!activePdfUrl}
+        onOpenChange={(isOpen) => {
+          if (!isOpen) {
+            setActivePdfUrl(null);
+          }
+        }}
       >
-        <TabsList className="w-full max-w-2xl">
-          <TabsTrigger
-            value="recommendation"
-            className="flex-1"
-            disabled={!generalSummary}
-          >
-            Overall Recommendation
-          </TabsTrigger>
-          <TabsTrigger value="analysis" className="flex-1">
-            Category Insights
-          </TabsTrigger>
-          <TabsTrigger value="tables" className="flex-1">
-            Comparison Tables
-          </TabsTrigger>
-        </TabsList>
-
-        {generalSummary && (
-          <TabsContent value="recommendation" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-primary" />
-                  Overall Recommendation
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground whitespace-pre-line">
-                  {generalSummary.key_differences}
-                </p>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div>
-                    <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-                      ProBTP Strengths
-                    </h3>
-                    <ul className="mt-2 space-y-1 text-sm list-disc pl-4">
-                      {toArray(generalSummary.probtp_overall_strengths).map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div>
-                    <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-                      AXA Strengths
-                    </h3>
-                    <ul className="mt-2 space-y-1 text-sm list-disc pl-4">
-                      {toArray(generalSummary.axa_overall_strengths).map((item) => (
-                        <li key={item}>{item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        )}
-
-        {!generalSummary && (
-          <TabsContent value="recommendation" className="space-y-4">
-            <Card>
-              <CardContent className="py-10 text-center text-sm text-muted-foreground">
-                Overall recommendation data is not available for this comparison.
-              </CardContent>
-            </Card>
-          </TabsContent>
-        )}
-
-        <TabsContent value="analysis" className="space-y-4">
-          {categorySummary.map((category, index) => {
-            const stateKey = `${category.category || "category"}-${index}`;
-            const isExpanded = expandedCategories[stateKey] ?? index === 0;
-            const panelId = `category-panel-${index}`;
-
-            const toggleCategory = () => {
-              setExpandedCategories((prev) => ({
-                ...prev,
-                [stateKey]: !(prev[stateKey] ?? index === 0),
-              }));
-            };
-
-            return (
-              <Card key={stateKey}>
-                <CardHeader
-                  className="flex flex-col gap-2 cursor-pointer"
-                  role="button"
-                  tabIndex={0}
-                  aria-expanded={isExpanded}
-                  aria-controls={panelId}
-                  onClick={toggleCategory}
-                  onKeyDown={(event) => {
-                    if (event.key === "Enter" || event.key === " ") {
-                      event.preventDefault();
-                      toggleCategory();
-                    }
-                  }}
-                >
-                  <div className="flex items-start justify-between gap-2">
-                    <CardTitle className="flex flex-wrap items-center gap-2">
-                      {category.category}
-                      <Badge variant={category.winner === "probtp" ? "default" : "secondary"}>
-                        Winner: {category.winner.toUpperCase()}
-                      </Badge>
-                      <Badge variant="outline">Confidence: {category.confidence}</Badge>
-                    </CardTitle>
-                    <ChevronDown
-                      className={`h-4 w-4 transition-transform ${
-                        isExpanded ? "rotate-0" : "-rotate-90"
-                      }`}
-                    />
-                  </div>
-                </CardHeader>
-                {isExpanded && (
-                  <CardContent
-                    id={panelId}
-                    className="space-y-4 text-sm"
-                  >
-                    <div>
-                      <h4 className="font-semibold text-muted-foreground">
-                        Key Differences
-                      </h4>
-                      <ul className="mt-2 space-y-1 list-disc pl-4">
-                        {category.keyDifferences.slice(0, 4).map((diff) => (
-                          <li key={diff}>{diff}</li>
-                        ))}
-                      </ul>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-muted-foreground">
-                        Talking Points
-                      </h4>
-                      <ul className="mt-2 space-y-1 list-disc pl-4">
-                        {category.talkingPoints.slice(0, 4).map((point) => (
-                          <li key={point}>{point}</li>
-                        ))}
-                      </ul>
-                    </div>
-                  </CardContent>
-                )}
-              </Card>
-            );
-          })}
-        </TabsContent>
-
-        <TabsContent value="tables" className="space-y-4">
-          {normalizedTables.length === 0 ? (
-            <Card>
-              <CardContent className="py-10 text-center text-sm text-muted-foreground">
-                No structured comparison tables were provided in this demo dataset.
-              </CardContent>
-            </Card>
-          ) : (
-            <Tabs
-              defaultValue={normalizedTables[0].id}
-              className="space-y-4"
+        <DialogContent className="max-w-[90vw] h-[90vh] flex flex-col">
+          <DialogHeader>
+            <div
+              style={{
+                display: "flex",
+                gap: "1rem",
+                alignItems: "center",
+                justifyContent: "space-between",
+              }}
             >
-              <TabsList className="w-full overflow-x-auto">
-                {normalizedTables.map((table) => (
-                  <TabsTrigger
-                    key={`table-tab-${table.id}`}
-                    value={table.id}
-                    className="whitespace-nowrap"
+              <DialogTitle>Document Highlights</DialogTitle>
+              <div style={{ display: "flex", gap: "1rem" }}>
+                {selectedProjectFiles.map((file) => (
+                  <Button
+                    key={file.id}
+                    variant={
+                      pdfUrls[file.id] === activePdfUrl ? "default" : "outline"
+                    }
+                    onClick={() => switchPdf(file.id)}
                   >
-                    {table.displayCategory}
-                  </TabsTrigger>
+                    {file.file.name}
+                  </Button>
                 ))}
-              </TabsList>
+              </div>
+            </div>
+          </DialogHeader>
+          <div className="flex-grow h-full overflow-hidden relative">
+            {activePdfUrl && (
+              <PdfHighlighter
+                url={activePdfUrl}
+                initialHighlights={activeHighlights}
+                // onAddHighlight={() => {}}
+                // onUpdateHighlight={() => {}}
+              />
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
 
-              {normalizedTables.map((table) => {
-                const category =
-                  table.metadata?.category?.trim() ??
-                  analyses?.[table.originalIndex]?.category?.trim();
-                const columnIndex = (cellId?: string) => {
-                  if (!cellId) return Number.MAX_SAFE_INTEGER;
-                  const match = cellId.match(/[A-Za-z]+/);
-                  const columnLabel = match ? match[0].toUpperCase() : null;
-                  if (!columnLabel) return Number.MAX_SAFE_INTEGER;
-                  const lookupIndex = table.columnOrder.findIndex(
-                    (label) => label.toUpperCase() === columnLabel
-                  );
-                  return lookupIndex === -1 ? Number.MAX_SAFE_INTEGER : lookupIndex;
-                };
+      <div className="space-y-6">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-end">
+          <div className="flex gap-2 justify-end">
+            <Button variant="outline" size="sm" onClick={handleDownloadJson}>
+              <Download className="mr-2 h-4 w-4" />
+              Download JSON
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                onShare?.();
+              }}
+            >
+              <Share className="mr-2 h-4 w-4" />
+              Share
+            </Button>
+          </div>
+        </div>
 
-                return (
-                  <TabsContent key={`table-content-${table.id}`} value={table.id}>
-                    <Card>
-                      <CardHeader>
-                        <CardTitle className="flex flex-wrap items-center justify-between gap-2 text-lg">
-                          <span>{table.displayCategory}</span>
-                          <span className="text-sm font-normal text-muted-foreground">
-                            ProBTP: {table.metadata?.policy_levels?.probtp?.join(", ") ?? "N/A"} · AXA: {table.metadata?.policy_levels?.axa?.join(", ") ?? "N/A"}
-                          </span>
-                        </CardTitle>
-                      </CardHeader>
-                      <CardContent>
-                        <div className="w-full overflow-x-auto">
-                          <table className="min-w-full border text-sm">
-                            <thead>
-                              <tr className="bg-muted/60">
-                                {table.headers.map((header, headerIndex) => {
-                                  const label = typeof header === "string" && header.trim().length > 0 ? header : "\u00A0";
-                                  return (
-                                    <th
-                                      key={`header-${table.id}-${headerIndex}`}
-                                      className="border px-3 py-2 text-left font-semibold"
-                                    >
-                                      {label}
-                                    </th>
+        <Tabs
+          defaultValue={generalSummary ? "recommendation" : "analysis"}
+          className="space-y-4"
+        >
+          <TabsList className="w-full max-w-2xl">
+            <TabsTrigger
+              value="recommendation"
+              className="flex-1"
+              disabled={!generalSummary}
+            >
+              Overall Recommendation
+            </TabsTrigger>
+            <TabsTrigger value="analysis" className="flex-1">
+              Category Insights
+            </TabsTrigger>
+            <TabsTrigger value="tables" className="flex-1">
+              Comparison Tables
+            </TabsTrigger>
+          </TabsList>
+
+          {generalSummary && (
+            <TabsContent value="recommendation" className="space-y-4">
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-primary" />
+                    Overall Recommendation
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-sm text-muted-foreground whitespace-pre-line">
+                    {generalSummary.key_differences}
+                  </p>
+                  <div className="grid gap-4 md:grid-cols-2">
+                    <div>
+                      <h3 className="text-sm font-semibold uppercase text-muted-foreground">
+                        ProBTP Strengths
+                      </h3>
+                      <ul className="mt-2 space-y-1 text-sm list-disc pl-4">
+                        {toArray(generalSummary.probtp_overall_strengths).map(
+                          (item) => (
+                            <li key={item}>{item}</li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                    <div>
+                      <h3 className="text-sm font-semibold uppercase text-muted-foreground">
+                        AXA Strengths
+                      </h3>
+                      <ul className="mt-2 space-y-1 text-sm list-disc pl-4">
+                        {toArray(generalSummary.axa_overall_strengths).map(
+                          (item) => (
+                            <li key={item}>{item}</li>
+                          )
+                        )}
+                      </ul>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
+
+          {!generalSummary && (
+            <TabsContent value="recommendation" className="space-y-4">
+              <Card>
+                <CardContent className="py-10 text-center text-sm text-muted-foreground">
+                  Overall recommendation data is not available for this
+                  comparison.
+                </CardContent>
+              </Card>
+            </TabsContent>
+          )}
+
+          <TabsContent value="analysis" className="space-y-4">
+            {categorySummary.map((category, index) => {
+              const stateKey = `${category.category || "category"}-${index}`;
+              const isExpanded = expandedCategories[stateKey] ?? index === 0;
+              const panelId = `category-panel-${index}`;
+
+              const toggleCategory = () => {
+                setExpandedCategories((prev) => ({
+                  ...prev,
+                  [stateKey]: !(prev[stateKey] ?? index === 0),
+                }));
+              };
+
+              return (
+                <Card key={stateKey}>
+                  <CardHeader
+                    className="flex flex-col gap-2 cursor-pointer"
+                    role="button"
+                    tabIndex={0}
+                    aria-expanded={isExpanded}
+                    aria-controls={panelId}
+                    onClick={toggleCategory}
+                    onKeyDown={(event) => {
+                      if (event.key === "Enter" || event.key === " ") {
+                        event.preventDefault();
+                        toggleCategory();
+                      }
+                    }}
+                  >
+                    <div className="flex items-start justify-between gap-2">
+                      <CardTitle className="flex flex-wrap items-center gap-2">
+                        {category.category}
+                        <Badge
+                          variant={
+                            category.winner === "probtp"
+                              ? "default"
+                              : "secondary"
+                          }
+                        >
+                          Winner: {category.winner.toUpperCase()}
+                        </Badge>
+                        <Badge variant="outline">
+                          Confidence: {category.confidence}
+                        </Badge>
+                      </CardTitle>
+                      <ChevronDown
+                        className={`h-4 w-4 transition-transform ${
+                          isExpanded ? "rotate-0" : "-rotate-90"
+                        }`}
+                      />
+                    </div>
+                  </CardHeader>
+                  {isExpanded && (
+                    <CardContent id={panelId} className="space-y-4 text-sm">
+                      <div>
+                        <h4 className="font-semibold text-muted-foreground">
+                          Key Differences
+                        </h4>
+                        <ul className="mt-2 space-y-1 list-disc pl-4">
+                          {category.keyDifferences.slice(0, 4).map((diff) => (
+                            <li key={diff}>{diff}</li>
+                          ))}
+                        </ul>
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-muted-foreground">
+                          Talking Points
+                        </h4>
+                        <ul className="mt-2 space-y-1 list-disc pl-4">
+                          {category.talkingPoints.slice(0, 4).map((point) => (
+                            <li key={point}>{point}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    </CardContent>
+                  )}
+                </Card>
+              );
+            })}
+          </TabsContent>
+
+          <TabsContent value="tables" className="space-y-4">
+            {normalizedTables.length === 0 ? (
+              <Card>
+                <CardContent className="py-10 text-center text-sm text-muted-foreground">
+                  No structured comparison tables were provided in this demo
+                  dataset.
+                </CardContent>
+              </Card>
+            ) : (
+              <Tabs defaultValue={normalizedTables[0].id} className="space-y-4">
+                <TabsList className="w-full overflow-x-auto">
+                  {normalizedTables.map((table) => (
+                    <TabsTrigger
+                      key={`table-tab-${table.id}`}
+                      value={table.id}
+                      className="whitespace-nowrap"
+                    >
+                      {table.displayCategory}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+
+                {normalizedTables.map((table) => {
+                  const category =
+                    table.metadata?.category?.trim() ??
+                    analyses?.[table.originalIndex]?.category?.trim();
+                  const columnIndex = (cellId?: string) => {
+                    if (!cellId) return Number.MAX_SAFE_INTEGER;
+                    const match = cellId.match(/[A-Za-z]+/);
+                    const columnLabel = match ? match[0].toUpperCase() : null;
+                    if (!columnLabel) return Number.MAX_SAFE_INTEGER;
+                    const lookupIndex = table.columnOrder.findIndex(
+                      (label) => label.toUpperCase() === columnLabel
+                    );
+                    return lookupIndex === -1
+                      ? Number.MAX_SAFE_INTEGER
+                      : lookupIndex;
+                  };
+
+                  return (
+                    <TabsContent
+                      key={`table-content-${table.id}`}
+                      value={table.id}
+                    >
+                      <Card>
+                        <CardHeader>
+                          <CardTitle className="flex flex-wrap items-center justify-between gap-2 text-lg">
+                            <span>{table.displayCategory}</span>
+                            <span className="text-sm font-normal text-muted-foreground">
+                              ProBTP:{" "}
+                              {table.metadata?.policy_levels?.probtp?.join(
+                                ", "
+                              ) ?? "N/A"}{" "}
+                              · AXA:{" "}
+                              {table.metadata?.policy_levels?.axa?.join(", ") ??
+                                "N/A"}
+                            </span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <div className="w-full overflow-x-auto">
+                            <table className="min-w-full border text-sm">
+                              <thead>
+                                <tr className="bg-muted/60">
+                                  {table.headers.map((header, headerIndex) => {
+                                    const label =
+                                      typeof header === "string" &&
+                                      header.trim().length > 0
+                                        ? header
+                                        : "\u00A0";
+                                    return (
+                                      <th
+                                        key={`header-${table.id}-${headerIndex}`}
+                                        className="border px-3 py-2 text-left font-semibold"
+                                      >
+                                        {label}
+                                      </th>
+                                    );
+                                  })}
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {table.dataRows.map((row, rowIndex) => {
+                                  const visibleCells = Array.isArray(row.cells)
+                                    ? row.cells.filter(
+                                        (cell) => !("ref" in cell)
+                                      )
+                                    : [];
+                                  const sortedCells = [...visibleCells].sort(
+                                    (a, b) =>
+                                      columnIndex(a.id) - columnIndex(b.id)
                                   );
-                                })}
-                              </tr>
-                            </thead>
-                            <tbody>
-                              {table.dataRows.map((row, rowIndex) => {
-                                const visibleCells = Array.isArray(row.cells)
-                                  ? row.cells.filter((cell) => !("ref" in cell))
-                                  : [];
-                                const sortedCells = [...visibleCells].sort(
-                                  (a, b) => columnIndex(a.id) - columnIndex(b.id)
-                                );
 
-                                return (
-                                  <tr
-                                    key={`row-${table.id}-${rowIndex}`}
-                                    className="odd:bg-muted/30"
-                                  >
-                                    {sortedCells.map((cell, cellIndex) => {
-                                      const cellRecord = cell as {
-                                        id?: string;
-                                        is_best?: boolean | null;
-                                        colspan?: number;
-                                        rowspan?: number;
-                                        type?: string;
-                                      };
-                                      const cellIsGreen = isGreen(category, {
-                                        id: cellRecord.id ?? "",
-                                        is_best: cellRecord.is_best,
-                                      });
+                                  return (
+                                    <tr
+                                      key={`row-${table.id}-${rowIndex}`}
+                                      className="odd:bg-muted/30"
+                                    >
+                                      {sortedCells.map((cell, cellIndex) => {
+                                        const cellRecord = cell as {
+                                          id?: string;
+                                          is_best?: boolean | null;
+                                          colspan?: number;
+                                          rowspan?: number;
+                                          type?: string;
+                                          bounding_boxes?: {
+                                            file_id: string;
+                                            page: number;
+                                            bounding_box: BoundingBox;
+                                          }[];
+                                        };
 
-                                      const cellValue =
-                                        cell.value != null ? String(cell.value) : "";
-                                      const displayValue =
-                                        cellValue.trim().length > 0 ? cellValue : "—";
-                                      const colSpan = cellRecord.colspan ?? 1;
-                                      const rowSpan = cellRecord.rowspan ?? 1;
-                                      const rawType = typeof cellRecord.type === "string"
-                                        ? cellRecord.type.trim()
-                                        : undefined;
-                                      const showType = rawType && rawType.toLowerCase() !== "data";
+                                        const totalColumns =
+                                          table.headers.length;
+                                        const colIndex = getColumnIndexFromId(
+                                          cellRecord.id
+                                        );
 
-                                      const cellBackgroundClass = cellIsGreen
-                                        ? "bg-emerald-100 dark:bg-emerald-900/40 border-emerald-200 dark:border-emerald-700"
-                                        : "";
+                                        const isClickable =
+                                          colIndex !== -1 &&
+                                          totalColumns > 2 &&
+                                          (colIndex === totalColumns - 1 ||
+                                            colIndex === totalColumns - 2);
 
-                                      const textClass = cellIsGreen
-                                        ? "text-emerald-700 dark:text-emerald-300 font-semibold"
-                                        : displayValue === "—"
-                                        ? "text-muted-foreground"
-                                        : "";
+                                        const cellIsGreen = isGreen(category, {
+                                          id: cellRecord.id ?? "",
+                                          is_best: cellRecord.is_best,
+                                        });
 
-                                      return (
-                                        <td
-                                          key={`cell-${cell.id ?? cellIndex}`}
-                                          className={cn("border px-3 py-2 align-top", cellBackgroundClass)}
-                                          colSpan={colSpan}
-                                          rowSpan={rowSpan}
-                                          data-cell-id={cell.id}
-                                        >
+                                        const cellValue =
+                                          cell.value != null
+                                            ? String(cell.value)
+                                            : "";
+                                        const displayValue =
+                                          cellValue.trim().length > 0
+                                            ? cellValue
+                                            : "—";
+                                        const colSpan = cellRecord.colspan ?? 1;
+                                        const rowSpan = cellRecord.rowspan ?? 1;
+                                        const rawType =
+                                          typeof cellRecord.type === "string"
+                                            ? cellRecord.type.trim()
+                                            : undefined;
+                                        const showType =
+                                          rawType &&
+                                          rawType.toLowerCase() !== "data";
+
+                                        const cellBackgroundClass = cellIsGreen
+                                          ? "bg-emerald-100 dark:bg-emerald-900/40 border-emerald-200 dark:border-emerald-700"
+                                          : "";
+
+                                        const textClass = cellIsGreen
+                                          ? "text-emerald-700 dark:text-emerald-300 font-semibold"
+                                          : displayValue === "—"
+                                          ? "text-muted-foreground"
+                                          : "";
+
+                                        const cellContent = (
                                           <div className="space-y-1">
-                                            <span className={cn("inline-block", textClass)}>
+                                            <span
+                                              className={cn(
+                                                "inline-block",
+                                                textClass
+                                              )}
+                                            >
                                               {displayValue}
                                             </span>
                                             {showType ? (
@@ -412,25 +605,94 @@ const DemoComparisonResults = ({ data, onShare }: DemoComparisonResultsProps) =>
                                               </p>
                                             ) : null}
                                           </div>
-                                        </td>
-                                      );
-                                    })}
-                                  </tr>
-                                );
-                              })}
-                            </tbody>
-                          </table>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  </TabsContent>
-                );
-              })}
-            </Tabs>
-          )}
-        </TabsContent>
-      </Tabs>
-    </div>
+                                        );
+
+                                        return (
+                                          <td
+                                            key={`cell-${cell.id ?? cellIndex}`}
+                                            className={cn(
+                                              "border px-3 py-2 align-top",
+                                              cellBackgroundClass,
+                                              isClickable && "cursor-pointer"
+                                            )}
+                                            colSpan={colSpan}
+                                            rowSpan={rowSpan}
+                                            data-cell-id={cell.id}
+                                            onClick={() =>
+                                              isClickable &&
+                                              cell.id &&
+                                              handleCellClick(cell)
+                                            }
+                                          >
+                                            {isClickable &&
+                                            cellRecord.bounding_boxes &&
+                                            cellRecord.bounding_boxes.length >
+                                              0 ? (
+                                              <HoverCard openDelay={500}>
+                                                <HoverCardTrigger asChild>
+                                                  {cellContent}
+                                                </HoverCardTrigger>
+                                                <HoverCardContent className="w-80">
+                                                  <div className="space-y-2">
+                                                    <h4 className="font-semibold">
+                                                      Source Document
+                                                    </h4>
+                                                    {cellRecord.bounding_boxes.map(
+                                                      (bbox, index) => {
+                                                        const file =
+                                                          selectedProjectFiles.find(
+                                                            (f) =>
+                                                              f.id ===
+                                                              bbox.file_id
+                                                          );
+                                                        return (
+                                                          <div
+                                                            key={index}
+                                                            className="text-sm"
+                                                          >
+                                                            <p>
+                                                              <span className="font-semibold">
+                                                                File:
+                                                              </span>{" "}
+                                                              {bbox?.file_id ??
+                                                                "Unknown file"}
+                                                            </p>
+                                                            <p>
+                                                              <span className="font-semibold">
+                                                                Page:
+                                                              </span>{" "}
+                                                              {bbox.page}
+                                                            </p>
+                                                          </div>
+                                                        );
+                                                      }
+                                                    )}
+                                                  </div>
+                                                </HoverCardContent>
+                                              </HoverCard>
+                                            ) : (
+                                              cellContent
+                                            )}
+                                          </td>
+                                        );
+                                      })}
+                                    </tr>
+                                  );
+                                })}
+                              </tbody>
+                            </table>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    </TabsContent>
+                  );
+                })}
+              </Tabs>
+            )}
+          </TabsContent>
+        </Tabs>
+      </div>
+    </>
   );
 };
 
