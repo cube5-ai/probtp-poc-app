@@ -1,5 +1,4 @@
 import type { IHighlight } from "react-pdf-highlighter";
 
-export interface CustomHighlight extends IHighlight {
-  // Add any custom properties here if needed in the future
-}
+// Alias for IHighlight with potential for custom properties in the future
+export type CustomHighlight = IHighlight;

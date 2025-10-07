@@ -1,17 +1,16 @@
 "use client";
 
-import { useMemo, useState, useCallback } from "react";
+import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Download, Share, Trophy, ChevronDown } from "lucide-react";
+import { Download, Share, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { documentService } from "@/lib/api/documents";
-import { transformDataToHighlights } from "../../lib/pdf";
-import demoComparison from "@/fixtures/comparison_report_new.json";
+import demoComparison from "@/fixtures/comparison_report_new_2.json";
 import { makeIsGreen } from "@/lib/report/isBest";
 import { CustomHighlight } from "../pdf/types";
 import {
@@ -26,17 +25,19 @@ import {
   HoverCardTrigger,
 } from "@/components/ui/hover-card";
 
-const PdfHighlighter = dynamic(() => import("../pdf/PdfHighlighter"), {
+const SimplePdfViewer = dynamic(() => import("../pdf/SimplePdfViewer"), {
   ssr: false,
 });
 
 const demoJsonString = JSON.stringify(demoComparison, null, 2);
 
 type BoundingBox = {
-  bottom: number;
-  left: number;
-  right: number;
-  top: number;
+  x1: number;
+  y1: number;
+  x2: number;
+  y2: number;
+  width: number;
+  height: number;
 };
 
 type DemoComparisonResult = typeof demoComparison;
@@ -78,23 +79,14 @@ const DemoComparisonResults = ({
   selectedProjectFiles,
 }: DemoComparisonResultsProps) => {
   const [activePdfUrl, setActivePdfUrl] = useState<string | null>(null);
-  const [activeHighlights, setActiveHighlights] = useState<CustomHighlight[]>(
-    []
-  );
-  const [allHighlights, setAllHighlights] = useState<
-    Record<string, CustomHighlight[]>
-  >({});
-  const [pdfUrls, setPdfUrls] = useState<Record<string, string>>({});
+  const [activeHighlight, setActiveHighlight] =
+    useState<CustomHighlight | null>(null);
 
   const {
     analyses,
     general_summary: generalSummary,
     comparison_tables: comparisonTables,
   } = data;
-
-  const [expandedCategories, setExpandedCategories] = useState<
-    Record<string, boolean>
-  >({});
 
   const categorySummary = useMemo(
     () =>
@@ -178,33 +170,85 @@ const DemoComparisonResults = ({
     return -1;
   };
 
-  const handleCellClick = async (cell: any) => {
-    const highlightsByFile = transformDataToHighlights(
-      data,
-      selectedProjectFiles
+  const handleCellClick = async (cell: {
+    id?: string;
+    value?: string;
+    bounding_boxes?: {
+      file_id: string;
+      page: number;
+      bounding_box: BoundingBox;
+    }[];
+  }) => {
+    console.log("Cell clicked:", cell);
+    console.log("Cell bounding_boxes:", cell.bounding_boxes);
+
+    if (!cell.bounding_boxes || cell.bounding_boxes.length === 0) {
+      toast.error("No source document information available for this cell");
+      return;
+    }
+
+    // Get the first bounding box (we'll show the first source)
+    const bbox = cell.bounding_boxes[0];
+    const documentTitle = bbox.file_id;
+
+    // Find the file by matching the document title
+    const file = selectedProjectFiles.find((f) =>
+      f.file.name.includes(documentTitle.split(" - ")[1] || documentTitle)
     );
-    setAllHighlights(highlightsByFile);
 
-    const urls: Record<string, string> = {};
-    for (const file of selectedProjectFiles) {
+    if (!file) {
+      console.log(
+        "Available files:",
+        selectedProjectFiles.map((f) => f.file.name)
+      );
+      console.log("Looking for document:", documentTitle);
+      toast.error("Source file not found");
+      return;
+    }
+
+    try {
+      // Get the file URL
       const fileData = await documentService.getFile(file.id, projectId);
-      if (fileData.view_url) {
-        urls[file.id] = fileData.view_url;
+      if (!fileData.view_url) {
+        toast.error("File URL not available");
+        return;
       }
-    }
-    setPdfUrls(urls);
 
-    // Set the first file as active
-    const firstFileId = selectedProjectFiles[0]?.id;
-    if (firstFileId) {
-      setActivePdfUrl(urls[firstFileId]);
-      setActiveHighlights(highlightsByFile[firstFileId] || []);
-    }
-  };
+      // Create a single highlight for this cell
+      // The bounding box coordinates should already be in the correct format
+      const highlight: CustomHighlight = {
+        id: `cell-${cell.id}`,
+        content: { text: cell.value || "" },
+        position: {
+          pageNumber: bbox.page + 1,
+          boundingRect: {
+            x1: bbox.bounding_box.x1,
+            y1: bbox.bounding_box.y1,
+            x2: bbox.bounding_box.x2,
+            y2: bbox.bounding_box.y2,
+            width: bbox.bounding_box.width,
+            height: bbox.bounding_box.height,
+          },
+          rects: [
+            {
+              x1: bbox.bounding_box.x1,
+              y1: bbox.bounding_box.y1,
+              x2: bbox.bounding_box.x2,
+              y2: bbox.bounding_box.y2,
+              width: bbox.bounding_box.width,
+              height: bbox.bounding_box.height,
+            },
+          ],
+        },
+        comment: { text: "", emoji: "" },
+      };
 
-  const switchPdf = (fileId: string) => {
-    setActivePdfUrl(pdfUrls[fileId]);
-    setActiveHighlights(allHighlights[fileId] || []);
+      setActivePdfUrl(fileData.view_url);
+      setActiveHighlight(highlight);
+    } catch (error) {
+      console.error("Failed to load file:", error);
+      toast.error("Failed to load source document");
+    }
   };
 
   return (
@@ -214,43 +258,17 @@ const DemoComparisonResults = ({
         onOpenChange={(isOpen) => {
           if (!isOpen) {
             setActivePdfUrl(null);
+            setActiveHighlight(null);
           }
         }}
       >
         <DialogContent className="max-w-[90vw] h-[90vh] flex flex-col">
           <DialogHeader>
-            <div
-              style={{
-                display: "flex",
-                gap: "1rem",
-                alignItems: "center",
-                justifyContent: "space-between",
-              }}
-            >
-              <DialogTitle>Document Highlights</DialogTitle>
-              <div style={{ display: "flex", gap: "1rem" }}>
-                {selectedProjectFiles.map((file) => (
-                  <Button
-                    key={file.id}
-                    variant={
-                      pdfUrls[file.id] === activePdfUrl ? "default" : "outline"
-                    }
-                    onClick={() => switchPdf(file.id)}
-                  >
-                    {file.file.name}
-                  </Button>
-                ))}
-              </div>
-            </div>
+            <DialogTitle>Source Document</DialogTitle>
           </DialogHeader>
           <div className="flex-grow h-full overflow-hidden relative">
             {activePdfUrl && (
-              <PdfHighlighter
-                url={activePdfUrl}
-                initialHighlights={activeHighlights}
-                // onAddHighlight={() => {}}
-                // onUpdateHighlight={() => {}}
-              />
+              <SimplePdfViewer url={activePdfUrl} highlight={activeHighlight} />
             )}
           </div>
         </DialogContent>
@@ -352,84 +370,47 @@ const DemoComparisonResults = ({
           )}
 
           <TabsContent value="analysis" className="space-y-4">
-            {categorySummary.map((category, index) => {
-              const stateKey = `${category.category || "category"}-${index}`;
-              const isExpanded = expandedCategories[stateKey] ?? index === 0;
-              const panelId = `category-panel-${index}`;
-
-              const toggleCategory = () => {
-                setExpandedCategories((prev) => ({
-                  ...prev,
-                  [stateKey]: !(prev[stateKey] ?? index === 0),
-                }));
-              };
-
-              return (
-                <Card key={stateKey}>
-                  <CardHeader
-                    className="flex flex-col gap-2 cursor-pointer"
-                    role="button"
-                    tabIndex={0}
-                    aria-expanded={isExpanded}
-                    aria-controls={panelId}
-                    onClick={toggleCategory}
-                    onKeyDown={(event) => {
-                      if (event.key === "Enter" || event.key === " ") {
-                        event.preventDefault();
-                        toggleCategory();
+            {categorySummary.map((category, index) => (
+              <Card key={`category-${index}`}>
+                <CardHeader>
+                  <CardTitle className="flex flex-wrap items-center gap-2">
+                    {category.category}
+                    <Badge
+                      variant={
+                        category.winner === "probtp" ? "default" : "secondary"
                       }
-                    }}
-                  >
-                    <div className="flex items-start justify-between gap-2">
-                      <CardTitle className="flex flex-wrap items-center gap-2">
-                        {category.category}
-                        <Badge
-                          variant={
-                            category.winner === "probtp"
-                              ? "default"
-                              : "secondary"
-                          }
-                        >
-                          Winner: {category.winner.toUpperCase()}
-                        </Badge>
-                        <Badge variant="outline">
-                          Confidence: {category.confidence}
-                        </Badge>
-                      </CardTitle>
-                      <ChevronDown
-                        className={`h-4 w-4 transition-transform ${
-                          isExpanded ? "rotate-0" : "-rotate-90"
-                        }`}
-                      />
-                    </div>
-                  </CardHeader>
-                  {isExpanded && (
-                    <CardContent id={panelId} className="space-y-4 text-sm">
-                      <div>
-                        <h4 className="font-semibold text-muted-foreground">
-                          Key Differences
-                        </h4>
-                        <ul className="mt-2 space-y-1 list-disc pl-4">
-                          {category.keyDifferences.slice(0, 4).map((diff) => (
-                            <li key={diff}>{diff}</li>
-                          ))}
-                        </ul>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-muted-foreground">
-                          Talking Points
-                        </h4>
-                        <ul className="mt-2 space-y-1 list-disc pl-4">
-                          {category.talkingPoints.slice(0, 4).map((point) => (
-                            <li key={point}>{point}</li>
-                          ))}
-                        </ul>
-                      </div>
-                    </CardContent>
-                  )}
-                </Card>
-              );
-            })}
+                    >
+                      Winner: {category.winner.toUpperCase()}
+                    </Badge>
+                    <Badge variant="outline">
+                      Confidence: {category.confidence}
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4 text-sm">
+                  <div>
+                    <h4 className="font-semibold text-muted-foreground">
+                      Key Differences
+                    </h4>
+                    <ul className="mt-2 space-y-1 list-disc pl-4">
+                      {category.keyDifferences.slice(0, 4).map((diff) => (
+                        <li key={diff}>{diff}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold text-muted-foreground">
+                      Talking Points
+                    </h4>
+                    <ul className="mt-2 space-y-1 list-disc pl-4">
+                      {category.talkingPoints.slice(0, 4).map((point) => (
+                        <li key={point}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </TabsContent>
 
           <TabsContent value="tables" className="space-y-4">
@@ -639,12 +620,6 @@ const DemoComparisonResults = ({
                                                     </h4>
                                                     {cellRecord.bounding_boxes.map(
                                                       (bbox, index) => {
-                                                        const file =
-                                                          selectedProjectFiles.find(
-                                                            (f) =>
-                                                              f.id ===
-                                                              bbox.file_id
-                                                          );
                                                         return (
                                                           <div
                                                             key={index}

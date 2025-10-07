@@ -1,9 +1,7 @@
 import React from "react";
 import { IHighlight } from "react-pdf-highlighter";
 
-interface HighlightPopupProps extends IHighlight {}
-
-const HighlightPopup: React.FC<HighlightPopupProps> = ({ comment }) => {
+const HighlightPopup: React.FC<IHighlight> = ({ comment }) => {
   if (!comment || !comment.text) {
     return null;
   }

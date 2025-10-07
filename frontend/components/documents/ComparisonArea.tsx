@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import demoComparison from "@/fixtures/comparison_report_new.json";
+import demoComparison from "@/fixtures/comparison_report_new_2.json";
 import DemoComparisonResults from "./DemoComparisonResults";
 
 interface UploadedFile {

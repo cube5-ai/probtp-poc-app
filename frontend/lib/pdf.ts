@@ -1,12 +1,47 @@
-import { IHighlight } from "react-pdf-highlighter";
 import { CustomHighlight } from "@/components/pdf/types";
 
+type ComparisonData = {
+  metadata?: {
+    "ProBTP Document"?: string;
+    "AXA Document"?: string;
+  };
+  comparison_tables?: ComparisonTable[];
+};
+
+type ComparisonTable = {
+  rows?: ComparisonRow[];
+};
+
+type ComparisonRow = {
+  cells?: ComparisonCell[];
+};
+
+type ComparisonCell = {
+  id?: string;
+  value?: string;
+  bounding_boxes?: BoundingBox[];
+};
+
+type BoundingBox = {
+  file_id: string;
+  page: number;
+  bounding_box: {
+    x1: number;
+    y1: number;
+    x2: number;
+    y2: number;
+    width: number;
+    height: number;
+  };
+};
+
 export const transformDataToHighlights = (
-  data: any,
+  data: ComparisonData,
   selectedProjectFiles: { id: string; file: { name: string } }[]
 ): Record<string, CustomHighlight[]> => {
   const fileHighlights: Record<string, CustomHighlight[]> = {};
   const titleToIdMap: Record<string, string> = {};
+
   if (data.metadata) {
     const probtpTitle = data.metadata["ProBTP Document"];
     const axaTitle = data.metadata["AXA Document"];
@@ -25,19 +60,19 @@ export const transformDataToHighlights = (
     }
   }
 
-  if (!data.analyses) {
+  if (!data.comparison_tables) {
     return {};
   }
 
-  data.analyses.forEach((analysis: any) => {
-    if (!analysis.annotated_table || !analysis.annotated_table.rows) return;
+  data.comparison_tables.forEach((table) => {
+    if (!table.rows) return;
 
-    analysis.annotated_table.rows.forEach((row: any) => {
+    table.rows.forEach((row) => {
       if (!row.cells) return;
-      row.cells.forEach((cell: any) => {
+      row.cells.forEach((cell) => {
         if (!cell.bounding_boxes) return;
 
-        cell.bounding_boxes.forEach((box: any, index: number) => {
+        cell.bounding_boxes.forEach((box, index) => {
           const fileId = titleToIdMap[box.file_id];
           if (!fileId) return;
 
