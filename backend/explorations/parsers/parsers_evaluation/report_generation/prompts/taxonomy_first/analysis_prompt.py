@@ -10,6 +10,22 @@ from enum import Enum
 from pydantic import BaseModel, Field
 
 
+class OverallWinner(str, Enum):
+    """Overall winner of the comparison."""
+
+    PROBTP = "probtp"
+    AXA = "axa"
+    TIE = "tie"
+
+
+class Confidence(str, Enum):
+    """Confidence level in the assessment."""
+
+    LOW = "low"
+    MEDIUM = "medium"
+    HIGH = "high"
+
+
 class ProBTPAdvantage(str, Enum):
     """ProBTP advantage level relative to AXA."""
 
@@ -41,11 +57,11 @@ class LeafAnalysis(BaseModel):
 class ObjectiveAssessment(BaseModel):
     """Brutally objective comparison assessment."""
 
-    overall_winner: str = Field(
+    overall_winner: OverallWinner = Field(
         ...,
-        description="'probtp' or 'axa' - which contract is objectively better for this category",
+        description="'probtp', 'axa', or 'tie' - which contract is objectively better for this category",
     )
-    confidence: str = Field(
+    confidence: Confidence = Field(
         ..., description="'high', 'medium', or 'low' - confidence in the assessment"
     )
     reasoning: str = Field(
@@ -182,7 +198,7 @@ Use your world knowledge of French health insurance and beneficiary psychology t
 - Coverage caps: 300€ cap vs no cap on €1000+ benefit → advantage to uncapped insurer (cap very limiting)
 
 **2. Objective Assessment** (brutally honest)
-- **overall_winner**: 'probtp' or 'axa' - which contract is objectively better
+- **overall_winner**: 'probtp', 'axa', or 'tie' - which contract is objectively better, or if they're roughly equivalent
 - **confidence**: 'high', 'medium', or 'low'
 - **reasoning**: Honest explanation even if unfavorable to ProBTP
 - **probtp_weaknesses**: Specific areas where ProBTP is objectively weaker
@@ -341,8 +357,8 @@ Return ONLY a JSON object conforming to the TaxonomyFirstAnalysisOutput schema.
     }}
   ],
   "objective_assessment": {{
-    "overall_winner": "probtp",
-    "confidence": "high",
+    "overall_winner": "probtp",  // can be "probtp", "axa", or "tie"
+    "confidence": "high",  // can be "high", "medium", or "low"
     "reasoning": "ProBTP offers objectively better optical coverage with 30-50% higher reimbursements across most categories, resulting in significantly lower out-of-pocket costs",
     "probtp_weaknesses": ["No network partnership bonuses", "Lower contact lens cap"],
     "axa_weaknesses": ["Lower frame coverage", "Lower progressive lens reimbursement", "More restrictive frequency limits"]

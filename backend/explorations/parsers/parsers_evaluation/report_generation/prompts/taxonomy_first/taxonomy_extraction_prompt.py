@@ -11,6 +11,14 @@ Updated to use recursive tree structure for better LLM generation and navigation
 from pydantic import BaseModel, Field
 
 
+class ExtractionMetadata(BaseModel):
+    """Metadata about the taxonomy extraction."""
+    source_document: str = Field(..., description="Name of the source document")
+    extraction_date: str = Field(..., description="Date of extraction (ISO format)")
+    extraction_approach: str = Field(..., description="Approach used for extraction")
+    extractor_model: str = Field(..., description="Model used for extraction")
+
+
 class TaxonomyNode(BaseModel):
     """A node in the taxonomy (can be category, subcategory, or leaf).
 
@@ -20,14 +28,14 @@ class TaxonomyNode(BaseModel):
     """
 
     # ============ IDENTITY ============
+    name: str = Field(
+        ...,
+        description="Human-readable name for this node. Should be a clean category name WITHOUT units, caps, or frequency (e.g., 'Monture' not 'Monture 150€ max'). Examples: 'Optique', 'Lunettes', 'Verres simples', 'Chambre particulière'"
+    )
+
     node_id: str = Field(
         ...,
         description="Unique identifier using snake_case. Examples: 'optique', 'optique_lunettes', 'optique_lunettes_verres_simples'"
-    )
-
-    name: str = Field(
-        ...,
-        description="Human-readable name for this node. Examples: 'Optique', 'Lunettes', 'Verres simples'"
     )
 
     description: str = Field(
@@ -93,9 +101,9 @@ class ProBTPTaxonomy(BaseModel):
         description="ALL taxonomy nodes (categories, subcategories, and leaves) in depth-first order. Top-level categories have parent_id=null."
     )
 
-    metadata: dict[str, str] = Field(
+    metadata: ExtractionMetadata = Field(
         ...,
-        description="Extraction metadata. Should include: source_document, extraction_date, extraction_approach, extractor_model, etc."
+        description="Extraction metadata including source document, date, approach, and model used."
     )
 
 
@@ -296,6 +304,8 @@ Create unique identifiers using snake_case by joining the path:
 - Path: ["Optique"]
 - node_id: "optique"
 
+**IMPORTANT:** Use only the clean category name (without units, caps, or frequency) when generating node_id and path. For example, if you see "Monture (150€ maximum)", the name is "Monture" and NOT "Monture (150€ maximum)".
+
 **6. Generating path**
 
 The path is the full list from root to current node:
@@ -350,8 +360,10 @@ For each top-level category:
 **STEP 3: For Each Node, Fill in Attributes**
 
 For EVERY node (category, subcategory, or leaf):
+- Set name (human-readable, clean category name ONLY)
+  ✓ Correct: "Chambre particulière", "Monture", "Verres simples"
+  ✗ Wrong: "Chambre particulière 60€/jour", "Monture (150€ max)", "Verres simples - 2 équipements/an"
 - Generate node_id (snake_case from path)
-- Set name (human-readable)
 - Write description
 - Set parent_id (null for top-level, otherwise parent's node_id)
 - Set level (depth in tree: 0, 1, 2, ...)
@@ -395,103 +407,104 @@ OUTPUT FORMAT
   "nodes": [
     // Top-level category: Optique
     {{
-      "node_id": "optique",
       "name": "Optique",
+      "path": ["Optique"],
+      "node_id": "optique",
       "description": "Soins et équipements optiques (lunettes, lentilles, chirurgie réfractive)",
       "parent_id": "_root_",
       "level": 0,
-      "path": ["Optique"],
       "is_leaf": false
     }},
     // Optique → Lunettes
     {{
-      "node_id": "optique_lunettes",
       "name": "Lunettes",
+      "path": ["Optique", "Lunettes"],
+      "node_id": "optique_lunettes",
       "description": "Équipements optiques de correction (montures et verres)",
       "parent_id": "optique",
       "level": 1,
-      "path": ["Optique", "Lunettes"],
       "is_leaf": false
     }},
     // Optique → Lunettes → Monture (leaf)
     {{
-      "node_id": "optique_lunettes_monture",
       "name": "Monture",
+      "path": ["Optique", "Lunettes", "Monture"],
+      "node_id": "optique_lunettes_monture",
       "description": "Remboursement de la monture de lunettes",
       "parent_id": "optique_lunettes",
       "level": 2,
-      "path": ["Optique", "Lunettes", "Monture"],
       "is_leaf": true,
       "securite_sociale_coverage": "60% BR"
     }},
     // Optique → Lunettes → Verres (container)
     {{
-      "node_id": "optique_lunettes_verres",
       "name": "Verres",
+      "path": ["Optique", "Lunettes", "Verres"],
+      "node_id": "optique_lunettes_verres",
       "description": "Verres correcteurs (différents types selon correction)",
       "parent_id": "optique_lunettes",
       "level": 2,
-      "path": ["Optique", "Lunettes", "Verres"],
       "is_leaf": false
     }},
     // Optique → Lunettes → Verres → Verres simples (leaf)
     {{
-      "node_id": "optique_lunettes_verres_simples",
       "name": "Verres simples",
+      "path": ["Optique", "Lunettes", "Verres", "Verres simples"],
+      "node_id": "optique_lunettes_verres_simples",
       "description": "Verres correcteurs unifocaux simples",
       "parent_id": "optique_lunettes_verres",
       "level": 3,
-      "path": ["Optique", "Lunettes", "Verres", "Verres simples"],
       "is_leaf": true,
       "securite_sociale_coverage": "60% BR"
     }},
     // Optique → Lunettes → Verres → Verres complexes (leaf)
     {{
-      "node_id": "optique_lunettes_verres_complexes",
       "name": "Verres complexes",
+      "path": ["Optique", "Lunettes", "Verres", "Verres complexes"],
+      "node_id": "optique_lunettes_verres_complexes",
       "description": "Verres correcteurs complexes ou progressifs",
       "parent_id": "optique_lunettes_verres",
       "level": 3,
-      "path": ["Optique", "Lunettes", "Verres", "Verres complexes"],
       "is_leaf": true,
       "securite_sociale_coverage": "60% BR"
     }},
     // Optique → Lentilles (container)
     {{
-      "node_id": "optique_lentilles",
       "name": "Lentilles",
+      "path": ["Optique", "Lentilles"],
+      "node_id": "optique_lentilles",
       "description": "Lentilles de contact correctrices",
       "parent_id": "optique",
       "level": 1,
-      "path": ["Optique", "Lentilles"],
       "is_leaf": false
     }},
     // Optique → Lentilles → Remboursées SS (leaf)
     {{
-      "node_id": "optique_lentilles_remboursees_ss",
       "name": "Remboursées par la S.S.",
+      "path": ["Optique", "Lentilles", "Remboursées par la S.S."],
+      "node_id": "optique_lentilles_remboursees_ss",
       "description": "Lentilles de contact remboursées par la Sécurité Sociale",
       "parent_id": "optique_lentilles",
       "level": 2,
-      "path": ["Optique", "Lentilles", "Remboursées par la S.S."],
       "is_leaf": true,
       "securite_sociale_coverage": "60% du tarif de convention"
     }},
     // Optique → Lentilles → Non remboursées SS (leaf)
     {{
-      "node_id": "optique_lentilles_non_remboursees_ss",
       "name": "Non remboursées par la S.S.",
+      "path": ["Optique", "Lentilles", "Non remboursées par la S.S."],
+      "node_id": "optique_lentilles_non_remboursees_ss",
       "description": "Lentilles de contact non remboursées par la Sécurité Sociale",
       "parent_id": "optique_lentilles",
       "level": 2,
-      "path": ["Optique", "Lentilles", "Non remboursées par la S.S."],
       "is_leaf": true,
       "securite_sociale_coverage": "Non remboursé par la S.S."
     }},
     // Optique → Chirurgie réfractive (leaf with conditions)
     {{
-      "node_id": "optique_chirurgie_refractive",
       "name": "Chirurgie réfractive",
+      "path": ["Optique", "Chirurgie réfractive"],
+      "node_id": "optique_chirurgie_refractive",
       "description": "Chirurgie de correction de la vue (laser, etc.)",
       "parent_id": "optique",
       "level": 1,
@@ -502,44 +515,44 @@ OUTPUT FORMAT
     }},
     // Top-level category: Hospitalisation
     {{
-      "node_id": "hospitalisation",
       "name": "Hospitalisation",
+      "path": ["Hospitalisation"],
+      "node_id": "hospitalisation",
       "description": "Frais d'hospitalisation et soins associés",
       "parent_id": "_root_",
       "level": 0,
-      "path": ["Hospitalisation"],
       "is_leaf": false
     }},
     // Hospitalisation → Frais de séjour (leaf)
     {{
-      "node_id": "hospitalisation_frais_sejour",
       "name": "Frais de séjour",
+      "path": ["Hospitalisation", "Frais de séjour"],
+      "node_id": "hospitalisation_frais_sejour",
       "description": "Frais de séjour hospitalier (médicaux et chirurgicaux)",
       "parent_id": "hospitalisation",
       "level": 1,
-      "path": ["Hospitalisation", "Frais de séjour"],
       "is_leaf": true,
       "securite_sociale_coverage": "80% du tarif de convention"
     }},
     // Hospitalisation → Chambre particulière (leaf)
     {{
-      "node_id": "hospitalisation_chambre_particuliere",
       "name": "Chambre particulière",
+      "path": ["Hospitalisation", "Chambre particulière"],
+      "node_id": "hospitalisation_chambre_particuliere",
       "description": "Supplément pour chambre particulière",
       "parent_id": "hospitalisation",
       "level": 1,
-      "path": ["Hospitalisation", "Chambre particulière"],
       "is_leaf": true,
       "securite_sociale_coverage": "Non remboursé par la S.S."
     }},
     // Hospitalisation → Forfait journalier (leaf)
     {{
-      "node_id": "hospitalisation_forfait_journalier",
       "name": "Forfait journalier",
+      "path": ["Hospitalisation", "Forfait journalier"],
+      "node_id": "hospitalisation_forfait_journalier",
       "description": "Forfait journalier hospitalier",
       "parent_id": "hospitalisation",
       "level": 1,
-      "path": ["Hospitalisation", "Forfait journalier"],
       "is_leaf": true,
       "securite_sociale_coverage": "100% BRSS"
     }}

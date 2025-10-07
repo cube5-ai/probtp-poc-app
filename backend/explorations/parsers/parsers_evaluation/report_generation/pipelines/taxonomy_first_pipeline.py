@@ -23,6 +23,7 @@ from typing import Any
 
 from dotenv import load_dotenv
 from langfuse import Langfuse, observe
+from langfuse._client.observe import F
 
 # Load environment variables
 load_dotenv()
@@ -82,6 +83,10 @@ from utils.comparison_document_builder import (
     ComparisonDocument,
     build_comparison_document,
     prepare_for_llm,
+)
+from utils.page_dimensions_generator import (
+    generate_page_dimensions_cache,
+    load_page_dimensions_cache,
 )
 from utils.document_loader import ParsedDocument
 from utils.gemini_client import generate_with_reasoning
@@ -264,12 +269,13 @@ class TaxonomyFirstPipeline:
         self.comparison_documents: dict[
             str, dict[str, Any]
         ] = {}  # category_id -> ComparisonDocument
-        self.analyses: dict[
+        self.leaf_analyses: dict[
             str, dict[str, Any]
-        ] = {}  # category_id -> TaxonomyFirstAnalysisOutput
+        ] = {}  # category_id -> TaxonomyFirstAnalysisOutput (leaf-level analyses)
         self.comparison_tables: dict[
             str, dict[str, Any]
         ] = {}  # category_id -> ComparisonTable
+        self.analyses: list[dict[str, Any]] = []  # Array of {category, annotated_table}
         self.general_summary: dict[str, Any] | None = None  # ComparisonSummary
         self.overall_recommendation: str | None = None
 
@@ -524,7 +530,7 @@ class TaxonomyFirstPipeline:
                     comparison_document=self.comparison_documents[category_id],
                 )
 
-                self.analyses[category_id] = analysis
+                self.leaf_analyses[category_id] = analysis
                 self._save_checkpoint(f"{category_id}_analysis", analysis)
 
                 print("   ✓ Analysis complete")
@@ -536,7 +542,7 @@ class TaxonomyFirstPipeline:
             for category in categories:
                 category_id = category["node_id"]
                 analysis = self._load_checkpoint(f"{category_id}_analysis")
-                self.analyses[category_id] = analysis
+                self.leaf_analyses[category_id] = analysis
 
         # Phase 5: Build comparison tables from analysis
         print(f"\n{'─' * 80}")
@@ -550,12 +556,13 @@ class TaxonomyFirstPipeline:
 
             # Parse analysis output
             analysis_output = TaxonomyFirstAnalysisOutput.model_validate(
-                self.analyses[category_id]
+                self.leaf_analyses[category_id]
             )
 
             comparison_table = build_table_from_analysis(
                 comparison_document=self.comparison_documents[category_id],
                 analysis=analysis_output,
+                taxonomy_nodes=all_nodes,  # Pass full taxonomy for hierarchy-aware table building
             )
 
             self.comparison_tables[category_id] = comparison_table
@@ -578,7 +585,7 @@ class TaxonomyFirstPipeline:
             # Generate markdown
             markdown = generate_comparison_markdown(
                 comparison_table=self.comparison_tables[category_id],
-                analysis=self.analyses[category_id],
+                analysis=self.leaf_analyses[category_id],
             )
 
             # Save markdown
@@ -594,13 +601,19 @@ class TaxonomyFirstPipeline:
             print("PHASE 7: General Summary Generation")
             print(f"{'─' * 80}")
             self.general_summary = await self._generate_summary(
-                all_analyses=list(self.analyses.values())
+                all_analyses=list(self.leaf_analyses.values())
             )
             self._save_checkpoint("general_summary", self.general_summary)
             print("   ✓ Summary generated")
         else:
             print("\n⏩ Skipping summary generation (loading from checkpoint)")
-            self.general_summary = self._load_checkpoint("general_summary")
+            summary_checkpoint = self.tmp_dir / "general_summary.json"
+            if summary_checkpoint.exists():
+                self.general_summary = self._load_checkpoint("general_summary")
+                print("   ✓ Summary loaded from checkpoint")
+            else:
+                print("   ⚠️  No summary checkpoint found, setting to None")
+                self.general_summary = None
 
         # Phase 8: Generate overall recommendation
         if not skip_recommendation:
@@ -608,12 +621,19 @@ class TaxonomyFirstPipeline:
             print("PHASE 8: Overall Recommendation Generation")
             print(f"{'─' * 80}")
             self.overall_recommendation = await self._generate_recommendation(
-                all_analyses=list(self.analyses.values())
+                all_analyses=list(self.leaf_analyses.values())
             )
+            self._save_checkpoint("general_recommendation", self.overall_recommendation)
             print(f"   ✓ Recommendation generated ({len(self.overall_recommendation)} chars)")
         else:
             print("\n⏩ Skipping recommendation generation")
-            self.overall_recommendation = ""
+            recommendation_checkpoint = self.tmp_dir / "general_recommendation.json"
+            if recommendation_checkpoint.exists():
+                self.overall_recommendation = self._load_checkpoint("general_recommendation")
+                print(f"   ✓ Recommendation loaded from checkpoint ({len(self.overall_recommendation)} chars)")
+            else:
+                print("   ⚠️  No recommendation checkpoint found, setting to empty string")
+                self.overall_recommendation = ""
 
         # Phase 9: Assemble final report
         print(f"\n{'─' * 80}")
@@ -630,8 +650,19 @@ class TaxonomyFirstPipeline:
             / f"comparison_report_ProBTP_{probtp_level_str}_vs_AXA_{axa_level_str}.md"
         )
 
+        # Create metadata (needed for category ordering)
+        metadata = create_report_metadata(
+            probtp_doc_name=self.probtp_doc.name,
+            axa_doc_name=self.axa_doc.name,
+            model=self.model_name,
+            probtp_levels=probtp_levels,
+            axa_levels=axa_levels,
+            categories=[cat["name"] for cat in categories],
+        )
+
         # Convert to markdown
         report_sections = []
+        annex_sections = []  # Store detailed comparisons for annex
 
         # Summary section
         if self.general_summary:
@@ -639,22 +670,56 @@ class TaxonomyFirstPipeline:
             report_sections.append("\n---\n")
 
         # Category sections (with comparison tables)
-        for category_id in [cat["node_id"] for cat in categories]:
-            if category_id in self.analyses:
+        # Use category order from metadata, not dict keys
+        category_names_ordered = metadata.get("Categories", "").split(", ")
+        category_map = {cat["name"]: cat["node_id"] for cat in categories}
+
+        from utils.json_formatters import detailed_leaf_comparisons_to_markdown
+
+        for category_name in category_names_ordered:
+            if not category_name or category_name not in category_map:
+                continue
+
+            category_id = category_map[category_name]
+
+            if category_id in self.leaf_analyses:
                 # Add category header (H2 level)
-                category_name = self.analyses[category_id].get("category", "Unknown")
                 report_sections.append(f"## {category_name}\n")
 
-                # Add comparison table (will have H3 category header inside it)
+                # Add comparison table with French header
                 if category_id in self.comparison_tables:
-                    report_sections.append("### Tableau de Comparaison\n")
-                    # comparison_table_to_markdown adds its own category header (H3), which we'll keep
-                    table_md = comparison_table_to_markdown(self.comparison_tables[category_id])
+                    report_sections.append(f"### Tableau Récapitulatif pour {category_name}\n")
+                    # Generate table without its own header
+                    table_md = comparison_table_to_markdown(self.comparison_tables[category_id], include_row_comparison=False)
+                    # Remove category header if present
+                    table_lines = table_md.split('\n')
+                    if table_lines and table_lines[0].startswith('### '):
+                        table_md = '\n'.join(table_lines[1:])
                     report_sections.append(table_md)
                     report_sections.append("\n")
 
+                    # Add link to annex
+                    # Create anchor-friendly ID (lowercase, replace spaces with hyphens)
+                    category_anchor = category_name.lower().replace(" ", "-").replace("é", "e").replace("è", "e")
+                    report_sections.append(f"*→ Voir [Comparaisons détaillées - {category_name}](#comparaisons-détaillées---{category_anchor}) en annexe*\n")
+                    report_sections.append("\n")
+
+                # Store detailed leaf comparisons for annex
+                if category_id in self.comparison_documents:
+                    detailed_md = detailed_leaf_comparisons_to_markdown(
+                        self.comparison_documents[category_id],
+                        self.leaf_analyses[category_id],
+                        self.comparison_tables[category_id],
+                    )
+                    # Add to annex sections with back-reference
+                    annex_sections.append(f"### Comparaisons Détaillées - {category_name}\n")
+                    annex_sections.append(detailed_md)
+                    annex_sections.append("\n")
+                    annex_sections.append(f"*← Retour au [Tableau récapitulatif](#{ category_name.lower().replace(' ', '-').replace('é', 'e').replace('è', 'e')})*\n")
+                    annex_sections.append("\n---\n")
+
                 # Add analysis sections (without the category header since we already added H2)
-                analysis_md = analysis_to_markdown(self.analyses[category_id])
+                analysis_md = analysis_to_markdown(self.leaf_analyses[category_id])
                 # Remove the first line (H2 category header) from analysis_to_markdown output
                 analysis_lines = analysis_md.split('\n')
                 if analysis_lines and analysis_lines[0].startswith('## '):
@@ -669,15 +734,11 @@ class TaxonomyFirstPipeline:
             report_sections.append(self.overall_recommendation)
             report_sections.append("\n")
 
-        # Metadata
-        metadata = create_report_metadata(
-            probtp_doc_name=self.probtp_doc.name,
-            axa_doc_name=self.axa_doc.name,
-            model=self.model_name,
-            probtp_levels=probtp_levels,
-            axa_levels=axa_levels,
-            categories=[cat["name"] for cat in categories],
-        )
+        # Add annex section at the end
+        if annex_sections:
+            report_sections.append("\n---\n")
+            report_sections.append("## Annexe: Comparaisons Détaillées\n")
+            report_sections.extend(annex_sections)
 
         # Build full report
         full_report = "---\n"
@@ -702,54 +763,158 @@ class TaxonomyFirstPipeline:
         json_output_path = final_report_path.with_suffix(".json")
         json_output_path_before = final_report_path.with_suffix(".before_bbox.json")
 
-        # Prepare JSON data
-        json_data = {
+        # Save version without bounding boxes first
+        analyses_array_before = []
+        for category in categories:
+            category_id = category["node_id"]
+            category_name = category["name"]
+            if category_id in self.comparison_tables:
+                analysis_entry = {
+                    "category": category_name,
+                    "annotated_table": self.comparison_tables[category_id],
+                }
+                if category_id in self.leaf_analyses:
+                    analysis_entry.update(self.leaf_analyses[category_id])
+                analyses_array_before.append(analysis_entry)
+
+        json_data_before = {
             "metadata": metadata,
             "taxonomy": self.taxonomy,
             "extractions": self.extractions,
             "comparison_documents": self.comparison_documents,
-            "comparison_tables": self.comparison_tables,
-            "analyses": self.analyses,
+            "leaf_analyses": self.leaf_analyses,
+            "analyses": analyses_array_before,
+            "comparison_tables": list(self.comparison_tables.values()),
             "general_summary": self.general_summary,
             "overall_recommendation": self.overall_recommendation,
         }
 
-        # Save version without bounding boxes
         with open(json_output_path_before, "w", encoding="utf-8") as f:
-            json.dump(json_data, f, ensure_ascii=False, indent=2)
+            json.dump(json_data_before, f, ensure_ascii=False, indent=2)
         print(f"   ✓ JSON data (before bbox) saved: {json_output_path_before.name}")
 
         # Enrich with bounding boxes
         if not skip_grounding:
             print("   → Adding bounding boxes from source documents...")
 
-            # Enrich comparison_tables array
-            enriched_comparison_tables = {}
-            for category_id, table in self.comparison_tables.items():
-                enriched_table = enrich_comparison_table_with_bounding_boxes(
-                    table,
-                    self.probtp_doc_path,
-                    self.axa_doc_path
+            # Generate/load page dimensions cache
+            page_dims_cache_path = self.output_dir / "page_dimensions.json"
+
+            if not page_dims_cache_path.exists():
+                print("   → Generating page dimensions cache...")
+
+                # Map JSON paths to PDF paths
+                # JSON: output/landing_ai_xtd/File #1 - ....json
+                # PDF: documents/File #1 - ....pdf
+                base_dir = self.probtp_doc_path.parent.parent.parent
+                documents_dir = base_dir / "documents"
+
+                probtp_pdf_path = documents_dir / f"{self.probtp_doc.name}.pdf"
+                axa_pdf_path = documents_dir / f"{self.axa_doc.name}.pdf"
+
+                # Build PDF paths map
+                pdf_paths = {
+                    self.probtp_doc.name: probtp_pdf_path,
+                    self.axa_doc.name: axa_pdf_path,
+                }
+
+                # Generate cache
+                page_dimensions_cache = generate_page_dimensions_cache(
+                    pdf_paths,
+                    page_dims_cache_path
                 )
-                enriched_comparison_tables[category_id] = enriched_table
+            else:
+                print("   → Loading page dimensions cache...")
+                page_dimensions_cache = load_page_dimensions_cache(page_dims_cache_path)
 
-            # Enrich analyses (if they have annotated_table)
-            enriched_analyses = {}
-            for category_id, analysis in self.analyses.items():
-                # Note: taxonomy_first analysis doesn't have annotated_table currently
-                # Just copy as-is
-                enriched_analyses[category_id] = analysis
+            # FIRST: Enrich comparison_tables dict entries
+            # This ensures both comparison_tables and analyses use the same enriched data
+            print("   → Enriching comparison_tables...")
+            all_grounding_stats = []
+            for category in categories:
+                category_id = category["node_id"]
+                if category_id in self.comparison_tables:
+                    enriched_table, grounding_stats = enrich_comparison_table_with_bounding_boxes(
+                        self.comparison_tables[category_id],
+                        self.probtp_doc_path,
+                        self.axa_doc_path,
+                        page_dimensions_cache
+                    )
+                    # Update in-place so both comparison_tables and analyses reference the same enriched data
+                    self.comparison_tables[category_id] = enriched_table
+                    all_grounding_stats.append(grounding_stats)
 
-            # Update json_data with enriched tables
-            json_data["comparison_tables"] = enriched_comparison_tables
-            json_data["analyses"] = enriched_analyses
+            # THEN: Build analyses array from already-enriched comparison_tables
+            print("   → Building analyses array from enriched tables...")
+            analyses_array = []
+            for category in categories:
+                category_id = category["node_id"]
+                category_name = category["name"]
+                if category_id in self.comparison_tables:
+                    # Now using enriched table (already has bounding boxes)
+                    analysis_entry = {
+                        "category": category_name,
+                        "annotated_table": self.comparison_tables[category_id],
+                    }
+                    # Add analysis output fields if available
+                    if category_id in self.leaf_analyses:
+                        analysis_entry.update(self.leaf_analyses[category_id])
+                    analyses_array.append(analysis_entry)
+            self.analyses = analyses_array
+
+            # Prepare final JSON data with enriched tables
+            json_data = {
+                "metadata": metadata,
+                "taxonomy": self.taxonomy,
+                "extractions": self.extractions,
+                "comparison_documents": self.comparison_documents,
+                "leaf_analyses": self.leaf_analyses,
+                "analyses": self.analyses,  # Now has enriched tables
+                "comparison_tables": list(self.comparison_tables.values()),  # Also enriched
+                "general_summary": self.general_summary,
+                "overall_recommendation": self.overall_recommendation,
+            }
 
             # Save enriched version
             with open(json_output_path, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, ensure_ascii=False, indent=2)
             print(f"   ✓ JSON data (with bounding boxes) saved: {json_output_path.name}")
+
+            # Save grounding statistics
+            grounding_stats_path = json_output_path.with_suffix(".grounding_stats.json")
+            with open(grounding_stats_path, "w", encoding="utf-8") as f:
+                json.dump(all_grounding_stats, f, ensure_ascii=False, indent=2)
+            print(f"   ✓ Grounding statistics saved: {grounding_stats_path.name}")
         else:
             print("   ⏩ Skipping bounding box enrichment")
+            # Build analyses array without enrichment
+            analyses_array = []
+            for category in categories:
+                category_id = category["node_id"]
+                category_name = category["name"]
+                if category_id in self.comparison_tables:
+                    analysis_entry = {
+                        "category": category_name,
+                        "annotated_table": self.comparison_tables[category_id],
+                    }
+                    if category_id in self.leaf_analyses:
+                        analysis_entry.update(self.leaf_analyses[category_id])
+                    analyses_array.append(analysis_entry)
+            self.analyses = analyses_array
+
+            # Prepare JSON data without enrichment
+            json_data = {
+                "metadata": metadata,
+                "taxonomy": self.taxonomy,
+                "extractions": self.extractions,
+                "comparison_documents": self.comparison_documents,
+                "leaf_analyses": self.leaf_analyses,
+                "analyses": self.analyses,
+                "comparison_tables": list(self.comparison_tables.values()),
+                "general_summary": self.general_summary,
+                "overall_recommendation": self.overall_recommendation,
+            }
+
             # Save without enrichment
             with open(json_output_path, "w", encoding="utf-8") as f:
                 json.dump(json_data, f, ensure_ascii=False, indent=2)
@@ -769,6 +934,7 @@ class TaxonomyFirstPipeline:
             "taxonomy": self.taxonomy,
             "extractions": self.extractions,
             "comparison_documents": self.comparison_documents,
+            "leaf_analyses": self.leaf_analyses,
             "analyses": self.analyses,
             "comparison_tables": self.comparison_tables,
             "general_summary": self.general_summary,
@@ -800,11 +966,12 @@ class TaxonomyFirstPipeline:
 
         response = await generate_with_reasoning(
             prompt=prompt,
-            model=self.model_name,
+            model="gemini-2.5-pro",
             thinking_budget=4096,
             temperature=0.2,
             response_mime_type="application/json",
             response_schema=ProBTPTaxonomy.model_json_schema(),
+            use_vertex=False,
         )
 
         taxonomy = json.loads(response)
@@ -851,7 +1018,7 @@ class TaxonomyFirstPipeline:
         """Extract values for a category from vendor document."""
         print(f"   Extracting {vendor} values for {category_name}...")
 
-        vendor_markdown = vendor_doc.get_full_markdown()
+        vendor_markdown = vendor_doc.get_markdown_with_expanded_tables()
         prompt = create_value_extraction_prompt(
             vendor=vendor,
             vendor_markdown=vendor_markdown,
@@ -880,11 +1047,12 @@ class TaxonomyFirstPipeline:
 
         response = await generate_with_reasoning(
             prompt=prompt,
-            model=self.model_name,
+            model="gemini-2.5-pro",
             thinking_budget=2048,
             temperature=0.1,
             response_mime_type="application/json",
             response_schema=CategoryValueExtraction.model_json_schema(),
+            use_vertex=False,
         )
 
         extraction = json.loads(response)
@@ -1091,13 +1259,13 @@ class TaxonomyFirstPipeline:
 
         return response
 
-    def _save_checkpoint(self, name: str, data: dict[str, Any]) -> None:
+    def _save_checkpoint(self, name: str, data: dict[str, Any] | str) -> None:
         """Save checkpoint to tmp directory."""
         checkpoint_path = self.tmp_dir / f"{name}.json"
         with open(checkpoint_path, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=2)
 
-    def _load_checkpoint(self, name: str) -> dict[str, Any]:
+    def _load_checkpoint(self, name: str) -> dict[str, Any] | str:
         """Load checkpoint from tmp directory."""
         checkpoint_path = self.tmp_dir / f"{name}.json"
         if not checkpoint_path.exists():
@@ -1145,6 +1313,8 @@ async def main():
         skip_extraction=False,
         skip_assembly=False,
         skip_analysis=False,
+        skip_summary=False,
+        skip_recommendation=False
     )
 
     print("\n✅ Pipeline complete!")

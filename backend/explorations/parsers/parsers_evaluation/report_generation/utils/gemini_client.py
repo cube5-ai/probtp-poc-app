@@ -3,10 +3,12 @@ import os
 from google import genai
 from google.genai.types import GenerateContentConfig, ThinkingConfig
 from openinference.instrumentation.google_genai import GoogleGenAIInstrumentor
-
+from dotenv import load_dotenv
+load_dotenv()
 
 # Global client instance (singleton pattern)
 _client_instance = None
+_client_instance_no_vertex = None
 
 
 def get_gemini_client() -> genai.Client:
@@ -27,6 +29,23 @@ def get_gemini_client() -> genai.Client:
     return _client_instance
 
 
+def get_gemini_client_no_vertex() -> genai.Client:
+    """Get or create singleton Gemini client with Vertex AI configuration."""
+    global _client_instance_no_vertex
+    if _client_instance is None:
+        # Optional: instrument with OpenInference for tracing
+        try:
+            GoogleGenAIInstrumentor().instrument()
+        except Exception:
+            pass  # Instrumentation is optional
+
+        _client_instance_no_vertex = genai.Client(
+            vertexai=False,
+            api_key=os.getenv("GEMINI_API_KEY"),
+        )
+    return _client_instance_no_vertex
+
+
 async def generate_with_reasoning(
     prompt: str,
     model: str = "gemini-2.5-flash",
@@ -35,6 +54,7 @@ async def generate_with_reasoning(
     max_output_tokens: int = 20000,
     response_mime_type: str = "text/plain",
     response_schema: dict | None = None,
+    use_vertex: bool = True,
 ) -> str:
     """
     Generate content with Gemini using reasoning mode (high thinking budget).
@@ -47,11 +67,14 @@ async def generate_with_reasoning(
         max_output_tokens: Maximum tokens to generate (default: 8000)
         response_mime_type: Response format (default: text/plain)
         response_schema: Optional Pydantic schema for structured JSON output
+        use_vertex: Use Vertex AI (True) or Gemini API (False) (default: True)
 
     Returns:
         Generated text response
     """
-    client = get_gemini_client()
+    # Create client based on use_vertex flag
+    client = get_gemini_client() if use_vertex else get_gemini_client_no_vertex()
+
 
     config_params = {
         "temperature": temperature,
@@ -67,9 +90,11 @@ async def generate_with_reasoning(
         config_params["response_mime_type"] = response_mime_type
 
     response = await client.aio.models.generate_content(
-        model=model,
+    model=model,
         contents=prompt,
         config=GenerateContentConfig(**config_params)
     )
+
+
 
     return getattr(response, "text", "").strip()

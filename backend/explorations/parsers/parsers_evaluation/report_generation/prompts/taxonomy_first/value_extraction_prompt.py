@@ -17,6 +17,9 @@ class VendorCondition(BaseModel):
     modified_coverage_source_cell_ids: list[str] | None = Field(None, description="Cell ID from source document that contains the modified coverage value. Or the modifier itself.")
 
 
+
+
+
 class ExtractedValue(BaseModel):
     """A coverage value extracted from vendor document for a specific taxonomy leaf."""
     leaf_id: str = Field(..., description="ID of taxonomy leaf this value corresponds to")
@@ -38,17 +41,36 @@ class ExtractedValue(BaseModel):
     # Traceability
     notes: str | None = Field(None, description="Extraction notes or ambiguities. Omit if straightforward.")
 
+    # Human-readable summary
+    display_text: str = Field(..., description="Concise 1-2 sentence human-readable summary synthesizing the coverage for user understanding. Include: base value, universal modifiers (frequency, cap, age restrictions, other universal conditions), vendor-specific conditions, and inline the content of vendor-specific footnotes that apply directly to this leaf/value (not just the footnote reference). Examples: '150€ tous les 2 ans (200€ si partenaire Sévéane)', '100% BR - MR, plafond 300€/an, sur prescription', '120€ par an, uniquement dans le réseau de partenaires agréés', 'Non couvert'.")
+
 
 class UnmappableItem(BaseModel):
     """A benefit found in vendor document that doesn't map to existing taxonomy."""
     description: str = Field(..., description="Description of the unmapped benefit")
+    reasoning: str = Field(..., description="Why this doesn't map to existing taxonomy and should be added")
+    suggested_category_id:   str = Field(..., description="Suggested category ID (snake_case)")
     suggested_path: list[str] = Field(..., description="Suggested taxonomy path for this item")
     suggested_parent_id: str = Field(..., description="Suggested parent ID (snake_case)")
     suggested_leaf_id: str = Field(..., description="Suggested leaf ID (snake_case)")
-    reasoning: str = Field(..., description="Why this doesn't map to existing taxonomy and should be added")
     coverage: str = Field(..., description="Coverage value for this item")
     # Traceability
     source_cell_ids: list[str] | None = Field(None, description="Cell ID from source document markdown where the value was extracted from. Generally will be a single cell ID but can be a list of cell IDs if the value spans multiple cells.")
+
+    # Universal modifiers (apply to any insurer)
+    frequency: str | None = Field(None, description="Frequency limit (e.g., 'par an', 'par œil', 'tous les 2 ans'). Omit if none.")
+    cap: str | None = Field(None, description="Coverage cap/plafond (e.g., 'plafond 300€', 'maximum 500€/an'). Omit if none.")
+    age_restriction: str | None = Field(None, description="Age limits (e.g., 'jusqu'à 16 ans', 'adultes uniquement'). Omit if none.")
+    other_universal_conditions: str | None = Field(None, description="Other universal conditions (e.g., 'sur prescription médicale', 'avec accord préalable SS'). Omit if none.")
+
+    # Vendor-specific modifiers (DO NOT belong in taxonomy)
+    vendor_conditions: list[VendorCondition] | None = Field(None, description="Vendor-specific modifiers. Omit if none.")
+
+    # Traceability
+    notes: str | None = Field(None, description="Extraction notes or ambiguities. Omit if straightforward.")
+
+    # Human-readable summary
+    display_text: str = Field(..., description="Concise 1-2 sentence human-readable summary synthesizing the coverage for user understanding. Include: base value, universal modifiers (frequency, cap, age restrictions, other universal conditions), vendor-specific conditions. Examples: '150€ tous les 2 ans', '100% BR - MR, plafond 300€/an, sur prescription', '120€ par an'.")
 
 
 class CategoryValueExtraction(BaseModel):
@@ -126,8 +148,12 @@ def format_taxonomy_tree(nodes: list[dict[str, Any]]) -> str:
 
         return lines
 
-    # Start from root (parent_id = None)
-    tree_lines = build_tree(None)
+    # Start from root (parent_id = "_root_" or None)
+    # Try "_root_" first (ProBTP convention), fallback to None
+    if "_root_" in children_map:
+        tree_lines = build_tree("_root_")
+    else:
+        tree_lines = build_tree(None)
     return "\n".join(tree_lines)
 
 
@@ -265,7 +291,8 @@ Extract as:
       "coverage_modifier": "+50€ (150€ total)",
       "modified_coverage_source_cell_ids": ["0-2v"]
     }}
-  ]
+  ],
+  "display_text": "100€ tous les 2 ans (150€ si partenaire opticien Sévéane)"
 }}
 ```
 
@@ -327,7 +354,17 @@ If {vendor} splits a taxonomy leaf into multiple scenarios (e.g., "Lentilles jou
 **Option B: Flag as unmappable extension**
 If the distinction is significant, suggest splitting the taxonomy leaf.
 
-**6. Policy Level Filtering**
+**6. Handling Vendor-Specific Footnotes in Display Text**
+
+When a coverage value has associated footnotes in the vendor document:
+
+**Determine Footnote Type:**
+- **Universal footnote**: Applies to any insurer (e.g., "*Sur prescription médicale", "*Accord préalable SS requis") → Extract to appropriate universal field (other_universal_conditions), include in display_text
+- **Vendor-specific footnote**: Specific to {vendor} (e.g., "*Uniquement réseau partenaire {vendor}", "*Offre 2024") → Extract to vendor_conditions, inline the footnote CONTENT (not reference) in display_text
+
+**Key Point**: The display_text should integrate the footnote content inline for easy human understanding, not just reference it as "voir note *".
+
+**7. Policy Level Filtering**
 
 **CRITICAL**: Only extract values for **{policy_level}**.
 
@@ -363,7 +400,11 @@ For each leaf in the taxonomy:
 3.2: Extract coverage value from **{policy_level}** column
 3.3: Extract universal conditions (frequency, cap, age, etc.)
 3.4: Extract vendor-specific conditions separately
-3.5: If benefit not found → coverage: "Non couvert"
+3.5: Check for footnotes that apply to this leaf/value:
+     - If universal footnote → add to appropriate universal field
+     - If vendor-specific footnote → add to vendor_conditions and inline content in display_text
+3.6: Synthesize display_text with all elements (coverage, universal modifiers, vendor conditions, footnote content)
+3.7: If benefit not found → coverage: "Non couvert"
 
 **STEP 4: Identify Unmappable Items (Current Category Only)**
 
@@ -379,6 +420,8 @@ Skip any benefits that clearly belong to other categories - they will be process
 ✓ All taxonomy leaves have extracted values (or "Non couvert")?
 ✓ Coverage values accurate?
 ✓ Universal conditions separated from vendor conditions?
+✓ Vendor-specific footnotes inlined in display_text (content, not just references)?
+✓ Display text synthesizes all importante elements for human understanding?
 ✓ Only **{policy_level}** extracted (not other levels)?
 ✓ Unmappable items flagged appropriately?
 
@@ -413,7 +456,8 @@ OUTPUT FORMAT
           "modified_coverage_source_cell_ids": ["0-2v"]
         }}
       ],
-      "notes": null
+      "notes": null,
+      "display_text": "150€ tous les 2 ans (200€ si partenaire opticien Sévéane)"
     }},
     {{
       "leaf_id": "optique_lunettes_verres_simples",
@@ -424,7 +468,8 @@ OUTPUT FORMAT
       "age_restriction": null,
       "other_universal_conditions": null,
       "vendor_conditions": null,
-      "notes": null
+      "notes": null,
+      "display_text": "100€/an, plafond 150€"
     }},
     {{
       "leaf_id": "optique_lentilles_remboursees_ss",
@@ -435,18 +480,26 @@ OUTPUT FORMAT
       "age_restriction": null,
       "other_universal_conditions": null,
       "vendor_conditions": null,
-      "notes": "AXA ne couvre pas les lentilles remboursées SS dans {policy_level}"
+      "notes": "AXA ne couvre pas les lentilles remboursées SS mais couvre les lentilles non remboursées SS (voir optique_lentilles_non_remboursees_ss)",
+      "display_text": "Non couvert (voir lentilles non remboursées SS)"
     }}
   ],
   "unmappable_items": [
     {{
       "description": "Chirurgie réfractive (LASIK)",
+      "suggested_category_id": "{category_id}",
       "suggested_path": ["Optique", "Chirurgie réfractive"],
       "suggested_parent_id": "optique",
       "suggested_leaf_id": "optique_chirurgie_refractive",
-      "reasoning": "AXA covers laser eye surgery but not in ProBTP taxonomy. Legitimate AXA-only benefit.",
+      "reasoning": "AXA couvre la chirurgie réfractive au laser mais ce n'est pas présent dans la taxonomie ProBTP. Avantage légitime propre à AXA.",
       "coverage": "300€",
-      "source_cell_ids": ["7-5L"]
+      "source_cell_ids": ["7-5L"],
+      "frequency": "/an",
+      "cap": "par an par beneficiaire",
+      "age_restriction": null,
+      "other_universal_conditions": null,
+      "vendor_conditions": null,
+      "notes": null
     }}
   ],
   "extraction_notes": "Extraction complete for {category_name}. 1 unmappable item flagged."

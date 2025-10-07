@@ -9,22 +9,22 @@ from pydantic import BaseModel, Field
 class CategoryStrengths(BaseModel):
     """Key strengths for a specific category."""
     category: str = Field(..., description="Category name (e.g., 'Soins courants', 'Dentaire')")
-    probtp_strengths: list[str] = Field(..., description="2-3 key ProBTP advantages in this category")
-    axa_strengths: list[str] = Field(..., description="2-3 key AXA advantages in this category")
+    probtp_strengths: list[str] = Field(..., description="2-3 key ProBTP advantages in this category. Keep each short and concise (one line each).")
+    axa_strengths: list[str] = Field(..., description="2-3 key AXA advantages in this category. Keep each short and concise (one line each).")
 
 
 class CategoryObjectiveAssessment(BaseModel):
     """Objective winner for a specific category."""
     category: str = Field(..., description="Category name")
     winner: str = Field(..., description="'probtp' or 'axa' - which contract is objectively better")
-    confidence: str = Field(..., description="'high', 'medium', or 'low'")
+    confidence: str = Field(..., description="How much better is the winner in this category? 'high', 'medium', or 'low'")
     key_reason: str = Field(..., description="One-sentence explanation of why this contract wins")
 
 
 class OverallComparison(BaseModel):
     """Overall comparison summary."""
     overall_winner: str = Field(..., description="'probtp', 'axa', or 'mixed' - overall assessment across all categories")
-    confidence: str = Field(..., description="'high', 'medium', or 'low'")
+    confidence: str = Field(..., description="How much better is the winner overall? 'high', 'medium', or 'low'")
     reasoning: str = Field(..., description="2-3 sentence explanation of overall assessment")
 
 
@@ -32,12 +32,11 @@ class ComparisonSummary(BaseModel):
     """High-level structured summary of the comparison across all categories."""
     key_differences: str = Field(..., description="2-3 paragraphs: High-level strategic differences between ProBTP and AXA")
     category_strengths: list[CategoryStrengths] = Field(..., description="Strengths breakdown by category")
-    probtp_overall_strengths: list[str] = Field(..., description="3-5 top ProBTP strengths across all categories")
-    axa_overall_strengths: list[str] = Field(..., description="3-5 top AXA strengths across all categories")
+    probtp_overall_strengths: list[str] = Field(..., description="3-4 top ProBTP strengths across all categories")
+    axa_overall_strengths: list[str] = Field(..., description="3-4 top AXA strengths across all categories")
     objective_evaluation: OverallComparison = Field(..., description="Brutally honest overall assessment")
     category_winners: list[CategoryObjectiveAssessment] = Field(..., description="Winner assessment for each category")
-    selling_points: list[str] = Field(..., description="5-7 key talking points for ProBTP salespeople")
-    target_customer_fit: str = Field(..., description="2-3 paragraphs: Which customer segments fit each contract best")
+    selling_points: list[str] = Field(..., description="4-6 key talking points for ProBTP salespeople")
 
 
 def create_summary_prompt(
@@ -237,7 +236,7 @@ This summary serves TWO distinct purposes:
 - Do NOT sugarcoat or spin to favor ProBTP
 - "mixed" is a valid and often correct answer for overall_winner
 - Acknowledge where AXA is objectively superior
-- Confidence should reflect actual certainty
+- Confidence should reflect how clear-cut the winner is, based on the difference intensity between the winner and the loser as a beneficiary would perceive it.
 
 **Synthesis Methodology:**
 
@@ -251,7 +250,7 @@ This summary serves TWO distinct purposes:
 5. **Determine overall strengths** by finding themes across categories
 6. **Make objective evaluation:**
    - Count category wins for each side
-   - Assess strength of wins (high confidence wins count more)
+   - Assess strength of wins (high gap intensity wins count more)
    - Consider customer base composition (most people need routine care frequently)
    - Determine if there's a clear overall winner or if it's truly mixed
 7. **Craft selling points** that work across categories and address competitive gaps

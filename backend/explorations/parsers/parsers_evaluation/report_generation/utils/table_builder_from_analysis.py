@@ -9,9 +9,98 @@ from typing import Any
 from prompts.taxonomy_first.analysis_prompt import TaxonomyFirstAnalysisOutput
 
 
+def _sort_leaves_by_hierarchy(
+    leaves: list[dict[str, Any]],
+    taxonomy_nodes: list[dict[str, Any]] | None = None
+) -> list[dict[str, Any]]:
+    """
+    Sort leaves hierarchically preserving original taxonomy order.
+
+    The taxonomy nodes are in depth-first order matching the source document structure.
+    We preserve this order and append unmappable items (taxonomy extensions) after their
+    parent's existing children.
+
+    Args:
+        leaves: List of leaf dicts from comparison document
+        taxonomy_nodes: Optional full taxonomy nodes for preserving original order
+
+    Returns:
+        Sorted list of leaves preserving taxonomy order
+    """
+    if not taxonomy_nodes:
+        # Fallback: simple alphabetical sorting by path
+        return sorted(leaves, key=lambda leaf: leaf.get("path", []))
+
+    # Build taxonomy order lookup: {leaf_id: order_index}
+    taxonomy_order = {}
+    for idx, node in enumerate(taxonomy_nodes):
+        if node.get("is_leaf", False):
+            taxonomy_order[node["node_id"]] = idx
+
+    # Split leaves into taxonomy leaves and unmappable extensions
+    taxonomy_leaves = []
+    unmappable_leaves = []
+
+    for leaf in leaves:
+        leaf_id = leaf.get("leaf_id", "")
+        is_unmappable = leaf.get("is_unmappable_probtp_only", False) or leaf.get("is_unmappable_axa_only", False)
+
+        if is_unmappable or leaf_id not in taxonomy_order:
+            unmappable_leaves.append(leaf)
+        else:
+            taxonomy_leaves.append(leaf)
+
+    # Sort taxonomy leaves by their original order
+    taxonomy_leaves.sort(key=lambda leaf: taxonomy_order.get(leaf.get("leaf_id", ""), float('inf')))
+
+    # Group unmappable leaves by parent path for insertion
+    unmappable_by_parent: dict[tuple[str, ...], list[dict[str, Any]]] = {}
+    for leaf in unmappable_leaves:
+        path = leaf.get("path", [])
+        parent_path = tuple(path[:-1]) if len(path) > 1 else ()
+        if parent_path not in unmappable_by_parent:
+            unmappable_by_parent[parent_path] = []
+        unmappable_by_parent[parent_path].append(leaf)
+
+    # Sort unmappable leaves within each parent group alphabetically
+    for parent_path in unmappable_by_parent:
+        unmappable_by_parent[parent_path].sort(key=lambda leaf: leaf.get("path", [])[-1] if leaf.get("path") else "")
+
+    # Merge: insert unmappable leaves after their parent's last taxonomy child
+    result = []
+    i = 0
+    while i < len(taxonomy_leaves):
+        current_leaf = taxonomy_leaves[i]
+        current_path = current_leaf.get("path", [])
+        current_parent_path = tuple(current_path[:-1]) if len(current_path) > 1 else ()
+
+        # Add current taxonomy leaf
+        result.append(current_leaf)
+
+        # Check if next leaf has different parent
+        next_has_different_parent = (
+            i + 1 >= len(taxonomy_leaves) or
+            tuple(taxonomy_leaves[i + 1].get("path", [])[:-1] if len(taxonomy_leaves[i + 1].get("path", [])) > 1 else ()) != current_parent_path
+        )
+
+        # If this is the last child of current parent, insert unmappable children
+        if next_has_different_parent and current_parent_path in unmappable_by_parent:
+            result.extend(unmappable_by_parent[current_parent_path])
+            del unmappable_by_parent[current_parent_path]  # Mark as inserted
+
+        i += 1
+
+    # Append any remaining unmappable leaves that didn't match a parent (root-level extensions)
+    for parent_path in sorted(unmappable_by_parent.keys()):
+        result.extend(unmappable_by_parent[parent_path])
+
+    return result
+
+
 def build_table_from_analysis(
     comparison_document: dict[str, Any],
     analysis: TaxonomyFirstAnalysisOutput,
+    taxonomy_nodes: list[dict[str, Any]] | None = None,
 ) -> dict[str, Any]:
     """
     Build ComparisonTable from comparison document and analysis results.
@@ -19,6 +108,7 @@ def build_table_from_analysis(
     Args:
         comparison_document: ComparisonDocument dict with full leaf data
         analysis: TaxonomyFirstAnalysisOutput with leaf comparisons
+        taxonomy_nodes: Optional full taxonomy nodes for enhanced hierarchy visualization
 
     Returns:
         ComparisonTable dict with Excel-style IDs, rowspan/colspan, and is_best annotations
@@ -27,6 +117,9 @@ def build_table_from_analysis(
     probtp_level = comparison_document.get("probtp_policy_level", "")
     axa_level = comparison_document.get("axa_policy_level", "")
     leaves = comparison_document.get("leaves", [])
+
+    # Sort leaves hierarchically preserving original taxonomy order
+    leaves = _sort_leaves_by_hierarchy(leaves, taxonomy_nodes)
 
     # Build leaf analysis lookup by leaf_id
     leaf_analysis_map = {
@@ -76,7 +169,7 @@ def build_table_from_analysis(
         rows.append(row)
 
     # Apply rowspan merging for hierarchical display
-    rows = _apply_rowspan_merging(rows, max_depth, total_columns, column_labels)
+    rows = _apply_rowspan_merging(rows, max_depth, total_columns, column_labels, taxonomy_nodes)
 
     # Assemble comparison table
     comparison_table = {
@@ -145,7 +238,7 @@ def _build_data_row(
 
     cells = []
 
-    # Dimension columns: fill path elements
+    # Dimension columns: fill path elements with hierarchy depth metadata
     for i in range(max_depth):
         cell_id = f"{column_labels[i]}{row_number}"
         cell_value = path[i] if i < len(path) else ""
@@ -153,6 +246,8 @@ def _build_data_row(
             "id": cell_id,
             "value": cell_value,
             "type": "dimension",
+            "hierarchy_level": i,  # 0 = top category, 1 = subcategory, etc.
+            "is_deepest_level": (i == len(path) - 1) if path else False,  # Marks leaf level
         }
         cells.append(cell)
 
@@ -184,6 +279,9 @@ def _build_data_row(
     )
     cells.append(axa_cell)
 
+    # Check if this is a new taxonomy leaf (discovered during extraction)
+    is_new_leaf = leaf.get("is_unmappable_probtp_only", False) or leaf.get("is_unmappable_axa_only", False)
+
     # Build row with enriched metadata
     row = {
         "row_number": row_number,
@@ -194,6 +292,7 @@ def _build_data_row(
         "securite_sociale_coverage": leaf.get("securite_sociale_coverage"),
         "is_unmappable_probtp_only": leaf.get("is_unmappable_probtp_only", False),
         "is_unmappable_axa_only": leaf.get("is_unmappable_axa_only", False),
+        "is_taxonomy_extension": is_new_leaf,  # Flag for visual styling
         "inherited_from_above": [None] * total_columns,
         "cells": cells,
     }
@@ -333,18 +432,21 @@ def _apply_rowspan_merging(
     max_depth: int,
     total_columns: int,
     column_labels: list[str],
+    taxonomy_nodes: list[dict[str, Any]] | None = None,
 ) -> list[dict[str, Any]]:
     """
     Apply rowspan merging to dimension columns for hierarchical display.
 
     When consecutive rows have the same value in a dimension column,
-    merge them into a single cell with rowspan.
+    merge them into a single cell with rowspan. Uses taxonomy structure
+    for smarter hierarchical merging.
 
     Args:
         rows: List of row dicts
         max_depth: Number of dimension columns
         total_columns: Total columns in table
         column_labels: Excel-style column labels
+        taxonomy_nodes: Optional full taxonomy nodes for hierarchy-aware merging
 
     Returns:
         Updated rows with rowspan applied and virtual cells added
@@ -355,10 +457,20 @@ def _apply_rowspan_merging(
     # Track merged cells: {(col_idx, start_row): span_count}
     merged_cells: dict[tuple[int, int], int] = {}
 
-    # Process dimension columns only (not data columns)
+    # Build taxonomy node lookup if available (for smarter merging)
+    taxonomy_lookup = {}
+    if taxonomy_nodes:
+        for node in taxonomy_nodes:
+            node_id = node.get("node_id")
+            if node_id:
+                taxonomy_lookup[node_id] = node
+
+    # Process dimension columns from left to right (respects hierarchy)
+    # Only merge cells when ALL ancestor columns are also merged
     for col_idx in range(max_depth):
         # Scan rows starting from row 2 (index 1, after header)
         current_value = None
+        current_path_prefix = None  # Track full path prefix for this column
         span_start_row = None
         span_count = 0
 
@@ -367,7 +479,32 @@ def _apply_rowspan_merging(
             cell = row["cells"][col_idx]
             cell_value = cell.get("value", "")
 
-            if cell_value == current_value and cell_value != "":
+            # Get full path for taxonomy-aware comparison
+            leaf_path = row.get("leaf_path", [])
+            path_prefix = tuple(leaf_path[:col_idx + 1]) if col_idx < len(leaf_path) else ()
+
+            # Check if ancestors are merged (only merge if parent columns are also merged)
+            can_merge = True
+            if col_idx > 0:
+                # Check if all ancestor columns (0 to col_idx-1) are merged
+                for ancestor_col_idx in range(col_idx):
+                    ancestor_cell = row["cells"][ancestor_col_idx]
+                    # If ancestor is virtual (has ref), it's merged - good
+                    # If ancestor has no ref and has same value as previous row, continue checking
+                    if "ref" not in ancestor_cell:
+                        # Not merged yet, so we can't merge this level either
+                        if row_idx > 1:
+                            prev_row = rows[row_idx - 1]
+                            prev_ancestor_cell = prev_row["cells"][ancestor_col_idx]
+                            if prev_ancestor_cell.get("value", "") != ancestor_cell.get("value", ""):
+                                can_merge = False
+                                break
+
+            # Merge logic: same value AND same path prefix (taxonomy-aware)
+            if (cell_value == current_value and
+                path_prefix == current_path_prefix and
+                cell_value != "" and
+                can_merge):
                 # Continue span
                 span_count += 1
             else:
@@ -377,6 +514,7 @@ def _apply_rowspan_merging(
 
                 # Start new potential span
                 current_value = cell_value
+                current_path_prefix = path_prefix
                 span_start_row = row_idx
                 span_count = 1
 

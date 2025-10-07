@@ -122,15 +122,22 @@ def build_comparison_document(
             )
         )
 
-    # Process ProBTP unmappable items
+    # Process ProBTP unmappable items (only those matching current category)
+    category_id = probtp_extraction.category_id
     if probtp_extraction.unmappable_items:
         for unmappable in probtp_extraction.unmappable_items:
-            leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="probtp"))
+            # Filter: only include unmappable items that belong to current category
+            unmappable_dict = unmappable if isinstance(unmappable, dict) else unmappable.model_dump()
+            if unmappable_dict.get("suggested_category_id") == category_id:
+                leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="probtp"))
 
-    # Process AXA unmappable items
+    # Process AXA unmappable items (only those matching current category)
     if axa_extraction.unmappable_items:
         for unmappable in axa_extraction.unmappable_items:
-            leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="axa"))
+            # Filter: only include unmappable items that belong to current category
+            unmappable_dict = unmappable if isinstance(unmappable, dict) else unmappable.model_dump()
+            if unmappable_dict.get("suggested_category_id") == category_id:
+                leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="axa"))
 
     return ComparisonDocument(
         category_id=probtp_extraction.category_id,
@@ -170,7 +177,13 @@ def _unmappable_to_leaf_comparison(unmappable: UnmappableItem | dict, vendor: st
         leaf_id=unmappable.suggested_leaf_id,
         coverage=unmappable.coverage,
         source_cell_ids=unmappable.source_cell_ids,
+        frequency=unmappable.frequency,
+        cap=unmappable.cap,
+        age_restriction=unmappable.age_restriction,
+        other_universal_conditions=unmappable.other_universal_conditions,
+        vendor_conditions=unmappable.vendor_conditions,
         notes=f"Unmappable: {unmappable.reasoning}",
+        display_text=unmappable.display_text,
     )
 
     return LeafComparison(
