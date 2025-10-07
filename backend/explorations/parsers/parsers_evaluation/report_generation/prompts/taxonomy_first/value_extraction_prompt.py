@@ -4,14 +4,17 @@ This prompt extracts actual coverage values from vendor documents, mapping them 
 the pre-defined taxonomy structure while separating vendor-specific conditions.
 """
 
+from typing import Any
+
 from pydantic import BaseModel, Field
 
 
 class VendorCondition(BaseModel):
     """A vendor-specific modifier that affects coverage."""
     condition_type: str = Field(..., description="Type: 'network_bonus', 'administrative_requirement', 'geographic_restriction', 'timing_restriction', etc.")
-    description: str = Field(..., description="Human-readable description (e.g., 'Si partenaire opticien Sévéane')")
+    description: str = Field(..., description="Human-readable description (e.g., 'Si partenaire xyz')")
     coverage_modifier: str | None = Field(None, description="How this changes coverage (e.g., '+20€', 'remboursement majoré'). Omit if not quantified.")
+    modified_coverage_source_cell_ids: list[str] | None = Field(None, description="Cell ID from source document that contains the modified coverage value. Or the modifier itself.")
 
 
 class ExtractedValue(BaseModel):
@@ -19,9 +22,9 @@ class ExtractedValue(BaseModel):
     leaf_id: str = Field(..., description="ID of taxonomy leaf this value corresponds to")
 
     # Core coverage information
-    coverage: str = Field(..., description="Coverage amount/percentage/yes-no (e.g., '100€', '150% BR', '100% BR - MR', 'Non couvert', 'Oui')")
+    coverage: str = Field(..., description="Base (unmodified) coverage amount/percentage/yes-no (e.g., '100€', '150% BR', '100% BR - MR', 'Non couvert', 'Oui') Can be a composite if the coverage is more granular than a leaf.")
     # Traceability
-    source_cell_ids: list[str] | None = Field(None, description="Cell IDs from source document markdown. Omit for now (grounding deferred).")
+    source_cell_ids: list[str] | None = Field(None, description="Cell ID from source document markdown where the value was extracted from. Generally will be a single cell ID but can be a list of cell IDs if the value spans multiple cells.")
 
     # Universal modifiers (apply to any insurer)
     frequency: str | None = Field(None, description="Frequency limit (e.g., 'par an', 'par œil', 'tous les 2 ans'). Omit if none.")
@@ -45,7 +48,7 @@ class UnmappableItem(BaseModel):
     reasoning: str = Field(..., description="Why this doesn't map to existing taxonomy and should be added")
     coverage: str = Field(..., description="Coverage value for this item")
     # Traceability
-    source_cell_ids: list[str] | None = Field(None, description="Cell IDs from source. Omit for now.")
+    source_cell_ids: list[str] | None = Field(None, description="Cell ID from source document markdown where the value was extracted from. Generally will be a single cell ID but can be a list of cell IDs if the value spans multiple cells.")
 
 
 class CategoryValueExtraction(BaseModel):
@@ -60,6 +63,74 @@ class CategoryValueExtraction(BaseModel):
     extraction_notes: str | None = Field(None, description="General notes about extraction (coverage gaps, ambiguities, etc.). Omit if none.")
 
 
+def format_taxonomy_tree(nodes: list[dict[str, Any]]) -> str:
+    """
+    Format a flat taxonomy into an ASCII tree structure with names and descriptions.
+
+    Args:
+        nodes: Flat list of taxonomy nodes with node_id, parent_id, name, description, is_leaf
+
+    Returns:
+        Formatted ASCII tree string
+    """
+    # Build parent-child mapping
+    children_map: dict[str | None, list[dict[str, Any]]] = {}
+    node_map: dict[str, dict[str, Any]] = {}
+
+    for node in nodes:
+        node_id = node["node_id"]
+        parent_id = node.get("parent_id")
+
+        node_map[node_id] = node
+
+        if parent_id not in children_map:
+            children_map[parent_id] = []
+        children_map[parent_id].append(node)
+
+    # Recursive function to build tree
+    def build_tree(node_id: str | None, prefix: str = "", is_last: bool = True) -> list[str]:
+        """Build tree recursively with proper ASCII art."""
+        lines = []
+
+        # Get children of this node
+        children = children_map.get(node_id, [])
+
+        for i, child in enumerate(children):
+            is_last_child = i == len(children) - 1
+
+            # Prepare connector
+            connector = "└─ " if is_last_child else "├─ "
+
+            # Prepare description
+            name = child["name"]
+            description = child.get("description", "")
+            is_leaf = child.get("is_leaf", False)
+
+            # Format line
+            if is_leaf:
+                line = f"{prefix}{connector}{name} - {description}"
+            else:
+                line = f"{prefix}{connector}{name} - {description}"
+
+            lines.append(line)
+
+            # Prepare prefix for children
+            if is_last_child:
+                child_prefix = prefix + "   "
+            else:
+                child_prefix = prefix + "│  "
+
+            # Recursively add children
+            child_lines = build_tree(child["node_id"], child_prefix, is_last_child)
+            lines.extend(child_lines)
+
+        return lines
+
+    # Start from root (parent_id = None)
+    tree_lines = build_tree(None)
+    return "\n".join(tree_lines)
+
+
 def create_value_extraction_prompt(
     vendor: str,
     vendor_markdown: str,
@@ -67,6 +138,7 @@ def create_value_extraction_prompt(
     category_name: str,
     policy_level: str,
     taxonomy_leaves: list[dict],
+    full_taxonomy_nodes: list[dict[str, Any]] | None = None,
     language: str = "French (France)"
 ) -> str:
     """
@@ -79,6 +151,7 @@ def create_value_extraction_prompt(
         category_name: Category display name (e.g., "Optique")
         policy_level: Policy level to extract (e.g., "S2", "Base Obligatoire")
         taxonomy_leaves: List of taxonomy leaf dicts for this category
+        full_taxonomy_nodes: Full flat taxonomy structure (for cross-category awareness)
         language: Output language
 
     Returns:
@@ -93,8 +166,23 @@ def create_value_extraction_prompt(
         for leaf in taxonomy_leaves
     ])
 
-    prompt = f"""You are an expert insurance analyst specializing in French health insurance (mutuelle) contracts. Your task is to extract COVERAGE VALUES from the {vendor} contract for the "{category_name}" category, mapping them to a pre-defined taxonomy.
+    # Format full taxonomy tree if provided
+    full_taxonomy_section = ""
+    if full_taxonomy_nodes:
+        full_taxonomy_tree = format_taxonomy_tree(full_taxonomy_nodes)
+        full_taxonomy_section = f"""
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+FULL TAXONOMY REFERENCE (All Categories)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
+The complete taxonomy structure is shown below for reference. This helps you identify when a benefit found in the document clearly belongs to a DIFFERENT category:
+
+{full_taxonomy_tree}
+
+"""
+
+    prompt = f"""You are an expert insurance analyst specializing in French health insurance (mutuelle) contracts. Your task is to extract COVERAGE VALUES from the {vendor} contract for the "{category_name}" category, mapping them to a pre-defined taxonomy.
+{full_taxonomy_section}
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 GOAL: EXTRACT VALUES MAPPED TO TAXONOMY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -103,9 +191,9 @@ GOAL: EXTRACT VALUES MAPPED TO TAXONOMY
 
 For the **{vendor} {policy_level}** policy levels, extract coverage values for the **"{category_name}"** category.
 
-**Your Reference Taxonomy:**
+**Current Category Taxonomy Leaves:**
 
-The taxonomy below defines what to extract. Each leaf represents a specific benefit that should have a coverage value:
+The leaves below define what to extract for THIS category. Each leaf represents a specific benefit that should have a coverage value:
 
 {leaves_formatted}
 
@@ -168,13 +256,14 @@ Extract as:
 {{
   "leaf_id": "optique_lunettes_monture",
   "coverage": "100€",
-  "frequency": "tous les 2 ans",
   "source_cell_ids": ["0-2v", "0-4E"],
+  "frequency": "tous les 2 ans",
   "vendor_conditions": [
     {{
       "condition_type": "network_bonus",
       "description": "Si partenaire opticien Sévéane",
-      "coverage_modifier": "+50€ (150€ total)"
+      "coverage_modifier": "+50€ (150€ total)",
+      "modified_coverage_source_cell_ids": ["0-2v"]
     }}
   ]
 }}
@@ -187,21 +276,27 @@ Extract as:
 **"50€ + 60€"** → Extract: `"110€"` (or keep as `"50€ + 60€"` if semantic meaning matters)
 **"Jusqu'à 100€"** → coverage: `"100€"`, cap: `"maximum 100€"`
 
-**4. Handling Unmappable Items**
+**4. Handling Unmappable Items & Cross-Category Awareness**
 
-If you find a benefit in {vendor} document that doesn't match any taxonomy leaf:
+When you find a benefit in the {vendor} document, follow this decision tree:
 
-**Step 1: Verify it truly doesn't map**
+**Step 1: Does it match a leaf in the CURRENT category ({category_name})?**
 - Check all leaves carefully - might be worded differently
 - Example: Taxonomy has "Verres simples", {vendor} has "Verres unifocaux" → SAME (map it)
+- If YES → Extract the value to that leaf
 
-**Step 2: If truly unmappable, flag it**
-- Add to `unmappable_items`
-- Suggest taxonomy path and leaf_id
-- Explain why it should be added
+**Step 2: Does it clearly belong to a DIFFERENT category?**
+- Use the full taxonomy reference above to check other categories
+- Example: Processing "Optique" but found "Chambre particulière" → clearly "Hospitalisation" → SKIP IT
+- If YES → SKIP this benefit (it will be processed when that category runs)
 
-**Example:**
-{vendor} has "Chirurgie réfractive (LASIK)" but taxonomy has no such leaf under Optique.
+**Step 3: Does it belong to CURRENT category but no leaf matches?**
+- The benefit semantically belongs to {category_name}
+- But none of the leaves match it
+- If YES → Flag as `unmappable_items` with suggested leaf
+
+**Example of Step 3:**
+Processing "Optique" category. {vendor} has "Chirurgie réfractive (LASIK)" but taxonomy has no such leaf under Optique.
 
 ```json
 {{
@@ -209,10 +304,12 @@ If you find a benefit in {vendor} document that doesn't match any taxonomy leaf:
   "suggested_path": ["Optique", "Chirurgie réfractive"],
   "suggested_parent_id": "optique",
   "suggested_leaf_id": "optique_chirurgie_refractive",
-  "reasoning": "AXA covers laser eye surgery but ProBTP taxonomy doesn't include it. This is a legitimate AXA-only benefit.",
+  "reasoning": "Clearly belongs to Optique category but no matching leaf exists. AXA covers laser eye surgery but ProBTP taxonomy doesn't include it.",
   "coverage": "300€"
 }}
 ```
+
+**Important:** Only flag items as unmappable if they belong to the CURRENT category. Don't flag items that belong to other categories.
 
 **5. Handling Multiple Values for Same Leaf**
 
@@ -268,11 +365,14 @@ For each leaf in the taxonomy:
 3.4: Extract vendor-specific conditions separately
 3.5: If benefit not found → coverage: "Non couvert"
 
-**STEP 4: Identify Unmappable Items**
+**STEP 4: Identify Unmappable Items (Current Category Only)**
 
-Scan {vendor} "{category_name}" section for benefits not in taxonomy:
-- Verify they truly don't map
-- Flag as unmappable with suggested taxonomy extension
+Scan {vendor} "{category_name}" section for benefits that:
+- Clearly belong to {category_name} category (not other categories)
+- Don't match any existing leaf in this category
+- Should be flagged as unmappable with suggested taxonomy extension
+
+Skip any benefits that clearly belong to other categories - they will be processed later.
 
 **STEP 5: Validate**
 
@@ -309,7 +409,8 @@ OUTPUT FORMAT
         {{
           "condition_type": "network_bonus",
           "description": "Si partenaire opticien Sévéane",
-          "coverage_modifier": "+50€ (200€ total)"
+          "coverage_modifier": "+50€ (200€ total)",
+          "modified_coverage_source_cell_ids": ["0-2v"]
         }}
       ],
       "notes": null
@@ -317,7 +418,7 @@ OUTPUT FORMAT
     {{
       "leaf_id": "optique_lunettes_verres_simples",
       "coverage": "100€",
-      "source_cell_ids": ["3-6v"],
+      "source_cell_ids": ["3-6C"],
       "frequency": "par an",
       "cap": "plafond 150€",
       "age_restriction": null,
@@ -345,7 +446,7 @@ OUTPUT FORMAT
       "suggested_leaf_id": "optique_chirurgie_refractive",
       "reasoning": "AXA covers laser eye surgery but not in ProBTP taxonomy. Legitimate AXA-only benefit.",
       "coverage": "300€",
-      "source_cell_ids": null
+      "source_cell_ids": ["7-5L"]
     }}
   ],
   "extraction_notes": "Extraction complete for {category_name}. 1 unmappable item flagged."

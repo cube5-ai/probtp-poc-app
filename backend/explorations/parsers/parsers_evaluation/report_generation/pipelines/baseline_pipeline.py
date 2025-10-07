@@ -12,7 +12,7 @@ from pathlib import Path
 # Add parent directory to path for imports
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from prompts.baseline_prompt import create_baseline_prompt
+from prompts.baseline.baseline_prompt import create_baseline_prompt
 from utils.document_loader import ParsedDocument, load_document_pair
 from utils.gemini_client import generate_with_reasoning
 from utils.report_formatter import create_report_metadata, save_report

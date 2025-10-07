@@ -171,7 +171,6 @@ def _integrate_unmappable_items(
             "path": path,
             "leaf_id": leaf_id,
             "description": item["description"],
-            "basis": None,
             "securite_sociale_coverage": None,
             "_unmappable_source": vendor,  # Track which vendor introduced this
         }

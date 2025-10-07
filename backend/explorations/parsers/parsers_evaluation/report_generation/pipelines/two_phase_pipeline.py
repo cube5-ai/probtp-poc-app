@@ -19,9 +19,9 @@ from langfuse import Langfuse, observe
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from dotenv import load_dotenv
-from prompts.alignment_prompt import ComparisonTable, create_alignment_prompt
-from prompts.analysis_prompt import AnalysisOutput, create_analysis_prompt
-from prompts.summary_prompt import ComparisonSummary, create_summary_prompt
+from prompts.two_phase.alignment_prompt import ComparisonTable, create_alignment_prompt
+from prompts.two_phase.analysis_prompt import AnalysisOutput, create_analysis_prompt
+from prompts.two_phase.summary_prompt import ComparisonSummary, create_summary_prompt
 from utils.document_loader import load_document_pair
 from utils.gemini_client import generate_with_reasoning
 from utils.json_formatters import analysis_to_markdown, summary_to_markdown
@@ -43,7 +43,7 @@ DEFAULT_CATEGORIES = [
     "Optique",
     "Soins Dentaires",
     "Audiologie",
-    "Médecines Douces",
+    "Prestations Complémentaires",
 ]
 
 # Category to ProBTP level type mapping
@@ -55,7 +55,7 @@ CATEGORY_LEVEL_MAPPING = {
     "Optique": "P",
     "Soins Dentaires": "P",
     "Audiologie": "P",
-    "Médecines Douces": "P",
+    "Prestations Complémentaires": "P",
 }
 
 
@@ -97,6 +97,7 @@ async def extract_comparison_table(
     category: str,
     probtp_levels: list[str] | None = None,
     axa_levels: list[str] | None = None,
+    other_categories: list[str] | None = None,
     language: str = "French (France)",
 ) -> dict:
     """
@@ -108,6 +109,7 @@ async def extract_comparison_table(
         category: Category to extract
         probtp_levels: ProBTP levels
         axa_levels: AXA levels
+        other_categories: List of other categories being processed separately
         language: Output language
 
     Returns:
@@ -121,6 +123,7 @@ async def extract_comparison_table(
             "category": category,
             "probtp_levels": probtp_levels,
             "axa_levels": axa_levels,
+            "other_categories": other_categories,
             "language": language,
             "phase": "alignment",
         }
@@ -132,6 +135,7 @@ async def extract_comparison_table(
         category=category,
         probtp_levels=probtp_levels,
         axa_levels=axa_levels,
+        other_categories=other_categories,
         language=language,
     )
 
@@ -147,11 +151,23 @@ async def extract_comparison_table(
     try:
         comparison_table = json.loads(response)
 
+        # Fix table structure using redundancy in schema
+        from utils.table_structure_fixer import fix_table_structure
+
+        fixed_table, structure_fixes = fix_table_structure(comparison_table)
+
+        if structure_fixes:
+            print(f"    ℹ Applied {len(structure_fixes)} structure fixes to comparison_table")
+            for fix in structure_fixes[:3]:  # Show first 3
+                print(f"      - {fix}")
+            if len(structure_fixes) > 3:
+                print(f"      ... and {len(structure_fixes) - 3} more")
+
         # Post-processing: Validate and fix table structure
         from utils.table_validator import validate_and_fix_table
 
         comparison_table, validation_log = await validate_and_fix_table(
-            table=comparison_table, category=category, max_iterations=3
+            table=fixed_table, category=category, max_iterations=3
         )
 
         # Track output metrics including validation
@@ -181,13 +197,16 @@ async def extract_comparison_table(
 
 @observe(name="phase_2_analysis")
 async def generate_category_analysis(
-    comparison_table: dict, language: str = "French (France)"
+    comparison_table: dict,
+    other_categories: list[str] | None = None,
+    language: str = "French (France)",
 ) -> dict:
     """
     Phase 2: Generate insights and analysis from comparison table.
 
     Args:
         comparison_table: ComparisonTable dict from Phase 1
+        other_categories: List of other categories being analyzed separately
         language: Output language
 
     Returns:
@@ -200,6 +219,7 @@ async def generate_category_analysis(
     langfuse.update_current_trace(
         metadata={
             "category": category,
+            "other_categories": other_categories,
             "language": language,
             "phase": "analysis",
             "input_row_count": len(comparison_table.get("rows", [])),
@@ -207,7 +227,9 @@ async def generate_category_analysis(
     )
 
     prompt = create_analysis_prompt(
-        comparison_table=comparison_table, language=language
+        comparison_table=comparison_table,
+        other_categories=other_categories,
+        language=language,
     )
 
     response = await generate_with_reasoning(
@@ -222,13 +244,25 @@ async def generate_category_analysis(
     try:
         analysis_data = json.loads(response)
 
+        # Fix table structure using redundancy in schema
+        from utils.table_structure_fixer import fix_table_structure
+
+        annotated_table = analysis_data.get("annotated_table", {})
+        fixed_table, structure_fixes = fix_table_structure(annotated_table)
+
+        if structure_fixes:
+            print(f"    ℹ Applied {len(structure_fixes)} structure fixes to annotated_table")
+            for fix in structure_fixes[:3]:  # Show first 3
+                print(f"      - {fix}")
+            if len(structure_fixes) > 3:
+                print(f"      ... and {len(structure_fixes) - 3} more")
+
         # Post-processing: Validate analysis preserves alignment structure
         from utils.analysis_validator import validate_and_fix_analysis_table
 
-        annotated_table = analysis_data.get("annotated_table", {})
         corrected_table, validation_log = await validate_and_fix_analysis_table(
             alignment_table=comparison_table,
-            analysis_table=annotated_table,
+            analysis_table=fixed_table,
             category=category,
         )
         analysis_data["annotated_table"] = corrected_table
@@ -416,6 +450,7 @@ async def process_single_category(
     axa_markdown: str,
     probtp_levels: list[str] | None,
     axa_levels: list[str] | None,
+    all_categories: list[str],
     language: str,
 ) -> tuple[str, dict, dict]:
     """
@@ -429,6 +464,7 @@ async def process_single_category(
         axa_markdown: AXA document markdown
         probtp_levels: ProBTP levels
         axa_levels: AXA levels
+        all_categories: List of all categories being processed
         language: Output language
 
     Returns:
@@ -442,6 +478,10 @@ async def process_single_category(
     if category_probtp_levels and category_probtp_levels != probtp_levels:
         print(f"  → Filtered ProBTP levels for {category}: {category_probtp_levels}")
 
+
+    # Compute other categories (for boundary guidance)
+    other_categories = [c for c in all_categories if c != category]
+
     # Phase 1: Extract comparison table (structured JSON)
     comparison_table = await extract_comparison_table(
         probtp_markdown=probtp_markdown,
@@ -449,12 +489,15 @@ async def process_single_category(
         category=category,
         probtp_levels=category_probtp_levels,
         axa_levels=axa_levels,
+        other_categories=other_categories,
         language=language,
     )
 
     # Phase 2: Generate analysis from structured table (structured JSON)
     analysis_data = await generate_category_analysis(
-        comparison_table=comparison_table, language=language
+        comparison_table=comparison_table,
+        other_categories=other_categories,
+        language=language
     )
 
     return (category, comparison_table, analysis_data)
@@ -542,6 +585,7 @@ async def generate_two_phase_report(
             axa_markdown=axa_markdown,
             probtp_levels=probtp_levels,
             axa_levels=axa_levels,
+            all_categories=categories,
             language=language,
         )
 
@@ -569,6 +613,7 @@ async def generate_two_phase_report(
                 axa_markdown=axa_markdown,
                 probtp_levels=probtp_levels,
                 axa_levels=axa_levels,
+                all_categories=categories,
                 language=language,
             )
             for i, category in enumerate(categories[1:], 2)
@@ -663,9 +708,50 @@ async def generate_two_phase_report(
         "general_summary": general_summary,
         "overall_recommendation": overall_recommendation,
     }
+
+    # Save version without bounding boxes
+    json_output_path_before = Path(output_path).with_suffix(".before_bbox.json")
+    with open(json_output_path_before, "w", encoding="utf-8") as f:
+        json.dump(json_data, f, ensure_ascii=False, indent=2)
+    print(f"  ✓ JSON data (before bbox) saved to {json_output_path_before}")
+
+    # Enrich with bounding boxes from source documents
+    print("  → Adding bounding boxes from source documents...")
+    from utils.bounding_box_enricher import enrich_comparison_table_with_bounding_boxes
+
+    # Enrich comparison_tables array
+    enriched_comparison_tables = []
+    for table in all_comparison_tables:
+        enriched_table = enrich_comparison_table_with_bounding_boxes(
+            table,
+            probtp_path,
+            axa_path
+        )
+        enriched_comparison_tables.append(enriched_table)
+
+    # Enrich analyses (annotated_table inside each analysis)
+    enriched_analyses = []
+    for analysis in all_analyses:
+        annotated_table = analysis.get("annotated_table")
+        if annotated_table:
+            enriched_table = enrich_comparison_table_with_bounding_boxes(
+                annotated_table,
+                probtp_path,
+                axa_path
+            )
+            enriched_analysis = {**analysis, "annotated_table": enriched_table}
+            enriched_analyses.append(enriched_analysis)
+        else:
+            enriched_analyses.append(analysis)
+
+    # Update json_data with enriched tables and analyses
+    json_data["comparison_tables"] = enriched_comparison_tables
+    json_data["analyses"] = enriched_analyses
+
+    # Save enriched version
     with open(json_output_path, "w", encoding="utf-8") as f:
         json.dump(json_data, f, ensure_ascii=False, indent=2)
-    print(f"  ✓ JSON data saved to {json_output_path}")
+    print(f"  ✓ JSON data (with bounding boxes) saved to {json_output_path}")
 
     print("\n" + "=" * 80)
     print("Pipeline Complete!")
