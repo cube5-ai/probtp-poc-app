@@ -486,7 +486,7 @@ const DemoComparisonResults = ({
                                     return (
                                       <th
                                         key={`header-${table.id}-${headerIndex}`}
-                                        className="border px-3 py-2 text-left font-semibold"
+                                        className="border px-3 py-2 text-center font-semibold align-middle"
                                       >
                                         {label}
                                       </th>
@@ -552,14 +552,6 @@ const DemoComparisonResults = ({
                                             : "—";
                                         const colSpan = cellRecord.colspan ?? 1;
                                         const rowSpan = cellRecord.rowspan ?? 1;
-                                        const rawType =
-                                          typeof cellRecord.type === "string"
-                                            ? cellRecord.type.trim()
-                                            : undefined;
-                                        const showType =
-                                          rawType &&
-                                          rawType.toLowerCase() !== "data";
-
                                         const cellBackgroundClass = cellIsGreen
                                           ? "bg-emerald-100 dark:bg-emerald-900/40 border-emerald-200 dark:border-emerald-700"
                                           : "";
@@ -570,8 +562,12 @@ const DemoComparisonResults = ({
                                           ? "text-muted-foreground"
                                           : "";
 
-                                        const cellContent = (
-                                          <div className="space-y-1">
+                                        const isDimensionCell =
+                                          cellRecord.type === "dimension" &&
+                                          cellRecord.id?.startsWith("A");
+
+                                        const cellContent = isDimensionCell ? (
+                                          <div className="[writing-mode:vertical-rl] rotate-180 inline-block whitespace-nowrap">
                                             <span
                                               className={cn(
                                                 "inline-block",
@@ -580,12 +576,16 @@ const DemoComparisonResults = ({
                                             >
                                               {displayValue}
                                             </span>
-                                            {showType ? (
-                                              <p className="text-xs uppercase text-muted-foreground">
-                                                {rawType}
-                                              </p>
-                                            ) : null}
                                           </div>
+                                        ) : (
+                                          <span
+                                            className={cn(
+                                              "inline-block",
+                                              textClass
+                                            )}
+                                          >
+                                            {displayValue}
+                                          </span>
                                         );
 
                                         const cellMetadata = (() => {
@@ -622,7 +622,7 @@ const DemoComparisonResults = ({
                                           <td
                                             key={`cell-${cell.id ?? cellIndex}`}
                                             className={cn(
-                                              "border px-3 py-2 align-top",
+                                              "border px-3 py-2 align-middle text-center",
                                               cellBackgroundClass,
                                               isClickable && "cursor-pointer"
                                             )}
