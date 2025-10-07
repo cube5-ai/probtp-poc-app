@@ -17,7 +17,6 @@
         "@radix-ui/react-slot": "^1.2.3",
         "@radix-ui/react-switch": "^1.2.6",
         "@radix-ui/react-tabs": "^1.1.13",
-        "@types/react-collapsible": "^2.3.1",
         "@types/react-pdf": "^7.0.0",
         "axios": "^1.12.2",
         "class-variance-authority": "^0.7.1",
@@ -30,7 +29,6 @@
         "next-themes": "^0.4.6",
         "nuqs": "^2.7.0",
         "react": "19.1.0",
-        "react-collapsible": "^2.10.0",
         "react-dom": "19.1.0",
         "react-pdf": "^10.1.0",
         "react-pdf-highlighter": "^8.0.0-rc.0",
@@ -455,8 +453,6 @@
     "@types/node": ["@types/node@20.19.19", "", { "dependencies": { "undici-types": "~6.21.0" } }, "sha512-pb1Uqj5WJP7wrcbLU7Ru4QtA0+3kAXrkutGiD26wUKzSMgNNaPARTUDQmElUXp64kh3cWdou3Q0C7qwwxqSFmg=="],
 
     "@types/react": ["@types/react@19.2.0", "", { "dependencies": { "csstype": "^3.0.2" } }, "sha512-1LOH8xovvsKsCBq1wnT4ntDUdCJKmnEakhsuoUSy6ExlHCkGP2hqnatagYTgFk6oeL0VU31u7SNjunPN+GchtA=="],
-
-    "@types/react-collapsible": ["@types/react-collapsible@2.3.1", "", { "dependencies": { "react-collapsible": "*" } }, "sha512-Ecq4EMmVZRL18w1P2HnC8zNaGIb2W1DJRY0FCvQNO5anl9hmYN0rqZ1zZ/ANcMnRfBeDWb+iTfoANR+alRjZ6w=="],
 
     "@types/react-dom": ["@types/react-dom@19.2.0", "", { "peerDependencies": { "@types/react": "^19.2.0" } }, "sha512-brtBs0MnE9SMx7px208g39lRmC5uHZs96caOJfTjFcYSLHNamvaSMfJNagChVNkup2SdtOxKX1FDBkRSJe1ZAg=="],
 
@@ -1053,8 +1049,6 @@
     "re-resizable": ["re-resizable@6.11.2", "", { "peerDependencies": { "react": "^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0", "react-dom": "^16.13.1 || ^17.0.0 || ^18.0.0 || ^19.0.0" } }, "sha512-2xI2P3OHs5qw7K0Ud1aLILK6MQxW50TcO+DetD9eIV58j84TqYeHoZcL9H4GXFXXIh7afhH8mv5iUCXII7OW7A=="],
 
     "react": ["react@19.1.0", "", {}, "sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg=="],
-
-    "react-collapsible": ["react-collapsible@2.10.0", "", { "peerDependencies": { "react": "~15 || ~16 || ~17 || ~18", "react-dom": "~15 || ~16 || ~17 || ~18" } }, "sha512-kEVsmlFfXBMTCnU5gwIv19MdmPAhbIPzz5Er37TiJSzRKS0IHrqAKQyQeHEmtoGIQMTcVI46FzE4z3NlVTx77A=="],
 
     "react-dom": ["react-dom@19.1.0", "", { "dependencies": { "scheduler": "^0.26.0" }, "peerDependencies": { "react": "^19.1.0" } }, "sha512-Xs1hdnE+DyKgeHJeJznQmYMIBG3TKIHJJT95Q58nHLSrElKlGQqDTR2HQ9fx5CN/Gk6Vh/kupBTDLU11/nDk/g=="],
 
