@@ -588,6 +588,36 @@ const DemoComparisonResults = ({
                                           </div>
                                         );
 
+                                        const cellMetadata = (() => {
+                                          // Priority 1: display_text (for future batches)
+                                          if (
+                                            "display_text" in cell &&
+                                            cell.display_text
+                                          ) {
+                                            return String(cell.display_text);
+                                          }
+                                          // Priority 2: display_value
+                                          if (
+                                            "display_value" in cell &&
+                                            cell.display_value
+                                          ) {
+                                            return String(cell.display_value);
+                                          }
+                                          // Priority 3: metadata.conditions
+                                          if (
+                                            "metadata" in cell &&
+                                            cell.metadata &&
+                                            typeof cell.metadata === "object" &&
+                                            "conditions" in cell.metadata &&
+                                            cell.metadata.conditions
+                                          ) {
+                                            return String(cell.metadata.conditions);
+                                          }
+                                          return null;
+                                        })();
+
+                                        const hasCellMetadata = cellMetadata !== null;
+
                                         return (
                                           <td
                                             key={`cell-${cell.id ?? cellIndex}`}
@@ -605,44 +635,15 @@ const DemoComparisonResults = ({
                                               handleCellClick(cell)
                                             }
                                           >
-                                            {isClickable &&
-                                            cellRecord.bounding_boxes &&
-                                            cellRecord.bounding_boxes.length >
-                                              0 ? (
+                                            {hasCellMetadata ? (
                                               <HoverCard openDelay={500}>
                                                 <HoverCardTrigger asChild>
                                                   {cellContent}
                                                 </HoverCardTrigger>
                                                 <HoverCardContent className="w-80">
-                                                  <div className="space-y-2">
-                                                    <h4 className="font-semibold">
-                                                      Source Document
-                                                    </h4>
-                                                    {cellRecord.bounding_boxes.map(
-                                                      (bbox, index) => {
-                                                        return (
-                                                          <div
-                                                            key={index}
-                                                            className="text-sm"
-                                                          >
-                                                            <p>
-                                                              <span className="font-semibold">
-                                                                File:
-                                                              </span>{" "}
-                                                              {bbox?.file_id ??
-                                                                "Unknown file"}
-                                                            </p>
-                                                            <p>
-                                                              <span className="font-semibold">
-                                                                Page:
-                                                              </span>{" "}
-                                                              {bbox.page}
-                                                            </p>
-                                                          </div>
-                                                        );
-                                                      }
-                                                    )}
-                                                  </div>
+                                                  <p className="text-sm">
+                                                    {cellMetadata}
+                                                  </p>
                                                 </HoverCardContent>
                                               </HoverCard>
                                             ) : (
