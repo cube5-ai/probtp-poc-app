@@ -385,11 +385,11 @@ const DemoComparisonResults = ({ data, onShare }: DemoComparisonResultsProps) =>
                                       const showType = rawType && rawType.toLowerCase() !== "data";
 
                                       const cellBackgroundClass = cellIsGreen
-                                        ? "bg-emerald-100"
+                                        ? "bg-emerald-100 dark:bg-emerald-900/40 border-emerald-200 dark:border-emerald-700"
                                         : "";
 
                                       const textClass = cellIsGreen
-                                        ? "text-emerald-700 font-semibold"
+                                        ? "text-emerald-700 dark:text-emerald-300 font-semibold"
                                         : displayValue === "—"
                                         ? "text-muted-foreground"
                                         : "";

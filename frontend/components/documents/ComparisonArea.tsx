@@ -30,6 +30,8 @@ interface ComparisonAreaProps {
   autoStartToken?: number;
 }
 
+const COMPARISON_STORAGE_KEY = "comparisonArea:demoResults";
+
 const ComparisonArea = ({
   selectedFiles,
   onStartComparison,
@@ -43,6 +45,36 @@ const ComparisonArea = ({
   const [comparisonProgress, setComparisonProgress] = useState(0);
   const [comparisonStep, setComparisonStep] = useState<string>("");
   const lastAutoStartTokenRef = useRef(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    try {
+      const stored = window.localStorage.getItem(COMPARISON_STORAGE_KEY);
+      if (!stored) return;
+
+      const parsed = JSON.parse(stored) as DemoComparisonResult;
+      setComparisonResults(parsed);
+      setComparisonProgress(100);
+      setComparisonStep("Comparison loaded from last session.");
+    } catch (error) {
+      console.error("Failed to load stored comparison results", error);
+      window.localStorage.removeItem(COMPARISON_STORAGE_KEY);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    if (comparisonResults) {
+      window.localStorage.setItem(
+        COMPARISON_STORAGE_KEY,
+        JSON.stringify(comparisonResults)
+      );
+    } else {
+      window.localStorage.removeItem(COMPARISON_STORAGE_KEY);
+    }
+  }, [comparisonResults]);
 
   const formatFileSize = (bytes: number): string => {
     if (bytes === 0) return "0 Bytes";
@@ -109,7 +141,9 @@ const ComparisonArea = ({
     handleStartComparison();
   }, [autoStartToken, handleStartComparison, selectedFiles]);
 
-  if (selectedFiles.length === 0) {
+  const hasSelectedFiles = selectedFiles.length > 0;
+
+  if (selectedFiles.length === 0 && !comparisonResults) {
     return (
       <div className={cn("flex-1 flex items-center justify-center", className)}>
         <div className="text-center space-y-4 max-w-md">
@@ -137,8 +171,9 @@ const ComparisonArea = ({
           <div>
             <h2 className="text-2xl font-bold">Document Comparison</h2>
             <p className="text-muted-foreground">
-              {selectedFiles.length} document
-              {selectedFiles.length !== 1 ? "s" : ""} selected for analysis
+              {hasSelectedFiles
+                ? `${selectedFiles.length} document${selectedFiles.length !== 1 ? "s" : ""} selected for analysis`
+                : "Showing the most recent comparison results"}
             </p>
           </div>
 
@@ -163,33 +198,35 @@ const ComparisonArea = ({
         </div>
 
         {/* Selected Files Overview */}
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {selectedFiles.map((file, index) => (
-            <Card key={file.id}>
-              <CardContent className="p-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FileText className="w-4 h-4 text-blue-600" />
+        {hasSelectedFiles && (
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {selectedFiles.map((file, index) => (
+              <Card key={file.id}>
+                <CardContent className="p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                      <FileText className="w-4 h-4 text-blue-600" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h4
+                        className="font-medium text-sm truncate"
+                        title={file.file.name}
+                      >
+                        Document {index + 1}
+                      </h4>
+                      <p className="text-xs text-muted-foreground truncate">
+                        {file.file.name}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {formatFileSize(file.file.size)}
+                      </p>
+                    </div>
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <h4
-                      className="font-medium text-sm truncate"
-                      title={file.file.name}
-                    >
-                      Document {index + 1}
-                    </h4>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {file.file.name}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatFileSize(file.file.size)}
-                    </p>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Comparison Process */}
