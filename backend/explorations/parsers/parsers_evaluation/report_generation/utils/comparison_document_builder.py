@@ -1,6 +1,6 @@
 """Build comparison document from taxonomy and value extractions.
 
-This module creates a leaf-based comparison document that pairs ProBTP and AXA values
+This module creates a leaf-based comparison document that pairs vendor A and vendor B values
 for each taxonomy leaf, making it suitable for LLM-based analysis.
 """
 
@@ -15,7 +15,7 @@ from prompts.taxonomy_first.value_extraction_prompt import (
 
 
 class LeafComparison(BaseModel):
-    """Comparison of ProBTP and AXA values for a single taxonomy leaf."""
+    """Comparison of vendor A and vendor B values for a single taxonomy leaf."""
 
     leaf_id: str = Field(..., description="Taxonomy leaf ID (e.g., 'optique_lunettes_monture')")
     path: list[str] = Field(..., description="Taxonomy path (e.g., ['Optique', 'Lunettes', 'Monture'])")
@@ -23,15 +23,15 @@ class LeafComparison(BaseModel):
     securite_sociale_coverage: str | None = Field(None, description="Social Security coverage (e.g., '0€', '70% BRSS')")
 
     # Full ExtractedValue objects with all fields
-    probtp: ExtractedValue | None = Field(None, description="ProBTP extracted value (None if not covered or unmappable)")
-    axa: ExtractedValue | None = Field(None, description="AXA extracted value (None if not covered or unmappable)")
+    vendor_a_ref: ExtractedValue | None = Field(None, description="Vendor A (reference) extracted value (None if not covered or unmappable)")
+    vendor_b: ExtractedValue | None = Field(None, description="Vendor B extracted value (None if not covered or unmappable)")
 
     # Flags for unmappable items
-    is_unmappable_probtp_only: bool = Field(
-        default=False, description="True if this leaf is from ProBTP unmappable items"
+    is_unmappable_vendor_a_ref_only: bool = Field(
+        default=False, description="True if this leaf is from vendor A unmappable items"
     )
-    is_unmappable_axa_only: bool = Field(
-        default=False, description="True if this leaf is from AXA unmappable items"
+    is_unmappable_vendor_b_only: bool = Field(
+        default=False, description="True if this leaf is from vendor B unmappable items"
     )
 
 
@@ -40,8 +40,10 @@ class ComparisonDocument(BaseModel):
 
     category_id: str = Field(..., description="Category ID (e.g., 'optique', 'hospitalisation')")
     category_name: str = Field(..., description="Category display name (e.g., 'Optique')")
-    probtp_policy_level: str = Field(..., description="ProBTP policy level (e.g., 'S2')")
-    axa_policy_level: str = Field(..., description="AXA policy level (e.g., 'Base Obligatoire')")
+    vendor_a_ref_policy_level: str = Field(..., description="Vendor A (reference) policy level (e.g., 'S2')")
+    vendor_b_policy_level: str = Field(..., description="Vendor B policy level (e.g., 'Base Obligatoire')")
+    vendor_a_ref_name: str = Field(..., description="Vendor A (reference) name (e.g., 'ProBTP')")
+    vendor_b_name: str = Field(..., description="Vendor B name (e.g., 'Generali')")
 
     leaves: list[LeafComparison] = Field(..., description="Leaf-based comparisons")
 
@@ -66,34 +68,38 @@ def _fix_extraction_dict(extraction: dict) -> dict:
 
 def build_comparison_document(
     category_taxonomy: dict,
-    probtp_extraction: CategoryValueExtraction | dict,
-    axa_extraction: CategoryValueExtraction | dict,
+    vendor_a_ref_extraction: CategoryValueExtraction | dict,
+    vendor_b_extraction: CategoryValueExtraction | dict,
+    vendor_a_ref_name: str,
+    vendor_b_name: str,
 ) -> ComparisonDocument:
     """
     Build comparison document from taxonomy and extractions.
 
     Args:
         category_taxonomy: Taxonomy category dict with leaves
-        probtp_extraction: ProBTP CategoryValueExtraction (or dict)
-        axa_extraction: AXA CategoryValueExtraction (or dict)
+        vendor_a_ref_extraction: Vendor A (reference) CategoryValueExtraction (or dict)
+        vendor_b_extraction: Vendor B CategoryValueExtraction (or dict)
+        vendor_a_ref_name: Vendor A name (e.g., "ProBTP")
+        vendor_b_name: Vendor B name (e.g., "Generali")
 
     Returns:
         ComparisonDocument with leaf-based comparisons
     """
     # Validate inputs if they're dicts (with backward compatibility fixes)
-    if isinstance(probtp_extraction, dict):
-        probtp_extraction = _fix_extraction_dict(probtp_extraction)
-        probtp_extraction = CategoryValueExtraction.model_validate(probtp_extraction)
-    if isinstance(axa_extraction, dict):
-        axa_extraction = _fix_extraction_dict(axa_extraction)
-        axa_extraction = CategoryValueExtraction.model_validate(axa_extraction)
+    if isinstance(vendor_a_ref_extraction, dict):
+        vendor_a_ref_extraction = _fix_extraction_dict(vendor_a_ref_extraction)
+        vendor_a_ref_extraction = CategoryValueExtraction.model_validate(vendor_a_ref_extraction)
+    if isinstance(vendor_b_extraction, dict):
+        vendor_b_extraction = _fix_extraction_dict(vendor_b_extraction)
+        vendor_b_extraction = CategoryValueExtraction.model_validate(vendor_b_extraction)
 
     # Create lookup maps for extracted values by leaf_id
-    probtp_map: dict[str, ExtractedValue] = {
-        ev.leaf_id: ev for ev in probtp_extraction.extracted_values
+    vendor_a_ref_map: dict[str, ExtractedValue] = {
+        ev.leaf_id: ev for ev in vendor_a_ref_extraction.extracted_values
     }
-    axa_map: dict[str, ExtractedValue] = {
-        ev.leaf_id: ev for ev in axa_extraction.extracted_values
+    vendor_b_map: dict[str, ExtractedValue] = {
+        ev.leaf_id: ev for ev in vendor_b_extraction.extracted_values
     }
 
     # Build leaf comparisons from taxonomy
@@ -102,11 +108,11 @@ def build_comparison_document(
     # Process taxonomy leaves
     for leaf in category_taxonomy.get("leaves", []):
         leaf_id = leaf["leaf_id"]
-        probtp_value = probtp_map.get(leaf_id)
-        axa_value = axa_map.get(leaf_id)
+        vendor_a_ref_value = vendor_a_ref_map.get(leaf_id)
+        vendor_b_value = vendor_b_map.get(leaf_id)
 
         # Skip if neither vendor has this leaf (shouldn't happen in taxonomy)
-        if not probtp_value and not axa_value:
+        if not vendor_a_ref_value and not vendor_b_value:
             continue
 
         leaf_comparisons.append(
@@ -115,35 +121,37 @@ def build_comparison_document(
                 path=leaf["path"],
                 description=leaf["description"],
                 securite_sociale_coverage=leaf.get("securite_sociale_coverage"),
-                probtp=probtp_value,
-                axa=axa_value,
-                is_unmappable_probtp_only=False,
-                is_unmappable_axa_only=False,
+                vendor_a_ref=vendor_a_ref_value,
+                vendor_b=vendor_b_value,
+                is_unmappable_vendor_a_ref_only=False,
+                is_unmappable_vendor_b_only=False,
             )
         )
 
-    # Process ProBTP unmappable items (only those matching current category)
-    category_id = probtp_extraction.category_id
-    if probtp_extraction.unmappable_items:
-        for unmappable in probtp_extraction.unmappable_items:
+    # Process vendor A unmappable items (only those matching current category)
+    category_id = vendor_a_ref_extraction.category_id
+    if vendor_a_ref_extraction.unmappable_items:
+        for unmappable in vendor_a_ref_extraction.unmappable_items:
             # Filter: only include unmappable items that belong to current category
             unmappable_dict = unmappable if isinstance(unmappable, dict) else unmappable.model_dump()
             if unmappable_dict.get("suggested_category_id") == category_id:
-                leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="probtp"))
+                leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="vendor_a_ref"))
 
-    # Process AXA unmappable items (only those matching current category)
-    if axa_extraction.unmappable_items:
-        for unmappable in axa_extraction.unmappable_items:
+    # Process vendor B unmappable items (only those matching current category)
+    if vendor_b_extraction.unmappable_items:
+        for unmappable in vendor_b_extraction.unmappable_items:
             # Filter: only include unmappable items that belong to current category
             unmappable_dict = unmappable if isinstance(unmappable, dict) else unmappable.model_dump()
             if unmappable_dict.get("suggested_category_id") == category_id:
-                leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="axa"))
+                leaf_comparisons.append(_unmappable_to_leaf_comparison(unmappable, vendor="vendor_b"))
 
     return ComparisonDocument(
-        category_id=probtp_extraction.category_id,
-        category_name=category_taxonomy.get("category_name", probtp_extraction.category_id),
-        probtp_policy_level=probtp_extraction.policy_level,
-        axa_policy_level=axa_extraction.policy_level,
+        category_id=vendor_a_ref_extraction.category_id,
+        category_name=category_taxonomy.get("category_name", vendor_a_ref_extraction.category_id),
+        vendor_a_ref_policy_level=vendor_a_ref_extraction.policy_level,
+        vendor_b_policy_level=vendor_b_extraction.policy_level,
+        vendor_a_ref_name=vendor_a_ref_name,
+        vendor_b_name=vendor_b_name,
         leaves=leaf_comparisons,
     )
 
@@ -154,7 +162,7 @@ def _unmappable_to_leaf_comparison(unmappable: UnmappableItem | dict, vendor: st
 
     Args:
         unmappable: UnmappableItem from extraction (or dict)
-        vendor: "probtp" or "axa"
+        vendor: "vendor_a_ref" or "vendor_b"
 
     Returns:
         LeafComparison with unmappable flags set
@@ -191,10 +199,10 @@ def _unmappable_to_leaf_comparison(unmappable: UnmappableItem | dict, vendor: st
         path=unmappable.suggested_path,
         description=unmappable.description,
         securite_sociale_coverage=None,
-        probtp=extracted_value if vendor == "probtp" else None,
-        axa=extracted_value if vendor == "axa" else None,
-        is_unmappable_probtp_only=(vendor == "probtp"),
-        is_unmappable_axa_only=(vendor == "axa"),
+        vendor_a_ref=extracted_value if vendor == "vendor_a_ref" else None,
+        vendor_b=extracted_value if vendor == "vendor_b" else None,
+        is_unmappable_vendor_a_ref_only=(vendor == "vendor_a_ref"),
+        is_unmappable_vendor_b_only=(vendor == "vendor_b"),
     )
 
 
@@ -216,25 +224,27 @@ def prepare_for_llm(comparison_doc: ComparisonDocument) -> dict:
             "path": leaf.path,
             "description": leaf.description,
             "securite_sociale_coverage": leaf.securite_sociale_coverage,
-            "is_unmappable_probtp_only": leaf.is_unmappable_probtp_only,
-            "is_unmappable_axa_only": leaf.is_unmappable_axa_only,
+            "is_unmappable_vendor_a_ref_only": leaf.is_unmappable_vendor_a_ref_only,
+            "is_unmappable_vendor_b_only": leaf.is_unmappable_vendor_b_only,
         }
 
         # Strip source_cell_ids from extracted values
-        if leaf.probtp:
-            probtp_dict = leaf.probtp.model_dump(exclude={"source_cell_ids"}, exclude_none=True)
-            leaf_dict["probtp"] = probtp_dict
+        if leaf.vendor_a_ref:
+            vendor_a_ref_dict = leaf.vendor_a_ref.model_dump(exclude={"source_cell_ids"}, exclude_none=True)
+            leaf_dict["vendor_a_ref"] = vendor_a_ref_dict
 
-        if leaf.axa:
-            axa_dict = leaf.axa.model_dump(exclude={"source_cell_ids"}, exclude_none=True)
-            leaf_dict["axa"] = axa_dict
+        if leaf.vendor_b:
+            vendor_b_dict = leaf.vendor_b.model_dump(exclude={"source_cell_ids"}, exclude_none=True)
+            leaf_dict["vendor_b"] = vendor_b_dict
 
         leaves_simplified.append(leaf_dict)
 
     return {
         "category_id": comparison_doc.category_id,
         "category_name": comparison_doc.category_name,
-        "probtp_policy_level": comparison_doc.probtp_policy_level,
-        "axa_policy_level": comparison_doc.axa_policy_level,
+        "vendor_a_ref_policy_level": comparison_doc.vendor_a_ref_policy_level,
+        "vendor_b_policy_level": comparison_doc.vendor_b_policy_level,
+        "vendor_a_ref_name": comparison_doc.vendor_a_ref_name,
+        "vendor_b_name": comparison_doc.vendor_b_name,
         "leaves": leaves_simplified,
     }

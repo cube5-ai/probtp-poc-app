@@ -17,12 +17,16 @@ def translate_to_french(text: str) -> str:
     # Translation mapping for common terms
     # Lower-case keys for case-insensitive matching
     translations = {
-        # Winner/loser enumerations
+        # Winner/loser enumerations (old format - keep for backwards compatibility)
         "probtp": "ProBTP",
         "axa": "AXA",
+        # New vendor-neutral format
+        "vendor_a_ref": "vendor_a_ref",  # Placeholder, will be replaced dynamically
+        "vendor_b": "vendor_b",          # Placeholder, will be replaced dynamically
         "equivalent": "Équivalent",
         "unknown": "Inconnu",
         "tie": "Égalité",
+        "mixed": "Mixte",
 
         # Confidence levels
         "high": "Élevée",
@@ -235,12 +239,18 @@ def comparison_table_to_markdown(table_data: dict, include_row_comparison: bool 
     return "\n".join(lines)
 
 
-def analysis_to_markdown(analysis_data: dict) -> str:
+def analysis_to_markdown(
+    analysis_data: dict,
+    vendor_a_ref_name: str = "Vendor A",
+    vendor_b_name: str = "Vendor B"
+) -> str:
     """
     Convert AnalysisOutput JSON to readable Markdown.
 
     Args:
         analysis_data: AnalysisOutput dict from analysis phase
+        vendor_a_ref_name: Name of vendor A (reference vendor)
+        vendor_b_name: Name of vendor B (competitor vendor)
 
     Returns:
         Markdown formatted analysis
@@ -298,36 +308,52 @@ def analysis_to_markdown(analysis_data: dict) -> str:
     objective = analysis_data.get("objective_assessment", {})
     if objective:
         lines.append("### Évaluation Objective\n")
-        winner = translate_to_french(objective.get('overall_winner', 'N/A'))
+        winner_raw = objective.get('overall_winner', 'N/A')
+
+        # Translate vendor keys to actual names
+        if winner_raw == "vendor_a_ref":
+            winner = vendor_a_ref_name
+        elif winner_raw == "vendor_b":
+            winner = vendor_b_name
+        else:
+            winner = translate_to_french(winner_raw)
+
         confidence = translate_to_french(objective.get('confidence', 'N/A'))
         reasoning = objective.get('reasoning', 'N/A')
         lines.append(f"**Gagnant:** {winner.upper()}")
         lines.append(f"**Confiance:** {confidence.capitalize()}")
         lines.append(f"\n**Raisonnement:** {reasoning}\n")
 
-        probtp_weak = objective.get("probtp_weaknesses", [])
-        if probtp_weak:
-            lines.append("**Faiblesses ProBTP:**")
-            for weakness in probtp_weak:
+        # Check for both old and new field names for backwards compatibility
+        vendor_a_ref_weak = objective.get("vendor_a_ref_weaknesses", objective.get("probtp_weaknesses", []))
+        if vendor_a_ref_weak:
+            lines.append(f"**Faiblesses {vendor_a_ref_name}:**")
+            for weakness in vendor_a_ref_weak:
                 lines.append(f"- {weakness}")
             lines.append("")
 
-        axa_weak = objective.get("axa_weaknesses", [])
-        if axa_weak:
-            lines.append("**Faiblesses AXA:**")
-            for weakness in axa_weak:
+        vendor_b_weak = objective.get("vendor_b_weaknesses", objective.get("axa_weaknesses", []))
+        if vendor_b_weak:
+            lines.append(f"**Faiblesses {vendor_b_name}:**")
+            for weakness in vendor_b_weak:
                 lines.append(f"- {weakness}")
             lines.append("")
 
     return "\n".join(lines)
 
 
-def summary_to_markdown(summary_data: dict) -> str:
+def summary_to_markdown(
+    summary_data: dict,
+    vendor_a_ref_name: str = "Vendor A",
+    vendor_b_name: str = "Vendor B"
+) -> str:
     """
     Convert ComparisonSummary JSON to readable Markdown.
 
     Args:
         summary_data: ComparisonSummary dict from summary phase
+        vendor_a_ref_name: Name of vendor A (reference vendor)
+        vendor_b_name: Name of vendor B (competitor vendor)
 
     Returns:
         Markdown formatted summary
@@ -345,22 +371,22 @@ def summary_to_markdown(summary_data: dict) -> str:
 
 
 
-    # Overall strengths
-    probtp_overall = summary_data.get("probtp_overall_strengths", [])
-    axa_overall = summary_data.get("axa_overall_strengths", [])
+    # Overall strengths - check both new and old field names
+    vendor_a_ref_overall = summary_data.get("vendor_a_ref_overall_strengths", summary_data.get("probtp_overall_strengths", []))
+    vendor_b_overall = summary_data.get("vendor_b_overall_strengths", summary_data.get("axa_overall_strengths", []))
 
-    if probtp_overall or axa_overall:
+    if vendor_a_ref_overall or vendor_b_overall:
         lines.append("## Forces Globales\n")
 
-        if probtp_overall:
-            lines.append("### ProBTP\n")
-            for strength in probtp_overall:
+        if vendor_a_ref_overall:
+            lines.append(f"### {vendor_a_ref_name}\n")
+            for strength in vendor_a_ref_overall:
                 lines.append(f"- {strength}")
             lines.append("")
 
-        if axa_overall:
-            lines.append("### AXA\n")
-            for strength in axa_overall:
+        if vendor_b_overall:
+            lines.append(f"### {vendor_b_name}\n")
+            for strength in vendor_b_overall:
                 lines.append(f"- {strength}")
             lines.append("")
 
@@ -368,7 +394,16 @@ def summary_to_markdown(summary_data: dict) -> str:
     objective_eval = summary_data.get("objective_evaluation", {})
     if objective_eval:
         lines.append("## Évaluation Objective Globale\n")
-        overall_winner = translate_to_french(objective_eval.get('overall_winner', 'N/A'))
+        winner_raw = objective_eval.get('overall_winner', 'N/A')
+
+        # Translate vendor keys to actual names
+        if winner_raw == "vendor_a_ref":
+            overall_winner = vendor_a_ref_name
+        elif winner_raw == "vendor_b":
+            overall_winner = vendor_b_name
+        else:
+            overall_winner = translate_to_french(winner_raw)
+
         confidence = translate_to_french(objective_eval.get('confidence', 'N/A'))
         reasoning = objective_eval.get('reasoning', 'N/A')
         lines.append(f"**Gagnant Global:** {overall_winner.upper()}")
@@ -376,26 +411,26 @@ def summary_to_markdown(summary_data: dict) -> str:
         lines.append(f"\n{reasoning}\n")
 
 
-    # Category strengths
+    # Category strengths - check both new and old field names
     category_strengths = summary_data.get("category_strengths", [])
     if category_strengths:
         lines.append("## Forces par Catégorie\n")
         for cat_strength in category_strengths:
             category = cat_strength.get("category", "")
-            probtp_strengths = cat_strength.get("probtp_strengths", [])
-            axa_strengths = cat_strength.get("axa_strengths", [])
+            vendor_a_ref_strengths = cat_strength.get("vendor_a_ref_strengths", cat_strength.get("probtp_strengths", []))
+            vendor_b_strengths = cat_strength.get("vendor_b_strengths", cat_strength.get("axa_strengths", []))
 
             lines.append(f"### {category}\n")
 
-            if probtp_strengths:
-                lines.append("**ProBTP:**")
-                for strength in probtp_strengths:
+            if vendor_a_ref_strengths:
+                lines.append(f"**{vendor_a_ref_name}:**")
+                for strength in vendor_a_ref_strengths:
                     lines.append(f"- {strength}")
                 lines.append("")
 
-            if axa_strengths:
-                lines.append("**AXA:**")
-                for strength in axa_strengths:
+            if vendor_b_strengths:
+                lines.append(f"**{vendor_b_name}:**")
+                for strength in vendor_b_strengths:
                     lines.append(f"- {strength}")
                 lines.append("")
 
@@ -416,7 +451,7 @@ def summary_to_markdown(summary_data: dict) -> str:
     # Selling points
     selling_points = summary_data.get("selling_points", [])
     if selling_points:
-        lines.append("## Arguments de Vente ProBTP\n")
+        lines.append(f"## Arguments de Vente {vendor_a_ref_name}\n")
         for point in selling_points:
             lines.append(f"- {point}")
         lines.append("")

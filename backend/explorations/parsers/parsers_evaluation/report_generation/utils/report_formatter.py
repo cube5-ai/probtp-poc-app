@@ -150,8 +150,12 @@ def format_comparison_table_markdown(
 
 
 def create_report_metadata(
-    probtp_doc_name: str,
-    axa_doc_name: str,
+    vendor_a_ref_doc_name: str,
+    vendor_b_doc_name: str,
+    vendor_a_ref_name: str,
+    vendor_b_name: str,
+    vendor_a_ref_levels: list[str] | None = None,
+    vendor_b_levels: list[str] | None = None,
     model: str = "gemini-2.5-pro",
     generation_time_seconds: float | None = None,
     **extra_metadata: Any
@@ -160,11 +164,15 @@ def create_report_metadata(
     Create metadata dict for report.
 
     Args:
-        probtp_doc_name: ProBTP document name
-        axa_doc_name: AXA document name
+        vendor_a_ref_doc_name: Vendor A (reference) document name
+        vendor_b_doc_name: Vendor B document name
+        vendor_a_ref_name: Vendor A name (e.g., "ProBTP")
+        vendor_b_name: Vendor B name (e.g., "Generali")
+        vendor_a_ref_levels: Vendor A policy levels
+        vendor_b_levels: Vendor B policy levels
         model: Model used for generation
         generation_time_seconds: Time taken to generate report
-        **extra_metadata: Additional metadata fields (e.g., probtp_levels, axa_levels, categories)
+        **extra_metadata: Additional metadata fields (e.g., categories)
 
     Returns:
         Metadata dictionary
@@ -172,9 +180,15 @@ def create_report_metadata(
     metadata = {
         "Generated": datetime.now().isoformat(),
         "Model": model,
-        "ProBTP Document": probtp_doc_name,
-        "AXA Document": axa_doc_name,
+        "Vendor A (Reference)": f"{vendor_a_ref_name} ({vendor_a_ref_doc_name})",
+        "Vendor B": f"{vendor_b_name} ({vendor_b_doc_name})",
     }
+
+    if vendor_a_ref_levels:
+        metadata["Vendor A Levels"] = ", ".join(vendor_a_ref_levels)
+
+    if vendor_b_levels:
+        metadata["Vendor B Levels"] = ", ".join(vendor_b_levels)
 
     if generation_time_seconds is not None:
         metadata["Generation Time"] = f"{generation_time_seconds:.2f}s"

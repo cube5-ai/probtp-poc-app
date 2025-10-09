@@ -1,7 +1,7 @@
 """Taxonomy-First Pipeline for Insurance Contract Comparison.
 
 This pipeline implements a taxonomy-first approach:
-1. Extract universal taxonomy from ProBTP (reference document)
+1. Extract universal taxonomy from vendor A (reference document)
 2. Extract values from both vendors mapped to taxonomy (loop per category)
 3. Assemble comparison tables programmatically
 4. Generate analysis and reports
@@ -11,6 +11,7 @@ Key benefits:
 - Clear separation of universal vs. vendor-specific
 - Modular checkpointing for debugging
 - Selective re-run capability
+- Vendor-neutral architecture for flexible comparisons
 """
 
 import asyncio
@@ -71,6 +72,7 @@ from prompts.taxonomy_first.summary_prompt import (
 from prompts.taxonomy_first.taxonomy_extraction_prompt import (
     ProBTPTaxonomy,
     create_taxonomy_extraction_prompt,
+    ExtractionMetadata,
 )
 from prompts.taxonomy_first.value_extraction_prompt import (
     CategoryValueExtraction,
@@ -217,18 +219,20 @@ class TaxonomyFirstPipeline:
     Taxonomy-first pipeline for insurance contract comparison.
 
     Workflow:
-    1. Extract ProBTP taxonomy (reference structure)
-    2. For each category: extract values from ProBTP and AXA
+    1. Extract taxonomy from vendor A (reference structure)
+    2. For each category: extract values from vendor A and vendor B
     3. Assemble comparison tables programmatically
     4. Generate analysis and markdown reports
     """
 
     def __init__(
         self,
-        probtp_doc_path: str | Path,
-        axa_doc_path: str | Path,
+        vendor_a_ref_doc_path: str | Path,
+        vendor_b_doc_path: str | Path,
+        vendor_a_ref_name: str,
+        vendor_b_name: str,
         output_dir: str | Path,
-        model_name: str = "gemini-2.5-flash",
+        model_name: str = "gemini-2.5-pro",
         categories_to_process: list[str] | None = None,
         language: str = "French (France)",
     ):
@@ -236,20 +240,27 @@ class TaxonomyFirstPipeline:
         Initialize pipeline.
 
         Args:
-            probtp_doc_path: Path to ProBTP parsed document JSON
-            axa_doc_path: Path to AXA parsed document JSON
+            vendor_a_ref_doc_path: Path to vendor A (reference) parsed document JSON
+            vendor_b_doc_path: Path to vendor B parsed document JSON
+            vendor_a_ref_name: Name of vendor A (reference), e.g., "ProBTP"
+            vendor_b_name: Name of vendor B, e.g., "Generali"
             output_dir: Output directory for results
-            model_name: Google GenAI model name
+            model_name: Google GenAI model name (default: gemini-2.5-pro)
             categories_to_process: List of category IDs to process (e.g., ["hospitalisation", "optique"])
                                   If None, processes all categories found in taxonomy
             language: Output language for reports
         """
-        self.probtp_doc_path = Path(probtp_doc_path)
-        self.axa_doc_path = Path(axa_doc_path)
-        self.output_dir = Path(output_dir)
+        self.vendor_a_ref_doc_path = Path(vendor_a_ref_doc_path)
+        self.vendor_b_doc_path = Path(vendor_b_doc_path)
+        self.vendor_a_ref_name = vendor_a_ref_name
+        self.vendor_b_name = vendor_b_name
         self.model_name = model_name
         self.categories_to_process = categories_to_process
         self.language = language
+
+        # Create vendor-specific output directory
+        vendor_folder_name = f"{vendor_a_ref_name}_vs_{vendor_b_name}"
+        self.output_dir = Path(output_dir) / vendor_folder_name
 
         # Create output directories
         self.output_dir.mkdir(parents=True, exist_ok=True)
@@ -258,14 +269,14 @@ class TaxonomyFirstPipeline:
 
         # Load documents
         print("Loading documents...")
-        self.probtp_doc = ParsedDocument(self.probtp_doc_path)
-        self.axa_doc = ParsedDocument(self.axa_doc_path)
+        self.vendor_a_ref_doc = ParsedDocument(self.vendor_a_ref_doc_path)
+        self.vendor_b_doc = ParsedDocument(self.vendor_b_doc_path)
 
         # Pipeline state
         self.taxonomy: dict[str, Any] | None = None
         self.extractions: dict[
             str, dict[str, Any]
-        ] = {}  # category_id -> {probtp: ..., axa: ...}
+        ] = {}  # category_id -> {vendor_a_ref: ..., vendor_b: ...}
         self.comparison_documents: dict[
             str, dict[str, Any]
         ] = {}  # category_id -> ComparisonDocument
@@ -282,8 +293,8 @@ class TaxonomyFirstPipeline:
     @observe(name="taxonomy_first_pipeline")
     async def run(
         self,
-        probtp_levels: list[str] | None = None,
-        axa_levels: list[str] | None = None,
+        vendor_a_ref_levels: list[str] | None = None,
+        vendor_b_levels: list[str] | None = None,
         skip_taxonomy: bool = False,
         skip_extraction: bool = False,
         skip_assembly: bool = False,
@@ -296,8 +307,8 @@ class TaxonomyFirstPipeline:
         Run the complete pipeline.
 
         Args:
-            probtp_levels: ProBTP policy levels to extract (will be filtered per category)
-            axa_levels: AXA policy levels to extract
+            vendor_a_ref_levels: Vendor A (reference) policy levels to extract (will be filtered per category)
+            vendor_b_levels: Vendor B policy levels to extract
             skip_taxonomy: Skip taxonomy extraction (load from checkpoint)
             skip_extraction: Skip value extraction (load from checkpoint)
             skip_assembly: Skip table assembly (load from checkpoint)
@@ -314,10 +325,12 @@ class TaxonomyFirstPipeline:
             name="taxonomy_first_pipeline",
             metadata={
                 "pipeline_type": "taxonomy_first",
-                "probtp_document": self.probtp_doc.name,
-                "axa_document": self.axa_doc.name,
-                "probtp_levels": probtp_levels,
-                "axa_levels": axa_levels,
+                "vendor_a_ref_name": self.vendor_a_ref_name,
+                "vendor_a_ref_document": self.vendor_a_ref_doc.name,
+                "vendor_b_name": self.vendor_b_name,
+                "vendor_b_document": self.vendor_b_doc.name,
+                "vendor_a_ref_levels": vendor_a_ref_levels,
+                "vendor_b_levels": vendor_b_levels,
                 "categories_to_process": self.categories_to_process,
                 "skip_taxonomy": skip_taxonomy,
                 "skip_extraction": skip_extraction,
@@ -328,10 +341,10 @@ class TaxonomyFirstPipeline:
         print(f"\n{'=' * 80}")
         print("TAXONOMY-FIRST PIPELINE")
         print(f"{'=' * 80}")
-        print(f"ProBTP document: {self.probtp_doc.name}")
-        print(f"AXA document: {self.axa_doc.name}")
-        print(f"ProBTP levels: {probtp_levels}")
-        print(f"AXA levels: {axa_levels}")
+        print(f"Vendor A (Reference): {self.vendor_a_ref_name} - {self.vendor_a_ref_doc.name}")
+        print(f"Vendor B: {self.vendor_b_name} - {self.vendor_b_doc.name}")
+        print(f"Vendor A levels: {vendor_a_ref_levels}")
+        print(f"Vendor B levels: {vendor_b_levels}")
         print(f"Output directory: {self.output_dir}")
         print(f"{'=' * 80}\n")
 
@@ -391,81 +404,93 @@ class TaxonomyFirstPipeline:
                     all_nodes, category_id
                 )
 
-                # Filter ProBTP levels for this category
-                category_probtp_levels = filter_probtp_levels_for_category(
-                    category_name, probtp_levels
+                # Filter vendor A levels for this category
+                category_vendor_a_ref_levels = filter_probtp_levels_for_category(
+                    category_name, vendor_a_ref_levels
                 )
 
                 category_data.append({
                     "id": category_id,
                     "name": category_name,
                     "leaves": category_leaves,
-                    "probtp_levels": category_probtp_levels,
+                    "vendor_a_ref_levels": category_vendor_a_ref_levels,
                 })
 
                 print(f"\n📦 Category: {category_name} ({category_id})")
                 print(f"   Leaves: {len(category_leaves)}")
-                if category_probtp_levels and category_probtp_levels != probtp_levels:
+                if category_vendor_a_ref_levels and category_vendor_a_ref_levels != vendor_a_ref_levels:
                     print(
-                        f"   → Filtered ProBTP levels for {category_name}: {category_probtp_levels}"
+                        f"   → Filtered vendor A levels for {category_name}: {category_vendor_a_ref_levels}"
                     )
 
-            # Extract all ProBTP values first (enables prompt caching)
+            # Extract all vendor A values first (enables prompt caching)
             print(f"\n{'─' * 40}")
-            print("Extracting ProBTP values (all categories)")
+            print(f"Extracting {self.vendor_a_ref_name} values (all categories)")
             print(f"{'─' * 40}")
             for cat_data in category_data:
-                probtp_extraction = await self._extract_values(
-                    vendor="ProBTP",
-                    vendor_doc=self.probtp_doc,
-                    category_id=cat_data["id"],
-                    category_name=cat_data["name"],
-                    category_leaves=cat_data["leaves"],
-                    policy_levels=cat_data["probtp_levels"],
-                    full_taxonomy_nodes=all_nodes,
-                )
-                self._save_checkpoint(f"{cat_data['id']}_probtp_values", probtp_extraction)
+                checkpoint_name = f"{cat_data['id']}_vendor_a_ref_values"
+                checkpoint_path = self.tmp_dir / f"{checkpoint_name}.json"
+
+                if checkpoint_path.exists():
+                    print(f"   ⏩ {cat_data['name']}: Loading from checkpoint")
+                    vendor_a_ref_extraction = self._load_checkpoint(checkpoint_name)
+                else:
+                    vendor_a_ref_extraction = await self._extract_values(
+                        vendor=self.vendor_a_ref_name,
+                        vendor_doc=self.vendor_a_ref_doc,
+                        category_id=cat_data["id"],
+                        category_name=cat_data["name"],
+                        category_leaves=cat_data["leaves"],
+                        policy_levels=cat_data["vendor_a_ref_levels"],
+                        full_taxonomy_nodes=all_nodes,
+                    )
+                    self._save_checkpoint(checkpoint_name, vendor_a_ref_extraction)
+                    print(
+                        f"   ✓ {cat_data['name']}: {len(vendor_a_ref_extraction['extracted_values'])} leaves"
+                    )
 
                 if cat_data["id"] not in self.extractions:
                     self.extractions[cat_data["id"]] = {}
-                self.extractions[cat_data["id"]]["probtp"] = probtp_extraction
+                self.extractions[cat_data["id"]]["vendor_a_ref"] = vendor_a_ref_extraction
 
-                print(
-                    f"   ✓ {cat_data['name']}: {len(probtp_extraction['extracted_values'])} leaves"
-                )
-
-            # Then extract all AXA values (enables prompt caching)
+            # Then extract all vendor B values (enables prompt caching)
             print(f"\n{'─' * 40}")
-            print("Extracting AXA values (all categories)")
+            print(f"Extracting {self.vendor_b_name} values (all categories)")
             print(f"{'─' * 40}")
             for cat_data in category_data:
-                axa_extraction = await self._extract_values(
-                    vendor="AXA",
-                    vendor_doc=self.axa_doc,
-                    category_id=cat_data["id"],
-                    category_name=cat_data["name"],
-                    category_leaves=cat_data["leaves"],
-                    policy_levels=axa_levels,
-                    full_taxonomy_nodes=all_nodes,
-                )
-                self._save_checkpoint(f"{cat_data['id']}_axa_values", axa_extraction)
+                checkpoint_name = f"{cat_data['id']}_vendor_b_values"
+                checkpoint_path = self.tmp_dir / f"{checkpoint_name}.json"
 
-                self.extractions[cat_data["id"]]["axa"] = axa_extraction
+                if checkpoint_path.exists():
+                    print(f"   ⏩ {cat_data['name']}: Loading from checkpoint")
+                    vendor_b_extraction = self._load_checkpoint(checkpoint_name)
+                else:
+                    vendor_b_extraction = await self._extract_values(
+                        vendor=self.vendor_b_name,
+                        vendor_doc=self.vendor_b_doc,
+                        category_id=cat_data["id"],
+                        category_name=cat_data["name"],
+                        category_leaves=cat_data["leaves"],
+                        policy_levels=vendor_b_levels,
+                        full_taxonomy_nodes=all_nodes,
+                    )
+                    self._save_checkpoint(checkpoint_name, vendor_b_extraction)
+                    print(
+                        f"   ✓ {cat_data['name']}: {len(vendor_b_extraction['extracted_values'])} leaves"
+                    )
 
-                print(
-                    f"   ✓ {cat_data['name']}: {len(axa_extraction['extracted_values'])} leaves"
-                )
+                self.extractions[cat_data["id"]]["vendor_b"] = vendor_b_extraction
         else:
             print("\n⏩ Skipping value extraction (loading from checkpoints)")
             for category in categories:
                 category_id = category["node_id"]
-                probtp_extraction = self._load_checkpoint(
-                    f"{category_id}_probtp_values"
+                vendor_a_ref_extraction = self._load_checkpoint(
+                    f"{category_id}_vendor_a_ref_values"
                 )
-                axa_extraction = self._load_checkpoint(f"{category_id}_axa_values")
+                vendor_b_extraction = self._load_checkpoint(f"{category_id}_vendor_b_values")
                 self.extractions[category_id] = {
-                    "probtp": probtp_extraction,
-                    "axa": axa_extraction,
+                    "vendor_a_ref": vendor_a_ref_extraction,
+                    "vendor_b": vendor_b_extraction,
                 }
 
         # Phase 3: Build comparison documents
@@ -493,8 +518,10 @@ class TaxonomyFirstPipeline:
 
                 comparison_doc = build_comparison_document(
                     category_taxonomy=category_with_leaves,
-                    probtp_extraction=self.extractions[category_id]["probtp"],
-                    axa_extraction=self.extractions[category_id]["axa"],
+                    vendor_a_ref_extraction=self.extractions[category_id]["vendor_a_ref"],
+                    vendor_b_extraction=self.extractions[category_id]["vendor_b"],
+                    vendor_a_ref_name=self.vendor_a_ref_name,
+                    vendor_b_name=self.vendor_b_name,
                 )
 
                 self.comparison_documents[category_id] = comparison_doc.model_dump()
@@ -641,22 +668,24 @@ class TaxonomyFirstPipeline:
         print(f"{'─' * 80}")
 
         # Build report filename
-        probtp_level_str = "_".join(probtp_levels) if probtp_levels else "default"
-        probtp_level_str = probtp_level_str.replace("+", "plus").replace(" ", "_")
-        axa_level_str = "_".join(axa_levels) if axa_levels else "default"
-        axa_level_str = axa_level_str.replace(" ", "_")
+        vendor_a_ref_level_str = "_".join(vendor_a_ref_levels) if vendor_a_ref_levels else "default"
+        vendor_a_ref_level_str = vendor_a_ref_level_str.replace("+", "plus").replace(" ", "_")
+        vendor_b_level_str = "_".join(vendor_b_levels) if vendor_b_levels else "default"
+        vendor_b_level_str = vendor_b_level_str.replace(" ", "_")
         final_report_path = (
             self.output_dir
-            / f"comparison_report_ProBTP_{probtp_level_str}_vs_AXA_{axa_level_str}.md"
+            / f"comparison_report_{self.vendor_a_ref_name}_{vendor_a_ref_level_str}_vs_{self.vendor_b_name}_{vendor_b_level_str}.md"
         )
 
         # Create metadata (needed for category ordering)
         metadata = create_report_metadata(
-            probtp_doc_name=self.probtp_doc.name,
-            axa_doc_name=self.axa_doc.name,
+            vendor_a_ref_doc_name=self.vendor_a_ref_doc.name,
+            vendor_b_doc_name=self.vendor_b_doc.name,
+            vendor_a_ref_name=self.vendor_a_ref_name,
+            vendor_b_name=self.vendor_b_name,
+            vendor_a_ref_levels=vendor_a_ref_levels,
+            vendor_b_levels=vendor_b_levels,
             model=self.model_name,
-            probtp_levels=probtp_levels,
-            axa_levels=axa_levels,
             categories=[cat["name"] for cat in categories],
         )
 
@@ -666,7 +695,11 @@ class TaxonomyFirstPipeline:
 
         # Summary section
         if self.general_summary:
-            report_sections.append(summary_to_markdown(self.general_summary))
+            report_sections.append(summary_to_markdown(
+                self.general_summary,
+                vendor_a_ref_name=self.vendor_a_ref_name,
+                vendor_b_name=self.vendor_b_name
+            ))
             report_sections.append("\n---\n")
 
         # Category sections (with comparison tables)
@@ -719,7 +752,11 @@ class TaxonomyFirstPipeline:
                     annex_sections.append("\n---\n")
 
                 # Add analysis sections (without the category header since we already added H2)
-                analysis_md = analysis_to_markdown(self.leaf_analyses[category_id])
+                analysis_md = analysis_to_markdown(
+                    self.leaf_analyses[category_id],
+                    vendor_a_ref_name=self.vendor_a_ref_name,
+                    vendor_b_name=self.vendor_b_name
+                )
                 # Remove the first line (H2 category header) from analysis_to_markdown output
                 analysis_lines = analysis_md.split('\n')
                 if analysis_lines and analysis_lines[0].startswith('## '):
@@ -806,16 +843,16 @@ class TaxonomyFirstPipeline:
                 # Map JSON paths to PDF paths
                 # JSON: output/landing_ai_xtd/File #1 - ....json
                 # PDF: documents/File #1 - ....pdf
-                base_dir = self.probtp_doc_path.parent.parent.parent
+                base_dir = self.vendor_a_ref_doc_path.parent.parent.parent
                 documents_dir = base_dir / "documents"
 
-                probtp_pdf_path = documents_dir / f"{self.probtp_doc.name}.pdf"
-                axa_pdf_path = documents_dir / f"{self.axa_doc.name}.pdf"
+                vendor_a_ref_pdf_path = documents_dir / f"{self.vendor_a_ref_doc.name}.pdf"
+                vendor_b_pdf_path = documents_dir / f"{self.vendor_b_doc.name}.pdf"
 
                 # Build PDF paths map
                 pdf_paths = {
-                    self.probtp_doc.name: probtp_pdf_path,
-                    self.axa_doc.name: axa_pdf_path,
+                    self.vendor_a_ref_doc.name: vendor_a_ref_pdf_path,
+                    self.vendor_b_doc.name: vendor_b_pdf_path,
                 }
 
                 # Generate cache
@@ -836,8 +873,8 @@ class TaxonomyFirstPipeline:
                 if category_id in self.comparison_tables:
                     enriched_table, grounding_stats = enrich_comparison_table_with_bounding_boxes(
                         self.comparison_tables[category_id],
-                        self.probtp_doc_path,
-                        self.axa_doc_path,
+                        self.vendor_a_ref_doc_path,
+                        self.vendor_b_doc_path,
                         page_dimensions_cache
                     )
                     # Update in-place so both comparison_tables and analyses reference the same enriched data
@@ -945,11 +982,11 @@ class TaxonomyFirstPipeline:
 
     @observe(name="extract_taxonomy")
     async def _extract_taxonomy(self) -> dict[str, Any]:
-        """Extract ProBTP taxonomy."""
-        print("Extracting taxonomy from ProBTP document...")
+        """Extract taxonomy from vendor A (reference) document."""
+        print(f"Extracting taxonomy from {self.vendor_a_ref_name} document...")
 
-        probtp_markdown = self.probtp_doc.get_full_markdown()
-        prompt = create_taxonomy_extraction_prompt(probtp_markdown)
+        vendor_a_ref_markdown = self.vendor_a_ref_doc.get_full_markdown()
+        prompt = create_taxonomy_extraction_prompt(vendor_a_ref_markdown)
 
         print(f"   Model: {self.model_name}")
         print(f"   Prompt length: {len(prompt)} chars")
@@ -960,7 +997,8 @@ class TaxonomyFirstPipeline:
                 "phase": "taxonomy_extraction",
                 "model": self.model_name,
                 "prompt_length": len(prompt),
-                "source_document": self.probtp_doc.name,
+                "source_document": self.vendor_a_ref_doc.name,
+                "vendor_name": self.vendor_a_ref_name,
             }
         )
 
@@ -975,6 +1013,15 @@ class TaxonomyFirstPipeline:
         )
 
         taxonomy = json.loads(response)
+
+        metadata = ExtractionMetadata(
+            source_document=self.vendor_a_ref_doc.name,
+            extraction_date=datetime.now().isoformat(),
+            extraction_approach="flat_depth_first",
+            extractor_model=self.model_name,
+        )
+
+        taxonomy["metadata"] = metadata
 
         all_nodes = taxonomy["nodes"]
         top_level_categories = [
@@ -1057,6 +1104,9 @@ class TaxonomyFirstPipeline:
 
         extraction = json.loads(response)
 
+        # Add vendor name to extraction metadata
+        extraction["vendor_name"] = vendor
+
         # Report unmappable items if any
         unmappable = extraction.get("unmappable_items") or []
         if unmappable:
@@ -1110,6 +1160,7 @@ class TaxonomyFirstPipeline:
             temperature=0.0,
             response_mime_type="application/json",
             response_schema=TaxonomyFirstAnalysisOutput.model_json_schema(),
+            use_vertex=False,
         )
 
         analysis = json.loads(response)
@@ -1147,6 +1198,8 @@ class TaxonomyFirstPipeline:
 
         prompt = create_summary_prompt(
             category_analyses=category_analyses,
+            vendor_a_ref_name=self.vendor_a_ref_name,
+            vendor_b_name=self.vendor_b_name,
             language=self.language,
         )
 
@@ -1167,6 +1220,7 @@ class TaxonomyFirstPipeline:
             temperature=0.4,
             response_mime_type="application/json",
             response_schema=ComparisonSummary.model_json_schema(),
+            use_vertex=False,
         )
 
         try:
@@ -1248,6 +1302,7 @@ class TaxonomyFirstPipeline:
             thinking_budget=2048,
             temperature=0.4,
             response_mime_type="text/plain",
+            use_vertex=False,
         )
 
         langfuse.update_current_trace(
@@ -1280,35 +1335,37 @@ async def main():
     base_dir = Path(__file__).parent.parent.parent
     output_base = base_dir / "output" / "landing_ai_xtd"
 
-    probtp_path = output_base / "File #3 - Panorama FMC 2025.json"
-    axa_path = (
+    vendor_a_ref_path = output_base / "File #3 - Panorama FMC 2025.json"
+    vendor_b_path = (
         output_base
-        / "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE.json"
+        / "File #4 - scop cae Résumé de garanties Formule SANTE - Ensemble du Personnel.json"
     )
     output_dir = Path(__file__).parent.parent / "output" / "taxonomy_first"
 
     # Check if documents exist
-    if not probtp_path.exists():
-        print(f"Error: ProBTP document not found: {probtp_path}")
+    if not vendor_a_ref_path.exists():
+        print(f"Error: Vendor A document not found: {vendor_a_ref_path}")
         return
 
-    if not axa_path.exists():
-        print(f"Error: AXA document not found: {axa_path}")
+    if not vendor_b_path.exists():
+        print(f"Error: Vendor B document not found: {vendor_b_path}")
         return
 
     # Create pipeline
     pipeline = TaxonomyFirstPipeline(
-        probtp_doc_path=probtp_path,
-        axa_doc_path=axa_path,
+        vendor_a_ref_doc_path=vendor_a_ref_path,
+        vendor_b_doc_path=vendor_b_path,
+        vendor_a_ref_name="ProBTP",
+        vendor_b_name="Generali",
         output_dir=output_dir,
-        model_name="gemini-2.5-flash",
+        model_name="gemini-2.5-pro",
         categories_to_process=None # ALL # ["hospitalisation", "optique"],  # Test with 2 categories
     )
 
     # Run pipeline
     results = await pipeline.run(
-        probtp_levels=["S4", "P5"],
-        axa_levels=["Base obligatoire"],
+        vendor_a_ref_levels=["S4", "P5"],
+        vendor_b_levels=["Régime de base"],
         skip_taxonomy=False,
         skip_extraction=False,
         skip_assembly=False,

@@ -139,8 +139,8 @@ def build_table_from_analysis(
     metadata = {
         "category": category_name,
         "policy_levels": {
-            "probtp": [probtp_level],
-            "axa": [axa_level],
+            "vendor_a_ref": [probtp_level],
+            "vendor_b": [axa_level],
         },
         "total_columns": total_columns,
         "column_labels": column_labels,
@@ -233,8 +233,8 @@ def _build_data_row(
 ) -> dict[str, Any]:
     """Build a data row for a single leaf with is_best annotations and full metadata."""
     path = leaf["path"]
-    probtp_value = leaf.get("probtp")
-    axa_value = leaf.get("axa")
+    vendor_a_ref_value = leaf.get("vendor_a_ref")
+    vendor_b_value = leaf.get("vendor_b")
 
     cells = []
 
@@ -259,28 +259,28 @@ def _build_data_row(
         "type": "ss_coverage",
     })
 
-    # ProBTP data column
-    probtp_col_idx = max_depth + 1
-    probtp_cell = _build_data_cell(
-        probtp_value,
-        f"{column_labels[probtp_col_idx]}{row_number}",
-        "probtp",
+    # Vendor A data column
+    vendor_a_ref_col_idx = max_depth + 1
+    vendor_a_ref_cell = _build_data_cell(
+        vendor_a_ref_value,
+        f"{column_labels[vendor_a_ref_col_idx]}{row_number}",
+        "vendor_a_ref",
         leaf_analysis,
     )
-    cells.append(probtp_cell)
+    cells.append(vendor_a_ref_cell)
 
-    # AXA data column
-    axa_col_idx = max_depth + 2
-    axa_cell = _build_data_cell(
-        axa_value,
-        f"{column_labels[axa_col_idx]}{row_number}",
-        "axa",
+    # Vendor B data column
+    vendor_b_col_idx = max_depth + 2
+    vendor_b_cell = _build_data_cell(
+        vendor_b_value,
+        f"{column_labels[vendor_b_col_idx]}{row_number}",
+        "vendor_b",
         leaf_analysis,
     )
-    cells.append(axa_cell)
+    cells.append(vendor_b_cell)
 
     # Check if this is a new taxonomy leaf (discovered during extraction)
-    is_new_leaf = leaf.get("is_unmappable_probtp_only", False) or leaf.get("is_unmappable_axa_only", False)
+    is_new_leaf = leaf.get("is_unmappable_vendor_a_ref_only", False) or leaf.get("is_unmappable_vendor_b_only", False)
 
     # Build row with enriched metadata
     row = {
@@ -299,7 +299,7 @@ def _build_data_row(
 
     # Add analysis metadata if available
     if leaf_analysis:
-        row["probtp_advantage"] = leaf_analysis.probtp_advantage
+        row["vendor_a_ref_advantage"] = leaf_analysis.vendor_a_ref_advantage
         row["rationale"] = leaf_analysis.rationale
 
     return row
@@ -355,24 +355,24 @@ def _build_data_cell(
 
     # Add analysis display value if available
     if leaf_analysis:
-        if vendor == "probtp":
-            cell["display_value"] = leaf_analysis.probtp_display_value
-        else:  # vendor == "axa"
-            cell["display_value"] = leaf_analysis.axa_display_value
+        if vendor == "vendor_a_ref":
+            cell["display_value"] = leaf_analysis.vendor_a_ref_display_value
+        else:  # vendor == "vendor_b"
+            cell["display_value"] = leaf_analysis.vendor_b_display_value
 
-    # Add is_best annotation from analysis using probtp_advantage
+    # Add is_best annotation from analysis using vendor_a_ref_advantage
     if leaf_analysis:
-        probtp_advantage = leaf_analysis.probtp_advantage
+        vendor_a_ref_advantage = leaf_analysis.vendor_a_ref_advantage
 
-        # Determine is_best based on vendor and ProBTP advantage
-        if probtp_advantage == "equal":
+        # Determine is_best based on vendor and vendor A advantage
+        if vendor_a_ref_advantage == "equal":
             cell["is_best"] = True  # Both are best if equal
-        elif vendor == "probtp":
-            # ProBTP cell is best if probtp_advantage is better
-            cell["is_best"] = probtp_advantage in ["probtp_much_better", "probtp_better"]
-        else:  # vendor == "axa"
-            # AXA cell is best if ProBTP advantage is worse
-            cell["is_best"] = probtp_advantage in ["probtp_worse", "probtp_much_worse"]
+        elif vendor == "vendor_a_ref":
+            # Vendor A cell is best if vendor_a_ref_advantage is better
+            cell["is_best"] = vendor_a_ref_advantage in ["vendor_a_ref_much_better", "vendor_a_ref_better"]
+        else:  # vendor == "vendor_b"
+            # Vendor B cell is best if vendor A advantage is worse
+            cell["is_best"] = vendor_a_ref_advantage in ["vendor_a_ref_worse", "vendor_a_ref_much_worse"]
     else:
         # No analysis - default to null
         cell["is_best"] = None

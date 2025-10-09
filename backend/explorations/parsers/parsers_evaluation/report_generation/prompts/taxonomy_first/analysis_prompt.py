@@ -13,8 +13,8 @@ from pydantic import BaseModel, Field
 class OverallWinner(str, Enum):
     """Overall winner of the comparison."""
 
-    PROBTP = "probtp"
-    AXA = "axa"
+    VENDOR_A_REF = "vendor_a_ref"
+    VENDOR_B = "vendor_b"
     TIE = "tie"
 
 
@@ -26,31 +26,31 @@ class Confidence(str, Enum):
     HIGH = "high"
 
 
-class ProBTPAdvantage(str, Enum):
-    """ProBTP advantage level relative to AXA."""
+class VendorAdvantage(str, Enum):
+    """Vendor A (reference) advantage level relative to Vendor B."""
 
-    MUCH_BETTER = "probtp_much_better"
-    BETTER = "probtp_better"
+    MUCH_BETTER = "vendor_a_ref_much_better"
+    BETTER = "vendor_a_ref_better"
     EQUAL = "equal"
-    WORSE = "probtp_worse"
-    MUCH_WORSE = "probtp_much_worse"
+    WORSE = "vendor_a_ref_worse"
+    MUCH_WORSE = "vendor_a_ref_much_worse"
 
 
 class LeafAnalysis(BaseModel):
     """Analysis result for a single taxonomy leaf comparison."""
 
     leaf_id: str = Field(..., description="Taxonomy leaf ID")
-    probtp_advantage: ProBTPAdvantage = Field(
-        ..., description="ProBTP advantage level relative to AXA"
+    vendor_a_ref_advantage: VendorAdvantage = Field(
+        ..., description="Vendor A (reference) advantage level relative to Vendor B"
     )
     rationale: str = Field(
         ..., description="Brief rationale for advantage assessment (1-2 sentences)"
     )
-    probtp_display_value: str = Field(
-        ..., description="ProBTP value formatted for display (e.g., '150€/2 ans', 'Non couvert')"
+    vendor_a_ref_display_value: str = Field(
+        ..., description="Vendor A (reference) value formatted for display (e.g., '150€/2 ans', 'Non couvert')"
     )
-    axa_display_value: str = Field(
-        ..., description="AXA value formatted for display (e.g., '100€/2 ans', 'Non couvert')"
+    vendor_b_display_value: str = Field(
+        ..., description="Vendor B value formatted for display (e.g., '100€/2 ans', 'Non couvert')"
     )
 
 
@@ -59,20 +59,20 @@ class ObjectiveAssessment(BaseModel):
 
     overall_winner: OverallWinner = Field(
         ...,
-        description="'probtp', 'axa', or 'tie' - which contract is objectively better for this category",
+        description="'vendor_a_ref', 'vendor_b', or 'tie' - which contract is objectively better for this category",
     )
     confidence: Confidence = Field(
         ..., description="'high', 'medium', or 'low' - confidence in the assessment"
     )
     reasoning: str = Field(
         ...,
-        description="Brutally honest explanation of why, even if unfavorable to ProBTP",
+        description="Brutally honest explanation of why, even if unfavorable to vendor A (reference)",
     )
-    probtp_weaknesses: list[str] = Field(
-        ..., description="Specific areas where ProBTP is objectively weaker"
+    vendor_a_ref_weaknesses: list[str] = Field(
+        ..., description="Specific areas where vendor A (reference) is objectively weaker"
     )
-    axa_weaknesses: list[str] = Field(
-        ..., description="Specific areas where AXA is objectively weaker"
+    vendor_b_weaknesses: list[str] = Field(
+        ..., description="Specific areas where vendor B is objectively weaker"
     )
 
 
@@ -103,10 +103,10 @@ class TaxonomyFirstAnalysisOutput(BaseModel):
         ..., description="Analysis of real-world value, risk, and customer fit"
     )
     best_coverage: str = Field(
-        ..., description="Sales-oriented determination of ProBTP's value proposition"
+        ..., description="Sales-oriented determination of vendor A (reference) value proposition"
     )
     salesperson_talking_points: list[str] = Field(
-        ..., description="3-5 key points for ProBTP salespeople to emphasize"
+        ..., description="3-5 key points for vendor A (reference) salespeople to emphasize"
     )
 
 
@@ -129,8 +129,10 @@ def create_taxonomy_first_analysis_prompt(
     """
     category_id = comparison_document.get("category_id", "unknown")
     category_name = comparison_document.get("category_name", category_id)
-    probtp_level = comparison_document.get("probtp_policy_level", "")
-    axa_level = comparison_document.get("axa_policy_level", "")
+    vendor_a_ref_level = comparison_document.get("vendor_a_ref_policy_level", "")
+    vendor_b_level = comparison_document.get("vendor_b_policy_level", "")
+    vendor_a_ref_name = comparison_document.get("vendor_a_ref_name", "Vendor A")
+    vendor_b_name = comparison_document.get("vendor_b_name", "Vendor B")
     leaves = comparison_document.get("leaves", [])
 
     # Format comparison document as JSON
@@ -139,8 +141,8 @@ def create_taxonomy_first_analysis_prompt(
     # Format policy levels context
     levels_context = f"""
 **Contract Levels Being Compared:**
-- ProBTP: {probtp_level}
-- AXA: {axa_level}
+- {vendor_a_ref_name}: {vendor_a_ref_level}
+- {vendor_b_name}: {vendor_b_level}
 """
 
     # Format category boundaries context
@@ -162,7 +164,7 @@ GOAL
 Generate comprehensive analysis including:
 1. **Leaf-level comparisons** with advantage levels (>>, >, ~, <, <<) for filtering
 2. **Narrative summaries** synthesized from leaf comparisons
-3. **Sales-ready insights** for ProBTP sales team
+3. **Sales-ready insights** for {vendor_a_ref_name} sales team
 4. **Brutally objective assessment** of which contract is actually better
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -172,47 +174,47 @@ ANALYSIS COMPONENTS
 **1. Leaf-Level Comparisons** (structured output)
 
 For EACH leaf in the comparison document:
-- **probtp_advantage**: Assess ProBTP's advantage relative to AXA based on LLM judgment:
-  - `probtp_much_better`: ProBTP significantly better coverage that materially impacts beneficiary
-  - `probtp_better`: ProBTP moderately better coverage with noticeable advantage
+- **vendor_a_ref_advantage**: Assess {vendor_a_ref_name}'s advantage relative to {vendor_b_name} based on LLM judgment:
+  - `vendor_a_ref_much_better`: {vendor_a_ref_name} significantly better coverage that materially impacts beneficiary
+  - `vendor_a_ref_better`: {vendor_a_ref_name} moderately better coverage with noticeable advantage
   - `equal`: Roughly equivalent or minor differences
-  - `probtp_worse`: ProBTP moderately worse coverage
-  - `probtp_much_worse`: ProBTP significantly worse coverage
+  - `vendor_a_ref_worse`: {vendor_a_ref_name} moderately worse coverage
+  - `vendor_a_ref_much_worse`: {vendor_a_ref_name} significantly worse coverage
 - **rationale**: 1-2 sentence explanation of the advantage assessment
 - **display values**: Format coverage for human readability
 
-**ProBTP Advantage Determination:**
+**{vendor_a_ref_name} Advantage Determination:**
 
-Use your world knowledge of French health insurance and beneficiary psychology to assess ProBTP relative to AXA:
+Use your world knowledge of French health insurance and beneficiary psychology to assess {vendor_a_ref_name} relative to {vendor_b_name}:
 
 **Examples:**
-- ProBTP 150€ vs AXA 100€ for glasses frames → `probtp_much_better` (50€ difference is significant)
-- ProBTP 200€ vs AXA 180€ for dental crown → `probtp_better` (20€ difference is noticeable)
-- ProBTP 100% BR vs AXA 100% BR → `equal` (identical coverage)
-- ProBTP "Non couvert" vs AXA 300€ for laser surgery → `probtp_much_worse` (no coverage vs coverage)
+- {vendor_a_ref_name} 150€ vs {vendor_b_name} 100€ for glasses frames → `vendor_a_ref_much_better` (50€ difference is significant)
+- {vendor_a_ref_name} 200€ vs {vendor_b_name} 180€ for dental crown → `vendor_a_ref_better` (20€ difference is noticeable)
+- {vendor_a_ref_name} 100% BR vs {vendor_b_name} 100% BR → `equal` (identical coverage)
+- {vendor_a_ref_name} "Non couvert" vs {vendor_b_name} 300€ for laser surgery → `vendor_a_ref_much_worse` (no coverage vs coverage)
 
 **Context matters:**
 - Small € differences on high-cost items (e.g., €20 on €2000 orthodontics) → `equal`
-- Small € differences on frequent items (e.g., €5 on doctor visits) → `probtp_better` or `probtp_much_better` (cumulative impact)
+- Small € differences on frequent items (e.g., €5 on doctor visits) → `vendor_a_ref_better` or `vendor_a_ref_much_better` (cumulative impact)
 - Coverage caps: 500€ cap vs no cap on €400 benefit → `equal` (cap unlikely to hit)
 - Coverage caps: 300€ cap vs no cap on €1000+ benefit → advantage to uncapped insurer (cap very limiting)
 
 **2. Objective Assessment** (brutally honest)
-- **overall_winner**: 'probtp', 'axa', or 'tie' - which contract is objectively better, or if they're roughly equivalent
+- **overall_winner**: 'vendor_a_ref', 'vendor_b', or 'tie' - which contract is objectively better, or if they're roughly equivalent
 - **confidence**: 'high', 'medium', or 'low'
-- **reasoning**: Honest explanation even if unfavorable to ProBTP
-- **probtp_weaknesses**: Specific areas where ProBTP is objectively weaker
-- **axa_weaknesses**: Specific areas where AXA is objectively weaker
+- **reasoning**: Honest explanation even if unfavorable to {vendor_a_ref_name}
+- **vendor_a_ref_weaknesses**: Specific areas where {vendor_a_ref_name} is objectively weaker
+- **vendor_b_weaknesses**: Specific areas where {vendor_b_name} is objectively weaker
 
 **3. Key Differences** (2-3 sentences)
-- Main strategic differences between ProBTP and AXA for this category
+- Main strategic differences between {vendor_a_ref_name} and {vendor_b_name} for this category
 - Which contract emphasizes what type of coverage?
 
 **4. Concrete Examples** (2-3 specific scenarios)
 - Realistic scenarios showing actual costs and reimbursements
 - Exact out-of-pocket costs for each contract
 - Use typical service prices (e.g., dental crown €750, progressive glasses €600)
-- Format: "For [service] costing €X, ProBTP reimburses €Y (remain €Z), AXA reimburses €A (remain €B)"
+- Format: "For [service] costing €X, {vendor_a_ref_name} reimburses €Y (remain €Z), {vendor_b_name} reimburses €A (remain €B)"
 
 **5. Critical Thinking & Value Assessment**
 - **Real-world probability:** How often do people use these benefits?
@@ -220,15 +222,15 @@ Use your world knowledge of French health insurance and beneficiary psychology t
 - **Customer segments:** Which types of customers benefit most from each contract?
 - **Hidden value:** Network benefits, caps, or conditions that change value proposition
 
-**6. Best Coverage** (1-2 paragraphs, ProBTP sales perspective)
-- Sales-oriented framing of ProBTP's value proposition
-- Specific sub-categories where ProBTP wins
+**6. Best Coverage** (1-2 paragraphs, {vendor_a_ref_name} sales perspective)
+- Sales-oriented framing of {vendor_a_ref_name}'s value proposition
+- Specific sub-categories where {vendor_a_ref_name} wins
 - What salespeople should emphasize
-- How to contextualize gaps where AXA is better
+- How to contextualize gaps where {vendor_b_name} is better
 
 **7. Salesperson Talking Points** (3-5 key points)
-- Actionable points for ProBTP salespeople
-- Focus on ProBTP strengths and how to frame them
+- Actionable points for {vendor_a_ref_name} salespeople
+- Focus on {vendor_a_ref_name} strengths and how to frame them
 - How to address competitive gaps
 
 
@@ -238,17 +240,17 @@ DUAL PERSPECTIVE REQUIREMENT
 
 This analysis serves TWO distinct purposes:
 
-**Part 1: Sales-Ready Insights (ProBTP Perspective)**
-- Frame comparisons from ProBTP's perspective
-- Highlight ProBTP strengths quantitatively
-- Contextualize ProBTP gaps (is it worth it? does it matter?)
+**Part 1: Sales-Ready Insights ({vendor_a_ref_name} Perspective)**
+- Frame comparisons from {vendor_a_ref_name}'s perspective
+- Highlight {vendor_a_ref_name} strengths quantitatively
+- Contextualize {vendor_a_ref_name} gaps (is it worth it? does it matter?)
 - Provide actionable talking points for salespeople
-- Focus on what salespeople can say about ProBTP's value
+- Focus on what salespeople can say about {vendor_a_ref_name}'s value
 
 **Part 2: Objective Assessment (Analyst Perspective)**
 - Be brutally honest about which contract is objectively better
-- Do NOT sugarcoat or spin results to favor ProBTP
-- Clearly state ProBTP weaknesses where they exist
+- Do NOT sugarcoat or spin results to favor {vendor_a_ref_name}
+- Clearly state {vendor_a_ref_name} weaknesses where they exist
 - Use "high" confidence when the winner is clear
 - This section is for internal strategy, not customer-facing
 
@@ -256,7 +258,7 @@ This analysis serves TWO distinct purposes:
 LEAF COMPARISON METHODOLOGY
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-For each leaf, compare ProBTP vs AXA values considering:
+For each leaf, compare {vendor_a_ref_name} vs {vendor_b_name} values considering:
 
 **1. Coverage Amounts**
 - Higher € amount or % BR = better
@@ -289,14 +291,14 @@ For each leaf, compare ProBTP vs AXA values considering:
 HANDLING UNMAPPABLE ITEMS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Leaves with `is_unmappable_probtp_only: true` or `is_unmappable_axa_only: true`:
+Leaves with `is_unmappable_vendor_a_ref_only: true` or `is_unmappable_vendor_b_only: true`:
 
-**If ProBTP-only unmappable:**
-- probtp_advantage: `probtp_much_better` (ProBTP covers something AXA doesn't)
-- Highlight this in narrative as ProBTP unique benefit
+**If {vendor_a_ref_name}-only unmappable:**
+- vendor_a_ref_advantage: `vendor_a_ref_much_better` ({vendor_a_ref_name} covers something {vendor_b_name} doesn't)
+- Highlight this in narrative as {vendor_a_ref_name} unique benefit
 
-**If AXA-only unmappable:**
-- probtp_advantage: `probtp_much_worse` (AXA covers something ProBTP doesn't)
+**If {vendor_b_name}-only unmappable:**
+- vendor_a_ref_advantage: `vendor_a_ref_much_worse` ({vendor_b_name} covers something {vendor_a_ref_name} doesn't)
 - Acknowledge this gap honestly in objective assessment
 - In sales talking points: contextualize why this gap may not matter (or does matter)
 
@@ -313,16 +315,16 @@ COMPARISON DOCUMENT (LEAF-BASED)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 The comparison document below contains all leaves for the "{category_name}" category.
-Each leaf shows ProBTP and AXA values side-by-side with all extracted fields.
+Each leaf shows {vendor_a_ref_name} and {vendor_b_name} values side-by-side with all extracted fields.
 
 **Structure:**
 - `leaf_id`: Unique identifier
 - `path`: Taxonomy hierarchy path
 - `description`: Leaf description
-- `probtp`: Full ProBTP ExtractedValue (coverage, frequency, cap, age_restriction, vendor_conditions, etc.)
-- `axa`: Full AXA ExtractedValue
-- `is_unmappable_probtp_only`: True if this is a ProBTP-only benefit not in taxonomy
-- `is_unmappable_axa_only`: True if this is an AXA-only benefit not in taxonomy
+- `vendor_a_ref`: Full {vendor_a_ref_name} ExtractedValue (coverage, frequency, cap, age_restriction, vendor_conditions, etc.)
+- `vendor_b`: Full {vendor_b_name} ExtractedValue
+- `is_unmappable_vendor_a_ref_only`: True if this is a {vendor_a_ref_name}-only benefit not in taxonomy
+- `is_unmappable_vendor_b_only`: True if this is an {vendor_b_name}-only benefit not in taxonomy
 
 **Comparison Document JSON:**
 
@@ -343,45 +345,45 @@ Return ONLY a JSON object conforming to the TaxonomyFirstAnalysisOutput schema.
   "leaf_comparisons": [
     {{
       "leaf_id": "optique_lunettes_monture",
-      "probtp_advantage": "probtp_much_better",
-      "rationale": "ProBTP 150€ vs AXA 100€ - 50€ difference is significant for frames (50% more coverage)",
-      "probtp_display_value": "150€/2 ans",
-      "axa_display_value": "100€/2 ans"
+      "vendor_a_ref_advantage": "vendor_a_ref_much_better",
+      "rationale": "{vendor_a_ref_name} 150€ vs {vendor_b_name} 100€ - 50€ difference is significant for frames (50% more coverage)",
+      "vendor_a_ref_display_value": "150€/2 ans",
+      "vendor_b_display_value": "100€/2 ans"
     }},
     {{
       "leaf_id": "optique_lentilles_non_remboursees_ss",
-      "probtp_advantage": "equal",
+      "vendor_a_ref_advantage": "equal",
       "rationale": "Both offer 60€/an - identical coverage",
-      "probtp_display_value": "60€/an",
-      "axa_display_value": "60€/an"
+      "vendor_a_ref_display_value": "60€/an",
+      "vendor_b_display_value": "60€/an"
     }}
   ],
   "objective_assessment": {{
-    "overall_winner": "probtp",  // can be "probtp", "axa", or "tie"
+    "overall_winner": "vendor_a_ref",  // can be "vendor_a_ref", "vendor_b", or "tie"
     "confidence": "high",  // can be "high", "medium", or "low"
-    "reasoning": "ProBTP offers objectively better optical coverage with 30-50% higher reimbursements across most categories, resulting in significantly lower out-of-pocket costs",
-    "probtp_weaknesses": ["No network partnership bonuses", "Lower contact lens cap"],
-    "axa_weaknesses": ["Lower frame coverage", "Lower progressive lens reimbursement", "More restrictive frequency limits"]
+    "reasoning": "{vendor_a_ref_name} offers objectively better optical coverage with 30-50% higher reimbursements across most categories, resulting in significantly lower out-of-pocket costs",
+    "vendor_a_ref_weaknesses": ["No network partnership bonuses", "Lower contact lens cap"],
+    "vendor_b_weaknesses": ["Lower frame coverage", "Lower progressive lens reimbursement", "More restrictive frequency limits"]
   }},
-  "key_differences": "ProBTP emphasizes higher coverage amounts for frames and lenses, while AXA focuses on baseline coverage with network advantages...",
+  "key_differences": "{vendor_a_ref_name} emphasizes higher coverage amounts for frames and lenses, while {vendor_b_name} focuses on baseline coverage with network advantages...",
   "concrete_examples": [
-    "For progressive glasses (€600 total: €200 frame + €400 lenses), ProBTP reimburses €350 (remain €250), AXA reimburses €280 (remain €320)",
+    "For progressive glasses (€600 total: €200 frame + €400 lenses), {vendor_a_ref_name} reimburses €350 (remain €250), {vendor_b_name} reimburses €280 (remain €320)",
     "For contact lenses costing €240/year, both reimburse €60 (remain €180)"
   ],
-  "critical_thinking": "ProBTP's higher optical coverage provides better protection against the significant out-of-pocket costs...",
-  "best_coverage": "From ProBTP's perspective, the S2 level excels in optical coverage by offering significantly higher reimbursements for frames and progressive lenses...",
+  "critical_thinking": "{vendor_a_ref_name}'s higher optical coverage provides better protection against the significant out-of-pocket costs...",
+  "best_coverage": "From {vendor_a_ref_name}'s perspective, the S2 level excels in optical coverage by offering significantly higher reimbursements for frames and progressive lenses...",
   "salesperson_talking_points": [
     "Highlight 50% higher frame coverage (€150 vs €100) - saves €50 every 2 years",
     "Emphasize superior progressive lens coverage reducing out-of-pocket by €70",
-    "Position ProBTP as premium optical protection for customers who value vision care"
+    "Position {vendor_a_ref_name} as premium optical protection for customers who value vision care"
   ]
 }}
 
 **Quality Standards:**
 - Every leaf must have a comparison (use all {len(leaves)} leaves)
-- ProBTP advantage levels must reflect real-world beneficiary impact (use LLM judgment)
+- {vendor_a_ref_name} advantage levels must reflect real-world beneficiary impact (use LLM judgment)
 - Concrete examples must use realistic euro amounts and typical service prices
-- Be brutally honest in objective assessment even if unfavorable to ProBTP
+- Be brutally honest in objective assessment even if unfavorable to {vendor_a_ref_name}
 - Output ONLY the JSON object - no preamble, no commentary
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -391,10 +393,10 @@ TASK EXECUTION
 Based on the comparison document above, generate comprehensive analysis for the "{category_name}" category.
 
 1. Analyze EACH of the {len(leaves)} leaves
-2. Determine ProBTP advantage level using LLM judgment based on real-world impact
+2. Determine {vendor_a_ref_name} advantage level using LLM judgment based on real-world impact
 5. Give brutally objective assessment of which contract is objectively better
 3. Synthesize narrative summaries from leaf comparisons
-4. Provide sales-ready insights for ProBTP
+4. Provide sales-ready insights for {vendor_a_ref_name}
 
 
 Output all content in {language}. Output ONLY the JSON conforming to TaxonomyFirstAnalysisOutput schema.
