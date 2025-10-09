@@ -44,17 +44,24 @@ def parse_evaluation_result(raw_json: str) -> "EvaluationResult":
 class GeminiClientManager:
     """Context manager for proper Gemini client lifecycle management"""
 
-    def __init__(self):
+    def __init__(self, use_vertex: bool = True):
         self.client = None
+        self.use_vertex = use_vertex
 
     def __enter__(self):
         GoogleGenAIInstrumentor().instrument()
 
-        self.client = genai.Client(
-            vertexai=True,
-            project="probtp-poc-prod",
-            location="global",
-        )
+        if self.use_vertex:
+            self.client = genai.Client(
+                vertexai=True,
+                project="probtp-poc-prod",
+                location="global",
+            )
+        else:
+            self.client = genai.Client(
+                vertexai=False,
+                api_key=os.getenv("GEMINI_API_KEY"),
+            )
         return self.client
 
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -71,17 +78,24 @@ class GeminiClientManager:
 class AsyncGeminiClientManager:
     """Async context manager for proper Gemini client lifecycle management"""
 
-    def __init__(self):
+    def __init__(self, use_vertex: bool = True):
         self.client = None
+        self.use_vertex = use_vertex
 
     async def __aenter__(self):
         GoogleGenAIInstrumentor().instrument()
 
-        self.client = genai.Client(
-            vertexai=True,
-            project="probtp-poc-prod",
-            location="global",
-        )
+        if self.use_vertex:
+            self.client = genai.Client(
+                vertexai=True,
+                project="probtp-poc-prod",
+                location="global",
+            )
+        else:
+            self.client = genai.Client(
+                vertexai=False,
+                api_key=os.getenv("GEMINI_API_KEY"),
+            )
         return self.client
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
@@ -142,7 +156,7 @@ def generate_question_answer(eval_data: list[dict], file_name_in_qa: str) -> lis
 
 
 
-def evaluate_pipeline(file_qa_list: list[dict], data: str, pipeline_name: str) -> list[dict[str, Any]]:
+def evaluate_pipeline(file_qa_list: list[dict], data: str, pipeline_name: str, file_name: str = "", use_vertex: bool = False) -> list[dict[str, Any]]:
     """
     Evaluate the pipeline by asking for answers then grading them with structured output.
     """
@@ -205,14 +219,14 @@ def evaluate_pipeline(file_qa_list: list[dict], data: str, pipeline_name: str) -
     """
 
     results: list[dict[str, Any]] = []
-    with GeminiClientManager() as client:
+    with GeminiClientManager(use_vertex=use_vertex) as client:
         for qa in file_qa_list:
             answer_prompt = prompt_answer.format(document=data, question=qa["question"])
             answer_resp = client.models.generate_content(
-                model="gemini-2.5-flash-preview-09-2025",
+                model="gemini-2.5-pro",
                 contents=answer_prompt,
                 config=GenerateContentConfig(
-                    thinking_config=ThinkingConfig(thinking_budget=0)
+                    thinking_config=ThinkingConfig(thinking_budget=300)
                 ),
             )
             candidate_answer = getattr(answer_resp, "text", "").strip()
@@ -224,7 +238,7 @@ def evaluate_pipeline(file_qa_list: list[dict], data: str, pipeline_name: str) -
                 f"<candidate_answer>\n{candidate_answer}\n</candidate_answer>\n"
             )
             eval_resp = client.models.generate_content(
-                model="gemini-2.5-flash-preview-09-2025",
+                model="gemini-2.5-pro",
                 contents=eval_prompt,
                 config={
                     "response_mime_type": "application/json",
@@ -239,6 +253,7 @@ def evaluate_pipeline(file_qa_list: list[dict], data: str, pipeline_name: str) -
                 result_as_dict["ground_truth"] = qa["answer"]
                 result_as_dict["question"] = qa["question"]
                 result_as_dict["pipeline_name"] = pipeline_name
+                result_as_dict["file_name"] = file_name
             except Exception:
                 start = raw_json.find("{")
                 end = raw_json.rfind("}")
@@ -249,6 +264,7 @@ def evaluate_pipeline(file_qa_list: list[dict], data: str, pipeline_name: str) -
                     result_as_dict["ground_truth"] = qa["answer"]
                     result_as_dict["question"] = qa["question"]
                     result_as_dict["pipeline_name"] = pipeline_name
+                    result_as_dict["file_name"] = file_name
                 else:
                     result = EvaluationResult(
                         verdict="HALLUCINATION",
@@ -263,22 +279,23 @@ def evaluate_pipeline(file_qa_list: list[dict], data: str, pipeline_name: str) -
                     result_as_dict["ground_truth"] = qa["answer"]
                     result_as_dict["question"] = qa["question"]
                     result_as_dict["pipeline_name"] = pipeline_name
+                    result_as_dict["file_name"] = file_name
             results.append(result_as_dict)
 
     return results
 
 
-async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, prompt_answer: str, prompt_evaluation: str) -> dict[str, Any]:
+async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, prompt_answer: str, prompt_evaluation: str, file_name: str = "") -> dict[str, Any]:
     """
     Evaluate a single Q&A pair asynchronously.
     """
     answer_prompt = prompt_answer.format(document=data, question=qa["question"])
     answer_resp = await client.aio.models.generate_content(
-        model="gemini-2.5-flash",#-preview-09-2025",
+        model="gemini-2.5-pro",#-preview-09-2025",
         contents=answer_prompt,
         config=GenerateContentConfig(
-            thinking_config=ThinkingConfig(thinking_budget=0),
-            max_output_tokens=300,
+            thinking_config=ThinkingConfig(thinking_budget=300),
+            max_output_tokens=600,
             temperature=0.
         ),
     )
@@ -291,7 +308,7 @@ async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, pr
         f"<candidate_answer>\n{candidate_answer}\n</candidate_answer>\n"
     )
     eval_resp = await client.aio.models.generate_content(
-        model="gemini-2.5-flash",#-preview-09-2025",
+        model="gemini-2.5-pro",#flash-preview-09-2025",
         contents=eval_prompt,
         config=GenerateContentConfig(
             response_mime_type= "application/json",
@@ -310,6 +327,7 @@ async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, pr
         result_as_dict["ground_truth"] = qa["answer"]
         result_as_dict["question"] = qa["question"]
         result_as_dict["pipeline_name"] = pipeline_name
+        result_as_dict["file_name"] = file_name
     except Exception:
         start = raw_json.find("{")
         end = raw_json.rfind("}")
@@ -320,6 +338,7 @@ async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, pr
             result_as_dict["ground_truth"] = qa["answer"]
             result_as_dict["question"] = qa["question"]
             result_as_dict["pipeline_name"] = pipeline_name
+            result_as_dict["file_name"] = file_name
         else:
             result = EvaluationResult(
                 verdict="HALLUCINATION",
@@ -334,11 +353,12 @@ async def evaluate_single_qa(client, qa: dict, data: str, pipeline_name: str, pr
             result_as_dict["ground_truth"] = qa["answer"]
             result_as_dict["question"] = qa["question"]
             result_as_dict["pipeline_name"] = pipeline_name
+            result_as_dict["file_name"] = file_name
 
     return result_as_dict
 
 
-async def evaluate_pipeline_async(file_qa_list: list[dict], data: str, pipeline_name: str) -> list[dict[str, Any]]:
+async def evaluate_pipeline_async(file_qa_list: list[dict], data: str, pipeline_name: str, file_name: str = "", use_vertex: bool = False) -> list[dict[str, Any]]:
     """
     Async version of evaluate_pipeline using the Google Gen AI async client with parallel execution.
     """
@@ -399,7 +419,7 @@ async def evaluate_pipeline_async(file_qa_list: list[dict], data: str, pipeline_
     - Use confidence 1.0 for obvious cases; otherwise estimate between 0.0 and 1.0.
     """
 
-    async with AsyncGeminiClientManager() as client:
+    async with AsyncGeminiClientManager(use_vertex=use_vertex) as client:
         # Process tasks in batches of 5 to avoid rate limiting
         batch_size = 5
         all_results = []
@@ -407,7 +427,7 @@ async def evaluate_pipeline_async(file_qa_list: list[dict], data: str, pipeline_
         for i in range(0, len(file_qa_list), batch_size):
             batch = file_qa_list[i:i + batch_size]
             tasks = [
-                evaluate_single_qa(client, qa, data, pipeline_name, prompt_answer, prompt_evaluation)
+                evaluate_single_qa(client, qa, data, pipeline_name, prompt_answer, prompt_evaluation, file_name)
                 for qa in batch
             ]
 
@@ -446,11 +466,14 @@ def quick_performance_results(results: list[dict[str, Any]]):
 
 # Global configuration
 qa_file_file_name_map = {
-    "#1": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE.md",
-    "#2": "File #2 - Laurent M - tableau garantie fm 2025 word.md",
+    "#1": ["File #1 - Laurent M - Conditions particulières - Socle AXA - SAE.md", ],
+    "#2": [
+        "File #2 - Laurent M - tableau garantie fm 2025 word.md",
+        "File #3 - Panorama FMC 2025.md"
+    ],
 }
 # reverse the file_name_map
-file_name_file_qa_map = {v: k for k, v in qa_file_file_name_map.items()}
+file_name_file_qa_map = {filename: k for k, filenames in qa_file_file_name_map.items() for filename in filenames}
 
 
 async def main():
@@ -488,8 +511,8 @@ async def main():
                 file_name = file_path.name
                 qa_list = generate_question_answer(eval_data, file_name_file_qa_map[file_name])
                 print("Extracted question/answer pairs", len(qa_list))
-                # Use the async version
-                results = await evaluate_pipeline_async(qa_list, file_path.read_text(encoding="utf-8"), pipeline_name)
+                # Use the async version (use_vertex=False to use Gemini API)
+                results = await evaluate_pipeline_async(qa_list, file_path.read_text(encoding="utf-8"), pipeline_name, file_name, use_vertex=False)
                 print(f"Results for {pipeline_name}, {file_name}: {len(results)}")
                 print(json.dumps(quick_performance_results(results), indent=2))
                 all_results.extend(results)
@@ -533,8 +556,8 @@ def main_sync():
                 file_name = file_path.name
                 qa_list = generate_question_answer(eval_data, file_name_file_qa_map[file_name])
                 print("Extracted question/answer pairs", len(qa_list))
-                # Use the sync version with fixed parameters
-                results = evaluate_pipeline(qa_list, file_path.read_text(encoding="utf-8"), pipeline_name)
+                # Use the sync version with fixed parameters (use_vertex=False to use Gemini API)
+                results = evaluate_pipeline(qa_list, file_path.read_text(encoding="utf-8"), pipeline_name, file_name, use_vertex=False)
                 print(f"Results for {pipeline_name}, {file_name}: {len(results)}")
                 print(json.dumps(quick_performance_results(results), indent=2))
                 all_results.extend(results)

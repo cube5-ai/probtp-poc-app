@@ -2,7 +2,7 @@ import pymupdf4llm
 import pymupdf
 from pathlib import Path
 
-from pymupdf_lock import pymupdf_lock
+from .pymupdf_lock import pymupdf_lock
 
 
 

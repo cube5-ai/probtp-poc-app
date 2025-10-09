@@ -110,229 +110,183 @@ async def correct_table_with_llm(
     landing_html_formatted = format_html_for_llm(landing_table['html_content'])
     pymupdf_markdowns = '\n\n---\n\n'.join([t['markdown'] for t in matched_pymupdf_tables])
 
-    # Build prompt with flexible semantic synthesis approach
-    prompt = f"""You are a document parsing expert specializing in table extraction synthesis.
+    # Build prompt with focused correction approach
+    prompt = f"""You are a table extraction correction specialist.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-TASK: Synthesize Two Imperfect Table Extractions
+⚠️  CRITICAL FIRST PRINCIPLE ⚠️
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-You have two different extraction attempts of the same table, each with different strengths:
+Only correct text errors that affect MEANING or prevent READABILITY.
+Do NOT correct cosmetic spacing/punctuation that doesn't impair comprehension.
+
+READABILITY ERRORS - DO CORRECT:
+✓ "65%30%15%" → "65% 30% 15%" (run-together values are unreadable)
+✓ "FraisréelsOPTAM" → "Frais réels OPTAM" (missing word boundaries)
+✓ "1OO€" → "100€" (OCR misread character: "O" instead of "0")
+✓ "anti-grppe" → "anti-grippe" (missing letter makes word unreadable)
+✓ "Premium" → "Premium benefits" (missing content changes meaning)
+
+COSMETIC VARIATIONS - DO NOT CORRECT:
+✗ "100 %" vs "100%" (both equally readable)
+✗ "Verres: frais" vs "Verres : frais" (both equally readable)
+✗ "15€" vs "15 €" (both equally readable)
+✗ "Item1, Item2" vs "Item1,Item2" (both equally readable)
+✗ "-" vs "—" vs "*" (all mean "empty/not covered")
+✗ "✓ Text" vs "Text" (Landing AI saw a visual element, keep it)
+
+THE TEST: Would a human reader struggle to parse or misunderstand the current text?
+→ If YES: Correct it (readability/meaning issue)
+→ If NO: Leave it (cosmetic variation)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TASK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+You have two imperfect extractions of the same table:
 
 LANDING AI (OCR-based):
-  ✓ Strengths: Excellent at detecting cell boundaries and table structure
-  ✗ Weaknesses: Prone to character-level OCR errors (misreading characters, missing text)
+  ✓ Excellent cell boundaries and table structure
+  ✓ Can detect images, logos, icons in cells
+  ✗ Prone to OCR errors (misread characters, missing text, run-together words)
 
 PYMUPDF (Text extraction):
-  ✓ Strengths: Accurate text extraction with high character fidelity
-  ✗ Weaknesses: May misunderstand cell boundaries (merge cells that should be separate,
-               or split content that belongs together)
+  ✓ Accurate text with high character fidelity
+  ✗ May misunderstand cell boundaries
+  ✗ Text-only - cannot see images, logos, or icons
 
-YOUR GOAL: Identify specific cell-level edits needed in the Landing AI table to improve
-           text accuracy by synthesizing evidence from both extraction sources.
+YOUR JOB: Fix text errors in Landing AI cells using PyMuPDF as reference.
 
-OUTPUT: A list of cell corrections in JSON format, where each correction specifies:
-        - cell_id: The ID of the Landing AI cell to edit
-        - old_content: The current (incorrect/incomplete) content
-        - new_content: The corrected/completed content
-        - confidence: "high" | "medium" | "low"
-        - reason: Brief explanation of why this correction improves accuracy
+OUTPUT: JSON list of corrections with:
+- cell_id: Landing AI cell ID
+- old_content: Current (incorrect) content
+- new_content: Corrected content
+- confidence: "high" | "medium"
+- reason: Brief explanation
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 LANDING AI TABLE (HTML - Structure Reference)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Note: Empty cells in non-header rows are represented as <td>-</td>
 
 {landing_html_formatted}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PYMUPDF TABLES (Markdown - Text Reference)
+PYMUPDF TABLE (Markdown - Text Reference)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-Note: Empty cells in non-header rows are represented as "-"
 
 {pymupdf_markdowns}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-SEMANTIC SYNTHESIS FRAMEWORK
+CORRECTION GUIDELINES
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-PHASE 1: UNDERSTAND THE TABLE HOLISTICALLY
-└─ What does this table represent? (e.g., pricing, benefits, specifications, schedule)
-└─ What are the semantic columns? (e.g., category, tier, value, description)
-└─ What data types should each column contain? (text, numbers, dates, codes)
-└─ What patterns should repeat? (units, formatting, terminology)
+STEP 1: Identify the type of differences
 
-PHASE 2: ANALYZE BOTH SOURCES AS EVIDENCE
-└─ Treat both as imperfect witnesses to the same underlying table
+A) OCR CHARACTER ERRORS - Wrong characters that change meaning
+   Example: "1OO€" should be "100€" (letter O instead of digit 0)
+   → Correct: YES (high confidence if PyMuPDF confirms)
 
-A. For each Landing AI cell, examine:
-   ├─ Does the content make semantic sense for this column type?
-   ├─ Are there obvious OCR errors? (garbled text, wrong characters, missing content)
-   ├─ Does it match expected patterns? (e.g., numeric column should have numbers)
-   └─ Is it complete? (does it feel like something is missing?)
+B) NOT READABLE ERRORS - Missing spaces that prevent parsing
+   Example: "65%30%15%" should be "65% 30% 15%" (can't tell where values separate)
+   → Correct: YES (high confidence - values are run together)
 
-B. For PyMuPDF content, examine:
-   ├─ How is the text grouped? (what appears together in PyMuPDF?)
-   ├─ Are there spacing/formatting cues? (line breaks, whitespace, punctuation)
-   ├─ Does PyMuPDF's grouping suggest semantic unity or separation?
-   └─ Does PyMuPDF contain content absent from Landing AI?
+   Example: "FraisréelsOPTAM" should be "Frais réels OPTAM" (words glued together)
+   → Correct: YES (high confidence - word boundaries missing)
 
-C. Cross-reference patterns:
-   ├─ Where do they agree? (high confidence - likely correct)
-   ├─ Where do they disagree? (needs interpretation)
-   ├─ Is PyMuPDF content found distributed across multiple Landing AI cells?
-      └─ This suggests Landing AI correctly split cells, PyMuPDF concatenated
-   ├─ Is PyMuPDF content completely absent from all Landing AI cells?
-      └─ This suggests Landing AI OCR missed it entirely
-   ├─ Does PyMuPDF show natural breaks (spacing, punctuation) within its text?
-      └─ This provides clues about whether content should be split or unified
+C) MISSING CONTENT - Text present in PyMuPDF but absent from Landing AI
+   Example: Landing AI has "Premium" but PyMuPDF has "Premium benefits"
+   → Check: Is "benefits" found in other Landing AI cells nearby?
+     - If NO: Correct (likely missing)
+     - If YES: Don't correct (PyMuPDF merged cells)
 
-PHASE 3: SEMANTIC ARBITRATION
-└─ Use contextual reasoning to decide corrections:
+D) VISUAL CONTENT - Images, logos, icons that only Landing AI can see
+   Example: Landing AI has "✓ Premium" but PyMuPDF has only "Premium"
+   → Correct: NO (Landing AI has extra visual information, keep it)
 
-SCENARIO A: OCR Character Errors
-├─ Landing AI: "1OO€" (O instead of 0)
-├─ PyMuPDF: "100€"
-├─ Decision: Correct - clear OCR misread, PyMuPDF has accurate text
-└─ Confidence: High (if semantic and pattern match)
+   Example: Landing AI has "[logo] Company" but PyMuPDF has "Company"
+   → Correct: NO (Landing AI captured visual element, this is valuable)
 
-SCENARIO B: OCR Missing Content
-├─ Landing AI cell: "Premium"
-├─ PyMuPDF: "Premium benefits include coverage"
-├─ Check: Is "benefits include coverage" found in other Landing AI cells?
-│  └─ No → Landing AI likely truncated/missed content
-├─ Decision: Augment Landing AI cell with missing content
-└─ Confidence: High if content is semantically coherent for this cell
+E) COSMETIC SPACING - Spacing that doesn't affect parsing
+   Example: "100 %" vs "100%" (both equally clear)
+   → Correct: NO (forbidden - just a style difference)
 
-SCENARIO C: Layout Disagreement - Trust OCR Structure
-├─ Landing AI: Cell A="Value 1" | Cell B="Value 2"
-├─ PyMuPDF: "Value 1 Value 2" (concatenated)
-├─ Check: Do "Value 1" and "Value 2" appear separately in Landing AI?
-│  └─ Yes → Landing AI correctly identified cell boundaries
-├─ Decision: Do NOT merge - OCR structure is correct
-└─ Confidence: High if Landing AI structure is semantically logical
+STEP 2: Trust Landing AI structure
 
-SCENARIO D: PyMuPDF Layout Hints
-├─ Landing AI: One cell with "Plan A Plan B"
-├─ PyMuPDF markdown shows: "Plan A\n\nPlan B" (clear separation)
-├─ Semantic check: Should these be separate based on table meaning?
-│  └─ If yes: Consider flagging (but DON'T change structure - outside scope)
-│  └─ If no: Trust Landing AI structure
-├─ Decision: Preserve Landing AI structure (we correct content, not layout)
+- DON'T merge cells even if PyMuPDF concatenates them
+- DON'T split cells even if PyMuPDF separates content
+- If content appears in DIFFERENT Landing AI cells, PyMuPDF likely merged them incorrectly
 
-SCENARIO E: Image-Based Content Fusion
-├─ Landing AI: "[icon] Premium" (captured icon description from OCR)
-├─ PyMuPDF: "Premium" (no icon, text extraction only)
-├─ Decision: Keep Landing AI content (it has extra visual information)
-└─ Note: Don't "correct" away image-derived content
+STEP 3: Apply confidence levels
+
+"high" = Obvious OCR error or missing text, PyMuPDF clearly shows the correct version
+"medium" = Likely error but some ambiguity
+"low" = Uncertain → DO NOT include
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-CORRECTION PRINCIPLES
+ANALYSIS PROCESS
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-✓ DO correct: Character-level OCR errors that alter meaning
-✓ DO augment: Landing AI cells missing content that PyMuPDF has (and isn't elsewhere)
-✓ DO preserve: Landing AI cell structure (don't merge/split cells)
-✓ DO consider: PyMuPDF spacing/grouping as evidence for semantic relationships
-✓ DO validate: Corrections against semantic patterns (data types, units, terminology)
+For each Landing AI cell:
 
-✗ DON'T correct: ANY spacing, punctuation, or formatting variations that don't alter MEANING
-   STRICTLY FORBIDDEN to correct:
-   • "Revenue: increase" vs "Revenue : increase"(spacing around colons) - FORBIDDEN
-   • "100%" vs "100 %" (spacing around percent symbols) - FORBIDDEN
-   • "20€" vs "20 €" (spacing before currency) - FORBIDDEN
-   • "Item1, Item2" vs "Item1,Item2" (spacing around punctuation) - FORBIDDEN
-   • "Section A" vs "Section  A" (extra whitespace) - FORBIDDEN
-   • Line breaks or paragraph formatting differences - FORBIDDEN
-   • "-" (empty cell placeholder) - this is standardized and intentional - FORBIDDEN
+1. Does it have OCR character errors?
+   - Wrong letters/digits (1 vs l, O vs 0, etc.)
+   - Garbled text
+   - Misspelled words (check against PyMuPDF)
 
-   ONLY correct if text content is WRONG or MISSING, NOT for "standardization" or "consistency"
-✗ DON'T merge: Landing AI cells even if PyMuPDF concatenates them
-✗ DON'T split: Landing AI cells even if PyMuPDF separates content
-✗ DON'T overwrite: Image-derived content from Landing AI with PyMuPDF text-only version
-✗ DON'T force: Corrections when confidence is low or semantic fit is unclear
+2. Does it have errors completely preventing readability?
+   - Run-together values that look like one item ("65%30%15%")
+   - Missing spaces between words ("FraisréelsOPTAM")
+   - Would a human need to guess where breaks occur?
 
-CONFIDENCE LEVELS:
-├─ "high": Clear OCR error or missing content that changes meaning, strong semantic/pattern evidence
-├─ "medium": Likely OCR error/missing content but some ambiguity exists
-└─ "low": Uncertain - DO NOT include in corrections
+3. Is content missing?
+   - Compare with PyMuPDF content
+   - Search for "missing" content in adjacent Landing AI cells
+   - Only correct if truly absent (not just in another cell)
 
-NOTE: "Standardizing spacing/punctuation" is NEVER high or medium confidence - it's FORBIDDEN.
-      Only actual text errors (wrong characters, missing words) qualify as corrections.
+4. Is this just cosmetic?
+   - Does the spacing/punctuation difference affect comprehension?
+   - If both versions are equally readable → SKIP IT
 
-CRITICAL: Only suggest corrections that improve text accuracy while respecting
-          Landing AI's structural interpretation. When in doubt, don't correct.
+5. Create correction entry only if:
+   - Confidence is "high" or "medium"
+   - old_content ≠ new_content
+   - It fixes a readability or meaning issue
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-YOUR TASK
+FINAL VALIDATION CHECKLIST
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-⚠️  CRITICAL RULE: DO NOT "standardize" or "normalize" spacing/punctuation/formatting.
-    Only correct ACTUAL ERRORS where text content is wrong, missing, or unreadable.
+Before adding ANY correction, verify:
 
-    Examples of what to IGNORE (these are NOT errors):
-    - "Revenue: increase" vs "Revenue : increase" - IGNORE (just spacing)
-    - "100€" vs "100 €" - IGNORE (just spacing)
-    - "$100" vs "100$" - IGNORE (just formatting)
-    - "Item1,Item2" vs "Item1, Item2" - IGNORE (just spacing)
+□ Is this fixing wrong characters, missing text, or unreadable run-together text?
+  → If NO, DELETE this correction
 
-    Examples of what to CORRECT (these ARE errors):
-    - "1OO€" vs "100€" - CORRECT (OCR misread "0" as "O")
-    - "Premium" vs "Premium benefits" - CORRECT (missing text)
-    - "xyz@gmial.com" vs "xyz@gmail.com" - CORRECT (typo/OCR error)
-    - "GoldSilverBronze" vs "Gold Silver Bronze" - CORRECT (typo/OCR glued wordserror)
+□ Would a human reader understand the content differently after the fix?
+  → If NO, DELETE this correction
 
-1. Examine the Landing AI table and understand its semantic structure
-2. Compare each cell's content with the corresponding PyMuPDF content
-3. For each Landing AI cell where you identify an improvement opportunity:
+□ Does old_content exactly match the Landing AI cell content?
+  → If NO, fix the match
 
-   a) Determine the type of issue:
-      • OCR character error (misread characters)
-      • OCR missing content (text PyMuPDF has but Landing AI doesn't)
-      • Other text accuracy issue
+□ Is new_content actually different from old_content?
+  → If NO, DELETE this correction
 
-   b) Validate the correction using semantic reasoning:
-      • FIRST: Is this ONLY a spacing/punctuation/formatting change? → REJECT IT IMMEDIATELY
-      • Does the correction change the MEANING or fix a comprehension issue?
-      • Would a human reader understand the content differently? (if not, DON'T correct)
-      • Is actual TEXT wrong, missing, or garbled? (not just formatted differently)
-      • Does the PyMuPDF content make semantic sense for this cell?
-      • Does it match the expected pattern (data type, units, format)?
-      • If augmenting: Is this content genuinely missing, or just in another cell?
-      • Is the correction high enough confidence to apply?
-
-      REMEMBER: "Verres: frais" vs "Verres : frais" = SAME MEANING = DO NOT CORRECT
-
-   c) If valid, add a correction specifying:
-      • cell_id: The exact cell ID from the Landing AI HTML
-      • old_content: The exact current content (must match precisely)
-      • new_content: The corrected/completed content (MUST be different from old_content)
-      • confidence: "high" or "medium" only (don't include "low")
-      • reason: Concise explanation (e.g., "OCR misread '0' as 'O'",
-                "Landing AI missing 'coverage' text present in PyMuPDF")
-
-4. Return the list of corrections as a JSON object
-
-IMPORTANT:
-- Each correction will be applied as a direct text replacement in the Landing AI HTML
-- old_content must match the current cell content exactly
-- new_content MUST be DIFFERENT from old_content (if they're the same, DON'T include it)
-- DO NOT include entries where "no correction needed" - just skip them entirely
-
-If no corrections are needed, return an empty corrections array: {{"corrections": []}}
+□ Is confidence "high" or "medium" (not "low")?
+  → If NO, DELETE this correction
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Begin your analysis and provide the corrections in JSON format."""
+Return corrections as JSON. If no corrections needed: {{"corrections": []}}
 
-    # Call LLM with increased thinking budget for semantic synthesis
+Begin your analysis."""
+
+    # Call LLM with focused thinking budget
     response = await client.aio.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-pro",
         contents=prompt,
         config=GenerateContentConfig(
             response_mime_type="application/json",
             response_schema=CorrectionsResponse.model_json_schema(),
-            thinking_config=ThinkingConfig(thinking_budget=1000),
+            thinking_config=ThinkingConfig(thinking_budget=500),
             temperature=0.0,
             max_output_tokens=6000
         )

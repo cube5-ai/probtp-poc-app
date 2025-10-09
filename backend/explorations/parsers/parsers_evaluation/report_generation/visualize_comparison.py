@@ -41,8 +41,8 @@ def build_leaf_analysis_map(report: dict) -> dict:
     """
     leaf_map = {}
 
-    for category, analysis in report.get('analyses', {}).items():
-        for leaf_comp in analysis.get('leaf_comparisons', []):
+    for category_analysis in report.get('analyses', []):
+        for leaf_comp in category_analysis.get('leaf_comparisons', []):
             leaf_id = leaf_comp['leaf_id']
             leaf_map[leaf_id] = {
                 'advantage': leaf_comp['probtp_advantage'],
@@ -54,39 +54,43 @@ def build_leaf_analysis_map(report: dict) -> dict:
     return leaf_map
 
 
-def build_source_to_leaf_map(report: dict) -> dict:
+def build_leaf_id_to_display_map(report: dict) -> dict:
     """
-    Build a mapping from source_cell_id to leaf_id for both ProBTP and AXA.
+    Build a mapping from leaf_id to display values for both ProBTP and AXA.
 
     Returns:
-        dict: {source_cell_id: leaf_id}
+        dict: {leaf_id: {'probtp': display_text, 'axa': display_text}}
     """
-    source_map = {}
+    display_map = {}
 
     for category, extractions in report.get('extractions', {}).items():
-        # Add ProBTP sources
+        # Add ProBTP display values
         probtp_data = extractions.get('probtp', {})
         probtp_values = probtp_data.get('extracted_values', [])
 
         for item in probtp_values:
             leaf_id = item.get('leaf_id')
-            source_cell_ids = item.get('source_cell_ids') or []
+            display_text = item.get('display_text', '')
 
-            for source_id in source_cell_ids:
-                source_map[source_id] = leaf_id
+            if leaf_id:
+                if leaf_id not in display_map:
+                    display_map[leaf_id] = {}
+                display_map[leaf_id]['probtp'] = display_text
 
-        # Add AXA sources
+        # Add AXA display values
         axa_data = extractions.get('axa', {})
         axa_values = axa_data.get('extracted_values', [])
 
         for item in axa_values:
             leaf_id = item.get('leaf_id')
-            source_cell_ids = item.get('source_cell_ids') or []
+            display_text = item.get('display_text', '')
 
-            for source_id in source_cell_ids:
-                source_map[source_id] = leaf_id
+            if leaf_id:
+                if leaf_id not in display_map:
+                    display_map[leaf_id] = {}
+                display_map[leaf_id]['axa'] = display_text
 
-    return source_map
+    return display_map
 
 
 def bbox_contains(outer: dict, inner: dict) -> bool:
@@ -94,56 +98,56 @@ def bbox_contains(outer: dict, inner: dict) -> bool:
     Check if outer bounding box completely contains inner bounding box.
 
     Args:
-        outer: Bounding box {top, left, bottom, right}
-        inner: Bounding box {top, left, bottom, right}
+        outer: Bounding box {x1, y1, x2, y2, width, height}
+        inner: Bounding box {x1, y1, x2, y2, width, height}
 
     Returns:
         True if outer contains inner
     """
     return (
-        outer['left'] <= inner['left'] and
-        outer['right'] >= inner['right'] and
-        outer['top'] <= inner['top'] and
-        outer['bottom'] >= inner['bottom']
+        outer['x1'] <= inner['x1'] and
+        outer['x2'] >= inner['x2'] and
+        outer['y1'] <= inner['y1'] and
+        outer['y2'] >= inner['y2']
     )
 
 
-def are_vertically_aligned(bbox1: dict, bbox2: dict, tolerance: float = 0.02) -> bool:
+def are_vertically_aligned(bbox1: dict, bbox2: dict, tolerance: float = 20) -> bool:
     """
     Check if two bounding boxes are vertically aligned (centered on same vertical line).
 
     Args:
-        bbox1: First bounding box {top, left, bottom, right}
-        bbox2: Second bounding box {top, left, bottom, right}
-        tolerance: Maximum allowed difference in center x-coordinate (normalized 0-1)
+        bbox1: First bounding box {x1, y1, x2, y2, width, height}
+        bbox2: Second bounding box {x1, y1, x2, y2, width, height}
+        tolerance: Maximum allowed difference in center x-coordinate (in points)
 
     Returns:
         True if the bboxes are vertically aligned
     """
     # Calculate center x-coordinates
-    center1_x = (bbox1['left'] + bbox1['right']) / 2
-    center2_x = (bbox2['left'] + bbox2['right']) / 2
+    center1_x = (bbox1['x1'] + bbox1['x2']) / 2
+    center2_x = (bbox2['x1'] + bbox2['x2']) / 2
 
     # Check if centers are within tolerance
     return abs(center1_x - center2_x) < tolerance
 
 
-def are_vertical_neighbors(bbox1: dict, bbox2: dict, gap_tolerance: float = 0.01) -> bool:
+def are_vertical_neighbors(bbox1: dict, bbox2: dict, gap_tolerance: float = 10) -> bool:
     """
     Check if two bounding boxes are vertical neighbors (one above/below the other with small gap).
 
     Args:
-        bbox1: First bounding box {top, left, bottom, right}
-        bbox2: Second bounding box {top, left, bottom, right}
-        gap_tolerance: Maximum allowed gap between boxes (normalized 0-1)
+        bbox1: First bounding box {x1, y1, x2, y2, width, height}
+        bbox2: Second bounding box {x1, y1, x2, y2, width, height}
+        gap_tolerance: Maximum allowed gap between boxes (in points)
 
     Returns:
         True if the bboxes are vertical neighbors
     """
     # Check if bbox1 is above bbox2
-    gap_below = bbox2['top'] - bbox1['bottom']
+    gap_below = bbox2['y1'] - bbox1['y2']
     # Check if bbox2 is above bbox1
-    gap_above = bbox1['top'] - bbox2['bottom']
+    gap_above = bbox1['y1'] - bbox2['y2']
 
     # They are neighbors if the gap is small (touching or very close)
     return (0 <= gap_below <= gap_tolerance) or (0 <= gap_above <= gap_tolerance)
@@ -182,12 +186,12 @@ def remove_redundant_bboxes(bboxes: list) -> list:
         for i, bbox_info in enumerate(page_bboxes):
             bbox = bbox_info.get('bounding_box', {})
 
-            # Calculate bbox dimensions (normalized 0-1)
-            width = abs(bbox.get('right', 0) - bbox.get('left', 0))
-            height = abs(bbox.get('bottom', 0) - bbox.get('top', 0))
+            # Calculate bbox dimensions (in points)
+            width = bbox.get('width', 0)
+            height = bbox.get('height', 0)
 
-            # Skip bboxes that are too large (> 20% of page in either dimension)
-            if width > 0.2 or height > 0.2:
+            # Skip bboxes that are too large (> 20% of typical page ~600x840 points)
+            if width > 120 or height > 170:
                 continue
 
             is_redundant = False
@@ -248,13 +252,14 @@ def reverse_perspective(rationale: str, advantage: str) -> str:
         return f"{prefix}. {rationale}"
 
 
-def extract_annotations(report: dict, leaf_map: dict, document_filter: str) -> list:
+def extract_annotations(report: dict, leaf_map: dict, display_map: dict, document_filter: str) -> list:
     """
     Extract annotation data for cells from a specific document.
 
     Args:
         report: Comparison report data
         leaf_map: Mapping of leaf_id to analysis info
+        display_map: Mapping of leaf_id to display values
         document_filter: Document name to filter for ('Panorama FMC' or 'SAE')
 
     Returns:
@@ -262,57 +267,14 @@ def extract_annotations(report: dict, leaf_map: dict, document_filter: str) -> l
     """
     annotations = []
 
-    # Build source_cell_id to leaf_id mapping
-    source_to_leaf = build_source_to_leaf_map(report)
-
-    # Iterate through comparison tables
-    for category, table in report.get('comparison_tables', {}).items():
-        template_row = table.get('template_row', [])
-
-        # Find ProBTP and AXA column indices
-        probtp_col_idx = None
-        axa_col_idx = None
-        for idx, header in enumerate(template_row):
-            # ProBTP columns: S2, S3, S3+, S4, P3, P4, P5, etc.
-            if header in ['S2', 'S3', 'S3+', 'S4', 'P3', 'P4', 'P5']:
-                probtp_col_idx = idx
-            # AXA columns: various formulations
-            elif 'Base Obligatoire' in header or 'Surcomplémentaire' in header or 'Complémentaire responsable' in header or 'Option' in header:
-                axa_col_idx = idx
+    # Iterate through comparison tables (now a list)
+    for table in report.get('comparison_tables', []):
+        template_row = table.get('metadata', {}).get('column_labels', [])
 
         # Process each row
         for row in table.get('rows', []):
-            cells = row.get('cells', [])
-
-            # Get both ProBTP and AXA cells to extract leaf_id
-            probtp_cell = cells[probtp_col_idx] if probtp_col_idx is not None and probtp_col_idx < len(cells) else None
-            axa_cell = cells[axa_col_idx] if axa_col_idx is not None and axa_col_idx < len(cells) else None
-
-            # Determine which cell to process based on document filter
-            if document_filter == 'Panorama FMC':
-                target_cell = probtp_cell
-                source_key = 'probtp'
-            else:  # AXA document
-                target_cell = axa_cell
-                source_key = 'axa'
-
-            if not target_cell or not target_cell.get('bounding_boxes'):
-                continue
-
-            # Get source_cell_ids from the cell
-            sources = target_cell.get('sources', {})
-            target_sources = sources.get(source_key, [])
-
-            if not target_sources:
-                continue
-
-            # Map source_cell_id to leaf_id
-            leaf_id = None
-            for source_id in target_sources:
-                if source_id in source_to_leaf:
-                    leaf_id = source_to_leaf[source_id]
-                    break
-
+            # Skip header rows and rows without leaf_id
+            leaf_id = row.get('leaf_id')
             if not leaf_id:
                 continue
 
@@ -321,42 +283,54 @@ def extract_annotations(report: dict, leaf_map: dict, document_filter: str) -> l
                 continue
 
             analysis_info = leaf_map[leaf_id]
-            advantage = analysis_info['advantage']
+            advantage = row.get('probtp_advantage', analysis_info.get('advantage'))
 
             # Get color for this advantage level (from ProBTP perspective)
             color = COLORS.get(advantage, (0.5, 0.5, 0.5))  # Default gray
 
-            # Get policy levels from metadata
-            metadata = report.get('metadata', {})
-            probtp_levels = metadata.get('Probtp Levels', '')
-            axa_levels = metadata.get('Axa Levels', '')
+            # Get display values for hover text
+            display_info = display_map.get(leaf_id, {})
 
-            # Build hover text (show both values with policy levels)
-            probtp_value = analysis_info.get('probtp_display_value', 'N/A')
-            axa_value = analysis_info['axa_value']
-            rationale = analysis_info['rationale']
-
-            # For ProBTP document: show from ProBTP perspective
-            # For AXA document: show from AXA perspective (reversed)
+            # Build hover text using display_text
             if document_filter == 'Panorama FMC':
-                # ProBTP perspective
-                hover_text = (
-                    f"ProBTP ({probtp_levels}): {probtp_value}\n"
-                    f"AXA ({axa_levels}): {axa_value}\n\n"
-                    f"{rationale}"
-                )
+                # ProBTP document - show ProBTP's display value
+                probtp_display = display_info.get('probtp', 'N/A')
+                axa_display = display_info.get('axa', 'N/A')
+                hover_text = f"ProBTP: {probtp_display}\n\nAXA: {axa_display}"
             else:
-                # AXA perspective - reverse the rationale interpretation
-                axa_rationale = reverse_perspective(rationale, advantage)
-                hover_text = (
-                    f"AXA ({axa_levels}): {axa_value}\n"
-                    f"ProBTP ({probtp_levels}): {probtp_value}\n\n"
-                    f"{axa_rationale}"
-                )
+                # AXA document - show AXA's display value
+                axa_display = display_info.get('axa', 'N/A')
+                probtp_display = display_info.get('probtp', 'N/A')
+                hover_text = f"AXA: {axa_display}\n\nProBTP: {probtp_display}"
+
+            # Find the appropriate cell based on document filter
+            cells = row.get('cells', [])
+            target_cell = None
+
+            for cell in cells:
+                if cell.get('type') != 'data':
+                    continue
+
+                bboxes = cell.get('bounding_boxes', [])
+                if not bboxes:
+                    continue
+
+                # Check if any bbox matches our document filter
+                for bbox_info in bboxes:
+                    file_id = bbox_info.get('file_id', '')
+                    if document_filter in file_id:
+                        target_cell = cell
+                        break
+
+                if target_cell:
+                    break
+
+            if not target_cell:
+                continue
 
             # Extract bounding boxes and filter for target document
             target_bboxes = []
-            for bbox_info in target_cell['bounding_boxes']:
+            for bbox_info in target_cell.get('bounding_boxes', []):
                 file_id = bbox_info.get('file_id', '')
 
                 # Only process target document
@@ -375,7 +349,7 @@ def extract_annotations(report: dict, leaf_map: dict, document_filter: str) -> l
 
                 annotations.append({
                     'page': page,
-                    'bbox': bbox,  # {top, left, bottom, right} in 0-1 range
+                    'bbox': bbox,  # {x1, y1, x2, y2, width, height} in points
                     'color': color,
                     'hover_text': hover_text,
                     'leaf_id': leaf_id,
@@ -385,24 +359,17 @@ def extract_annotations(report: dict, leaf_map: dict, document_filter: str) -> l
     return annotations
 
 
-def convert_bbox_to_rect(bbox: dict, page_width: float, page_height: float) -> pymupdf.Rect:
+def convert_bbox_to_rect(bbox: dict) -> pymupdf.Rect:
     """
-    Convert normalized bounding box to PyMuPDF Rect.
+    Convert bounding box in points to PyMuPDF Rect.
 
     Args:
-        bbox: {top, left, bottom, right} in 0-1 range
-        page_width: Page width in points
-        page_height: Page height in points
+        bbox: {x1, y1, x2, y2, width, height} in points
 
     Returns:
         pymupdf.Rect object
     """
-    left = bbox['left'] * page_width
-    top = bbox['top'] * page_height
-    right = bbox['right'] * page_width
-    bottom = bbox['bottom'] * page_height
-
-    return pymupdf.Rect(left, top, right, bottom)
+    return pymupdf.Rect(bbox['x1'], bbox['y1'], bbox['x2'], bbox['y2'])
 
 
 def annotate_pdf(pdf_path: Path, annotations: list, output_path: Path):
@@ -424,11 +391,9 @@ def annotate_pdf(pdf_path: Path, annotations: list, output_path: Path):
             continue
 
         page = doc[page_num]
-        page_width = page.rect.width
-        page_height = page.rect.height
 
-        # Convert normalized bbox to PyMuPDF Rect
-        rect = convert_bbox_to_rect(annot_data['bbox'], page_width, page_height)
+        # Convert bbox to PyMuPDF Rect
+        rect = convert_bbox_to_rect(annot_data['bbox'])
 
         # Add square annotation
         annot = page.add_rect_annot(rect)
@@ -491,10 +456,15 @@ def main():
     leaf_map = build_leaf_analysis_map(report)
     print(f"Found {len(leaf_map)} leaf analyses")
 
+    # Build leaf display value map
+    print("Building leaf display value map...")
+    display_map = build_leaf_id_to_display_map(report)
+    print(f"Found display values for {len(display_map)} leaves")
+
     # Extract and annotate ProBTP document
     print("\n--- Annotating ProBTP Document ---")
     print("Extracting ProBTP annotations...")
-    probtp_annotations = extract_annotations(report, leaf_map, 'Panorama FMC')
+    probtp_annotations = extract_annotations(report, leaf_map, display_map, 'Panorama FMC')
     print(f"Found {len(probtp_annotations)} annotations")
 
     if probtp_annotations:
@@ -506,7 +476,7 @@ def main():
     # Extract and annotate AXA document
     print("\n--- Annotating AXA Document ---")
     print("Extracting AXA annotations...")
-    axa_annotations = extract_annotations(report, leaf_map, 'Laurent M - Conditions')
+    axa_annotations = extract_annotations(report, leaf_map, display_map, 'Laurent M - Conditions')
     print(f"Found {len(axa_annotations)} annotations")
 
     if axa_annotations:

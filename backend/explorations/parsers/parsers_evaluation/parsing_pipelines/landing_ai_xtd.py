@@ -1,41 +1,68 @@
 """
 Enhanced Landing AI parsing pipeline with PyMuPDF correction and LLM validation.
 
-Implements 4-phase pipeline:
+Implements 5-phase pipeline:
 1. Parse with both Landing AI and PyMuPDF
 2. Match tables using TF-IDF
 3. Correct with LLM using PyMuPDF reference
 4. Sanity check and visual correction
+5. Map corrected tables back to Landing AI response structure
 """
 
 import asyncio
 import json
 import os
 from pathlib import Path
+from typing import Any
 
 from dotenv import load_dotenv
 from google import genai
-from landing_ai_pipeline_utils.debug_utils import (
-    save_debug_artifacts,
-    save_html_versions,
-)
-from landing_ai_pipeline_utils.phase1_parsers import (
-    get_landing_tables,
-    get_landing_tables_with_response,
-    get_pymupdf_tables,
-)
-from landing_ai_pipeline_utils.phase2_matching import match_tables_on_page
-from landing_ai_pipeline_utils.phase3_correction import correct_table_with_llm
-from landing_ai_pipeline_utils.phase4_sanity_check import (
-    SanityCheck,
-    apply_header_correction,
-    apply_visual_correction,
-    generate_table_screenshot,
-    run_sanity_checks,
-)
-from landing_ai_pipeline_utils.phase5_output_mapping import map_to_landing_ai_response
 from langfuse import Langfuse
 from openinference.instrumentation.google_genai import GoogleGenAIInstrumentor
+
+# Handle both relative imports (when used as module) and direct imports (when run standalone)
+try:
+    from .landing_ai_pipeline_utils.debug_utils import (
+        save_debug_artifacts,
+        save_html_versions,
+    )
+    from .landing_ai_pipeline_utils.phase1_parsers import (
+        get_landing_tables,
+        get_landing_tables_with_response,
+        get_pymupdf_tables,
+    )
+    from .landing_ai_pipeline_utils.phase2_matching import match_tables_on_page
+    from .landing_ai_pipeline_utils.phase3_correction import correct_table_with_llm
+    from .landing_ai_pipeline_utils.phase4_sanity_check import (
+        SanityCheck,
+        apply_header_correction,
+        apply_visual_correction,
+        generate_table_screenshot,
+        run_sanity_checks,
+        validate_table_headers,
+    )
+    from .landing_ai_pipeline_utils.phase5_output_mapping import map_to_landing_ai_response
+except ImportError:
+    from landing_ai_pipeline_utils.debug_utils import (
+        save_debug_artifacts,
+        save_html_versions,
+    )
+    from landing_ai_pipeline_utils.phase1_parsers import (
+        get_landing_tables,
+        get_landing_tables_with_response,
+        get_pymupdf_tables,
+    )
+    from landing_ai_pipeline_utils.phase2_matching import match_tables_on_page
+    from landing_ai_pipeline_utils.phase3_correction import correct_table_with_llm
+    from landing_ai_pipeline_utils.phase4_sanity_check import (
+        SanityCheck,
+        apply_header_correction,
+        apply_visual_correction,
+        generate_table_screenshot,
+        run_sanity_checks,
+        validate_table_headers,
+    )
+    from landing_ai_pipeline_utils.phase5_output_mapping import map_to_landing_ai_response
 
 load_dotenv()
 
@@ -48,53 +75,24 @@ langfuse = Langfuse(
 )
 
 
-# Async Gemini client manager
-class AsyncGeminiClientManager:
-    """Async context manager for Gemini client lifecycle."""
+# Global client instance (reused across calls)
+_client_instance = None
 
-    def __init__(self):
-        self.client = None
 
-    async def __aenter__(self):
+def _get_client() -> genai.Client:
+    """Get or create Gemini client instance."""
+    global _client_instance
+    if _client_instance is None:
         GoogleGenAIInstrumentor().instrument()
-        self.client = genai.Client(
+        _client_instance = genai.Client(
             vertexai=True,
             project="probtp-poc-prod",
             location="global",
         )
-        return self.client
-
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        if self.client and hasattr(self.client, "close"):
-            try:
-                if asyncio.iscoroutinefunction(self.client.close):
-                    await self.client.close()
-                else:
-                    self.client.close()
-            except Exception as e:
-                print(f"Error closing client: {e}")
-        self.client = None
+    return _client_instance
 
 
-# Define mandatory sanity checks (always run)
-MANDATORY_SANITY_CHECKS = [
-    SanityCheck(
-        check_id="no_header",
-        description=(
-            "The table should have a descriptive header row with meaningful column names. "
-            "Check if the first row serves as a proper header by verifying: \n"
-            "(1) Headers should be descriptive text (e.g., 'Category', 'Level', 'Amount' or codes), not numerical values; \n"
-            "(2) Headers should be unique - repeated cell content in first row indicates missing headers; \n"
-            "(3) Partially empty header cells are acceptable; \n"
-            "(4) The first row content should clearly differ from data rows below it. \n"
-            "(5) Overall the table should be interpretable as is, not being able to interpret data cells is a sign of missing headers.\n"
-            "If any of the above conditions are not met, the table is missing a proper header row."
-        ),
-        applies_to="all",
-    ),
-]
-
-# Define additional optional sanity checks
+# Define optional sanity checks (run for data quality issues)
 OPTIONAL_SANITY_CHECKS = [
     SanityCheck(
         check_id="too_empty_row",
@@ -125,17 +123,13 @@ OPTIONAL_SANITY_CHECKS = [
     # ),
 ]
 
-# Combine all sanity checks
-SANITY_CHECKS = MANDATORY_SANITY_CHECKS + OPTIONAL_SANITY_CHECKS
 
-
-# Main pipeline
-async def process_document(file_path: str, client: genai.Client) -> dict:
+async def _process_document_with_client(file_path: str, client: genai.Client) -> dict:
     """
-    Process a document through the 4-phase pipeline.
+    Process a document through the 5-phase pipeline with given client.
 
     Returns:
-        Dict with corrected tables and statistics
+        Dict with corrected tables, statistics, and landing_ai_response
     """
     print(f"\n{'=' * 80}")
     print(f"Processing: {Path(file_path).name}")
@@ -214,34 +208,70 @@ async def process_document(file_path: str, client: genai.Client) -> dict:
     total_violations = 0
     total_visual_corrections = 0
 
-    # First pass: run mandatory header check on all tables and store in table dict
-    print("  Running mandatory header checks...")
+    # First pass: validate headers on all tables using dedicated function
+    print("  Running header validation...")
     for page_num in corrected_tables_by_page:
         for table in corrected_tables_by_page[page_num]:
             # Use chunk_id for identification
             table_id = table.get("chunk_id", "unknown")
-            header_result = await run_sanity_checks(
-                client, table, MANDATORY_SANITY_CHECKS
-            )
 
-            # Store violations directly in table dict
-            table["sanity_violations"] = list(header_result.violations)
-            table["has_valid_headers"] = len(header_result.violations) == 0
+            # Use dedicated header validation function
+            header_validation = await validate_table_headers(client, table)
 
-            if table["has_valid_headers"]:
-                print(f"    ✓ Page {page_num}, Table {table_id[:8]}: Valid headers")
-            else:
-                print(
-                    f"    ✗ Page {page_num}, Table {table_id[:8]}: Missing/invalid headers"
+            # Store validation results in table dict
+            table["has_valid_headers"] = header_validation.has_valid_headers
+            table["header_validation_confidence"] = header_validation.confidence
+            table["header_validation_reason"] = header_validation.reason
+
+            # Initialize sanity_violations list (will be populated with non-header issues later)
+            table["sanity_violations"] = []
+
+            # Add a violation for missing headers if needed (for backward compatibility)
+            if not header_validation.has_valid_headers:
+                try:
+                    from .landing_ai_pipeline_utils.phase4_sanity_check import SanityViolation
+                except ImportError:
+                    from landing_ai_pipeline_utils.phase4_sanity_check import SanityViolation
+
+                table["sanity_violations"].append(
+                    SanityViolation(
+                        check_id="no_header",
+                        description=header_validation.reason,
+                        affected_cells=[]
+                    )
                 )
 
-    # Second pass: process violations and apply corrections
+            if table["has_valid_headers"]:
+                print(f"    ✓ Page {page_num}, Table {table_id[:8]}: Valid headers ({header_validation.confidence} confidence)")
+            else:
+                print(f"    ✗ Page {page_num}, Table {table_id[:8]}: Missing/invalid headers ({header_validation.confidence} confidence)")
+
+    # Second pass: run optional data quality checks and process violations
+    print("\n  Running optional data quality checks...")
+    if OPTIONAL_SANITY_CHECKS:
+        for page_num in corrected_tables_by_page:
+            for table in corrected_tables_by_page[page_num]:
+                table_id = table.get("chunk_id", "unknown")
+
+                # Run optional sanity checks for data quality issues
+                optional_result = await run_sanity_checks(
+                    client, table, OPTIONAL_SANITY_CHECKS
+                )
+
+                # Append to existing violations (header violations from first pass)
+                existing_violations = table.get("sanity_violations", [])
+                table["sanity_violations"] = existing_violations + list(optional_result.violations)
+
+                if optional_result.violations:
+                    print(f"    Page {page_num}, Table {table_id[:8]}: {len(optional_result.violations)} data quality issues found")
+
+    # Third pass: process all violations and apply corrections
     print("\n  Processing violations and applying corrections...")
     for page_num in corrected_tables_by_page:
         final_tables = []
 
         for table in corrected_tables_by_page[page_num]:
-            # Get violations from table dict (stored in first pass)
+            # Get all violations from table dict (header + optional checks)
             violations = table.get("sanity_violations", [])
             has_valid_headers = table.get("has_valid_headers", True)
 
@@ -429,61 +459,97 @@ async def process_document(file_path: str, client: genai.Client) -> dict:
     return result
 
 
-# Generate markdown output
-def generate_markdown_output(result: dict) -> str:
-    """Generate markdown output from Landing AI response with corrected tables."""
-    lines = [f"# {Path(result['file_path']).name}\n"]
+# ============================================================================
+# Public API (called by parse_documents.py)
+# ============================================================================
 
-    # Use the landing_ai_response which has all chunks in their original order
-    landing_response = result.get("landing_ai_response", {})
+def parse_document(file_path: str) -> dict[str, Any]:
+    """
+    Parse a document using the enhanced Landing AI + PyMuPDF pipeline.
 
-    for page_num in sorted(result["tables_by_page"].keys()):
-        lines.append(f"\n## Page {page_num + 1}\n")
+    This is the main entry point called by parse_documents.py.
+    Runs the full 5-phase pipeline synchronously (from a thread pool).
 
-    for chunk in landing_response.get("chunks", []):
-        lines.append(chunk.get("markdown", ""))
-        lines.append("\n")
+    Args:
+        file_path: Absolute path to the PDF file
 
-    return "\n".join(lines)
+    Returns:
+        Dict containing the Landing AI response with corrected tables and metadata
+    """
+    # This function is called from ThreadPoolExecutor in parse_documents.py
+    # We're in a worker thread, not the main event loop thread
+
+    async def _run():
+        # Create client inside event loop to ensure proper binding
+        GoogleGenAIInstrumentor().instrument()
+        client = genai.Client(
+            vertexai=True,
+            project="probtp-poc-prod",
+            location="global",
+        )
+        return await _process_document_with_client(file_path, client)
+
+    # Create a new event loop for this thread
+    loop = asyncio.new_event_loop()
+    asyncio.set_event_loop(loop)
+    try:
+        result = loop.run_until_complete(_run())
+        return result["landing_ai_response"]
+    finally:
+        loop.close()
 
 
-# Main execution
-async def main():
-    """Main execution function."""
-    # Test on same file as landing_ai_enhanced_old.py
+def write_to_markdown(response: dict[str, Any], file_path: str) -> None:
+    """
+    Convert the enhanced Landing AI response to markdown.
+
+    This is called by parse_documents.py to generate the markdown output.
+
+    Args:
+        response: The Landing AI response dict (from parse_document)
+        file_path: Output markdown file path
+    """
+    with open(file_path, "w", encoding="utf-8") as f:
+        # Write all chunks in order (text, tables, etc.)
+        for chunk in response.get("chunks", []):
+            f.write(chunk.get("markdown", ""))
+            f.write("\n")
+
+
+
+
+# ============================================================================
+# Test/Debug main (for standalone execution)
+# ============================================================================
+
+def main():
+    """Test function for standalone execution."""
+    # Test on sample file
     document_name = "File #2 - Laurent M - tableau garantie fm 2025 word.pdf"
+
     base_dir = Path(__file__).parent.parent
     file_path = base_dir / "documents" / document_name
 
-    print("Landing AI Enhanced Pipeline")
+    print("Landing AI Enhanced Pipeline (Test Mode)")
     print("=" * 80)
 
-    async with AsyncGeminiClientManager() as client:
-        result = await process_document(str(file_path), client)
+    # Use the public API (synchronous)
+    response = parse_document(str(file_path))
 
-        # Print statistics
-        print(f"\n{'=' * 80}")
-        print("PIPELINE STATISTICS")
-        print(f"{'=' * 80}")
-        for key, value in result["statistics"].items():
-            print(f"{key}: {value}")
+    # Save outputs
+    output_dir = base_dir / "output" / "landing_ai_xtd"
+    output_dir.mkdir(parents=True, exist_ok=True)
 
-        # Generate and save markdown output
-        output_dir = base_dir / "output" / "landing_ai_xtd"
-        output_dir.mkdir(parents=True, exist_ok=True)
+    # Save JSON
+    json_file = output_dir / f"{Path(file_path).stem}.json"
+    json_file.write_text(json.dumps(response, indent=2), encoding="utf-8")
+    print(f"\nJSON saved to: {json_file}")
 
-        markdown_output = generate_markdown_output(result)
-        output_file = output_dir / f"{Path(file_path).stem}.md"
-        output_file.write_text(markdown_output, encoding="utf-8")
-        print(f"\nOutput saved to: {output_file}")
-
-        # Save Landing AI response with corrected tables and metadata
-        json_file = output_dir / f"{Path(file_path).stem}.json"
-        json_file.write_text(
-            json.dumps(result["landing_ai_response"], indent=2), encoding="utf-8"
-        )
-        print(f"Landing AI response with corrections saved to: {json_file}")
+    # Save markdown
+    md_file = output_dir / f"{Path(file_path).stem}.md"
+    write_to_markdown(response, str(md_file))
+    print(f"Markdown saved to: {md_file}")
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

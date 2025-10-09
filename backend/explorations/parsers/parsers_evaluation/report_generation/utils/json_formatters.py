@@ -1,6 +1,66 @@
 """Utilities for converting JSON structures to human-readable formats (HTML, Markdown)."""
 
 
+def translate_to_french(text: str) -> str:
+    """
+    Translate common English terms to French for report generation.
+
+    Args:
+        text: Input text that may contain English terms
+
+    Returns:
+        Text with English terms replaced by French equivalents
+    """
+    if not isinstance(text, str):
+        return text
+
+    # Translation mapping for common terms
+    # Lower-case keys for case-insensitive matching
+    translations = {
+        # Winner/loser enumerations
+        "probtp": "ProBTP",
+        "axa": "AXA",
+        "equivalent": "Équivalent",
+        "unknown": "Inconnu",
+        "tie": "Égalité",
+
+        # Confidence levels
+        "high": "Élevée",
+        "medium": "Moyenne",
+        "low": "Faible",
+        "very_high": "Très élevée",
+        "very_low": "Très faible",
+
+        # Coverage terms
+        "yes": "Oui",
+        "no": "Non",
+        "partial": "Partiel",
+        "partially covered": "Partiellement couvert",
+        "not covered": "Non couvert",
+        "covered": "Couvert",
+        "uncovered": "Non couvert",
+
+        # Common fields
+        "N/A": "N/D",  # Not Available -> Non Disponible
+        "n/a": "N/D",
+        "not available": "Non disponible",
+        "none": "Aucun",
+
+        # Other potential terms
+        "true": "Vrai",
+        "false": "Faux",
+        "all": "Tous",
+        "any": "N'importe quel",
+    }
+
+    # Check for exact match (case-insensitive)
+    text_lower = text.lower().strip()
+    if text_lower in translations:
+        return translations[text_lower]
+
+    return text
+
+
 def comparison_table_to_html(table_data: dict) -> str:
     """
     Convert ComparisonTable JSON to HTML table.
@@ -162,7 +222,7 @@ def comparison_table_to_markdown(table_data: dict, include_row_comparison: bool 
                     "equivalent": "🟡 Équivalent",
                     "axa_better": "🔴 AXA mieux",
                     "axa_much_better": "🔴🔴 AXA beaucoup mieux"
-                }.get(winner, winner)
+                }.get(winner, translate_to_french(winner))
 
                 # Add comparison as a note row
                 num_cols = len(cells)
@@ -229,7 +289,7 @@ def analysis_to_markdown(analysis_data: dict) -> str:
     # Salesperson talking points
     talking_points = analysis_data.get("salesperson_talking_points", [])
     if talking_points:
-        lines.append("### Points de Vente\n")
+        lines.append("### Arguments de Vente\n")
         for point in talking_points:
             lines.append(f"- {point}")
         lines.append("")
@@ -238,9 +298,12 @@ def analysis_to_markdown(analysis_data: dict) -> str:
     objective = analysis_data.get("objective_assessment", {})
     if objective:
         lines.append("### Évaluation Objective\n")
-        lines.append(f"**Gagnant:** {objective.get('overall_winner', 'N/A').upper()}")
-        lines.append(f"**Confiance:** {objective.get('confidence', 'N/A')}")
-        lines.append(f"\n**Raisonnement:** {objective.get('reasoning', 'N/A')}\n")
+        winner = translate_to_french(objective.get('overall_winner', 'N/A'))
+        confidence = translate_to_french(objective.get('confidence', 'N/A'))
+        reasoning = objective.get('reasoning', 'N/A')
+        lines.append(f"**Gagnant:** {winner.upper()}")
+        lines.append(f"**Confiance:** {confidence.capitalize()}")
+        lines.append(f"\n**Raisonnement:** {reasoning}\n")
 
         probtp_weak = objective.get("probtp_weaknesses", [])
         if probtp_weak:
@@ -305,9 +368,12 @@ def summary_to_markdown(summary_data: dict) -> str:
     objective_eval = summary_data.get("objective_evaluation", {})
     if objective_eval:
         lines.append("## Évaluation Objective Globale\n")
-        lines.append(f"**Gagnant Global:** {objective_eval.get('overall_winner', 'N/A').upper()}")
-        lines.append(f"**Confiance:** {objective_eval.get('confidence', 'N/A')}")
-        lines.append(f"\n{objective_eval.get('reasoning', 'N/A')}\n")
+        overall_winner = translate_to_french(objective_eval.get('overall_winner', 'N/A'))
+        confidence = translate_to_french(objective_eval.get('confidence', 'N/A'))
+        reasoning = objective_eval.get('reasoning', 'N/A')
+        lines.append(f"**Gagnant Global:** {overall_winner.upper()}")
+        lines.append(f"**Confiance:** {confidence.capitalize()}")
+        lines.append(f"\n{reasoning}\n")
 
 
     # Category strengths
@@ -340,8 +406,8 @@ def summary_to_markdown(summary_data: dict) -> str:
     #     lines.append("### Gagnants par Catégorie\n")
     #     for cat_winner in category_winners:
     #         category = cat_winner.get("category", "")
-    #         winner = cat_winner.get("winner", "").upper()
-    #         confidence = cat_winner.get("confidence", "")
+    #         winner = translate_to_french(cat_winner.get("winner", "")).upper()
+    #         confidence = translate_to_french(cat_winner.get("confidence", ""))
     #         reason = cat_winner.get("key_reason", "")
 
     #         lines.append(f"**{category}:** {winner} (confiance: {confidence})")
@@ -350,7 +416,7 @@ def summary_to_markdown(summary_data: dict) -> str:
     # Selling points
     selling_points = summary_data.get("selling_points", [])
     if selling_points:
-        lines.append("## Points de Vente ProBTP\n")
+        lines.append("## Arguments de Vente ProBTP\n")
         for point in selling_points:
             lines.append(f"- {point}")
         lines.append("")
@@ -559,7 +625,7 @@ def _build_coverage_sentence(vendor_name: str, cell: dict) -> str:
         Natural language sentence describing coverage
     """
     # Extract fields
-    coverage = cell.get("coverage", cell.get("value", "Non couvert"))
+    coverage = translate_to_french(cell.get("coverage", cell.get("value", "Non couvert")))
     frequency = cell.get("frequency")
     cap = cell.get("cap")
     age_restriction = cell.get("age_restriction")
@@ -568,13 +634,13 @@ def _build_coverage_sentence(vendor_name: str, cell: dict) -> str:
     notes = cell.get("notes")
 
     # Handle "Non couvert" case
-    if coverage == "Non couvert":
+    if coverage == "Non couvert" or coverage.lower() == "non couvert":
         return "Non couvert"
 
     # Build sentence parts
     parts = []
 
-    # Start with coverage
+    # Start with coverage (already translated)
     parts.append(coverage)
 
     # Add frequency

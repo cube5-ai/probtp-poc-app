@@ -20,8 +20,11 @@ load_dotenv()
 
 # File name mappings from evaluate_pipelines.py
 QA_FILE_FILE_NAME_MAP = {
-    "#1": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE.md",
-    "#2": "File #2 - Laurent M - tableau garantie fm 2025 word.md",
+    "#1": ["File #1 - Laurent M - Conditions particulières - Socle AXA - SAE.md"],
+    "#2": [
+        "File #2 - Laurent M - tableau garantie fm 2025 word.md",
+        "File #3 - Panorama FMC 2025.md"
+    ],
 }
 
 
@@ -123,8 +126,10 @@ def build_question_to_file_map(eval_data_path: Path) -> dict[str, dict[str, str]
         question += f" au niveau de garantie {obj['Niveau']} ?"
 
         file_id = obj.get("Fichier", "")
-        file_name = QA_FILE_FILE_NAME_MAP.get(file_id, file_id)
-        mapping[question] = {"file_id": file_id, "file_name": file_name}
+        file_names = QA_FILE_FILE_NAME_MAP.get(file_id, [file_id])
+        # Store all file names for this file_id (for reference, though we primarily use file_id)
+        # The file_name field will show the first variant for display purposes
+        mapping[question] = {"file_id": file_id, "file_name": file_names[0] if isinstance(file_names, list) else file_names}
     return mapping
 
 
@@ -136,9 +141,10 @@ def create_detailed_results_df(
     rows: list[dict[str, Any]] = []
     for r in results:
         question = r["question"]
+        # Use file_name directly from results if available, otherwise fall back to mapping
+        file_name = r.get("file_name", "")
         file_id = ""
-        file_name = ""
-        if question_to_file_map and question in question_to_file_map:
+        if not file_name and question_to_file_map and question in question_to_file_map:
             file_id = question_to_file_map[question]["file_id"]
             file_name = question_to_file_map[question]["file_name"]
 
@@ -164,7 +170,8 @@ def compute_file_metrics(detailed_results: pd.DataFrame) -> pd.DataFrame:
         return pd.DataFrame()
 
     df = detailed_results.copy()
-    group = df.groupby(["file_id", "file_name"])  # file_name may be empty if mapping not found
+    # Group by file_name only to show Files #2 and #3 separately
+    group = df.groupby("file_name")
     stats = group.agg({
         "verdict": [
             ("total", "count"),
@@ -194,7 +201,8 @@ def compute_pipeline_file_metrics(detailed_results: pd.DataFrame) -> pd.DataFram
         return pd.DataFrame()
 
     df = detailed_results.copy()
-    group = df.groupby(["pipeline", "file_id", "file_name"])  # long format
+    # Group by pipeline and file_name only to show Files #2 and #3 separately
+    group = df.groupby(["pipeline", "file_name"])
     stats = group.agg({
         "verdict": [
             ("total", "count"),
@@ -339,9 +347,9 @@ def add_file_bar_chart(wb, file_metrics: pd.DataFrame):
     chart.y_axis.title = "Success Rate"
     chart.x_axis.title = "File"
 
-    # Assume columns: file_id, file_name, ..., success_rate is last
+    # Assume columns: file_name, ..., success_rate is last
     data = Reference(ws, min_col=ws.max_column, min_row=1, max_row=num_files + 1)
-    cats = Reference(ws, min_col=2, min_row=2, max_row=num_files + 1)  # file_name
+    cats = Reference(ws, min_col=1, min_row=2, max_row=num_files + 1)  # file_name is now column 1
 
     chart.add_data(data, titles_from_data=True)
     chart.set_categories(cats)

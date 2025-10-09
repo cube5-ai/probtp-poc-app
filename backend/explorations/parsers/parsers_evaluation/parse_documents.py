@@ -3,9 +3,7 @@ Parse the documents in the input directory and write the results to the output d
 """
 
 # %%
-import asyncio
 import json
-from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from parsing_pipelines import (
@@ -14,6 +12,7 @@ from parsing_pipelines import (
     extend_llm_postprocessing_pymupdf_gemini_pro,
     extend_solo,
     landing_ai_solo,
+    landing_ai_xtd,
     # llamaparse_llm_postprocessing_pymupdf_claude_sonnet_4_5,
     mistral_ocr_solo,
     pulse_solo,
@@ -25,10 +24,11 @@ parsing_pipelines = {
     "pulse_solo": pulse_solo,
     "pymupdf4llm_solo": pymupdf4llm_solo,
     "mistral_ocr_solo": mistral_ocr_solo,
-    #"extend_llm_postprocessing_pymupdf_gemini_pro": extend_llm_postprocessing_pymupdf_gemini_pro,
+    # #"extend_llm_postprocessing_pymupdf_gemini_pro": extend_llm_postprocessing_pymupdf_gemini_pro,
     "extend_llm_postprocessing_pymupdf_gemini_flash": extend_llm_postprocessing_pymupdf_gemini_flash,
     "extend_llm_postprocessing_pymupdf_claude_sonnet_4_5": extend_llm_postprocessing_pymupdf_claude_sonnet_4_5,
     "landing_ai_solo": landing_ai_solo,
+    "landing_ai_xtd": landing_ai_xtd,  # Enhanced 5-phase pipeline
     #"llamaparse_llm_postprocessing_pymupdf_claude_sonnet_4_5": llamaparse_llm_postprocessing_pymupdf_claude_sonnet_4_5,
 }
 
@@ -52,76 +52,63 @@ def is_document_processed(document_name: str, output_dir_parser: Path) -> bool:
 
 
 # Process a single document with a single parser
-async def process_document(parser_name: str, parser, document: Path, executor: ThreadPoolExecutor) -> None:
-    """Process a single document with a single parser asynchronously"""
+def process_document(parser_name: str, parser, document: Path) -> None:
+    """Process a single document with a single parser"""
     output_dir_parser = output_dir / parser_name
     output_dir_parser.mkdir(parents=True, exist_ok=True)
-    
+
     # Check if already processed
     if is_document_processed(document.name, output_dir_parser):
         print(f"[{parser_name}] Skipping {document.name} - already processed.")
         return
-    
+
     print(f"[{parser_name}] Processing {document.name}")
-    
-    # Run parser in thread pool (parsers use synchronous HTTP calls)
-    loop = asyncio.get_event_loop()
-    data = await loop.run_in_executor(executor, parser.parse_document, str(document.absolute()))
-    
+
+    # Run parser
+    data = parser.parse_document(str(document.absolute()))
+
     # Save JSON
     output_json_file = output_dir_parser / document.name.replace(".pdf", ".json")
     try:
-        await loop.run_in_executor(
-            executor,
-            lambda: json.dump(data, open(output_json_file, "w"))
-        )
+        with open(output_json_file, "w") as f:
+            json.dump(data, f)
     except Exception as e:
         print(f"[{parser_name}] Error saving JSON: {e}")
-    
+
     # Save markdown
     output_md_file = output_dir_parser / document.name.replace(".pdf", ".md")
-    await loop.run_in_executor(
-        executor,
-        parser.write_to_markdown,
-        data,
-        str(output_md_file.absolute())
-    )
-    
+    parser.write_to_markdown(data, str(output_md_file.absolute()))
+
     print(f"[{parser_name}] ✅ Completed {document.name}")
 
 
 # Process all documents with a single parser
-async def process_parser(parser_name: str, parser, documents: list[Path], executor: ThreadPoolExecutor) -> None:
+def process_parser(parser_name: str, parser, documents: list[Path]) -> None:
     """Process all documents with a single parser"""
     print(f"\n{'='*60}")
     print(f"Starting parser: {parser_name}")
     print(f"{'='*60}")
-    
-    # Process all documents for this parser in parallel
-    tasks = [process_document(parser_name, parser, doc, executor) for doc in documents]
-    await asyncio.gather(*tasks)
-    
+
+    # Process all documents for this parser sequentially
+    for doc in documents:
+        process_document(parser_name, parser, doc)
+
     print(f"[{parser_name}] All documents completed")
 
 
-# Main async function
-async def main():
-    """Main function to orchestrate parallel parsing"""
-    # Create thread pool executor for synchronous I/O operations
-    with ThreadPoolExecutor(max_workers=10) as executor:
-        # Process all parsers in parallel (each parser processes all docs in parallel)
-        tasks = [
-            process_parser(parser_name, parser, documents, executor)
-            for parser_name, parser in parsing_pipelines.items()
-        ]
-        await asyncio.gather(*tasks)
-    
+# Main function
+def main():
+    """Main function to orchestrate sequential parsing"""
+    # Process all parsers sequentially
+    for parser_name, parser in parsing_pipelines.items():
+        process_parser(parser_name, parser, documents)
+
     print("\n" + "="*60)
     print("🎉 All parsing complete!")
     print("="*60)
 
 
 # %%
-# Run the async main function
+# Run the main function
 if __name__ == "__main__":
-    asyncio.run(main())
+    main()

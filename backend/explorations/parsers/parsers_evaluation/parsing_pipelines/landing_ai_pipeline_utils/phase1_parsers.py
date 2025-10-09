@@ -2,11 +2,15 @@
 import json
 import os
 import re
+import threading
 from pathlib import Path
 from typing import Any
 
 import fitz
 from langfuse import observe
+
+# Thread lock for PyMuPDF operations to avoid concurrent access issues
+_pymupdf_lock = threading.Lock()
 
 
 def standardize_empty_cells_html(html_content: str) -> str:
@@ -175,32 +179,36 @@ def get_pymupdf_tables(pdf_path: str) -> dict[int, list[dict]]:
     Returns:
         Dict mapping page number to list of Table objects with extracted content
     """
-    doc = fitz.open(pdf_path)
-    tables_by_page: dict[int, list[dict]] = {}
+    # Use lock to prevent concurrent PyMuPDF operations that can cause textpage conflicts
+    with _pymupdf_lock:
+        doc = fitz.open(pdf_path)
+        tables_by_page: dict[int, list[dict]] = {}
 
-    for page_num in range(len(doc)):
-        page = doc.load_page(page_num)
-        table_finder = page.find_tables()
+        try:
+            for page_num in range(len(doc)):
+                page = doc.load_page(page_num)
+                table_finder = page.find_tables()
 
-        if not table_finder.tables:
-            continue
+                if not table_finder.tables:
+                    continue
 
-        tables_by_page[page_num] = []
+                tables_by_page[page_num] = []
 
-        for table in table_finder.tables:
-            # Standardize empty cells in markdown
-            raw_markdown = table.to_markdown()
-            standardized_markdown = standardize_empty_cells_markdown(raw_markdown)
+                for table in table_finder.tables:
+                    # Standardize empty cells in markdown
+                    raw_markdown = table.to_markdown()
+                    standardized_markdown = standardize_empty_cells_markdown(raw_markdown)
 
-            tables_by_page[page_num].append({
-                'table_object': table,
-                'extracted_content': table.extract(),
-                'markdown': standardized_markdown,
-                'bbox': table.bbox,
-                'row_count': table.row_count,
-                'col_count': table.col_count
-            })
+                    tables_by_page[page_num].append({
+                        'table_object': table,
+                        'extracted_content': table.extract(),
+                        'markdown': standardized_markdown,
+                        'bbox': table.bbox,
+                        'row_count': table.row_count,
+                        'col_count': table.col_count
+                    })
+        finally:
+            doc.close()
 
-    doc.close()
-    return tables_by_page
+        return tables_by_page
 

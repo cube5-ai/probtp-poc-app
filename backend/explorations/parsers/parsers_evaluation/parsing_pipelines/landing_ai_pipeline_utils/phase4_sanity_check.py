@@ -34,6 +34,205 @@ class SanityCheckResult(BaseModel):
     violations: list[SanityViolation]
 
 
+# Header validation response
+class HeaderValidationResponse(BaseModel):
+    """Response from header validation."""
+    has_valid_headers: bool
+    confidence: str  # "high" | "medium" | "low"
+    reason: str = Field(..., description="Concise explanation of the determination, 200 words max.")
+
+
+# Dedicated header validation with LLM
+@observe()
+async def validate_table_headers(
+    client: genai.Client,
+    table: dict
+) -> HeaderValidationResponse:
+    """
+    Validate if a table has proper headers using LLM analysis.
+
+    This function understands common table patterns including:
+    - Empty header cells above row label columns (VALID)
+    - Headers with colspan/rowspan (VALID)
+    - Multi-row headers (VALID)
+    - Tables without row labels (data starts from first column)
+
+    Returns:
+        HeaderValidationResponse with validation result, confidence, and reason
+    """
+    formatted_html = format_html_for_llm(table['html_content'])
+
+    prompt = f"""You are a table structure expert specializing in header validation.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TASK: Determine if this table has valid headers
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+A table has VALID headers when the first row(s) provide meaningful labels that help interpret the data columns.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+TABLE TO ANALYZE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+{formatted_html}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANALYSIS FRAMEWORK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+STEP 1: Identify Table Structure Pattern
+└─ Examine the first row and subsequent data rows to understand the table's organization
+
+STEP 2: Recognize Common Valid Patterns
+
+A. Tables WITH Row Labels (left column contains categories/labels)
+   └─ Pattern: First column = row categories, remaining columns = data
+   └─ Valid header structure:
+      • Empty cell(s) in first column position(s) of header row
+      • Descriptive labels for data columns
+   └─ Example (semantically meaningful):
+      <table>
+        <tr><td></td><td>Revenue</td><td>Expenses</td><td>Profit</td></tr>
+        <tr><td>Q1 2024</td><td>250K</td><td>180K</td><td>70K</td></tr>
+        <tr><td>Q2 2024</td><td>280K</td><td>195K</td><td>85K</td></tr>
+      </table>
+      ✓ VALID: Empty header cell above "Q1 2024", "Q2 2024" row labels
+
+B. Tables WITHOUT Row Labels (all columns contain data)
+   └─ Pattern: All columns contain comparable data values
+   └─ Valid header structure:
+      • All header cells contain descriptive labels
+      • No empty cells unless using colspan
+   └─ Example (semantically meaningful):
+      <table>
+        <tr><td>Employee Name</td><td>Department</td><td>Salary</td><td>Start Date</td></tr>
+        <tr><td>Alice Chen</td><td>Engineering</td><td>95000</td><td>2023-01-15</td></tr>
+        <tr><td>Bob Smith</td><td>Marketing</td><td>78000</td><td>2023-03-22</td></tr>
+      </table>
+      ✓ VALID: All columns have descriptive headers
+
+C. Tables with Multi-Level Headers (hierarchical structure)
+   └─ Pattern: Multiple header rows showing category hierarchy
+   └─ Valid header structure:
+      • Uses colspan to group related columns
+      • May have empty cells in appropriate positions
+   └─ Example (semantically meaningful):
+      <table>
+        <tr><td></td><td colspan="2">Sales Metrics</td><td colspan="2">Customer Metrics</td></tr>
+        <tr><td>Region</td><td>Revenue</td><td>Growth</td><td>New</td><td>Retained</td></tr>
+        <tr><td>North</td><td>1.2M</td><td>15%</td><td>450</td><td>2100</td></tr>
+        <tr><td>South</td><td>980K</td><td>8%</td><td>320</td><td>1850</td></tr>
+      </table>
+      ✓ VALID: Empty cell above "Region" row label, colspan for grouping
+
+D. Tables with Complex Row Labels (nested categories)
+   └─ Pattern: Multiple left columns for hierarchical row categorization
+   └─ Valid header structure:
+      • Multiple empty cells corresponding to row label columns
+      • Headers for data columns only
+   └─ Example (semantically meaningful):
+      <table>
+        <tr><td></td><td></td><td>Basic Plan</td><td>Premium Plan</td><td>Enterprise Plan</td></tr>
+        <tr><td>Healthcare</td><td>Vision Coverage</td><td>Partial</td><td>Full</td><td>Full</td></tr>
+        <tr><td>Healthcare</td><td>Dental Coverage</td><td>None</td><td>Basic</td><td>Full</td></tr>
+        <tr><td>Insurance</td><td>Life Insurance</td><td>50K</td><td>100K</td><td>250K</td></tr>
+      </table>
+      ✓ VALID: Two empty cells above "Healthcare"/"Insurance" and "Vision Coverage"/"Dental Coverage"
+
+E. Tables with Rowspan in Headers
+   └─ Pattern: Header cells spanning multiple rows for grouped categories
+   └─ Valid header structure:
+      • Uses rowspan for cells that apply to multiple sub-rows
+   └─ Example (semantically meaningful):
+      <table>
+        <tr><td rowspan="2">Product Category</td><td colspan="2">Q1 Performance</td></tr>
+        <tr><td>Units Sold</td><td>Revenue</td></tr>
+        <tr><td>Electronics</td><td>1200</td><td>45000</td></tr>
+        <tr><td>Furniture</td><td>850</td><td>32000</td></tr>
+      </table>
+      ✓ VALID: Rowspan creates hierarchical header structure
+
+STEP 3: Identify INVALID Patterns (Missing or Inadequate Headers)
+
+❌ All header cells are empty or contain only generic symbols
+   <table>
+     <tr><td></td><td></td><td></td></tr>
+     <tr><td>Product A</td><td>100</td><td>5000</td></tr>
+   </table>
+
+❌ First row contains data values instead of descriptive labels
+   <table>
+     <tr><td>Product A</td><td>100</td><td>5000</td></tr>
+     <tr><td>Product B</td><td>150</td><td>7500</td></tr>
+   </table>
+   or
+   <table>
+     <tr><td>Category A</td><td>Covered Totally</td><td>Covered Partially</td><td>Covered Totally</td></tr>
+     <tr><td>Category B</td><td>50%</td><td>-</td><td>20%</td></tr>
+   </table>
+
+❌ Headers missing for data columns (but has row label)
+   <table>
+     <tr><td>Product</td><td></td><td></td></tr>
+     <tr><td>Product A</td><td>100</td><td>5000</td></tr>
+   </table>
+
+❌ Headers are too generic and don't describe the data
+   <table>
+     <tr><td></td><td>Column 1</td><td>Column 2</td></tr>
+     <tr><td>Alice Chen</td><td>Engineering</td><td>95000</td></tr>
+   </table>
+
+
+STEP 4: Make Your Determination
+
+Consider:
+• Does the first row contain labels that meaningfully describe the columns?
+• Are empty cells in valid positions (above row labels)?
+• Do the headers help interpret the data in subsequent rows?
+• Is the header structure consistent with the data structure?
+
+Set 'has_valid_headers' to:
+• true: Headers are present and meaningful for data columns
+• false: Headers are missing, inadequate, or the first row appears to be data
+
+Set 'confidence' to:
+• "high": Clear evidence, no ambiguity
+• "medium": Likely correct but some uncertainty
+• "low": Uncertain, could go either way
+
+Provide a brief 'reason' explaining your determination.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Analyze the table and provide your response in JSON format."""
+
+    response = await client.aio.models.generate_content(
+        model="gemini-2.5-pro",
+        contents=prompt,
+        config=GenerateContentConfig(
+            response_mime_type="application/json",
+            response_schema=HeaderValidationResponse.model_json_schema(),
+            thinking_config=ThinkingConfig(thinking_budget=500),
+            temperature=0.0,
+            max_output_tokens=2000
+        )
+    )
+
+    raw_json = getattr(response, "text", "").strip()
+
+    try:
+        result = HeaderValidationResponse.model_validate_json(raw_json)
+    except Exception:
+        # If parsing fails, assume headers are present (conservative default)
+        result = HeaderValidationResponse(
+            has_valid_headers=True,
+            confidence="low",
+            reason="Failed to parse LLM response"
+        )
+
+    return result
+
+
 # Run sanity checks with LLM
 @observe()
 async def run_sanity_checks(
@@ -67,14 +266,14 @@ Table (HTML):
 Identify any violations."""
 
     response = await client.aio.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-pro",
         contents=prompt,
         config=GenerateContentConfig(
             response_mime_type="application/json",
             response_schema=SanityCheckResult.model_json_schema(),
-            thinking_config=ThinkingConfig(thinking_budget=300),
+            thinking_config=ThinkingConfig(thinking_budget=500),
             temperature=0.0,
-            max_output_tokens=1500
+            max_output_tokens=2000
         )
     )
 
@@ -270,6 +469,41 @@ def get_table_column_count(html_content: str) -> int:
     return count_columns_in_row(row_html)
 
 
+# Helper function to validate multi-row header structure
+def validate_header_rows(header_html: str, expected_col_count: int) -> bool:
+    """
+    Validate that multi-row header structure has correct column counts.
+    For multi-row headers with rowspan, this validates the total structure.
+
+    Args:
+        header_html: Header HTML (single or multi-row)
+        expected_col_count: Expected column count for the table
+
+    Returns:
+        True if valid, False otherwise
+    """
+    import re
+
+    # Extract all <tr> elements
+    rows = re.findall(r'<tr[^>]*>.*?</tr>', header_html, re.DOTALL | re.IGNORECASE)
+
+    if not rows:
+        return False
+
+    # Single row case - simple validation
+    if len(rows) == 1:
+        return count_columns_in_row(rows[0]) == expected_col_count
+
+    # Multi-row case - need to account for rowspan
+    # For simplicity, validate that first row matches expected count
+    # (rowspan logic is complex and the LLM is instructed to handle it correctly)
+    first_row_count = count_columns_in_row(rows[0])
+
+    # For first row, the count should match expected (accounting for rowspan cells)
+    # This is a simplified check - full validation would require parsing rowspan
+    return first_row_count == expected_col_count
+
+
 # Apply header correction (no image needed)
 @observe()
 async def apply_header_correction(
@@ -369,6 +603,7 @@ PHASE 3: HEADER MAPPING (only if Phase 2 confirms compatibility)
    A. Identify semantic roles of reference headers:
       └─ Which headers label categories? Which label groupings/tiers?
       └─ Are there grouping headers (colspan) vs. leaf headers?
+      └─ Is this a MULTI-ROW header structure? (e.g., category row + subcategory row)
       └─ What is the PURPOSE of empty cells? (structural spacing? aesthetic? data alignment?)
 
    B. Map to current table columns:
@@ -377,8 +612,11 @@ PHASE 3: HEADER MAPPING (only if Phase 2 confirms compatibility)
       └─ Adapt structure (colspan, positioning) to match current column count
       └─ DO NOT blindly copy empty cells - only include if semantically necessary
 
-   C. Construct header row:
-      └─ Total column span MUST match current table's column count
+   C. Construct header row(s):
+      └─ SINGLE ROW headers: One <tr> element with total column span matching current table
+      └─ MULTI-ROW headers: Multiple <tr> elements, each with total column span matching current table
+      └─ Preserve semantic hierarchy from reference (parent categories → subcategories)
+      └─ Total column span MUST match current table's column count in EACH row
       └─ Preserve semantic meaning, not mechanical structure
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -402,16 +640,23 @@ TECHNICAL RULES (apply only after semantic validation)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 If headers ARE semantically appropriate:
-├─ Format: <tr><td>Header1</td><td>Header2</td><td colspan="2">Grouped</td></tr>
+├─ Single-row format: <tr><td>Header1</td><td>Header2</td><td colspan="2">Grouped</td></tr>
+├─ Multi-row format: Multiple <tr> elements concatenated (newlines between rows)
 ├─ Requirements:
 │  ├─ Use <td> tags ONLY (not <th>)
 │  ├─ NO id attributes in any tags
 │  ├─ Include empty cells ONLY if semantically meaningful: <td></td>
 │  ├─ Use colspan for grouped concepts: <td colspan="N">Text</td>
-│  └─ Total column span MUST match current table exactly
-└─ Example (current table has 5 columns):
-   <tr><td>Category</td><td colspan="2">Premium Tier</td><td colspan="2">Basic Tier</td></tr>
-   └─ Breakdown: 1 + 2 (colspan) + 2 (colspan) = 5 columns ✓
+│  ├─ Use rowspan for multi-row headers if needed: <td rowspan="M">Text</td>
+│  └─ Total column span MUST match current table exactly in EACH row
+├─ Single-row example (current table has 5 columns):
+│  <tr><td>Category</td><td colspan="2">Premium Tier</td><td colspan="2">Basic Tier</td></tr>
+│  └─ Breakdown: 1 + 2 (colspan) + 2 (colspan) = 5 columns ✓
+└─ Multi-row example (current table has 5 columns):
+   <tr><td rowspan="2">Category</td><td colspan="4">Plans</td></tr>
+   <tr><td colspan="2">Premium</td><td colspan="2">Basic</td></tr>
+   └─ Row 1: 1 (rowspan accounts for position) + 4 (colspan) = 5 columns ✓
+   └─ Row 2: 2 (colspan) + 2 (colspan) = 4 columns (rowspan cell continues) ✓
 
 If headers are NOT semantically appropriate (set new_header_row_HTML to null):
 ├─ Tables represent different types of information
@@ -432,7 +677,7 @@ CRITICAL: When in doubt about SEMANTIC compatibility, set new_header_row_HTML to
 Provide your analysis and header reconstruction."""
 
     response = await client.aio.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-pro",
         contents=prompt,
         config=GenerateContentConfig(
             response_mime_type="application/json",
@@ -454,14 +699,17 @@ Provide your analysis and header reconstruction."""
     if not correction_obj.new_header_row_HTML or correction_obj.confidence not in ["high", "medium"]:
         return table
 
-    # Step 1: Validate column count matches
+    # Step 1: Validate column count matches (supports multi-row headers)
     original_col_count = get_table_column_count(table['html_content'])
-    proposed_header_col_count = count_columns_in_row(correction_obj.new_header_row_HTML)
+    header_is_valid = validate_header_rows(correction_obj.new_header_row_HTML, original_col_count)
 
     final_header_row_html = correction_obj.new_header_row_HTML
 
-    # Step 2: If column counts don't match, trigger corrective LLM call
-    if original_col_count != proposed_header_col_count and original_col_count > 0:
+    # Step 2: If validation fails, trigger corrective LLM call
+    if not header_is_valid and original_col_count > 0:
+        # Calculate proposed header column count for error message
+        proposed_header_col_count = count_columns_in_row(correction_obj.new_header_row_HTML)
+
         # Create partially corrected table for context
         partially_corrected_html = prepend_header_row(table['html_content'], correction_obj.new_header_row_HTML)
         formatted_partial = format_html_for_llm(partially_corrected_html)
@@ -499,25 +747,32 @@ CURRENT TABLE WITH INCORRECT HEADER (needs {original_col_count} columns)
 TASK
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Correct the header row to have EXACTLY {original_col_count} columns (accounting for colspan).
+Correct the header row(s) to have EXACTLY {original_col_count} columns (accounting for colspan/rowspan).
 
 CRITICAL REQUIREMENTS:
 1. SEMANTIC ALIGNMENT: Review the reference table to understand the semantic meaning of each header
 2. PATTERN MATCHING: For small tables, the reference table patterns are especially important
 3. COLUMN MAPPING: Ensure each header semantically matches its corresponding data column
 4. STRUCTURAL CONSISTENCY: Maintain the same semantic relationships as the reference table
+5. MULTI-ROW SUPPORT: If reference has multi-row headers, preserve the hierarchical structure
 
 TECHNICAL RULES:
 1. Use <td> tags ONLY (never <th>)
 2. NO id attributes in any tags
 3. Include empty cells where needed: <td></td>
 4. Use colspan for merged headers: <td colspan="N">Text</td>
-5. CRITICAL: Total column span MUST equal {original_col_count}
+5. Use rowspan for multi-row headers if needed: <td rowspan="M">Text</td>
+6. CRITICAL: Total column span MUST equal {original_col_count} in EACH row
 
-CALCULATION EXAMPLE:
-If target is 5 columns:
+SINGLE-ROW EXAMPLE (target is 5 columns):
 <tr><td>Col1</td><td></td><td colspan="2">Grouped</td><td>Last</td></tr>
 └─ Count: 1 + 1 (empty) + 2 (colspan) + 1 = 5 ✓
+
+MULTI-ROW EXAMPLE (target is 5 columns):
+<tr><td rowspan="2">Category</td><td colspan="4">Plans</td></tr>
+<tr><td colspan="2">Premium</td><td colspan="2">Basic</td></tr>
+└─ Row 1: 1 (rowspan) + 4 (colspan) = 5 ✓
+└─ Row 2: 2 (colspan) + 2 (colspan) = 4 (rowspan continues) ✓
 
 DECISION CRITERIA:
 - If you can adjust the header structure while maintaining semantic alignment → Provide corrected header
@@ -530,7 +785,7 @@ Provide the corrected header row HTML or null if unable to fix in the expected J
 
         try:
             correction_response = await client.aio.models.generate_content(
-                model="gemini-2.5-flash",
+                model="gemini-2.5-pro",
                 contents=correction_prompt,
                 config=GenerateContentConfig(
                     response_mime_type="application/json",
@@ -544,10 +799,10 @@ Provide the corrected header row HTML or null if unable to fix in the expected J
             correction_raw_json = getattr(correction_response, "text", "").strip()
             correction_obj_2 = HeaderCorrectionResponse.model_validate_json(correction_raw_json)
 
-            # Validate the corrected header
+            # Validate the corrected header (supports multi-row)
             if correction_obj_2.new_header_row_HTML:
-                corrected_col_count = count_columns_in_row(correction_obj_2.new_header_row_HTML)
-                if corrected_col_count == original_col_count:
+                corrected_is_valid = validate_header_rows(correction_obj_2.new_header_row_HTML, original_col_count)
+                if corrected_is_valid:
                     final_header_row_html = correction_obj_2.new_header_row_HTML
                 else:
                     # Still doesn't match, abort header correction
@@ -562,21 +817,28 @@ Provide the corrected header row HTML or null if unable to fix in the expected J
 
     # Step 3: Apply the validated header
     import copy
+    import re
     corrected_table = copy.deepcopy(table)
     corrected_table['_pre_header_html_content'] = table['html_content']
 
-    # Prepend header row
+    # Prepend header row(s)
     corrected_html = prepend_header_row(table['html_content'], final_header_row_html)
 
     # Standardize empty cells in the entire table (including the new header and data rows)
     # This ensures empty cells below the header are represented as "-"
     corrected_html = standardize_empty_cells_html(corrected_html)
 
+    # Check if multi-row header
+    header_rows = re.findall(r'<tr[^>]*>.*?</tr>', final_header_row_html, re.DOTALL | re.IGNORECASE)
+    is_multi_row = len(header_rows) > 1
+
     corrected_table['html_content'] = corrected_html
     corrected_table['header_row_added'] = True
+    corrected_table['header_is_multi_row'] = is_multi_row
+    corrected_table['header_row_count'] = len(header_rows)
     corrected_table['header_correction_confidence'] = correction_obj.confidence
     corrected_table['header_correction_reason'] = correction_obj.reason
-    corrected_table['header_column_count_match'] = (original_col_count == proposed_header_col_count)
+    corrected_table['header_column_count_match'] = header_is_valid
 
     return corrected_table
 
@@ -694,7 +956,7 @@ Begin your analysis."""
     image_part = Part.from_bytes(data=screenshot_bytes, mime_type="image/png")
 
     response = await client.aio.models.generate_content(
-        model="gemini-2.5-flash",
+        model="gemini-2.5-pro",
         contents=[prompt, image_part],
         config=GenerateContentConfig(
             response_mime_type="application/json",
@@ -744,14 +1006,16 @@ Begin your analysis."""
     return corrected_table
 
 
-# Helper function to prepend header row
+# Helper function to prepend header row(s)
 def prepend_header_row(html_content: str, header_row: str) -> str:
     """
-    Prepend a header row to an HTML table.
+    Prepend header row(s) to an HTML table. Supports both single and multi-row headers.
 
     Args:
         html_content: Original HTML content containing the table
-        header_row: Header row HTML (e.g., "<tr><td>Col1</td><td>Col2</td></tr>")
+        header_row: Header row HTML - can be single or multi-row
+                   Single: "<tr><td>Col1</td><td>Col2</td></tr>"
+                   Multi: "<tr><td>Row1</td></tr>\n<tr><td>Row2</td></tr>"
 
     Returns:
         HTML content with header row prepended

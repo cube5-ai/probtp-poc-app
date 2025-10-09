@@ -36,8 +36,8 @@ def write_to_markdown(response, file_path: str):
     with open(file_path, "w", encoding="utf-8") as f:
         # The response object has a markdown attribute
         if response.get("markdown"):
-            f.write(response.markdown)
+            f.write(response.get("markdown"))
         else:
             # Fallback: write string representation
-            f.write(str(response))
+            f.write(str(response.get("chunks")))
 

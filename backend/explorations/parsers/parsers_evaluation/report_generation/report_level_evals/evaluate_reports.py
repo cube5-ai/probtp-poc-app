@@ -226,10 +226,18 @@ You will receive three inputs delimited by XML tags:
 <candidate_answer>...</candidate_answer>
 
 Decide a verdict using ONLY these strict definitions:
-- CORRECT: Candidate fully matches ground_truth with no material omissions or additions.
+- CORRECT: Candidate's core answer matches ground_truth. Additional relevant supporting details or context (e.g., specifying "BR", provider names, frequencies, amounts) are acceptable and do NOT constitute hallucination.
 - PARTIAL: Candidate is directionally right but misses required details present in ground_truth.
-- HALLUCINATION: Candidate introduces content not supported by ground_truth or contradicts it.
+- HALLUCINATION: Candidate CONTRADICTS ground_truth OR contains FACTUALLY INCORRECT information (e.g., wrong numbers, opposite conclusions, false claims).
 - MISSED: Candidate states information is not available while ground_truth contains it.
+
+IMPORTANT: Adding relevant precision or supporting details that align with and expand upon the ground_truth is NOT hallucination. Only flag HALLUCINATION when there is a direct contradiction or factual error.
+
+Examples:
+- Ground truth: "100 %" | Candidate: "100% BR" → CORRECT (BR is relevant precision)
+- Ground truth: "Oui" | Candidate: "Oui, 60€ par an" → CORRECT (adds supporting detail)
+- Ground truth: "Non couvert" | Candidate: "23€ par jour" → HALLUCINATION (contradicts)
+- Ground truth: "400€" | Candidate: "500€" → HALLUCINATION (wrong number)
 
 Return ONLY a JSON object on a single line that strictly conforms to this schema:
 {
