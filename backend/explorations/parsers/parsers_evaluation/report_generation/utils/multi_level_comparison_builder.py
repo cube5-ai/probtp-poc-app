@@ -104,15 +104,25 @@ def build_multi_level_comparison_document(
         values = extracted_value.get("values", [])
 
         # For vendor B, extract only the target level from all extracted levels
+        # Use fuzzy matching: exact match first, then substring match
+        matched_value = None
         for value_obj in values:
-            if value_obj.get("level") == vendor_b_target_level:
-                vendor_b_values_by_leaf[leaf_id] = {
-                    "base_value": value_obj.get("base_value", ""),
-                    "detailed_value": value_obj.get("detailed_value", ""),
-                    "source_cell_ids": value_obj.get("source_cell_ids"),
-                    "notes": value_obj.get("notes"),
-                }
+            level = value_obj.get("level", "")
+            if level == vendor_b_target_level:
+                # Exact match (preferred)
+                matched_value = value_obj
                 break
+            elif vendor_b_target_level.lower() in level.lower():
+                # Fuzzy match (fallback)
+                matched_value = value_obj
+
+        if matched_value:
+            vendor_b_values_by_leaf[leaf_id] = {
+                "base_value": matched_value.get("base_value", ""),
+                "detailed_value": matched_value.get("detailed_value", ""),
+                "source_cell_ids": matched_value.get("source_cell_ids"),
+                "notes": matched_value.get("notes"),
+            }
 
     # Build leaf comparisons
     leaf_comparisons = []
@@ -170,17 +180,26 @@ def build_multi_level_comparison_document(
         leaf_id = unmappable["suggested_leaf_id"]
         values = unmappable.get("values", [])
 
-        # For vendor B, extract only the target level
+        # For vendor B, extract only the target level (use fuzzy matching)
         vendor_b_value_data = None
+        matched_value = None
         for value_obj in values:
-            if value_obj.get("level") == vendor_b_target_level:
-                vendor_b_value_data = {
-                    "base_value": value_obj.get("base_value", ""),
-                    "detailed_value": value_obj.get("detailed_value", ""),
-                    "source_cell_ids": value_obj.get("source_cell_ids"),
-                    "notes": value_obj.get("notes"),
-                }
+            level = value_obj.get("level", "")
+            if level == vendor_b_target_level:
+                # Exact match (preferred)
+                matched_value = value_obj
                 break
+            elif vendor_b_target_level.lower() in level.lower():
+                # Fuzzy match (fallback)
+                matched_value = value_obj
+
+        if matched_value:
+            vendor_b_value_data = {
+                "base_value": matched_value.get("base_value", ""),
+                "detailed_value": matched_value.get("detailed_value", ""),
+                "source_cell_ids": matched_value.get("source_cell_ids"),
+                "notes": matched_value.get("notes"),
+            }
 
         leaf_comparison = MultiLevelLeafComparison(
             leaf_id=leaf_id,

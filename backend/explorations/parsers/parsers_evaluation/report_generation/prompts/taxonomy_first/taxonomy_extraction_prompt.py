@@ -101,12 +101,6 @@ class ProBTPTaxonomy(BaseModel):
         description="ALL taxonomy nodes (categories, subcategories, and leaves) in depth-first order. Top-level categories have parent_id=null."
     )
 
-    metadata: ExtractionMetadata = Field(
-        ...,
-        description="Extraction metadata including source document, date, approach, and model used."
-    )
-
-
 def create_taxonomy_extraction_prompt(
     probtp_markdown: str,
     language: str = "French (France)"
@@ -556,13 +550,7 @@ OUTPUT FORMAT
       "is_leaf": true,
       "securite_sociale_coverage": "100% BRSS"
     }}
-  ],
-  "metadata": {{
-    "source_document": "ProBTP GARANTIES 2025",
-    "extraction_date": "2025-01-XX",
-    "extraction_approach": "flat_depth_first",
-    "extractor_model": "gemini-2.5-flash"
-  }}
+  ]
 }}
 
 **CRITICAL REMINDERS:**

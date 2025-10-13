@@ -156,7 +156,7 @@ class PolicyRecommendationPipeline:
         vendor_b_name: str,
         vendor_b_target_level: str,
         output_dir: str | Path,
-        model_name: str = "gemini-2.5-flash",
+        model_name: str = "gemini-2.5-pro",
         categories_to_process: list[str] | None = None,
         language: str = "French (France)",
         vendor_b_all_levels: list[str] | None = None,
@@ -170,7 +170,7 @@ class PolicyRecommendationPipeline:
             vendor_b_name: Vendor B name (e.g., "AXA")
             vendor_b_target_level: Vendor B level to compete against (e.g., "Base obligatoire")
             output_dir: Output directory
-            model_name: Model name (default: gemini-2.5-flash)
+            model_name: Model name (default: gemini-2.5-pro)
             categories_to_process: Categories to process (None = all)
             language: Output language
             vendor_b_all_levels: All vendor B levels to extract (None = infer from target level)
@@ -311,7 +311,7 @@ class PolicyRecommendationPipeline:
                     self._save_checkpoint(checkpoint_name, vendor_a_extraction)
                     print(f"   ✓ Vendor A: {len(vendor_a_extraction['extracted_values'])} leaves")
 
-                # Extract vendor B multi-level values (filter by category)
+                # Extract vendor B multi-level values (all levels, no filtering)
                 checkpoint_name = f"{category_id}_vendor_b_multi_level_values"
                 checkpoint_path = self.tmp_dir / f"{checkpoint_name}.json"
 
@@ -319,17 +319,16 @@ class PolicyRecommendationPipeline:
                     print("   ⏩ Vendor B: Loading from checkpoint")
                     vendor_b_extraction = self._load_checkpoint(checkpoint_name)
                 else:
-                    # Filter vendor B levels relevant to this category
+                    # Extract ALL vendor B levels (no category filtering)
                     if self.vendor_b_all_levels:
-                        category_vendor_b_levels = filter_levels_for_category(category_name, self.vendor_b_all_levels)
-                        print(f"   → Vendor B levels for this category: {category_vendor_b_levels}")
+                        print(f"   → Vendor B levels: {self.vendor_b_all_levels}")
                         vendor_b_extraction = await self._extract_values_multi_level(
                             vendor=self.vendor_b_name,
                             vendor_doc=self.vendor_b_doc,
                             category_id=category_id,
                             category_name=category_name,
                             category_leaves=category_leaves,
-                            policy_levels=category_vendor_b_levels,
+                            policy_levels=self.vendor_b_all_levels,
                             full_taxonomy_nodes=all_nodes,
                         )
                     else:
@@ -524,7 +523,7 @@ class PolicyRecommendationPipeline:
             prompt=prompt,
             model="gemini-2.5-pro",
             thinking_budget=4096,
-            temperature=0.2,
+            temperature=0.1,
             response_mime_type="application/json",
             response_schema=ProBTPTaxonomy.model_json_schema(),
             use_vertex=False,
@@ -577,7 +576,7 @@ class PolicyRecommendationPipeline:
             prompt=prompt,
             model=self.model_name,
             thinking_budget=2048,
-            temperature=0.1,
+            temperature=0.0,
             response_mime_type="application/json",
             response_schema=CategoryValueExtractionMultiLevel.model_json_schema(),
             use_vertex=False,
@@ -687,9 +686,9 @@ async def main():
         vendor_b_name="AXA",
         vendor_b_target_level="Base obligatoire",
         output_dir=output_dir,
-        model_name="gemini-2.5-flash",
+        model_name="gemini-2.5-pro",
         categories_to_process=["Hospitalisation", "Dentaire"],  # Test with one category first
-        vendor_b_all_levels=["Base obligatoire", "Option 1"],  # Extract all AXA levels
+        vendor_b_all_levels=["Complémentaire responsable base obligatoire", "Option 1"],  # Extract all AXA levels
     )
 
     # Run pipeline with ALL ProBTP levels
