@@ -9,12 +9,10 @@ from typing import Any
 from pydantic import BaseModel, Field
 
 
-
-
 class ValueAtLevel(BaseModel):
     """Coverage value for a policy level of a vendor."""
     level: str = Field(..., description="Policy level name")
-    base_value: str = Field(..., description="Base coverage value under default conditions (e.g., '100€', '150% BR', 'Non couvert'). Use a range if values differ across levels (e.g., 'S1: 100€, S2: 150€, S3-S5: 200€')")
+    base_value: str = Field(..., description="Base coverage value under default conditions and modalities (e.g., '100€', '150% BR', 'Non couvert')")
     detailed_value: str = Field(..., description="Detailed text description including all conditions, modulations, footnotes, age restrictions, frequency limits, caps, network bonuses, etc. Should be comprehensive and self-contained. If coverage varies by level, explicitly state which levels have which conditions.")
     source_cell_ids: list[str] | None = Field(None, description="Cell IDs from source document where values were extracted. Can span multiple cells if value is distributed.")
     notes: str | None = Field(None, description="Extraction notes or ambiguities. Omit if straightforward.")
@@ -165,7 +163,7 @@ CategoryValueExtractionMultiLevel {{
 1. Identify the actual policy levels present in the document and return them in `policy_levels`
 2. For each taxonomy leaf, create a values array with ONE ValueAtLevel object per policy level:
   a. `level`: Exact policy level name
-  b. `base_value`: Default (unconditioned, unmodulated) coverage amount/percentage/status
+  b. `base_value`: Default coverage amount/percentage/status under default conditions and modalities. The value to be applied in general for this level.
   c. `detailed_value`: Complete description with ALL conditions and value specific modalities (frequency limits, annual caps, age restrictions, network bonuses, renewal periods). Inline a summary of potential footnote content directly.
   d. `source_cell_ids`: Array of cell IDs from the markdown where values were extracted. Generally will be a single cell ID but can be a list of cell IDs if the value spans multiple cells.
   e. If coverage doesn't exist for a leaf at a level: `base_value: "Non couvert"`, `detailed_value: "Aucune couverture pour ce niveau"`

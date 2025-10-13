@@ -51,7 +51,8 @@ class MultiLevelComparisonDocument(BaseModel):
 def build_multi_level_comparison_document(
     category_taxonomy: dict[str, Any],
     vendor_a_ref_multi_level_extraction: dict[str, Any],
-    vendor_b_single_level_extraction: dict[str, Any],
+    vendor_b_multi_level_extraction: dict[str, Any],
+    vendor_b_target_level: str,
     vendor_a_ref_name: str,
     vendor_b_name: str,
 ) -> MultiLevelComparisonDocument:
@@ -60,7 +61,8 @@ def build_multi_level_comparison_document(
     Args:
         category_taxonomy: Taxonomy category dict with leaves
         vendor_a_ref_multi_level_extraction: Multi-level extraction for vendor A (contains values for ALL levels)
-        vendor_b_single_level_extraction: Single-level extraction for vendor B
+        vendor_b_multi_level_extraction: Multi-level extraction for vendor B (contains values for ALL levels)
+        vendor_b_target_level: The specific vendor B level to use in comparison
         vendor_a_ref_name: Vendor A name
         vendor_b_name: Vendor B name
 
@@ -73,7 +75,7 @@ def build_multi_level_comparison_document(
 
     # Extract policy levels
     vendor_a_ref_levels = vendor_a_ref_multi_level_extraction.get("policy_levels", [])
-    vendor_b_level = vendor_b_single_level_extraction.get("policy_level", "Unknown")
+    vendor_b_all_levels = vendor_b_multi_level_extraction.get("policy_levels", [])
 
     # Build lookup maps
     # New structure: extracted_values contains {leaf_id, values: [{level, base_value, detailed_value, ...}]}
@@ -97,19 +99,20 @@ def build_multi_level_comparison_document(
         vendor_a_ref_values_by_leaf[leaf_id] = values_dict
 
     vendor_b_values_by_leaf = {}
-    for extracted_value in vendor_b_single_level_extraction.get("extracted_values", []):
+    for extracted_value in vendor_b_multi_level_extraction.get("extracted_values", []):
         leaf_id = extracted_value["leaf_id"]
         values = extracted_value.get("values", [])
 
-        # For vendor B, we expect only one level, but use the same structure
-        if values:
-            value_obj = values[0]  # Take first value
-            vendor_b_values_by_leaf[leaf_id] = {
-                "base_value": value_obj.get("base_value", ""),
-                "detailed_value": value_obj.get("detailed_value", ""),
-                "source_cell_ids": value_obj.get("source_cell_ids"),
-                "notes": value_obj.get("notes"),
-            }
+        # For vendor B, extract only the target level from all extracted levels
+        for value_obj in values:
+            if value_obj.get("level") == vendor_b_target_level:
+                vendor_b_values_by_leaf[leaf_id] = {
+                    "base_value": value_obj.get("base_value", ""),
+                    "detailed_value": value_obj.get("detailed_value", ""),
+                    "source_cell_ids": value_obj.get("source_cell_ids"),
+                    "notes": value_obj.get("notes"),
+                }
+                break
 
     # Build leaf comparisons
     leaf_comparisons = []
@@ -163,20 +166,21 @@ def build_multi_level_comparison_document(
         leaf_comparisons.append(leaf_comparison)
 
     # Handle unmappable items from vendor B
-    for unmappable in vendor_b_single_level_extraction.get("unmappable_items", []) or []:
+    for unmappable in vendor_b_multi_level_extraction.get("unmappable_items", []) or []:
         leaf_id = unmappable["suggested_leaf_id"]
         values = unmappable.get("values", [])
 
-        # For vendor B, take first value
+        # For vendor B, extract only the target level
         vendor_b_value_data = None
-        if values:
-            value_obj = values[0]
-            vendor_b_value_data = {
-                "base_value": value_obj.get("base_value", ""),
-                "detailed_value": value_obj.get("detailed_value", ""),
-                "source_cell_ids": value_obj.get("source_cell_ids"),
-                "notes": value_obj.get("notes"),
-            }
+        for value_obj in values:
+            if value_obj.get("level") == vendor_b_target_level:
+                vendor_b_value_data = {
+                    "base_value": value_obj.get("base_value", ""),
+                    "detailed_value": value_obj.get("detailed_value", ""),
+                    "source_cell_ids": value_obj.get("source_cell_ids"),
+                    "notes": value_obj.get("notes"),
+                }
+                break
 
         leaf_comparison = MultiLevelLeafComparison(
             leaf_id=leaf_id,
@@ -194,7 +198,7 @@ def build_multi_level_comparison_document(
         category_id=category_id,
         category_name=category_name,
         vendor_a_ref_policy_levels=vendor_a_ref_levels,
-        vendor_b_policy_level=vendor_b_level,
+        vendor_b_policy_level=vendor_b_target_level,
         vendor_a_ref_name=vendor_a_ref_name,
         vendor_b_name=vendor_b_name,
         leaves=leaf_comparisons,

@@ -98,7 +98,7 @@ def format_global_recommendation(recommendation: dict[str, Any]) -> str:
 
     lines = [
         "# Recommandation Globale\n",
-        f"## Niveaux Recommandés: {s_level} + {p_level}\n",
+        f"## Niveaux Recommandés: {s_level} & {p_level}\n",
         f"{overall_justification}\n",
     ]
 
@@ -118,29 +118,12 @@ def format_global_recommendation(recommendation: dict[str, Any]) -> str:
             lines.append(f"- {gap}")
         lines.append("\n")
 
-    # Target customer profile
-    target_profile = recommendation.get("target_customer_profile", "")
-    if target_profile:
-        lines.append("### Profil Client Idéal\n")
-        lines.append(f"{target_profile}\n")
-
     # Key talking points
     talking_points = recommendation.get("key_talking_points", [])
     if talking_points:
         lines.append("### Points Clés pour le Commercial\n")
         for point in talking_points:
             lines.append(f"- {point}")
-        lines.append("\n")
-
-    # Category justifications
-    category_justifications = recommendation.get("category_justifications", [])
-    if category_justifications:
-        lines.append("### Justification par Catégorie\n")
-        for item in category_justifications:
-            if isinstance(item, dict):
-                category_name = item.get("category_name", "Unknown")
-                justification = item.get("justification", "")
-                lines.append(f"**{category_name}**: {justification}\n")
         lines.append("\n")
 
     return "\n".join(lines)
