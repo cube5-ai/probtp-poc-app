@@ -31,6 +31,28 @@ def format_category_recommendation(
     if summary:
         lines.append(f"{summary}\n")
 
+    # Level selection process
+    eliminated = recommendation.get("eliminated_levels", [])
+    shortlisted = recommendation.get("shortlisted_levels", [])
+    other_candidates = recommendation.get("other_candidates", [])
+
+    if eliminated or shortlisted or other_candidates:
+        lines.append("### Processus de Sélection\n")
+
+        if eliminated:
+            lines.append(f"**Niveaux éliminés:** {', '.join(eliminated)}\n")
+
+        if shortlisted:
+            lines.append(f"**Niveaux présélectionnés:** {', '.join(shortlisted)}\n")
+
+        if other_candidates:
+            lines.append("\n**Autres candidats analysés:**\n")
+            for candidate in other_candidates:
+                level = candidate.get("level", "")
+                reason = candidate.get("reason_not_selected", "")
+                lines.append(f"- **{level}**: {reason}")
+            lines.append("\n")
+
     # Comparison table (if provided)
     if comparison_table_markdown:
         lines.append(f"### Tableau Comparatif - {category_name}\n")
@@ -94,13 +116,33 @@ def format_global_recommendation(recommendation: dict[str, Any]) -> str:
     """
     s_level = recommendation.get("recommended_s_level", "")
     p_level = recommendation.get("recommended_p_level", "")
+    s_candidates = recommendation.get("s_level_candidates", [])
+    p_candidates = recommendation.get("p_level_candidates", [])
     overall_justification = recommendation.get("overall_justification", "")
 
     lines = [
         "# Recommandation Globale\n",
         f"## Niveaux Recommandés: {s_level} & {p_level}\n",
-        f"{overall_justification}\n",
     ]
+
+    # Show candidate levels considered
+    if s_candidates or p_candidates:
+        lines.append("### Niveaux Analysés\n")
+        if s_candidates:
+            lines.append(f"**Niveaux S considérés:** {', '.join(s_candidates)}\n")
+        if p_candidates:
+            lines.append(f"**Niveaux P considérés:** {', '.join(p_candidates)}\n")
+        lines.append("\n")
+
+    # Justification
+    lines.append("### Recommandation\n")
+    lines.append(f"{overall_justification}\n")
+
+    # Alternatives rejected rationale
+    alternatives_rationale = recommendation.get("alternatives_rejected_rationale", "")
+    if alternatives_rationale:
+        lines.append("### Alternatives Considérées et Rejetées\n")
+        lines.append(f"{alternatives_rationale}\n")
 
     # Key competitive advantages
     advantages = recommendation.get("key_competitive_advantages", [])

@@ -697,7 +697,7 @@ async def main():
         skip_taxonomy=True,
         skip_extraction=True,
         skip_assembly=True,
-        skip_category_recommendations=True,
+        skip_category_recommendations=False,  # Regenerate with new schema
         skip_global_recommendation=False,
     )
 
