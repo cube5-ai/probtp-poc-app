@@ -24,8 +24,19 @@ def format_category_recommendation(
     summary = recommendation.get("summary_paragraph", "")
     recommended_level = recommendation.get("recommended_vendor_a_ref_level", "")
 
-    # Build markdown
-    lines = [f"## {section_title}\n"]
+    # Build markdown - ensure category name is at the start
+    # Remove category name from section_title if it's already there to avoid duplication
+    title_without_category = section_title
+    if section_title.lower().startswith(category_name.lower()):
+        title_without_category = section_title[len(category_name):].lstrip(" :-–—")
+
+    # Format: "Category: Brief newspaper-style title"
+    if title_without_category and title_without_category != category_name:
+        formatted_title = f"{category_name}: {title_without_category}"
+    else:
+        formatted_title = category_name
+
+    lines = [f"## {formatted_title}\n"]
 
     # Summary paragraph
     if summary:
@@ -122,17 +133,8 @@ def format_global_recommendation(recommendation: dict[str, Any]) -> str:
 
     lines = [
         "# Recommandation Globale\n",
-        f"## Niveaux Recommandés: {s_level} & {p_level}\n",
+        f"## Résumé de l'étude: {s_level} & {p_level}\n",
     ]
-
-    # Show candidate levels considered
-    if s_candidates or p_candidates:
-        lines.append("### Niveaux Analysés\n")
-        if s_candidates:
-            lines.append(f"**Niveaux S considérés:** {', '.join(s_candidates)}\n")
-        if p_candidates:
-            lines.append(f"**Niveaux P considérés:** {', '.join(p_candidates)}\n")
-        lines.append("\n")
 
     # Justification
     lines.append("### Recommandation\n")

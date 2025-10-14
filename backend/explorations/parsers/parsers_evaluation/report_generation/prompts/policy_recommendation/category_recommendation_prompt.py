@@ -39,7 +39,7 @@ class CategoryRecommendation(BaseModel):
     counter_arguments: list[str] = Field(..., description="Arguments explaining why vendor B wins are not that important. Use world knowledge (e.g., unrealistic coverage limits, rare use cases).")
 
     # Summary
-    section_title: str = Field(..., description="Informative section title (e.g., 'S4 recommended for [CATEGORY_NAME]: better on 3 out of 4 key prestations')")
+    section_title: str = Field(..., description="Brief, newspaper-style title without category name (e.g., 'S4 leads on key prestations' or 'P5 offers best value balance'). Max 8 words. The category name will be prepended automatically in the report.")
     summary_paragraph: str = Field(..., description="50 words max paragraph summarizing the recommendation, rationale, and key examples. Should convince a commercial that this is the best option to propose.")
 
 
