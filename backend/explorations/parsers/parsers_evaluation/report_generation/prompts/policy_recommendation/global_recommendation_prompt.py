@@ -17,15 +17,16 @@ class GlobalRecommendation(BaseModel):
     recommended_p_level: str = Field(..., description="Recommended P level (e.g., 'P5')")
 
     # Justification
-    overall_justification: str = Field(..., description="200-400 words explaining why this S+P combination is the best choice to compete with vendor B. Include general presentation of selected levels and overall competitive rationale. Downplay the loosing differences with arguments build from world knowledge.")
+    overall_justification: str = Field(...,
+       description="200-400 words explaining to the vendor A commercial why this S+P combination is the best choice to compete with vendor B. In your explanation, include coverage value grounded evidences.")
 
 
-    key_competitive_advantages: list[str] = Field(..., description="Top competitive advantages of the recommended combination across all categories")
+    key_competitive_advantages: list[str] = Field(..., description="Most impactful wins of the recommended combination across all categories. Must be coverage value grounded.")
 
-    acknowledged_gaps: list[str] = Field(..., description="List of specific prestations, that could be generally perceived as important by the client, where vendor A is behind vendor B, with explanation of why this is acceptable or not critical. Downplay the differences with arguments.")
+    acknowledged_gaps: list[str] = Field(..., description="List of specific prestations, that could be generally perceived as important by the client, where vendor A is behind vendor B, with explanation of why this is acceptable or not critical. Downplay the differences with arguments. Must be coverage value grounded.")
 
     # For commercial use
-    key_talking_points: list[str] = Field(..., description="Key selling points the commercial should emphasize on to highlight the advantages of the recommended combination over the competitor's level.")
+    key_selling_arguments_points: list[str] = Field(..., description="Key selling points the commercial should emphasize on to highlight the advantages of the recommended combination over the competitor's level. Must be coverage value grounded.")
 
 
 def create_global_recommendation_prompt(
@@ -79,7 +80,9 @@ def create_global_recommendation_prompt(
     # Format recommendations
     recommendations_json = json.dumps(category_recommendations, ensure_ascii=False, indent=2)
 
-    prompt = f"""You are an expert insurance strategist. Your goal is to select the overall best {vendor_a_ref_name} level combination (one S level + one P level) to compete with {vendor_b_name}'s "{vendor_b_level}" level.
+    prompt = f"""You are an expert insurance analyst and strategist, hired to advise a {vendor_a_ref_name} commercial.
+Your goal is to select the overall best {vendor_a_ref_name} level combination (one S level + one P level) to compete with {vendor_b_name}'s "{vendor_b_level}" level.
+
 
 **Context**: {vendor_a_ref_name} policies are defined by one S level (covering categories like Hospitalisation, Soins Courants) and one P level (covering categories like Optique, Dentaire, Audiologie, Prestations Complémentaires).
 
@@ -90,9 +93,13 @@ def create_global_recommendation_prompt(
 **Task**:
 1. Select ONE S level that best represents the recommendations from S categories
 2. Select ONE P level that best represents the recommendations from P categories
-3. Justify why this S+P combination is the best global offer to compete with {vendor_b_name}'s "{vendor_b_level}"
+3. Justify why this S+P combination is the best global offer to compete with {vendor_b_name}'s "{vendor_b_level}". Be objective on the facts, be convincing when defending your recommendation, ground your arguments on coverage values.
+4. Identify the most impactful wins of the recommended combination across all categories. Must be coverage value grounded.
+5. Identify the specific prestations, that could be generally perceived as important by the client, where vendor A is behind vendor B, with explanation of why this is acceptable or not critical. Downplay the differences with arguments. Must be coverage value grounded.
+6. Identify the key selling points the commercial should emphasize on to highlight the advantages of the recommended combination over the competitor's level. Must be coverage value grounded.
 
 **Key Principles**:
+- You are a consultant hired to advise a {vendor_a_ref_name} commercial. Be objective on the facts, be convincing when defending your recommendation, ground your arguments on coverage values.
 - Find the level that globally appears most frequently in recommendations within each group (S or P)
 - If there's a tie, prefer the higher level (more coverage)
 - Consider the overall competitive story: can you present this combination as globally equivalent or better?

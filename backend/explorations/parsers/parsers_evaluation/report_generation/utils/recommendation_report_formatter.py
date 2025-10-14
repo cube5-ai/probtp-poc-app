@@ -119,10 +119,10 @@ def format_global_recommendation(recommendation: dict[str, Any]) -> str:
         lines.append("\n")
 
     # Key talking points
-    talking_points = recommendation.get("key_talking_points", [])
-    if talking_points:
-        lines.append("### Points Clés pour le Commercial\n")
-        for point in talking_points:
+    key_selling_arguments_points = recommendation.get("key_selling_arguments_points", [])
+    if key_selling_arguments_points:
+        lines.append("### Arguments de Vente Clés\n")
+        for point in key_selling_arguments_points:
             lines.append(f"- {point}")
         lines.append("\n")
 

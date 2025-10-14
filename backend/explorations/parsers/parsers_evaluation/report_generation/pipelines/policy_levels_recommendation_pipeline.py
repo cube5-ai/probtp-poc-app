@@ -695,9 +695,9 @@ async def main():
     results = await pipeline.run(
         vendor_a_ref_all_levels=["S1", "S2", "S3", "S3+", "S4", "S5/S6", "P1", "P2", "P3", "P3+", "P4", "P5", "P6"],
         skip_taxonomy=True,
-        skip_extraction=False,
-        skip_assembly=False,
-        skip_category_recommendations=False,
+        skip_extraction=True,
+        skip_assembly=True,
+        skip_category_recommendations=True,
         skip_global_recommendation=False,
     )
 
