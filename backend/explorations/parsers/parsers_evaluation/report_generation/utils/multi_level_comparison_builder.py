@@ -148,6 +148,11 @@ def build_multi_level_comparison_document(
 
     # Handle unmappable items from vendor A
     for unmappable in vendor_a_ref_multi_level_extraction.get("unmappable_items", []) or []:
+        # Filter out unmappable items that don't belong to this category
+        suggested_category_id = unmappable.get("suggested_category_id", "")
+        if suggested_category_id != category_id:
+            continue
+
         leaf_id = unmappable["suggested_leaf_id"]
         values = unmappable.get("values", [])
 
@@ -177,6 +182,11 @@ def build_multi_level_comparison_document(
 
     # Handle unmappable items from vendor B
     for unmappable in vendor_b_multi_level_extraction.get("unmappable_items", []) or []:
+        # Filter out unmappable items that don't belong to this category
+        suggested_category_id = unmappable.get("suggested_category_id", "")
+        if suggested_category_id != category_id:
+            continue
+
         leaf_id = unmappable["suggested_leaf_id"]
         values = unmappable.get("values", [])
 

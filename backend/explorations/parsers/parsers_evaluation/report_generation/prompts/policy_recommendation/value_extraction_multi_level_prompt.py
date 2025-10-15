@@ -13,7 +13,7 @@ class ValueAtLevel(BaseModel):
     """Coverage value for a policy level of a vendor."""
     level: str = Field(..., description="Policy level name")
     base_value: str = Field(..., description="Base coverage value under default conditions and modalities (e.g., '100€', '150% BR', 'Non couvert')")
-    detailed_value: str = Field(..., description="Detailed value description including all conditions, modulations, footnotes, age restrictions, frequency limits, caps, network bonuses, etc. If coverage varies by level, explicitly state which levels have which conditions. Must not repeat the prestation name and description from the taxonomy leaf.")
+    detailed_value: str = Field(..., description="Complete value description that includes the base value PLUS all conditions, modulations, footnotes, age restrictions, frequency limits, caps, network bonuses, etc. This field should be self-contained and contain everything needed to understand the coverage. Must not repeat the prestation name and description from the taxonomy leaf.")
     source_cell_ids: list[str] | None = Field(None, description="Cell IDs from source document where values were extracted. Can span multiple cells if value is distributed.")
     notes: str | None = Field(None, description="Extraction notes or ambiguities. Omit if straightforward.")
 
@@ -77,13 +77,20 @@ def format_taxonomy_tree(nodes: list[dict[str, Any]]) -> str:
 
             name = child["name"]
             description = child.get("description", "")
+            child_node_id = child["node_id"]
+            parent_id = child.get("parent_id")
 
-            line = f"{prefix}{connector}{name} - {description}"
+            # For top-level categories (parent is _root_), include the category ID
+            if parent_id == "_root_":
+                line = f"{prefix}{connector}{name} (ID: {child_node_id}) - {description}"
+            else:
+                line = f"{prefix}{connector}{name} - {description}"
+
             lines.append(line)
 
             child_prefix = prefix + "   " if is_last_child else prefix + "│  "
 
-            child_lines = build_tree(child["node_id"], child_prefix, is_last_child)
+            child_lines = build_tree(child_node_id, child_prefix, is_last_child)
             lines.extend(child_lines)
 
         return lines
@@ -121,21 +128,16 @@ def create_value_extraction_multi_level_prompt(
     """
 
     # Format taxonomy tree for context
-    if full_taxonomy_nodes:
-        # Filter nodes for this category
-        category_nodes = [
-            node for node in full_taxonomy_nodes
-            if node["node_id"] == category_id or node.get("path", [""])[0] == category_name
-        ]
-        taxonomy_tree = format_taxonomy_tree(category_nodes) if category_nodes else ""
-    else:
-        taxonomy_tree = ""
+    taxonomy_tree = format_taxonomy_tree(full_taxonomy_nodes) if full_taxonomy_nodes else ""
 
     # Format leaves as simple list
-    leaves_list = "\n".join([
-        f"- {leaf['leaf_id']}: {leaf['path'][-1]} - {leaf['description']}"
-        for leaf in taxonomy_leaves
-    ])
+    leaves_texts: list[str] = []
+    for leaf in taxonomy_leaves:
+        leaf_text = f"- {leaf['leaf_id']}: {leaf['path'][-1]} - {leaf['description']}"
+        leaf_text += f" - Conditions : {leaf.get('conditions', '')}" if leaf.get('conditions') else ""
+        leaves_texts.append(leaf_text)
+
+    leaves_list = "\n".join(leaves_texts)
 
     policy_levels_str = ", ".join(policy_levels)
 
@@ -159,25 +161,18 @@ def create_value_extraction_multi_level_prompt(
                     bundled_benefits_guidance += f"  Note: {benefit['notes']}\n"
             bundled_benefits_guidance += "\n**Important**: These bundled benefits may appear in the coverage tables. Extract them accurately as they are key selling points.\n"
 
-    prompt = f"""Extract coverage values for {vendor} across multiple policy levels for a specific category that is provided below.
+    # Build provider context section conditionally
+    provider_section = ""
+    if provider_context or bundled_benefits_guidance:
+        provider_section = "\n**Provider Context:**\n"
+        if provider_context:
+            provider_section += f"{provider_context}\n"
+        if bundled_benefits_guidance:
+            provider_section += f"{bundled_benefits_guidance}"
+        provider_section += "\n"
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-PROVIDER DOMAIN KNOWLEDGE
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-{provider_context}
-{bundled_benefits_guidance}
-
-**Extraction Guidance:**
-- Be aware of typical bundled benefits for this provider (see above)
-- These benefits may appear in coverage tables and should be extracted accurately
-- Pay special attention to prevoyance-related benefits if extracting for {vendor}
-- Understand the provider's level structure to accurately identify policy levels
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-EXTRACTION TASK
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
+    prompt = f"""Extract coverage values for {vendor} across multiple policy levels for the category: {category_name}.
+{provider_section}
 **Task**: Map {vendor}'s coverage to the taxonomy leaves below, extracting values for ALL levels: {policy_levels_str}.
 
 **Output Schema**:
@@ -212,7 +207,7 @@ CategoryValueExtractionMultiLevel {{
 3. For each value that does not map to a taxonomy leaf, create an UnmappableItemMultiLevel object:
   a. `description`: Description of the unmapped benefit
   b. `reasoning`: Why this doesn't map to existing taxonomy
-  c. `suggested_category_id`: Suggested category ID (snake_case)
+  c. `suggested_category_id`: Suggested category ID (snake_case). IMPORTANT: Use one of the category IDs shown in the Taxonomy Context section (marked with "ID: ..."). If the benefit belongs to the current category being extracted, use that category ID.
   d. `suggested_path`: Suggested taxonomy path for this item
   e. `suggested_parent_id`: Suggested parent ID (snake_case)
   f. `suggested_leaf_id`: Suggested leaf ID (snake_case)
