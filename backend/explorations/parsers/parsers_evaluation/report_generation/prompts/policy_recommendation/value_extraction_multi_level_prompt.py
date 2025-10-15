@@ -100,6 +100,8 @@ def create_value_extraction_multi_level_prompt(
     policy_levels: list[str],
     taxonomy_leaves: list[dict[str, Any]],
     full_taxonomy_nodes: list[dict[str, Any]] | None = None,
+    provider_profile: dict[str, Any] | None = None,
+    provider_context: str = "",
 ) -> str:
     """Create value extraction prompt for multiple policy levels.
 
@@ -111,10 +113,13 @@ def create_value_extraction_multi_level_prompt(
         policy_levels: List of policy levels to extract (e.g., ['S1', 'S2', 'S3', 'S4', 'S5'])
         taxonomy_leaves: Taxonomy leaves for this category
         full_taxonomy_nodes: Full taxonomy for context (optional)
+        provider_profile: Provider profile data (optional)
+        provider_context: Formatted provider context string (optional)
 
     Returns:
         Extraction prompt
     """
+
     # Format taxonomy tree for context
     if full_taxonomy_nodes:
         # Filter nodes for this category
@@ -134,7 +139,44 @@ def create_value_extraction_multi_level_prompt(
 
     policy_levels_str = ", ".join(policy_levels)
 
+    # Get vendor-specific guidance about bundled benefits relevant to this category
+    bundled_benefits_guidance = ""
+    if provider_profile and provider_profile.get("typical_bundled_benefits"):
+        bundled_benefits = provider_profile["typical_bundled_benefits"]
+        # Filter for benefits that might appear in this category
+        relevant_benefits = [
+            b for b in bundled_benefits
+            if category_name.lower() in b["category"].lower() or
+               category_id.lower() in b.get("notes", "").lower() or
+               "prestations" in category_id.lower()  # Catch prevoyance benefits in Prestations Complémentaires
+        ]
+
+        if relevant_benefits:
+            bundled_benefits_guidance = "\n\n**Bundled Benefits Context for This Category:**\n"
+            for benefit in relevant_benefits:
+                bundled_benefits_guidance += f"- **{benefit['name']}**: {benefit['description']}\n"
+                if benefit.get("notes"):
+                    bundled_benefits_guidance += f"  Note: {benefit['notes']}\n"
+            bundled_benefits_guidance += "\n**Important**: These bundled benefits may appear in the coverage tables. Extract them accurately as they are key selling points.\n"
+
     prompt = f"""Extract coverage values for {vendor} across multiple policy levels for a specific category that is provided below.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROVIDER DOMAIN KNOWLEDGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{provider_context}
+{bundled_benefits_guidance}
+
+**Extraction Guidance:**
+- Be aware of typical bundled benefits for this provider (see above)
+- These benefits may appear in coverage tables and should be extracted accurately
+- Pay special attention to prevoyance-related benefits if extracting for {vendor}
+- Understand the provider's level structure to accurately identify policy levels
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXTRACTION TASK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 **Task**: Map {vendor}'s coverage to the taxonomy leaves below, extracting values for ALL levels: {policy_levels_str}.
 

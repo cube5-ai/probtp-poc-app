@@ -86,6 +86,12 @@ def create_alignment_prompt(
     Returns:
         Formatted prompt string
     """
+    # Import provider profiles
+    from utils.provider_profiles import format_comparison_context
+
+    # Format provider domain knowledge context
+    provider_context = format_comparison_context("ProBTP", "AXA")
+
     # Format levels if provided
     levels_context = ""
     probtp_levels_str = "/".join(probtp_levels) if probtp_levels else ""
@@ -442,6 +448,12 @@ Documents include cell IDs (e.g., `<td id="2-5">`). Track them in `sources`:
 **Combine both sources** in `metadata.conditions`:
 - Keep markers in `metadata.footnotes` array
 - Store combined text in `metadata.conditions`
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROVIDER DOMAIN KNOWLEDGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{provider_context}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 INSURANCE CONTRACT DOCUMENTS (CONTEXT)

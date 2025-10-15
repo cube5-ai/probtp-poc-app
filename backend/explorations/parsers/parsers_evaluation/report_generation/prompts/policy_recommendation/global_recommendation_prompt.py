@@ -9,6 +9,12 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+# Import text formatter utility
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent.parent))
+from utils.recommendation_text_formatter import format_category_recommendations_to_text
+
 
 class GlobalRecommendation(BaseModel):
     """Global recommendation for best vendor A level combination to compete with vendor B."""
@@ -36,6 +42,7 @@ class GlobalRecommendation(BaseModel):
 
 def create_global_recommendation_prompt(
     category_recommendations: list[dict[str, Any]],
+    comparison_documents: dict[str, dict[str, Any]],
     vendor_a_ref_name: str,
     vendor_b_name: str,
     vendor_b_level: str,
@@ -44,7 +51,8 @@ def create_global_recommendation_prompt(
     """Create global recommendation prompt.
 
     Args:
-        category_recommendations: List of category recommendations
+        category_recommendations: List of category recommendations with pre-generated coverage tables
+        comparison_documents: Category ID -> comparison document mapping (unused, kept for compatibility)
         vendor_a_ref_name: Vendor A reference name (e.g., 'ProBTP')
         vendor_b_name: Vendor B name (e.g., 'AXA')
         vendor_b_level: Vendor B policy level being compared against (e.g., 'Base obligatoire')
@@ -53,8 +61,11 @@ def create_global_recommendation_prompt(
     Returns:
         Global recommendation prompt
     """
-    # Format recommendations
-    recommendations_json = json.dumps(category_recommendations, ensure_ascii=False, indent=2)
+    # Format category recommendations as readable text WITH their attached coverage tables
+    recommendations_with_tables = format_category_recommendations_to_text(
+        category_recommendations,
+        include_tables=True,  # Keep tables attached to their category!
+    )
 
     prompt = f"""You are an expert insurance analyst and strategist, hired to advise a {vendor_a_ref_name} commercial.
 Your goal is to select the overall best {vendor_a_ref_name} level combination (one S level & one P level) that competes with {vendor_b_name}'s "{vendor_b_level}" level as a complete package.
@@ -63,8 +74,20 @@ Your goal is to select the overall best {vendor_a_ref_name} level combination (o
 
 **Critical insight**: The goal is to find the best **overall package**, not to win every category. A lower level in one category can be acceptable if compensated by wins elsewhere, as long as the total package is globally equivalent or better than {vendor_b_name}.
 
-**All category recommendations**:
-{recommendations_json}
+**Category-Level Recommendations & Analysis**:
+
+Each category below includes:
+- The recommended level and rationale
+- Analysis of other candidates considered
+- Coverage comparison table (shortlisted levels + one level above vs {vendor_b_name})
+
+Use the coverage tables to:
+- Verify claims made in category recommendations
+- Identify if a level marked as "not shortlisted" or "excessive" might actually be valuable for the global package
+- Reassess category-level decisions in light of the global optimization goal
+- Ground all arguments in actual coverage values
+
+{recommendations_with_tables}
 
 **Evaluation Process**:
 1. **Identify all plausible S & P combinations** from category recommendations (e.g., if categories recommend S3, S4 for S-categories and P4, P5 for P-categories, consider S3 & P4, S3 & P5, S4 & P4, S4 & P5)

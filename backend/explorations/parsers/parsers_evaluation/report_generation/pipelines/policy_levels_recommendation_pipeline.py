@@ -75,6 +75,7 @@ from utils.multi_level_comparison_builder import (
     MultiLevelComparisonDocument,
     build_multi_level_comparison_document,
 )
+from utils.provider_profiles import get_provider_profile, format_provider_context
 from utils.recommendation_report_formatter import build_recommendation_report
 from utils.report_formatter import create_report_metadata, save_report
 
@@ -275,28 +276,30 @@ class PolicyRecommendationPipeline:
         print(f"\n📋 Processing {len(categories)} categories: {[c['name'] for c in categories]}")
 
         # Phase 2: Extract values (multi-level for vendor A, single level for vendor B)
+        # Batch by vendor to enable prompt caching
         if not skip_extraction:
             print(f"\n{'─' * 80}")
             print("PHASE 2: Value Extraction")
             print(f"{'─' * 80}")
 
+            # Phase 2a: Extract all vendor A values first (for prompt caching)
+            print(f"\n📦 Extracting Vendor A ({self.vendor_a_ref_name}) values for all categories...")
+            vendor_a_extractions = {}
             for category in categories:
                 category_id = category["node_id"]
                 category_name = category["name"]
                 category_leaves = extract_leaves_from_flat_taxonomy(all_nodes, category_id)
 
-                print(f"\n📦 Category: {category_name} ({category_id})")
-
                 # Filter vendor A levels relevant to this category
                 category_vendor_a_levels = filter_levels_for_category(category_name, vendor_a_ref_all_levels)
-                print(f"   → Vendor A levels for this category: {category_vendor_a_levels}")
+                print(f"   → {category_name}: levels {category_vendor_a_levels}")
 
                 # Extract vendor A multi-level values
                 checkpoint_name = f"{category_id}_vendor_a_ref_multi_level_values"
                 checkpoint_path = self.tmp_dir / f"{checkpoint_name}.json"
 
                 if checkpoint_path.exists():
-                    print("   ⏩ Vendor A: Loading from checkpoint")
+                    print(f"      ⏩ Loading from checkpoint")
                     vendor_a_extraction = self._load_checkpoint(checkpoint_name)
                 else:
                     vendor_a_extraction = await self._extract_values_multi_level(
@@ -309,19 +312,29 @@ class PolicyRecommendationPipeline:
                         full_taxonomy_nodes=all_nodes,
                     )
                     self._save_checkpoint(checkpoint_name, vendor_a_extraction)
-                    print(f"   ✓ Vendor A: {len(vendor_a_extraction['extracted_values'])} leaves")
+                    print(f"      ✓ Extracted {len(vendor_a_extraction['extracted_values'])} leaves")
+
+                vendor_a_extractions[category_id] = vendor_a_extraction
+
+            # Phase 2b: Extract all vendor B values (for prompt caching)
+            print(f"\n📦 Extracting Vendor B ({self.vendor_b_name}) values for all categories...")
+            vendor_b_extractions = {}
+            for category in categories:
+                category_id = category["node_id"]
+                category_name = category["name"]
+                category_leaves = extract_leaves_from_flat_taxonomy(all_nodes, category_id)
 
                 # Extract vendor B multi-level values (all levels, no filtering)
                 checkpoint_name = f"{category_id}_vendor_b_multi_level_values"
                 checkpoint_path = self.tmp_dir / f"{checkpoint_name}.json"
 
                 if checkpoint_path.exists():
-                    print("   ⏩ Vendor B: Loading from checkpoint")
+                    print(f"   → {category_name}: Loading from checkpoint")
                     vendor_b_extraction = self._load_checkpoint(checkpoint_name)
                 else:
                     # Extract ALL vendor B levels (no category filtering)
                     if self.vendor_b_all_levels:
-                        print(f"   → Vendor B levels: {self.vendor_b_all_levels}")
+                        print(f"   → {category_name}: levels {self.vendor_b_all_levels}")
                         vendor_b_extraction = await self._extract_values_multi_level(
                             vendor=self.vendor_b_name,
                             vendor_doc=self.vendor_b_doc,
@@ -333,7 +346,7 @@ class PolicyRecommendationPipeline:
                         )
                     else:
                         # Fallback: extract only target level if vendor_b_all_levels not provided
-                        print(f"   → Vendor B level: {self.vendor_b_target_level} (single level)")
+                        print(f"   → {category_name}: level {self.vendor_b_target_level} (single level)")
                         vendor_b_extraction = await self._extract_values_multi_level(
                             vendor=self.vendor_b_name,
                             vendor_doc=self.vendor_b_doc,
@@ -344,11 +357,15 @@ class PolicyRecommendationPipeline:
                             full_taxonomy_nodes=all_nodes,
                         )
                     self._save_checkpoint(checkpoint_name, vendor_b_extraction)
-                    print(f"   ✓ Vendor B: {len(vendor_b_extraction['extracted_values'])} leaves")
+                    print(f"      ✓ Extracted {len(vendor_b_extraction['extracted_values'])} leaves")
 
+                vendor_b_extractions[category_id] = vendor_b_extraction
+
+            # Store all extractions
+            for category_id in vendor_a_extractions:
                 self.extractions[category_id] = {
-                    "vendor_a_ref": vendor_a_extraction,
-                    "vendor_b": vendor_b_extraction,
+                    "vendor_a_ref": vendor_a_extractions[category_id],
+                    "vendor_b": vendor_b_extractions[category_id],
                 }
         else:
             print("\n⏩ Skipping value extraction (loading from checkpoints)")
@@ -562,6 +579,11 @@ class PolicyRecommendationPipeline:
         print(f"   Extracting {vendor} values for {category_name} (levels: {policy_levels})...")
 
         vendor_markdown = vendor_doc.get_markdown_with_expanded_tables()
+
+        # Get provider profile data
+        provider_profile = get_provider_profile(vendor)
+        provider_context = format_provider_context(vendor)
+
         prompt = create_value_extraction_multi_level_prompt(
             vendor=vendor,
             vendor_markdown=vendor_markdown,
@@ -570,6 +592,8 @@ class PolicyRecommendationPipeline:
             policy_levels=policy_levels or ["default"],
             taxonomy_leaves=category_leaves,
             full_taxonomy_nodes=full_taxonomy_nodes,
+            provider_profile=provider_profile,
+            provider_context=provider_context,
         )
 
         response = await generate_with_reasoning(
@@ -687,7 +711,7 @@ async def main():
         vendor_b_target_level="Base obligatoire",
         output_dir=output_dir,
         model_name="gemini-2.5-pro",
-        categories_to_process=["Hospitalisation", "Dentaire"],  # Test with one category first
+        categories_to_process=None, #["Hospitalisation", "Dentaire"],  # Test with one category first
         vendor_b_all_levels=["Complémentaire responsable base obligatoire", "Option 1"],  # Extract all AXA levels
     )
 
@@ -695,8 +719,8 @@ async def main():
     results = await pipeline.run(
         vendor_a_ref_all_levels=["S1", "S2", "S3", "S3+", "S4", "S5/S6", "P1", "P2", "P3", "P3+", "P4", "P5", "P6"],
         skip_taxonomy=True,
-        skip_extraction=True,
-        skip_assembly=True,
+        skip_extraction=False,
+        skip_assembly=False,
         skip_category_recommendations=False,  # Regenerate with new schema
         skip_global_recommendation=False,
     )

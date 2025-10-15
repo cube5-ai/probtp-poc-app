@@ -228,6 +228,12 @@ def create_analysis_prompt(
     Returns:
         Formatted prompt string
     """
+    # Import provider profiles
+    from utils.provider_profiles import format_comparison_context
+
+    # Format provider domain knowledge context
+    provider_context = format_comparison_context("ProBTP", "AXA")
+
     # Extract metadata
     metadata = comparison_table.get("metadata", {})
     category = metadata.get("category", "Unknown")
@@ -476,6 +482,18 @@ REQUIRED OUTPUT STRUCTURE
 DO NOT add column "A" back. Preserve the exact column_labels array from the input.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PROVIDER DOMAIN KNOWLEDGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+{provider_context}
+
+**Important for Analysis:**
+- When evaluating coverage, consider bundled benefits that may not appear in the table
+- ProBTP's prevoyance benefits (like Forfait Naissance) are typically co-sold with health insurance
+- These bundled benefits should be mentioned in salesperson_talking_points when relevant
+- Consider the overall value proposition including both explicit coverage and typical bundles
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 COMPARISON TABLE DATA (FROM ALIGNMENT PHASE)
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -492,7 +510,7 @@ COMPARISON TABLE DATA (FROM ALIGNMENT PHASE)
 **Task Recap:**
 Based on the instructions above, generate a comprehensive analysis for the "{category}" category. The analysis must include:
 1. Annotated comparison table with is_best flags for all data cells
-2. Sales-ready insights from ProBTP's perspective
+2. Sales-ready insights from ProBTP's perspective (consider bundled benefits from domain knowledge)
 3. Brutally objective assessment of which contract is actually better
 
 Output all content in {language}. Output ONLY the JSON conforming to AnalysisOutput schema.
