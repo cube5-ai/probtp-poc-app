@@ -147,7 +147,13 @@ const ProjectDashboard = () => {
     }
 
     // Navigate to comparison page
-    router.push(`/projects/${projectId}/documents/compare`);
+    const params = new URLSearchParams();
+    selectedFiles.forEach((id) => params.append("selected", id));
+    params.set("autoStart", "1");
+
+    router.push(
+      `/projects/${projectId}/documents/compare?${params.toString()}`
+    );
   };
 
   const formatDate = (dateString: string) => {

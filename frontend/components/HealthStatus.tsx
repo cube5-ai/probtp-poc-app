@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { cn, getStatusColor, getStatusBgColor } from "@/lib/utils";
@@ -17,20 +17,54 @@ export default function HealthStatus() {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [resolvedEndpoint, setResolvedEndpoint] = useState<string | null>(null);
 
-  const fetchHealth = async () => {
+  const rawBaseUrl = (process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000").replace(/\/+$/, "");
+  const candidateEndpoints = useMemo(() => {
+    return Array.from(
+      new Set([
+        resolvedEndpoint,
+        `${rawBaseUrl}/health`,
+        `${rawBaseUrl}/api/v1/health`,
+        `${rawBaseUrl}/api/health`,
+      ].filter(Boolean))
+    ) as string[];
+  }, [rawBaseUrl, resolvedEndpoint]);
+
+  const fetchHealth = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
+      let lastError: Error | null = null;
 
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL + "/health");
+      for (const endpoint of candidateEndpoints) {
+        try {
+          const response = await fetch(endpoint, { cache: "no-store" });
 
-      if (!response.ok) {
-        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+          if (response.ok) {
+            const data: HealthResponse = await response.json();
+            setHealth(data);
+            setResolvedEndpoint(endpoint);
+            return;
+          }
+
+          if (response.status === 404) {
+            lastError = new Error(`Health endpoint not found at ${endpoint}`);
+            continue;
+          }
+
+          lastError = new Error(
+            `HTTP ${response.status}: ${response.statusText}`
+          );
+        } catch (fetchError) {
+          lastError =
+            fetchError instanceof Error
+              ? fetchError
+              : new Error("Failed to fetch health status");
+        }
       }
 
-      const data: HealthResponse = await response.json();
-      setHealth(data);
+      throw lastError ?? new Error("Health endpoint could not be reached");
     } catch (err) {
       setError(
         err instanceof Error ? err.message : "Failed to fetch health status"
@@ -39,14 +73,14 @@ export default function HealthStatus() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [candidateEndpoints]);
 
   useEffect(() => {
     fetchHealth();
     // Refresh health status every 30 seconds
     const interval = setInterval(fetchHealth, 30000);
     return () => clearInterval(interval);
-  }, []);
+  }, [fetchHealth]);
 
   const getStatusText = () => {
     if (loading) return "Checking...";
