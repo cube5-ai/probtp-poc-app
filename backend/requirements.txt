@@ -4,6 +4,6 @@ python-dotenv==1.1.1
 pydantic-settings==2.10.1
 sqlalchemy==2.0.36
 pyjwt==2.9.0
-firebase-admin
+firebase-admin>=6.5.0,<7.0.0
 structlog
 psycopg2-binary==2.9.10

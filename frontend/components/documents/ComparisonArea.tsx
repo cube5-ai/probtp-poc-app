@@ -13,7 +13,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { cn } from "@/lib/utils";
 import { toast } from "sonner";
-import demoComparison from "@/fixtures/comparison_report_new_2.json";
+import demoComparison from "@/fixtures/comparison_report_new_2.en.json";
 import DemoComparisonResults from "./DemoComparisonResults";
 
 interface UploadedFile {
@@ -222,13 +222,10 @@ const ComparisonArea = ({
                         className="font-medium text-sm truncate"
                         title={file.file.name}
                       >
-                        Document {index + 1}
+                        {file.file.name}
                       </h4>
                       <p className="text-xs text-muted-foreground truncate">
-                        {file.file.name}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatFileSize(file.file.size)}
+                        {formatFileSize(file.fileSize ?? file.file.size)}
                       </p>
                     </div>
                   </div>

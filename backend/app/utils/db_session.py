@@ -31,14 +31,24 @@ class DatabaseSessionManager:
         # Use provided URL or get from settings
         if database_url:
             self.database_url = database_url
-            # logger.info(f"Using provided database URL")
+            logger.info(f"Using provided database URL")
         else:
+            # Log environment for debugging
+            logger.info(f"🔍 Environment: ENVIRONMENT={settings.ENVIRONMENT}")
+            logger.info(f"🔍 DB Config: DB_USER={settings.DB_USER}, DB_NAME={settings.DB_NAME}, "
+                       f"CLOUD_SQL_CONNECTION_NAME={settings.CLOUD_SQL_CONNECTION_NAME}")
+            
             # Get the appropriate database URL (handles Cloud Run vs local)
             self.database_url = settings.get_database_url()
-            # logger.info(f"Environment: {settings.ENVIRONMENT}")
-            # Log connection string without password
-            safe_url = self.database_url.split('@')[0].split(':')[0] + ':****@' + self.database_url.split('@')[1] if '@' in self.database_url else 'invalid_url'
-            # logger.info(f"Database URL configured: {safe_url}")
+            
+            # Log connection string without password for debugging
+            if '@' in self.database_url:
+                parts = self.database_url.split('@')
+                prefix = parts[0].split(':')[0]  # Get protocol
+                safe_url = f"{prefix}:****@{parts[1]}"
+            else:
+                safe_url = self.database_url
+            logger.info(f"🔗 Database URL configured: {safe_url}")
         
         self._engine: Engine = None
         self._session_factory = None
@@ -56,6 +66,8 @@ class DatabaseSessionManager:
                     connect_args = {"connect_timeout": 10}
                 elif self.database_url.startswith('sqlite'):
                     connect_args = {"timeout": 10}
+
+                print(f"Database URL: {self.database_url}")
                 
                 self._engine = create_engine(
                     self.database_url,

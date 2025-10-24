@@ -1,0 +1,5055 @@
+{
+  "comparison_tables": [
+    {
+      "template_row": [
+        "Category",
+        "Subcategory",
+        "Benefit",
+        "Part S.S.",
+        "S4",
+        "Mandatory basis"
+      ],
+      "metadata": {
+        "category": "Routine care",
+        "policy_levels": {
+          "probtp": ["S4"],
+          "axa": ["Mandatory basis"]
+        },
+        "total_columns": 6,
+        "column_labels": ["A", "B", "C", "D", "E", "F"]
+      },
+      "rows": [
+        {
+          "row_number": 1,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A1",
+              "value": "Category"
+            },
+            {
+              "id": "B1",
+              "value": "Subcategory"
+            },
+            {
+              "id": "C1",
+              "value": "Benefit"
+            },
+            {
+              "id": "D1",
+              "value": "Part S.S."
+            },
+            {
+              "id": "E1",
+              "value": "S4"
+            },
+            {
+              "id": "F1",
+              "value": "Mandatory basis"
+            }
+          ]
+        },
+        {
+          "row_number": 2,
+          "leaf_id": "soins_courants_honoraires_medicaux_consultations_et_visites",
+          "leaf_path": [
+            "Routine care",
+            "Medical fees",
+            "Consultations and visits (general practitioners and specialists)"
+          ],
+          "leaf_description": "Reimbursement of consultations and visits to general practitioners and specialists.",
+          "securite_sociale_coverage": "70%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A2",
+              "value": "Routine care",
+              "type": "dimension",
+              "rowspan": 14,
+              "occupies": [
+                "A2",
+                "A3",
+                "A4",
+                "A5",
+                "A6",
+                "A7",
+                "A8",
+                "A9",
+                "A10",
+                "A11",
+                "A12",
+                "A13",
+                "A14",
+                "A15"
+              ]
+            },
+            {
+              "id": "B2",
+              "value": "Medical fees",
+              "type": "dimension",
+              "rowspan": 4,
+              "occupies": ["B2", "B3", "B4", "B5"]
+            },
+            {
+              "id": "C2",
+              "value": "Consultations and visits (general practitioners and specialists)",
+              "type": "dimension"
+            },
+            {
+              "id": "D2",
+              "value": "70%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E2",
+              "value": "200%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "200%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If OPTAM (Controlled Practical Pricing Option)",
+                  "coverage_modifier": "Actual costs",
+                  "modified_coverage_source_cell_ids": ["2-k"]
+                }
+              ],
+              "notes": null,
+              "display_value": "200% BR (Frais réels si OPTAM)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If OPTAM (Controlled Practical Pricing Option): Actual costs"
+              },
+              "sources": {
+                "probtp": ["2-k"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 137.57542728734572,
+                    "x2": 549.1674670085602,
+                    "y2": 178.85985895252946,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F2",
+              "value": "170% BR-MR (DPTAM) / 150% BR-MR (non DPTAM)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "170% BR-MR (DPTAM) / 150% BR-MR (non DPTAM)",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "administrative_requirement",
+                  "description": "Member of one of the DPTAMs",
+                  "coverage_modifier": "170% BR-MR",
+                  "modified_coverage_source_cell_ids": ["4-f", "4-l", "4-r"]
+                },
+                {
+                  "condition_type": "administrative_requirement",
+                  "description": "Not a member of one of the DPTAMs",
+                  "coverage_modifier": "150% BR-MR",
+                  "modified_coverage_source_cell_ids": ["4-i", "4-o", "4-u"]
+                }
+              ],
+              "notes": "Coverage varies based on DPTAM adherence for generalist, specialist consultations and visits.",
+              "display_value": "150-170% BR-MR",
+              "is_best": false,
+              "metadata": {
+                "document": "axa",
+                "conditions": "Adhérent à l'un des DPTAM: 170% BR-MR | Non adhérent à l'un des DPTAM: 150% BR-MR"
+              },
+              "sources": {
+                "axa": ["4-f", "4-i", "4-l", "4-o", "4-r", "4-u"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 166.8693035662708,
+                    "x2": 444.2022024730186,
+                    "y2": 298.7073307468082,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP offre une couverture de base plus élevée (200% BR) et la possibilité de remboursement aux frais réels si le médecin est OPTAM, ce qui est nettement supérieur à AXA (150-170% BR-MR)."
+        },
+        {
+          "row_number": 3,
+          "leaf_id": "soins_courants_honoraires_medicaux_actes_techniques_medicaux",
+          "leaf_path": [
+            "Routine care",
+            "Medical fees",
+            "Medical technical procedures"
+          ],
+          "leaf_description": "Reimbursement of technical procedures performed by doctors.",
+          "securite_sociale_coverage": "70%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B2", null, null, null, null],
+          "cells": [
+            {
+              "id": "A3",
+              "ref": "A2"
+            },
+            {
+              "id": "B3",
+              "ref": "B2"
+            },
+            {
+              "id": "C3",
+              "value": "Medical technical procedures",
+              "type": "dimension"
+            },
+            {
+              "id": "D3",
+              "value": "70%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E3",
+              "value": "200%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "200%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If OPTAM (Controlled Practical Pricing Option)",
+                  "coverage_modifier": "Actual costs",
+                  "modified_coverage_source_cell_ids": ["2-k"]
+                }
+              ],
+              "notes": null,
+              "display_value": "200% BR (Frais réels si OPTAM)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If OPTAM (Controlled Practical Pricing Option): Actual costs"
+              },
+              "sources": {
+                "probtp": ["2-k"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 137.57542728734572,
+                    "x2": 549.1674670085602,
+                    "y2": 178.85985895252946,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F3",
+              "value": "170% BR-MR (DPTAM) / 150% BR-MR (non DPTAM)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "170% BR-MR (DPTAM) / 150% BR-MR (non DPTAM)",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "administrative_requirement",
+                  "description": "Practiced by a doctor who is a member of one of the DPTAMs",
+                  "coverage_modifier": "170% BR-MR",
+                  "modified_coverage_source_cell_ids": ["4-x"]
+                },
+                {
+                  "condition_type": "administrative_requirement",
+                  "description": "Practiced by a doctor who is not a member of one of the DPTAMs",
+                  "coverage_modifier": "150% BR-MR",
+                  "modified_coverage_source_cell_ids": ["4-A"]
+                }
+              ],
+              "notes": "Coverage varies based on DPTAM adherence for medical or surgical technical acts.",
+              "display_value": "150-170% BR-MR",
+              "is_best": false,
+              "metadata": {
+                "document": "axa",
+                "conditions": "Pratiqué par un médecin adhérent à l'un des DPTAM: 170% BR-MR | Pratiqué par un médecin non adhérent à l'un des DPTAM: 150% BR-MR"
+              },
+              "sources": {
+                "axa": ["4-x", "4-A"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 298.7073307468082,
+                    "x2": 444.2022024730186,
+                    "y2": 367.0051946386179,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP propose une meilleure couverture de base (200% BR) et un remboursement aux frais réels si le médecin est OPTAM, surpassant les 150-170% BR-MR d'AXA."
+        },
+        {
+          "row_number": 4,
+          "leaf_id": "soins_courants_honoraires_medicaux_radiologie",
+          "leaf_path": ["Routine care", "Medical fees", "Radiology"],
+          "leaf_description": "Reimbursement of radiology examinations.",
+          "securite_sociale_coverage": "70%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B2", null, null, null, null],
+          "cells": [
+            {
+              "id": "A4",
+              "ref": "A2"
+            },
+            {
+              "id": "B4",
+              "ref": "B2"
+            },
+            {
+              "id": "C4",
+              "value": "Radiology",
+              "type": "dimension"
+            },
+            {
+              "id": "D4",
+              "value": "70%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E4",
+              "value": "200%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "200%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If OPTAM (Controlled Practical Pricing Option)",
+                  "coverage_modifier": "Actual costs",
+                  "modified_coverage_source_cell_ids": ["2-k"]
+                }
+              ],
+              "notes": null,
+              "display_value": "200% BR (Frais réels si OPTAM)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If OPTAM (Controlled Practical Pricing Option): Actual costs"
+              },
+              "sources": {
+                "probtp": ["2-k"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 137.57542728734572,
+                    "x2": 549.1674670085602,
+                    "y2": 178.85985895252946,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F4",
+              "value": "170% BR-MR (DPTAM) / 150% BR-MR (non DPTAM)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "170% BR-MR (DPTAM) / 150% BR-MR (non DPTAM)",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "administrative_requirement",
+                  "description": "Practiced by a doctor who is a member of one of the DPTAMs",
+                  "coverage_modifier": "170% BR-MR",
+                  "modified_coverage_source_cell_ids": ["4-D"]
+                },
+                {
+                  "condition_type": "administrative_requirement",
+                  "description": "Practiced by a doctor who is not a member of one of the DPTAMs",
+                  "coverage_modifier": "150% BR-MR",
+                  "modified_coverage_source_cell_ids": ["4-G"]
+                }
+              ],
+              "notes": "Coverage varies based on DPTAM adherence for imaging, ultrasound and doppler acts.",
+              "display_value": "150-170% BR-MR",
+              "is_best": false,
+              "metadata": {
+                "document": "axa",
+                "conditions": "Pratiqué par un médecin adhérent à l'un des DPTAM: 170% BR-MR | Pratiqué par un médecin non adhérent à l'un des DPTAM: 150% BR-MR"
+              },
+              "sources": {
+                "axa": ["4-D", "4-G"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 367.0051946386179,
+                    "x2": 444.2022024730186,
+                    "y2": 435.41970047662437,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP offre une couverture supérieure (200% BR) et la possibilité de frais réels avec OPTAM, tandis qu'AXA se limite à 150-170% BR-MR."
+        },
+        {
+          "row_number": 5,
+          "leaf_id": "soins_courants_honoraires_medicaux_soins_externes",
+          "leaf_path": ["Routine care", "Medical fees", "Outpatient care"],
+          "leaf_description": "Reimbursement of external care.",
+          "securite_sociale_coverage": "60% à 70%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B2", null, null, null, null],
+          "cells": [
+            {
+              "id": "A5",
+              "ref": "A2"
+            },
+            {
+              "id": "B5",
+              "ref": "B2"
+            },
+            {
+              "id": "C5",
+              "value": "Outpatient care",
+              "type": "dimension"
+            },
+            {
+              "id": "D5",
+              "value": "60% à 70%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E5",
+              "value": "200%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "200%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If OPTAM (Controlled Practical Pricing Option)",
+                  "coverage_modifier": "Actual costs",
+                  "modified_coverage_source_cell_ids": ["2-k"]
+                }
+              ],
+              "notes": null,
+              "display_value": "200% BR (Frais réels si OPTAM)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If OPTAM (Controlled Practical Pricing Option): Actual costs"
+              },
+              "sources": {
+                "probtp": ["2-k"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 137.57542728734572,
+                    "x2": 549.1674670085602,
+                    "y2": 178.85985895252946,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F5",
+              "value": "Not covered",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "Not covered",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "No specific line item for 'Soins externes' found. Covered by other medical acts.",
+              "display_value": "Not covered",
+              "is_best": false
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP couvre explicitement les soins externes à 200% BR (voire frais réels), alors qu'AXA indique 'Non couvert' pour cette ligne spécifique."
+        },
+        {
+          "row_number": 6,
+          "leaf_id": "soins_courants_honoraires_paramedicaux_auxiliaires_medicaux_soins_infirmiers",
+          "leaf_path": [
+            "Routine care",
+            "Paramedical fees",
+            "Medical assistants, nursing care"
+          ],
+          "leaf_description": "Reimbursement of care provided by medical and nursing assistants.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A6",
+              "ref": "A2"
+            },
+            {
+              "id": "B6",
+              "value": "Paramedical fees",
+              "type": "dimension",
+              "rowspan": 4,
+              "occupies": ["B6", "B7", "B8", "B9"]
+            },
+            {
+              "id": "C6",
+              "value": "Medical assistants, nursing care",
+              "type": "dimension"
+            },
+            {
+              "id": "D6",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E6",
+              "value": "200%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "200%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "200% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-z"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 170.3744277347572,
+                    "x2": 501.3727584167711,
+                    "y2": 178.85985895252946,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F6",
+              "value": "160% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "160% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Includes nurses, physiotherapists, speech therapists, orthoptists and chiropodists.",
+              "display_value": "160% BR-MR",
+              "is_best": false,
+              "sources": {
+                "axa": ["4-T"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 562.7686793616895,
+                    "x2": 444.2022024730186,
+                    "y2": 609.9606595896722,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP propose une couverture de 200% BR, ce qui est nettement plus élevé que les 160% BR-MR d'AXA pour les auxiliaires médicaux."
+        },
+        {
+          "row_number": 7,
+          "leaf_id": "soins_courants_honoraires_paramedicaux_transport",
+          "leaf_path": ["Routine care", "Paramedical fees", "Transport"],
+          "leaf_description": "Reimbursement of medical transportation costs.",
+          "securite_sociale_coverage": "55%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B6", null, null, null, null],
+          "cells": [
+            {
+              "id": "A7",
+              "ref": "A2"
+            },
+            {
+              "id": "B7",
+              "ref": "B6"
+            },
+            {
+              "id": "C7",
+              "value": "Transport",
+              "type": "dimension"
+            },
+            {
+              "id": "D7",
+              "value": "55%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E7",
+              "value": "100%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "100%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-H"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 178.85985895252946,
+                    "x2": 549.1674670085602,
+                    "y2": 210.94391683758366,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F7",
+              "value": "100% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% BR-MR",
+              "is_best": true,
+              "sources": {
+                "axa": ["5-B"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 314.66057308648794,
+                    "y1": 461.8428224605854,
+                    "x2": 417.04039099004456,
+                    "y2": 482.02094070575515,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 5
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats offrent une couverture équivalente à 100% de la Base de Remboursement pour le transport médical."
+        },
+        {
+          "row_number": 8,
+          "leaf_id": "soins_courants_honoraires_paramedicaux_seances_accompagnement_psychologique_remboursees_ss",
+          "leaf_path": [
+            "Routine care",
+            "Paramedical fees",
+            "Psychological support sessions reimbursed by the Social Security"
+          ],
+          "leaf_description": "Reimbursement of psychological support sessions covered by Social Security.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B6", null, null, null, null],
+          "cells": [
+            {
+              "id": "A8",
+              "ref": "A2"
+            },
+            {
+              "id": "B8",
+              "ref": "B6"
+            },
+            {
+              "id": "C8",
+              "value": "Psychological support sessions reimbursed by the Social Security",
+              "type": "dimension"
+            },
+            {
+              "id": "D8",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E8",
+              "value": "100%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "100%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-H"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 178.85985895252946,
+                    "x2": 549.1674670085602,
+                    "y2": 210.94391683758366,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F8",
+              "value": "Not covered",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "Not covered",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Only &#39;Psychology&#39; under &#39;Alternative Medicines&#39; is mentioned, which is a flat rate and not tied to SS reimbursement.",
+              "display_value": "Not covered",
+              "is_best": false
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP couvre les séances de psychologie remboursées par la SS à 100% BR, tandis qu'AXA n'offre pas de couverture pour ce type de prestation."
+        },
+        {
+          "row_number": 9,
+          "leaf_id": "soins_courants_honoraires_paramedicaux_analyses_et_examens_de_laboratoires",
+          "leaf_path": [
+            "Routine care",
+            "Paramedical fees",
+            "Laboratory analyses and tests"
+          ],
+          "leaf_description": "Reimbursement of analyses and examinations carried out in the laboratory.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B6", null, null, null, null],
+          "cells": [
+            {
+              "id": "A9",
+              "ref": "A2"
+            },
+            {
+              "id": "B9",
+              "ref": "B6"
+            },
+            {
+              "id": "C9",
+              "value": "Laboratory analyses and tests",
+              "type": "dimension"
+            },
+            {
+              "id": "D9",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E9",
+              "value": "200%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "200%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "200% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-R"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 202.71137988860096,
+                    "x2": 501.3727584167711,
+                    "y2": 210.94391683758366,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F9",
+              "value": "160% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "160% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "For analyses and exams taken in charge by Social Security.",
+              "display_value": "160% BR-MR",
+              "is_best": false,
+              "sources": {
+                "axa": ["4-M"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 457.4167966169732,
+                    "x2": 444.2022024730186,
+                    "y2": 479.34266376677914,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP propose une couverture de 200% BR pour les analyses de laboratoire, ce qui est nettement supérieur aux 160% BR-MR d'AXA."
+        },
+        {
+          "row_number": 10,
+          "leaf_id": "soins_courants_medicaments_pharmacie_remboursee_ss",
+          "leaf_path": [
+            "Routine care",
+            "Drugs",
+            "Pharmacy reimbursed by the SS"
+          ],
+          "leaf_description": "Reimbursement of medications covered by Social Security.",
+          "securite_sociale_coverage": "65% 30% 15%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A10",
+              "ref": "A2"
+            },
+            {
+              "id": "B10",
+              "value": "Drugs",
+              "type": "dimension",
+              "rowspan": 3,
+              "occupies": ["B10", "B11", "B12"]
+            },
+            {
+              "id": "C10",
+              "value": "Pharmacy reimbursed by the SS",
+              "type": "dimension"
+            },
+            {
+              "id": "D10",
+              "value": "65% 30% 15%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E10",
+              "value": "100%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "100%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-10"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 210.94391683758366,
+                    "x2": 501.3727584167711,
+                    "y2": 231.87092124909586,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F10",
+              "value": "100% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% BR-MR",
+              "is_best": true,
+              "sources": {
+                "axa": ["4-Z"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 632.0597223565582,
+                    "x2": 444.2022024730186,
+                    "y2": 654.0909117700186,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats remboursent les médicaments pris en charge par la SS à 100% de la Base de Remboursement."
+        },
+        {
+          "row_number": 11,
+          "leaf_id": "soins_courants_medicaments_vaccins_non_rembourses_ss",
+          "leaf_path": [
+            "Routine care",
+            "Drugs",
+            "Vaccines not reimbursed by the SS"
+          ],
+          "leaf_description": "Reimbursement of vaccines not covered by Social Security.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B10", null, null, null, null],
+          "cells": [
+            {
+              "id": "A11",
+              "ref": "A2"
+            },
+            {
+              "id": "B11",
+              "ref": "B10"
+            },
+            {
+              "id": "C11",
+              "value": "Vaccines not reimbursed by the SS",
+              "type": "dimension"
+            },
+            {
+              "id": "D11",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E11",
+              "value": "60€ (per year) [ceiling 60€]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "60€",
+              "frequency": "per year",
+              "cap": "ceiling 60€",
+              "age_restriction": null,
+              "other_universal_conditions": "All vaccines",
+              "vendor_conditions": null,
+              "notes": "Note (1) indicates &#39;ceiling per year and per beneficiary&#39;",
+              "display_value": "60€/year",
+              "is_best": false,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "All vaccines"
+              },
+              "sources": {
+                "probtp": ["2-18"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 231.87092124909586,
+                    "x2": 501.3727584167711,
+                    "y2": 246.50805582288194,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F11",
+              "value": "6 % PMSS (per year and per beneficiary)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "6 % PMSS",
+              "frequency": "per year and per beneficiary",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": "prescribed by a doctor under the conditions provided for by their marketing authorization",
+              "vendor_conditions": null,
+              "notes": "Found under 'Prevention' section, but clearly a medication item.",
+              "display_value": "6% PMSS/year (approx. 230€)",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "prescribed by a doctor under the conditions provided for by their marketing authorization"
+              },
+              "sources": {
+                "axa": ["6-c"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 330.86587766916114,
+                    "y1": 143.46204306805592,
+                    "x2": 444.0358400843836,
+                    "y2": 184.28844449734308,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 6
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "AXA offers much more generous coverage for vaccines not reimbursed by the SS (around €230/year) compared to ProBTP&#39;s €60/year."
+        },
+        {
+          "row_number": 12,
+          "leaf_id": "soins_courants_medicaments_contraception_prescrite_non_remboursee_ss",
+          "leaf_path": [
+            "Routine care",
+            "Drugs",
+            "Prescribed contraception, not reimbursed by social security"
+          ],
+          "leaf_description": "Reimbursement of contraceptive methods prescribed but not covered by Social Security.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B10", null, null, null, null],
+          "cells": [
+            {
+              "id": "A12",
+              "ref": "A2"
+            },
+            {
+              "id": "B12",
+              "ref": "B10"
+            },
+            {
+              "id": "C12",
+              "value": "Prescribed contraception, not reimbursed by social security",
+              "type": "dimension"
+            },
+            {
+              "id": "D12",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E12",
+              "value": "60€ (per year) [ceiling 60€]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "60€",
+              "frequency": "per year",
+              "cap": "ceiling 60€",
+              "age_restriction": null,
+              "other_universal_conditions": "per beneficiary",
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "60€/year",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "per beneficiary"
+              },
+              "sources": {
+                "probtp": ["2-1g"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 246.50805582288194,
+                    "x2": 501.3727584167711,
+                    "y2": 254.63190444805747,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F12",
+              "value": "50 € (per year and per beneficiary)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "50 €",
+              "frequency": "per year and per beneficiary",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": "prescribed by a doctor",
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "50€/year",
+              "is_best": false,
+              "metadata": {
+                "document": "axa",
+                "conditions": "prescribed by a doctor"
+              },
+              "sources": {
+                "axa": ["4-15"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 702.33499608884,
+                    "x2": 444.2022024730186,
+                    "y2": 750.4076297218822,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP offers slightly higher coverage for contraception not reimbursed by the SS (€60/year) compared to AXA&#39;s €50/year."
+        },
+        {
+          "row_number": 13,
+          "leaf_id": "soins_courants_materiel_medical_appareillages_orthopediques_et_autres_protheses",
+          "leaf_path": [
+            "Routine care",
+            "Medical equipment",
+            "Orthopedic devices and other prosthetics"
+          ],
+          "leaf_description": "Reimbursement of orthopedic devices and other types of prostheses.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A13",
+              "ref": "A2"
+            },
+            {
+              "id": "B13",
+              "value": "Medical equipment",
+              "type": "dimension"
+            },
+            {
+              "id": "C13",
+              "value": "Orthopedic devices and other prosthetics",
+              "type": "dimension"
+            },
+            {
+              "id": "D13",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E13",
+              "value": "550%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "550%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "550% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-1p"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 254.63190444805747,
+                    "x2": 501.3727584167711,
+                    "y2": 269.2465983430101,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F13",
+              "value": "170% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "170% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": "hors prothèses dentaires, auditives et optiques",
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "170% BR-MR",
+              "is_best": false,
+              "metadata": {
+                "document": "axa",
+                "conditions": "excluding dental, hearing and optical prostheses"
+              },
+              "sources": {
+                "axa": ["4-1b"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 772.5842300770915,
+                    "x2": 444.2022024730186,
+                    "y2": 799.8989819862832,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP offre une couverture exceptionnellement élevée de 550% BR pour les appareillages orthopédiques, surpassant de loin les 170% BR-MR d'AXA."
+        },
+        {
+          "row_number": 14,
+          "leaf_id": "soins_courants_honoraires_medicaux_actes_non_rembourses_ss",
+          "leaf_path": [
+            "Routine care",
+            "Medical fees",
+            "Acts not reimbursed by the SS"
+          ],
+          "leaf_description": "Medical technical procedures, radiology and biological analyses not covered by Social Security (excluding genetic assessment: karyotype and DNA sequencing)",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": true,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A14",
+              "ref": "A2"
+            },
+            {
+              "id": "B14",
+              "value": "Medical fees",
+              "type": "dimension"
+            },
+            {
+              "id": "C14",
+              "value": "Acts not reimbursed by the SS",
+              "type": "dimension"
+            },
+            {
+              "id": "D14",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E14",
+              "value": "Not covered",
+              "type": "data",
+              "is_best": false,
+              "vendor": "probtp"
+            },
+            {
+              "id": "F14",
+              "value": "100 €",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Unmappable: This benefit covers specific medical acts, radiologies, and biological analyses not covered by SS, which is a distinct offering beyond the standard SS-reimbursed items. It doesn't fit neatly into existing leaves which focus on SS-reimbursed items or specific categories like 'vaccins non remboursés par la S.S.'.",
+              "display_value": "100€",
+              "is_best": true,
+              "sources": {
+                "axa": ["4-P"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 479.34266376677914,
+                    "x2": 444.2022024730186,
+                    "y2": 540.878829383609,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "AXA offers €100 coverage for certain medical procedures not reimbursed by the social security system, a service not covered by ProBTP."
+        },
+        {
+          "row_number": 15,
+          "leaf_id": "soins_courants_medicaments_homeopathie_non_remboursee_ss",
+          "leaf_path": [
+            "Routine care",
+            "Drugs",
+            "Homeopathy not reimbursed by social security"
+          ],
+          "leaf_description": "Homeopathic medicines not covered by Social Security and prescribed by a doctor",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": true,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A15",
+              "ref": "A2"
+            },
+            {
+              "id": "B15",
+              "value": "Drugs",
+              "type": "dimension"
+            },
+            {
+              "id": "C15",
+              "value": "Homeopathy not reimbursed by social security",
+              "type": "dimension"
+            },
+            {
+              "id": "D15",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E15",
+              "value": "Not covered",
+              "type": "data",
+              "is_best": false,
+              "vendor": "probtp"
+            },
+            {
+              "id": "F15",
+              "value": "60 €",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "60 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Unmappable: This is a specific type of medication (homeopathic) not covered by SS, which is distinct from general SS-reimbursed pharmacy or non-SS vaccines/contraception. It warrants its own leaf.",
+              "display_value": "60€",
+              "is_best": true,
+              "sources": {
+                "axa": ["4-12"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 331.0334836044837,
+                    "y1": 654.0909117700186,
+                    "x2": 444.2022024730186,
+                    "y2": 702.33499608884,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 4
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "AXA offers a reimbursement of €60 for homeopathy not reimbursed by social security, a guarantee not available at ProBTP."
+        }
+      ]
+    },
+    {
+      "template_row": [
+        "Category",
+        "Subcategory",
+        "Benefit",
+        "Part S.S.",
+        "S4",
+        "Mandatory basis"
+      ],
+      "metadata": {
+        "category": "Hospitalisation",
+        "policy_levels": {
+          "probtp": ["S4"],
+          "axa": ["Base obligatoire"]
+        },
+        "total_columns": 6,
+        "column_labels": ["A", "B", "C", "D", "E", "F"]
+      },
+      "rows": [
+        {
+          "row_number": 1,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A1",
+              "value": "Category"
+            },
+            {
+              "id": "B1",
+              "value": "Subcategory"
+            },
+            {
+              "id": "C1",
+              "value": "Benefit"
+            },
+            {
+              "id": "D1",
+              "value": "Part S.S."
+            },
+            {
+              "id": "E1",
+              "value": "S4"
+            },
+            {
+              "id": "F1",
+              "value": "Mandatory basis"
+            }
+          ]
+        },
+        {
+          "row_number": 2,
+          "leaf_id": "hospitalisation_honoraires_frais_de_sejour",
+          "leaf_path": ["Hospitalisation", "Fees", "Accommodation costs"],
+          "leaf_description": "Reimbursement of medical fees and hospital stay costs.",
+          "securite_sociale_coverage": "80%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A2",
+              "value": "Hospitalisation",
+              "type": "dimension",
+              "rowspan": 5,
+              "occupies": ["A2", "A3", "A4", "A5", "A6"]
+            },
+            {
+              "id": "B2",
+              "value": "Fees",
+              "type": "dimension",
+              "rowspan": 4,
+              "occupies": ["B2", "B3", "B4", "B5"]
+            },
+            {
+              "id": "C2",
+              "value": "Accommodation costs",
+              "type": "dimension"
+            },
+            {
+              "id": "D2",
+              "value": "80%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E2",
+              "value": "200%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "200%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "And we EIGHT",
+                  "coverage_modifier": "Actual costs",
+                  "modified_coverage_source_cell_ids": ["2-1I"]
+                }
+              ],
+              "notes": null,
+              "display_value": "200% BR (Frais réels si OPTAM)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If OPTAM: Actual costs"
+              },
+              "sources": {
+                "probtp": ["2-1I"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 287.64986295782774,
+                    "x2": 501.3727584167711,
+                    "y2": 301.6110913299676,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F2",
+              "value": "100% FR-SS (conventionné), 90% FR-SS (non conventionné), 100% TM (minimum), 480% BR-MR (DPTAM), 200% BR-MR (non DPTAM) [500% BR]",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100% FR-SS (conventionné), 90% FR-SS (non conventionné), 100% TM (minimum), 480% BR-MR (DPTAM), 200% BR-MR (non DPTAM)",
+              "frequency": null,
+              "cap": "500% BR",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Couverture variable selon le type d'établissement (conventionné/non conventionné) et l'adhésion du médecin au DPTAM. Les frais de séjour ont un plafond de 500% BR.",
+              "display_value": "Jusqu'à 480% BR-MR (DPTAM), plafonné à 500% BR pour frais de séjour",
+              "is_best": false,
+              "sources": {
+                "axa": [
+                  "2-b",
+                  "2-g",
+                  "2-j",
+                  "2-m",
+                  "2-p",
+                  "2-s",
+                  "2-v",
+                  "2-y",
+                  "2-C",
+                  "2-F"
+                ]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 316.7057775969425,
+                    "y1": 389.6622194186685,
+                    "x2": 421.1779716224745,
+                    "y2": 404.95616820076583,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 316.7057775969425,
+                    "y1": 583.4598528111183,
+                    "x2": 421.1779716224745,
+                    "y2": 627.2641288779021,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 316.7057775969425,
+                    "y1": 423.84423658487896,
+                    "x2": 421.1779716224745,
+                    "y2": 561.3955552103379,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 2
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP offre 200% BR et la prise en charge en frais réels si le praticien adhère à l'OPTAM, ce qui est un avantage significatif par rapport à la couverture plus complexe et plafonnée d'AXA pour les frais de séjour."
+        },
+        {
+          "row_number": 3,
+          "leaf_id": "hospitalisation_honoraires_chambre_particuliere",
+          "leaf_path": ["Hospitalisation", "Fees", "Private room"],
+          "leaf_description": "Reimbursement of the supplement for a single room in hospital.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B2", null, null, null, null],
+          "cells": [
+            {
+              "id": "A3",
+              "ref": "A2"
+            },
+            {
+              "id": "B3",
+              "ref": "B2"
+            },
+            {
+              "id": "C3",
+              "value": "Private room",
+              "type": "dimension"
+            },
+            {
+              "id": "D3",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E3",
+              "value": "80 € (per day)",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "80 €",
+              "frequency": "per day",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "80 €/day",
+              "is_best": false,
+              "sources": {
+                "probtp": ["2-1Q"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 301.6110913299676,
+                    "x2": 501.3727584167711,
+                    "y2": 310.10545332149405,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F3",
+              "value": "85 € (per day)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "85 €",
+              "frequency": "per day",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "85 €/day",
+              "is_best": true,
+              "sources": {
+                "axa": ["2-I"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 316.7057775969425,
+                    "y1": 627.2641288779021,
+                    "x2": 421.1779716224745,
+                    "y2": 649.4316892715347,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 2
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "AXA offers a slightly higher reimbursement for a private room, with €85 per day compared to €80 for ProBTP."
+        },
+        {
+          "row_number": 4,
+          "leaf_id": "hospitalisation_honoraires_lit_accompagnant_enfants_ou_beneficiaires_plus_70_ans",
+          "leaf_path": [
+            "Hospitalisation",
+            "Fees",
+            "Accompanying bed for children under 12 years old or beneficiaries over 70 years old"
+          ],
+          "leaf_description": "Reimbursement of accompanying bed for children under 12 years old or beneficiaries over 70 years old.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B2", null, null, null, null],
+          "cells": [
+            {
+              "id": "A4",
+              "ref": "A2"
+            },
+            {
+              "id": "B4",
+              "ref": "B2"
+            },
+            {
+              "id": "C4",
+              "value": "Accompanying bed for children under 12 years old or beneficiaries over 70 years old",
+              "type": "dimension"
+            },
+            {
+              "id": "D4",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E4",
+              "value": "23 € (per day)",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "23 €",
+              "frequency": "per day",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "23 €/day (children under 12 or over 70)",
+              "is_best": false,
+              "sources": {
+                "probtp": ["2-1Y"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 310.10545332149405,
+                    "x2": 501.3727584167711,
+                    "y2": 324.2304296686142,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F4",
+              "value": "40 € (per day) [30 day(s)]",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "40 €",
+              "frequency": "per day",
+              "cap": "30 day(s)",
+              "age_restriction": "child under 16 years old",
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Accommodation costs in a parents&#39; house can be covered for one person.",
+              "display_value": "€40/day (children under 16 or over 70), capped at 30 days",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "child under 16 years old"
+              },
+              "sources": {
+                "axa": ["2-R"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 316.7057775969425,
+                    "y1": 693.3428739346267,
+                    "x2": 421.1779716224745,
+                    "y2": 710.2496186275911,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 2
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "AXA reimburses almost double per day (€40 vs. €23) and covers children up to 16 years old, compared to 12 years old for ProBTP, offering better overall support."
+        },
+        {
+          "row_number": 5,
+          "leaf_id": "hospitalisation_honoraires_participation_forfaitaire_actes_superieurs_120",
+          "leaf_path": [
+            "Hospitalisation",
+            "Fees",
+            "Flat-rate contribution for procedures over €120"
+          ],
+          "leaf_description": "Reimbursement of the flat-rate contribution for medical procedures costing more than €120.",
+          "securite_sociale_coverage": "100% - 1 package",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B2", null, null, null, null],
+          "cells": [
+            {
+              "id": "A5",
+              "ref": "A2"
+            },
+            {
+              "id": "B5",
+              "ref": "B2"
+            },
+            {
+              "id": "C5",
+              "value": "Flat-rate contribution for procedures over €120",
+              "type": "dimension"
+            },
+            {
+              "id": "D5",
+              "value": "100% - 1 package",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E5",
+              "value": "100% of the package",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "100% of the package",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% of the package",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-26"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 324.2304296686142,
+                    "x2": 501.3727584167711,
+                    "y2": 339.06928084795095,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F5",
+              "value": "Not covered",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "Not covered",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "The flat-rate contribution for procedures exceeding €120 is not explicitly mentioned as reimbursed in the Hospitalization section for the Mandatory Base.",
+              "display_value": "Not covered",
+              "is_best": false
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP covers 100% of the flat-rate contribution for procedures exceeding €120, while AXA does not cover it at all."
+        },
+        {
+          "row_number": 6,
+          "leaf_id": "hospitalisation_forfait_journalier_et_forfait_urgences_etablissement_hospitalier",
+          "leaf_path": [
+            "Hospitalisation",
+            "Daily package and emergency package in hospital establishment"
+          ],
+          "leaf_description": "Reimbursement of the daily package and the emergency package in the event of hospitalization.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A6",
+              "ref": "A2"
+            },
+            {
+              "id": "B6",
+              "value": "Daily package and emergency package in hospital establishment",
+              "type": "dimension"
+            },
+            {
+              "id": "C6",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "D6",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E6",
+              "value": "Oui",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "Oui",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": "No time limit and no limit in number for the emergency package. Coverage according to the conditions defined in 6th of Article R. 871-2 of the Social Security Code, in application of which, daily packages in long-term establishments, MAS or EHPAD are excluded from coverage. Coverage according to the conditions defined in Article L. 871-1 of the Social Security Code.",
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "Yes (no time limit for the daily package, no number limit for the emergency package)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "No time limit and no limit in number for the emergency package. Coverage according to the conditions defined in 6th of Article R. 871-2 of the Social Security Code, in application of which, daily packages in long-term establishments, MAS or EHPAD are excluded from coverage. Coverage according to the conditions defined in Article L. 871-1 of the Social Security Code."
+              },
+              "sources": {
+                "probtp": ["2-2e"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 453.32646669321866,
+                    "y1": 339.06928084795095,
+                    "x2": 501.3727584167711,
+                    "y2": 347.4236417698945,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F6",
+              "value": "100% of the package",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100% of the package",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "The document mentions &#39;Daily hospital package&#39; and &#39;Major procedure package&#39;. The emergency package is not explicitly mentioned.",
+              "display_value": "100% of the daily package (emergency package not mentioned)",
+              "is_best": false,
+              "sources": {
+                "axa": ["2-L"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 316.7057775969425,
+                    "y1": 649.4316892715347,
+                    "x2": 421.1779716224745,
+                    "y2": 671.4080154709369,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 2
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP explicitly and without limitation covers the daily package and the emergency package, while AXA does not clearly mention coverage for the emergency package."
+        }
+      ]
+    },
+    {
+      "template_row": [
+        "Category",
+        "Subcategory",
+        "Sub-subcategory",
+        "Benefit",
+        "Part S.S.",
+        "P5",
+        "Mandatory basis"
+      ],
+      "metadata": {
+        "category": "Optical",
+        "policy_levels": {
+          "probtp": ["P5"],
+          "axa": ["Base obligatoire"]
+        },
+        "total_columns": 7,
+        "column_labels": ["A", "B", "C", "D", "E", "F", "G"]
+      },
+      "rows": [
+        {
+          "row_number": 1,
+          "inherited_from_above": [null, null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A1",
+              "value": "Category"
+            },
+            {
+              "id": "B1",
+              "value": "Subcategory"
+            },
+            {
+              "id": "C1",
+              "value": "Sub-subcategory"
+            },
+            {
+              "id": "D1",
+              "value": "Benefit"
+            },
+            {
+              "id": "E1",
+              "value": "Part S.S."
+            },
+            {
+              "id": "F1",
+              "value": "P5"
+            },
+            {
+              "id": "G1",
+              "value": "Mandatory basis"
+            }
+          ]
+        },
+        {
+          "row_number": 2,
+          "leaf_id": "optique_equipement_100_sante",
+          "leaf_path": ["Optical", "Equipment 100% health"],
+          "leaf_description": "Full reimbursement of optical equipment of class A (100% Health).",
+          "securite_sociale_coverage": "60% (a)",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": [null, null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A2",
+              "value": "Optical",
+              "type": "dimension",
+              "rowspan": 8,
+              "occupies": ["A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9"]
+            },
+            {
+              "id": "B2",
+              "value": "Equipment 100% health",
+              "type": "dimension"
+            },
+            {
+              "id": "C2",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "D2",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "E2",
+              "value": "60% (a)",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F2",
+              "value": "Frais réels",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "Frais réels",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "Actual costs",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-2C"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 373.1879167279335,
+                    "x2": 511.9366011574939,
+                    "y2": 382.00008705473067,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G2",
+              "value": "100% PLV (tous les 2 ans)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100% PLV",
+              "frequency": "tous les 2 ans",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "La définition des équipements 100% Santé inclut les verres et la monture de classe A.",
+              "display_value": "100% PLV (tous les 2 ans)",
+              "is_best": true,
+              "sources": {
+                "axa": ["7-p"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 330.65931647529004,
+                    "y1": 223.0587545919717,
+                    "x2": 443.7704331654726,
+                    "y2": 245.08621215958007,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 7
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats couvrent intégralement les équipements 100% Santé, ce qui est une obligation légale et assure un reste à charge zéro."
+        },
+        {
+          "row_number": 3,
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_combinant_verres_100_sante_et_monture_libre",
+          "leaf_path": [
+            "Optical",
+            "Other optical equipment (lenses and frames)",
+            "Equipment combining 100% Health lenses and a free frame"
+          ],
+          "leaf_description": "Full reimbursement of an optical equipment consisting of 100% Health lenses and a frame chosen freely.",
+          "securite_sociale_coverage": "60% (b)",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A3",
+              "ref": "A2"
+            },
+            {
+              "id": "B3",
+              "value": "Other optical equipment (lenses and frames)",
+              "type": "dimension",
+              "rowspan": 4,
+              "occupies": ["B3", "B4", "B5", "B6"]
+            },
+            {
+              "id": "C3",
+              "value": "Équipement combinant des verres 100% Santé et une monture libre",
+              "type": "dimension"
+            },
+            {
+              "id": "D3",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "E3",
+              "value": "60% (b)",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F3",
+              "value": "Glasses: actual costs Frame: 100 €",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "Glasses: actual costs Frame: 100 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "Glasses: Actual costs, Frame: €100",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-2M"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 382.00008705473067,
+                    "x2": 511.9366011574939,
+                    "y2": 415.0657192618886,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G3",
+              "value": "Glasses: 100% PLV, Frame: 100€ (every 2 years)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "Glasses: 100% PLV, Frame: 100€",
+              "frequency": "every 2 years",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "In the Itelis Optical network",
+                  "coverage_modifier": "Full refund for glasses",
+                  "modified_coverage_source_cell_ids": ["8-3", "8-5"]
+                }
+              ],
+              "notes": "The coverage for the free frame is the one indicated for 'Out of the Itelis Optical network'. The 100% Health lenses are covered at 100% PLV.",
+              "display_value": "Glasses: 100% PLV, Frame: 100€ (every 2 years)",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "In the Itelis Optique network: Full reimbursement for lenses"
+              },
+              "sources": {
+                "axa": ["7-p", "8-A", "8-3", "8-5"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 330.65931647529004,
+                    "y1": 223.0587545919717,
+                    "x2": 443.7704331654726,
+                    "y2": 245.08621215958007,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 7
+                },
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 259.5077400881894,
+                    "y1": 595.3130741558036,
+                    "x2": 377.20008672010545,
+                    "y2": 610.1068729342796,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 8
+                },
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 156.80759649703836,
+                    "y1": 410.63696454487564,
+                    "x2": 259.5077400881894,
+                    "y2": 449.4620920292993,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 8
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "La couverture pour les verres 100% Santé est intégrale pour les deux, et la monture libre est remboursée à 100€ dans les deux cas, rendant les offres équivalentes."
+        },
+        {
+          "row_number": 4,
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_libre_equipement_a_verres_unifocaux",
+          "leaf_path": [
+            "Optical",
+            "Other optical equipment (lenses and frames)",
+            "Free equipment",
+            "Single-vision lens equipment"
+          ],
+          "leaf_description": "Reimbursement of optical equipment with single-vision lenses.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B3", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A4",
+              "ref": "A2"
+            },
+            {
+              "id": "B4",
+              "ref": "B3"
+            },
+            {
+              "id": "C4",
+              "value": "Free equipment",
+              "type": "dimension",
+              "rowspan": 3,
+              "occupies": ["C4", "C5", "C6"]
+            },
+            {
+              "id": "D4",
+              "value": "Single-vision lens equipment",
+              "type": "dimension"
+            },
+            {
+              "id": "E4",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F4",
+              "value": "300 €",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "300 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If optician partner Sévéane",
+                  "coverage_modifier": "400 €",
+                  "modified_coverage_source_cell_ids": ["2-2X"]
+                }
+              ],
+              "notes": null,
+              "display_value": "€300 (€400 if Sévéane partner)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If Sévéane optician partner: €400"
+              },
+              "sources": {
+                "probtp": ["2-34", "2-2X"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 415.0657192618886,
+                    "x2": 511.9366011574939,
+                    "y2": 431.3789526053159,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G4",
+              "value": "From 81€ to 167€ (every 2 years)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "From 81€ to 167€",
+              "frequency": "every 2 years",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "In the Itelis Optical network",
+                  "coverage_modifier": "Full refund",
+                  "modified_coverage_source_cell_ids": ["8-3", "8-5"]
+                }
+              ],
+              "notes": "Coverage varies depending on the correction level (Low, Moderate, Medium, High, Very High) for Itelis out-of-network equipment. Reimbursement is per glass.",
+              "display_value": "From €81 to €167/glass (Full refund if Itelis network)",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "In the Itelis Optique network: Full reimbursement"
+              },
+              "sources": {
+                "axa": ["8-c", "8-h", "8-m", "8-r", "8-w", "8-3", "8-5"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 156.80759649703836,
+                    "y1": 410.63696454487564,
+                    "x2": 259.5077400881894,
+                    "y2": 449.4620920292993,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 8
+                },
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 377.20008672010545,
+                    "y1": 449.4620920292993,
+                    "x2": 453.75523778128866,
+                    "y2": 595.3130741558036,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 8
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "ProBTP offers €300 (€400 with the Sévéane network) for the equipment. AXA offers a range of €262 to €434 outside the network (including €100 for the frame) and full reimbursement through its Itelis network, which balances out the offers."
+        },
+        {
+          "row_number": 5,
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_libre_equipement_a_verres_progressifs",
+          "leaf_path": [
+            "Optical",
+            "Other optical equipment (lenses and frames)",
+            "Free equipment",
+            "Progressive lens equipment"
+          ],
+          "leaf_description": "Reimbursement of optical equipment with progressive or multifocal lenses.",
+          "securite_sociale_coverage": "60% (infinity symbol)",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B3", "C4", null, null, null, null],
+          "cells": [
+            {
+              "id": "A5",
+              "ref": "A2"
+            },
+            {
+              "id": "B5",
+              "ref": "B3"
+            },
+            {
+              "id": "C5",
+              "ref": "C4"
+            },
+            {
+              "id": "D5",
+              "value": "Progressive lens equipment",
+              "type": "dimension"
+            },
+            {
+              "id": "E5",
+              "value": "60% (infinity symbol)",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F5",
+              "value": "500€",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "500€",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If optician partner Sévéane",
+                  "coverage_modifier": "600 €",
+                  "modified_coverage_source_cell_ids": ["2-3d"]
+                }
+              ],
+              "notes": "Note (10) specifies complex reimbursement rules if the equipment combines unifocal and progressive/multifocal lenses, with total reimbursement limits ranging from 560€ to 750€.",
+              "display_value": "€500 (€600 if Sévéane partner)",
+              "is_best": false,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If Sévéane optician partner: €600"
+              },
+              "sources": {
+                "probtp": ["2-3l", "2-3d"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 431.3789526053159,
+                    "x2": 547.0688717731671,
+                    "y2": 448.52901630744896,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G5",
+              "value": "From 214€ to 267€ (every 2 years)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "From 214€ to 267€",
+              "frequency": "every 2 years",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "In the Itelis Optical network",
+                  "coverage_modifier": "Full refund",
+                  "modified_coverage_source_cell_ids": ["8-3", "8-6"]
+                }
+              ],
+              "notes": "Coverage varies depending on the correction level (Low, Moderate, Medium, High, Very High) for Itelis out-of-network equipment. Reimbursement is per glass.",
+              "display_value": "From €214 to €267/glass (Full refund if Itelis network)",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "In the Itelis Optique network: Full reimbursement"
+              },
+              "sources": {
+                "axa": ["8-d", "8-i", "8-n", "8-s", "8-x", "8-3", "8-6"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 259.5077400881894,
+                    "y1": 410.63696454487564,
+                    "x2": 377.20008672010545,
+                    "y2": 449.4620920292993,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 8
+                },
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 453.75523778128866,
+                    "y1": 449.4620920292993,
+                    "x2": 530.4074185293324,
+                    "y2": 595.3130741558036,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 8
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "AXA offers a potentially higher base reimbursement for progressive lenses outside the network (€528 to €634 for the equipment) and full reimbursement through its network, surpassing ProBTP&#39;s €500 (or €600 with the network)."
+        },
+        {
+          "row_number": 6,
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_libre_supplement_forte_correction",
+          "leaf_path": [
+            "Optical",
+            "Other optical equipment (lenses and frames)",
+            "Free equipment",
+            "Strong correction supplement"
+          ],
+          "leaf_description": "Supplement for high-prescription optical lenses.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B3", "C4", null, null, null, null],
+          "cells": [
+            {
+              "id": "A6",
+              "ref": "A2"
+            },
+            {
+              "id": "B6",
+              "ref": "B3"
+            },
+            {
+              "id": "C6",
+              "ref": "C4"
+            },
+            {
+              "id": "D6",
+              "value": "Strong correction supplement",
+              "type": "dimension"
+            },
+            {
+              "id": "E6",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F6",
+              "value": "+ 50€/verre",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "+ 50€/verre",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Note (11) specifies exceptions for certain categories of unifocal and multifocal/progressive lenses.",
+              "display_value": "+ 50€/glass",
+              "is_best": false,
+              "sources": {
+                "probtp": ["2-3s"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 448.52901630744896,
+                    "x2": 511.9366011574939,
+                    "y2": 462.88130633359225,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G6",
+              "value": "Included in the amounts of unifocal and multifocal lenses for the correction levels 'High' and 'Very High' (every 2 years)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "Included in the amounts of unifocal and multifocal lenses for the correction levels 'High' and 'Very High'",
+              "frequency": "every 2 years",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "The document does not mention a separate supplement for high correction, but reimbursement amounts for lenses vary depending on the level of correction, including high and very high corrections.",
+              "display_value": "Included in the amounts of lenses (High and Very High levels)",
+              "is_best": true,
+              "sources": {
+                "axa": ["8-r", "8-s", "8-w", "8-x"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 377.20008672010545,
+                    "y1": 541.8411305304934,
+                    "x2": 530.4074185293324,
+                    "y2": 595.3130741558036,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 8
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "AXA includes the high correction supplement in its lens reimbursement amounts, which can be more advantageous than the fixed supplement of €50/lens from ProBTP, especially for high corrections."
+        },
+        {
+          "row_number": 7,
+          "leaf_id": "optique_lentilles_remboursees_par_la_ss",
+          "leaf_path": ["Optical", "Lenses", "Reimbursed by SS"],
+          "leaf_description": "Reimbursement of contact lenses covered by Social Security.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A7",
+              "ref": "A2"
+            },
+            {
+              "id": "B7",
+              "value": "Lenses",
+              "type": "dimension",
+              "rowspan": 2,
+              "occupies": ["B7", "B8"]
+            },
+            {
+              "id": "C7",
+              "value": "Reimbursed by SS",
+              "type": "dimension"
+            },
+            {
+              "id": "D7",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "E7",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F7",
+              "value": "100% + 200€ (per year) [per beneficiary]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "100% + 200€",
+              "frequency": "per year",
+              "cap": "per beneficiary",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% BR + 200€/year",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-3C"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 462.88130633359225,
+                    "x2": 511.9366011574939,
+                    "y2": 470.7192280141795,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G7",
+              "value": "200€ (per year)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "200€",
+              "frequency": "per year",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Coverage for corrective contact lenses covered or not by Social Security.",
+              "display_value": "200€/year",
+              "is_best": false,
+              "sources": {
+                "axa": ["7-A"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 330.65931647529004,
+                    "y1": 305.4314427096773,
+                    "x2": 443.7704331654726,
+                    "y2": 322.60651791274785,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 7
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP offre 100% de la Base de Remboursement de la Sécurité Sociale en plus des 200€, ce qui est légèrement plus avantageux que les 200€ seuls d'AXA."
+        },
+        {
+          "row_number": 8,
+          "leaf_id": "optique_lentilles_non_remboursees_par_la_ss",
+          "leaf_path": ["Optical", "Lenses", "Not reimbursed by the SS"],
+          "leaf_description": "Reimbursement of contact lenses not covered by Social Security.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B7", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A8",
+              "ref": "A2"
+            },
+            {
+              "id": "B8",
+              "ref": "B7"
+            },
+            {
+              "id": "C8",
+              "value": "Not reimbursed by the SS",
+              "type": "dimension"
+            },
+            {
+              "id": "D8",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "E8",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F8",
+              "value": "175€ (per year) [per beneficiary]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "175€",
+              "frequency": "per year",
+              "cap": "per beneficiary",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "175€/year",
+              "is_best": false,
+              "sources": {
+                "probtp": ["2-3L"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 470.7192280141795,
+                    "x2": 511.9366011574939,
+                    "y2": 479.23987808907253,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G8",
+              "value": "200€ (per year)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "200€",
+              "frequency": "per year",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Coverage for corrective contact lenses covered or not by Social Security.",
+              "display_value": "200€/year",
+              "is_best": true,
+              "sources": {
+                "axa": ["7-A"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 330.65931647529004,
+                    "y1": 305.4314427096773,
+                    "x2": 443.7704331654726,
+                    "y2": 322.60651791274785,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 7
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "AXA offers a reimbursement of €200 per year for lenses not reimbursed by the social security system, compared to €175 for ProBTP."
+        },
+        {
+          "row_number": 9,
+          "leaf_id": "optique_chirurgie_refractive_de_la_vue",
+          "leaf_path": ["Optical", "Refractive eye surgery"],
+          "leaf_description": "Reimbursement for surgery to correct vision defects.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A9",
+              "ref": "A2"
+            },
+            {
+              "id": "B9",
+              "value": "Refractive eye surgery",
+              "type": "dimension"
+            },
+            {
+              "id": "C9",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "D9",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "E9",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "F9",
+              "value": "500€ (per year) [per eye, per year and per beneficiary]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "500€",
+              "frequency": "per year",
+              "cap": "per eye, per year and per beneficiary",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "500€/year/eye",
+              "is_best": false,
+              "sources": {
+                "probtp": ["2-3U"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 477.27436315468105,
+                    "y1": 479.23987808907253,
+                    "x2": 511.9366011574939,
+                    "y2": 487.147494469113,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "G9",
+              "value": "800€ (per year) [per eye, per year and per beneficiary]",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "800€",
+              "frequency": "per year",
+              "cap": "per eye, per year and per beneficiary",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Coverage for refractive eye surgery.",
+              "display_value": "800€/year/eye",
+              "is_best": true,
+              "sources": {
+                "axa": ["7-L"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 330.65931647529004,
+                    "y1": 372.7335381988307,
+                    "x2": 443.7704331654726,
+                    "y2": 405.31805925063003,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 7
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "AXA reimburses €800 per eye for refractive surgery, which is significantly higher than the €500 per eye offered by ProBTP."
+        }
+      ]
+    },
+    {
+      "template_row": [
+        "Category",
+        "Subcategory",
+        "Benefit",
+        "Part S.S.",
+        "P5",
+        "Mandatory basis"
+      ],
+      "metadata": {
+        "category": "Dental",
+        "policy_levels": {
+          "probtp": ["P5"],
+          "axa": ["Base obligatoire"]
+        },
+        "total_columns": 6,
+        "column_labels": ["A", "B", "C", "D", "E", "F"]
+      },
+      "rows": [
+        {
+          "row_number": 1,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A1",
+              "value": "Category"
+            },
+            {
+              "id": "B1",
+              "value": "Subcategory"
+            },
+            {
+              "id": "C1",
+              "value": "Benefit"
+            },
+            {
+              "id": "D1",
+              "value": "Part S.S."
+            },
+            {
+              "id": "E1",
+              "value": "P5"
+            },
+            {
+              "id": "F1",
+              "value": "Mandatory basis"
+            }
+          ]
+        },
+        {
+          "row_number": 2,
+          "leaf_id": "dentaire_soins_et_protheses_100_sante",
+          "leaf_path": ["Dental", "100% health care and prosthetics"],
+          "leaf_description": "Full reimbursement of dental care and prosthetics relevant to the 100% Health device.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A2",
+              "value": "Dental",
+              "type": "dimension",
+              "rowspan": 12,
+              "occupies": [
+                "A2",
+                "A3",
+                "A4",
+                "A5",
+                "A6",
+                "A7",
+                "A8",
+                "A9",
+                "A10",
+                "A11",
+                "A12",
+                "A13"
+              ]
+            },
+            {
+              "id": "B2",
+              "value": "100% health care and prosthetics",
+              "type": "dimension"
+            },
+            {
+              "id": "C2",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "D2",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E2",
+              "value": "Actual costs",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "Actual costs",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "Actual costs",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-45"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 503.79199114423625,
+                    "x2": 512.5335058747177,
+                    "y2": 512.009193039228,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F2",
+              "value": "100% PLV-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100% PLV-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% PLV-MR",
+              "is_best": true,
+              "sources": {
+                "axa": ["3-E"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 322.76369118087354,
+                    "y1": 389.23404382424746,
+                    "x2": 421.4833191661682,
+                    "y2": 411.28840541651573,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "Both contracts fully cover dental care and prosthetics relevant to the 100% Health device, ensuring zero out-of-pocket costs."
+        },
+        {
+          "row_number": 3,
+          "leaf_id": "dentaire_soins_dentaires_inlay_onlay_par_acte",
+          "leaf_path": ["Dental", "Dental care", "Inlay/onlay (part acte)"],
+          "leaf_description": "Reimbursement for inlay/onlay dental restorations.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A3",
+              "ref": "A2"
+            },
+            {
+              "id": "B3",
+              "value": "Dental care",
+              "type": "dimension",
+              "rowspan": 3,
+              "occupies": ["B3", "B4", "B5"]
+            },
+            {
+              "id": "C3",
+              "value": "Inlay/onlay (part acte)",
+              "type": "dimension"
+            },
+            {
+              "id": "D3",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E3",
+              "value": "250%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "250%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "250% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-4f"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 512.009193039228,
+                    "x2": 512.5335058747177,
+                    "y2": 520.0397371504113,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F3",
+              "value": "Not covered",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "Not covered",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Inlays/Onlays are explicitly excluded from 'Soins courants' and are covered under 'Prothèses dentaires' in this contract.",
+              "display_value": "Not covered",
+              "is_best": false,
+              "sources": {
+                "axa": ["3-n"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 36.044834560325725,
+                    "y1": 254.231905308332,
+                    "x2": 326.4550350280087,
+                    "y2": 288.467613123979,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP couvre les inlays/onlays à 250% de la BR, tandis qu'AXA ne les couvre pas spécifiquement sous cette catégorie, ce qui représente un avantage significatif pour ProBTP."
+        },
+        {
+          "row_number": 4,
+          "leaf_id": "dentaire_soins_dentaires_autres_soins_dentaires_pris_en_charge_par_la_ss",
+          "leaf_path": [
+            "Dental",
+            "Dental care",
+            "Other dental care covered by the SS"
+          ],
+          "leaf_description": "Reimbursement of other dental care covered by Social Security.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B3", null, null, null, null],
+          "cells": [
+            {
+              "id": "A4",
+              "ref": "A2"
+            },
+            {
+              "id": "B4",
+              "ref": "B3"
+            },
+            {
+              "id": "C4",
+              "value": "Other dental care covered by the SS",
+              "type": "dimension"
+            },
+            {
+              "id": "D4",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E4",
+              "value": "300%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "300%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "300% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-4o"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 520.0397371504113,
+                    "x2": 512.5335058747177,
+                    "y2": 528.7820893297752,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F4",
+              "value": "200% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "200% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Covers Consultations, routine care (excluding inlays, onlays, fillings), radiology and surgery.",
+              "display_value": "200% BR-MR",
+              "is_best": false,
+              "sources": {
+                "axa": ["3-o"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 326.4550350280087,
+                    "y1": 254.231905308332,
+                    "x2": 416.13390091037763,
+                    "y2": 288.467613123979,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP offre une meilleure couverture avec 300% de la BR contre 200% pour AXA, réduisant potentiellement le reste à charge pour les soins courants."
+        },
+        {
+          "row_number": 5,
+          "leaf_id": "dentaire_soins_dentaires_parodontologie_non_prise_en_charge_par_la_ss",
+          "leaf_path": [
+            "Dental",
+            "Dental care",
+            "Periodontology not covered by social security"
+          ],
+          "leaf_description": "Reimbursement of periodontology care not covered by Social Security.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B3", null, null, null, null],
+          "cells": [
+            {
+              "id": "A5",
+              "ref": "A2"
+            },
+            {
+              "id": "B5",
+              "ref": "B3"
+            },
+            {
+              "id": "C5",
+              "value": "Periodontology not covered by social security",
+              "type": "dimension"
+            },
+            {
+              "id": "D5",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E5",
+              "value": "350€ (per year per beneficiary)",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "350€",
+              "frequency": "per year per beneficiary",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "350€/year/beneficiary",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-4x", "2-4q"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 528.7820893297752,
+                    "x2": 512.5335058747177,
+                    "y2": 543.0273132961622,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 110.84366831859191,
+                    "y1": 528.7820893297752,
+                    "x2": 295.38040225112525,
+                    "y2": 553.7524273736659,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F5",
+              "value": "300 € (per year and per beneficiary)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "300 €",
+              "frequency": "per year and per beneficiary",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "This coverage applies to specific acts of parodontology (Curetage / Surfaçage). Other listed acts (Greffe gingivale, Allongement coronaire, Lambeau) do not have a specified coverage amount in the 'Base obligatoire' column, implying they are not covered or fall under this general cap.",
+              "display_value": "300€/year/beneficiary",
+              "is_best": false,
+              "sources": {
+                "axa": ["3-r"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 326.4550350280087,
+                    "y1": 288.467613123979,
+                    "x2": 416.13390091037763,
+                    "y2": 328.49327614214354,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP offers additional annual coverage of €50 for periodontology not reimbursed by the social security system."
+        },
+        {
+          "row_number": 6,
+          "leaf_id": "dentaire_protheses_dentaires_protheses_a_honoraires_maitrises",
+          "leaf_path": [
+            "Dental",
+            "Dental prostheses",
+            "Prosthetics at controlled fees"
+          ],
+          "leaf_description": "Reimbursement of dental prostheses with controlled fees.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A6",
+              "ref": "A2"
+            },
+            {
+              "id": "B6",
+              "value": "Dental prostheses",
+              "type": "dimension",
+              "rowspan": 2,
+              "occupies": ["B6", "B7"]
+            },
+            {
+              "id": "C6",
+              "value": "Prosthetics at controlled fees",
+              "type": "dimension"
+            },
+            {
+              "id": "D6",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E6",
+              "value": "Frais réels",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "Frais réels",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "Actual costs",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-4I"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 543.0273132961622,
+                    "x2": 512.5335058747177,
+                    "y2": 553.7524273736659,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F6",
+              "value": "370% BR-MR [100% PLV-MR]",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "370% BR-MR",
+              "frequency": null,
+              "cap": "100% PLV-MR",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "370% BR-MR (100% PLV-MR)",
+              "is_best": true,
+              "sources": {
+                "axa": ["3-I"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 322.76369118087354,
+                    "y1": 433.31523113511395,
+                    "x2": 421.4833191661682,
+                    "y2": 448.59795611853906,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "Both contracts fully cover dental prostheses at controlled fees, ensuring zero out-of-pocket costs for the insured."
+        },
+        {
+          "row_number": 7,
+          "leaf_id": "dentaire_protheses_dentaires_autres_protheses",
+          "leaf_path": ["Dental", "Dental prostheses", "Other prostheses"],
+          "leaf_description": "Remboursement des prothèses dentaires hors 100% Santé.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B6", null, null, null, null],
+          "cells": [
+            {
+              "id": "A7",
+              "ref": "A2"
+            },
+            {
+              "id": "B7",
+              "ref": "B6"
+            },
+            {
+              "id": "C7",
+              "value": "Other prostheses",
+              "type": "dimension"
+            },
+            {
+              "id": "D7",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E7",
+              "value": "550%",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "550%",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "550% BR",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-4Q"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 553.7524273736659,
+                    "x2": 512.5335058747177,
+                    "y2": 564.1209150126883,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F7",
+              "value": "370% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "370% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "This coverage is for &#39;Free-price prostheses (including inlays and onlays)&#39;. The document also lists &#39;Fixed prostheses not covered by social security&#39; with a specific euro amount, which is a subset of &#39;Other prostheses&#39;.",
+              "display_value": "370% BR-MR",
+              "is_best": false,
+              "sources": {
+                "axa": ["3-O"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 322.76369118087354,
+                    "y1": 470.06384519318436,
+                    "x2": 421.4833191661682,
+                    "y2": 492.1314049441701,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP offre une couverture nettement supérieure avec 550% de la BR contre 370% pour AXA, ce qui est crucial pour les prothèses à honoraires libres."
+        },
+        {
+          "row_number": 8,
+          "leaf_id": "dentaire_orthodontie_orthodontie_acceptee_par_la_ss_par_semestre",
+          "leaf_path": [
+            "Dental",
+            "Orthodontics",
+            "Orthodontics accepted by the SS (per semester)"
+          ],
+          "leaf_description": "Reimbursement of orthodontic treatments covered by Social Security, per semester.",
+          "securite_sociale_coverage": "100%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A8",
+              "ref": "A2"
+            },
+            {
+              "id": "B8",
+              "value": "Orthodontics",
+              "type": "dimension",
+              "rowspan": 2,
+              "occupies": ["B8", "B9"]
+            },
+            {
+              "id": "C8",
+              "value": "Orthodontics accepted by the SS (per semester)",
+              "type": "dimension"
+            },
+            {
+              "id": "D8",
+              "value": "100%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E8",
+              "value": "425% (per semester)",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "425%",
+              "frequency": "per semester",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "425% BR/semestre",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-50", "2-4T"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 564.1209150126883,
+                    "x2": 512.5335058747177,
+                    "y2": 572.5961188728378,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 110.84366831859191,
+                    "y1": 564.1209150126883,
+                    "x2": 295.38040225112525,
+                    "y2": 586.8625989930433,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F8",
+              "value": "370 % BR-MR (per semester) [4 consecutive semesters]",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "370 % BR-MR",
+              "frequency": "per semester",
+              "cap": "4 consecutive semesters",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "370% BR-MR/semester (max 4 semesters)",
+              "is_best": false,
+              "sources": {
+                "axa": ["3-Y"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 322.76369118087354,
+                    "y1": 576.1797122119492,
+                    "x2": 421.4833191661682,
+                    "y2": 598.2313627537138,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP propose un taux de remboursement plus élevé (425% BR) que AXA (370% BR) pour l'orthodontie acceptée par la SS, sans mention de limitation de durée."
+        },
+        {
+          "row_number": 9,
+          "leaf_id": "dentaire_orthodontie_orthodontie_adulte_non_prise_en_charge_par_la_ss_par_semestre",
+          "leaf_path": [
+            "Dental",
+            "Orthodontics",
+            "Adult orthodontics not covered by social security (per semester)"
+          ],
+          "leaf_description": "Reimbursement of orthodontic treatments for adults not covered by Social Security, per semester.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B8", null, null, null, null],
+          "cells": [
+            {
+              "id": "A9",
+              "ref": "A2"
+            },
+            {
+              "id": "B9",
+              "ref": "B8"
+            },
+            {
+              "id": "C9",
+              "value": "Adult orthodontics not covered by social security (per semester)",
+              "type": "dimension"
+            },
+            {
+              "id": "D9",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E9",
+              "value": "500 € (per semester)",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "500 €",
+              "frequency": "per semester",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "€500/semester",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-59", "2-52"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 572.5961188728378,
+                    "x2": 512.5335058747177,
+                    "y2": 586.8625989930433,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 110.84366831859191,
+                    "y1": 572.5961188728378,
+                    "x2": 295.38040225112525,
+                    "y2": 595.1874030220819,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F9",
+              "value": "300 € (per semester) [4 consecutive semesters]",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "300 €",
+              "frequency": "per semester",
+              "cap": "4 consecutive semesters",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "€300/semester (max 4 consecutive semesters)",
+              "is_best": false,
+              "sources": {
+                "axa": ["3-11"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 322.76369118087354,
+                    "y1": 598.2313627537138,
+                    "x2": 421.4833191661682,
+                    "y2": 615.9428548874861,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP offers coverage of €500 per semester for adult orthodontics not reimbursed by social security, i.e. €200 more than AXA, and without an explicit time limit."
+        },
+        {
+          "row_number": 10,
+          "leaf_id": "dentaire_implants_implants_dentaires",
+          "leaf_path": ["Dental", "Implants", "Dental implants"],
+          "leaf_description": "Reimbursement for dental implants.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A10",
+              "ref": "A2"
+            },
+            {
+              "id": "B10",
+              "value": "Implants",
+              "type": "dimension"
+            },
+            {
+              "id": "C10",
+              "value": "Dental implants",
+              "type": "dimension"
+            },
+            {
+              "id": "D10",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E10",
+              "value": "500 € (per year per beneficiary)",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "500 €",
+              "frequency": "per year per beneficiary",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If partner implantologist Sévéane",
+                  "coverage_modifier": "+500€ (1000€ total)",
+                  "modified_coverage_source_cell_ids": ["2-5j", "2-5c"]
+                }
+              ],
+              "notes": null,
+              "display_value": "€500/year (€1000 with Sévéane network)",
+              "is_best": false,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "If partner implantologist Sévéane: +500€ (1000€ total)"
+              },
+              "sources": {
+                "probtp": ["2-5p", "2-5b", "2-5j", "2-5c"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 60.419271681489384,
+                    "y1": 586.8625989930433,
+                    "x2": 161.45831744144107,
+                    "y2": 603.5054688440093,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 110.84366831859191,
+                    "y1": 586.8625989930433,
+                    "x2": 295.38040225112525,
+                    "y2": 603.5054688440093,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.21664456716053,
+                    "y1": 586.8625989930433,
+                    "x2": 512.5335058747177,
+                    "y2": 603.5054688440093,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F10",
+              "value": "616 €",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "616 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "This coverage is for 'Pose de l'implant (phase opératoire)'. An additional 184€ is covered for 'Faux-moignon implantaire'. The taxonomy leaf 'Implants dentaires' is broad, so I'm taking the main implant coverage and noting the additional component. Both have a limit of 3 acts per year per beneficiary. Total for implant + faux-moignon would be 800€ per act, up to 3 acts per year per beneficiary.",
+              "display_value": "800€/act (max 3 acts/year)",
+              "is_best": true,
+              "sources": {
+                "axa": ["3-1a"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 310.7417950151298,
+                    "y1": 672.2521862411032,
+                    "x2": 440.16667187283053,
+                    "y2": 688.4741380709978,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "AXA offers coverage of €800 per implant (up to 3 per year), or potentially €2,400, while ProBTP caps it at €500/year (€1,000 with network), which is less advantageous for several implants."
+        },
+        {
+          "row_number": 11,
+          "leaf_id": "dentaire_actes_de_prevention",
+          "leaf_path": ["Dental", "Preventive actions"],
+          "leaf_description": "Dental prevention procedures (annual scaling and prophylactic sealing for children under 14)",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": true,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A11",
+              "ref": "A2"
+            },
+            {
+              "id": "B11",
+              "value": "Preventive actions",
+              "type": "dimension"
+            },
+            {
+              "id": "C11",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "D11",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E11",
+              "value": "Oui",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "Oui",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Unmappable: These are specific preventive dental acts highlighted as 'intégrés au contrat' regardless of level, suggesting a distinct benefit beyond standard SS-reimbursed care. While detartrage and scellement are often SS-reimbursed, their explicit mention as a 'plus' warrants a separate leaf for clarity on preventive benefits.",
+              "display_value": "Yes (Annual descaling, child sealing)",
+              "is_best": true,
+              "sources": {
+                "probtp": ["ab60f799-f88f-46e6-9119-770b568a512f"]
+              }
+            },
+            {
+              "id": "F11",
+              "value": "Not covered",
+              "type": "data",
+              "is_best": false,
+              "vendor": "axa"
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP explicitly includes coverage for specific preventive procedures (annual scaling, prophylactic sealing for children), not explicitly covered by AXA."
+        },
+        {
+          "row_number": 12,
+          "leaf_id": "dentaire_protheses_dentaires_non_prises_en_charge_par_la_ss",
+          "leaf_path": [
+            "Dental",
+            "Dental prostheses",
+            "Prostheses not covered by the SS"
+          ],
+          "leaf_description": "Fixed prostheses not covered by Social Security (Bridge abutments on healthy teeth, additional bridge elements, single fixed prostheses on healthy teeth)",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": true,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A12",
+              "ref": "A2"
+            },
+            {
+              "id": "B12",
+              "value": "Dental prostheses",
+              "type": "dimension"
+            },
+            {
+              "id": "C12",
+              "value": "Prostheses not covered by the SS",
+              "type": "dimension"
+            },
+            {
+              "id": "D12",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E12",
+              "value": "Not covered",
+              "type": "data",
+              "is_best": false,
+              "vendor": "probtp"
+            },
+            {
+              "id": "F12",
+              "value": "300 €",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "300 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Unmappable: This benefit is a specific type of dental prosthesis not covered by Social Security, which is distinct from 'Prothèses à honoraires maîtrisés' and 'Autres prothèses' (which are generally for SS-covered prostheses with additional coverage). It warrants its own leaf under 'Prothèses dentaires' or a new sub-category for 'Prothèses non prises en charge par la SS'.",
+              "display_value": "300€",
+              "is_best": true,
+              "sources": {
+                "axa": ["3-R"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 322.76369118087354,
+                    "y1": 492.1314049441701,
+                    "x2": 421.4833191661682,
+                    "y2": 533.7254130521983,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "AXA offers €300 coverage for certain prostheses not reimbursed by social security, which ProBTP does not specifically cover."
+        },
+        {
+          "row_number": 13,
+          "leaf_id": "dentaire_implants_faux_moignon_implantaire",
+          "leaf_path": ["Dental", "Implants", "Implant abutment"],
+          "leaf_description": "Implant abutment",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": true,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A13",
+              "ref": "A2"
+            },
+            {
+              "id": "B13",
+              "value": "Implants",
+              "type": "dimension"
+            },
+            {
+              "id": "C13",
+              "value": "Implant abutment",
+              "type": "dimension"
+            },
+            {
+              "id": "D13",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E13",
+              "value": "Not covered",
+              "type": "data",
+              "is_best": false,
+              "vendor": "probtp"
+            },
+            {
+              "id": "F13",
+              "value": "184 €",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "184 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Unmappable: While 'Implants dentaires' exists, 'Faux-moignon implantaire' is a distinct component of implantology with its own specific coverage amount and limits. It could be a sub-leaf under 'Implants dentaires' for more granularity.",
+              "display_value": "184€",
+              "is_best": true,
+              "sources": {
+                "axa": ["3-1g"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 310.7417950151298,
+                    "y1": 710.213096238316,
+                    "x2": 440.16667187283053,
+                    "y2": 725.373421094865,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 3
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "AXA details specific coverage of €184 for the implant abutment, an element not explicitly mentioned or covered separately by ProBTP."
+        }
+      ]
+    },
+    {
+      "template_row": [
+        "Category",
+        "Subcategory",
+        "Benefit",
+        "Part S.S.",
+        "P5",
+        "Mandatory basis"
+      ],
+      "metadata": {
+        "category": "Hearing aids",
+        "policy_levels": {
+          "probtp": ["P5"],
+          "axa": ["Base obligatoire"]
+        },
+        "total_columns": 6,
+        "column_labels": ["A", "B", "C", "D", "E", "F"]
+      },
+      "rows": [
+        {
+          "row_number": 1,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A1",
+              "value": "Category"
+            },
+            {
+              "id": "B1",
+              "value": "Subcategory"
+            },
+            {
+              "id": "C1",
+              "value": "Benefit"
+            },
+            {
+              "id": "D1",
+              "value": "Part S.S."
+            },
+            {
+              "id": "E1",
+              "value": "P5"
+            },
+            {
+              "id": "F1",
+              "value": "Mandatory basis"
+            }
+          ]
+        },
+        {
+          "row_number": 2,
+          "leaf_id": "aides_auditives_equipements_auditifs_100_sante",
+          "leaf_path": ["Hearing aids", "100% health care devices"],
+          "leaf_description": "Remboursement intégral des équipements auditifs relevant du dispositif 100% Santé.",
+          "securite_sociale_coverage": "60%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": [null, null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A2",
+              "value": "Hearing aids",
+              "type": "dimension",
+              "rowspan": 4,
+              "occupies": ["A2", "A3", "A4", "A5"]
+            },
+            {
+              "id": "B2",
+              "value": "100% health care devices",
+              "type": "dimension"
+            },
+            {
+              "id": "C2",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "D2",
+              "value": "60%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E2",
+              "value": "Actual costs (every 4 years) [one device per ear]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "Actual costs",
+              "frequency": "every 4 years",
+              "cap": "one device per ear",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Reimbursement of one device per four-year period, limited to one device per ear per beneficiary (according to notes 18 and 19).",
+              "display_value": "Actual costs (100% Health)",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-5A", "2-5t"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 475.8434290584418,
+                    "y1": 619.1127275043442,
+                    "x2": 512.1104642710943,
+                    "y2": 627.4627015458904,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F2",
+              "value": "100% PLV-MR (every 4 years)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "100% PLV-MR",
+              "frequency": "every 4 years",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% PLV-MR (100% Health)",
+              "is_best": true,
+              "sources": {
+                "axa": ["5-c", "5-d", "5-f", "5-g"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 298.67636772552635,
+                    "y1": 301.352341840288,
+                    "x2": 419.73869847343667,
+                    "y2": 336.3306796790121,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 5
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "Both contracts fully cover 100% health care devices, ensuring zero out-of-pocket costs with the same renewal frequency."
+        },
+        {
+          "row_number": 3,
+          "leaf_id": "aides_auditives_prothese_auditive_pour_les_beneficiaires_de_plus_20_ans",
+          "leaf_path": [
+            "Hearing aids",
+            "Hearing aid",
+            "For beneficiaries aged &gt; 20"
+          ],
+          "leaf_description": "Reimbursement of hearing aids for beneficiaries over 20 years old.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A3",
+              "ref": "A2"
+            },
+            {
+              "id": "B3",
+              "value": "Hearing aid",
+              "type": "dimension",
+              "rowspan": 2,
+              "occupies": ["B3", "B4"]
+            },
+            {
+              "id": "C3",
+              "value": "For beneficiaries aged &gt; 20",
+              "type": "dimension"
+            },
+            {
+              "id": "D3",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E3",
+              "value": "1100€ (every 4 years) [one device per ear]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "1100€",
+              "frequency": "every 4 years",
+              "cap": "one device per ear",
+              "age_restriction": "> 20 years",
+              "other_universal_conditions": null,
+              "vendor_conditions": [
+                {
+                  "condition_type": "network_bonus",
+                  "description": "If hearing aid partner Sévéane",
+                  "coverage_modifier": "1500€",
+                  "modified_coverage_source_cell_ids": ["2-5K", "2-5E"]
+                }
+              ],
+              "notes": "Reimbursement of one device per four-year period, limited to one device per ear per beneficiary (according to notes 18 and 19).",
+              "display_value": "€1,100/4 years (€1,500 if Sévéane network)",
+              "is_best": false,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "&gt; 20 years | If partner hearing aid specialist Sévéane: €1,500"
+              },
+              "sources": {
+                "probtp": ["2-5S", "2-5D", "2-5M", "2-5K", "2-5E"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 475.8434290584418,
+                    "y1": 627.4627015458904,
+                    "x2": 512.1104642710943,
+                    "y2": 652.1361563720146,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 166.12375283216008,
+                    "y1": 627.4627015458904,
+                    "x2": 259.31324964188406,
+                    "y2": 652.1361563720146,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F3",
+              "value": "1400 Euros-MR (every 4 years)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "1400 Euros-MR",
+              "frequency": "every 4 years",
+              "cap": null,
+              "age_restriction": "> 20 years",
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "1400€/4 years",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "&gt; 20 years"
+              },
+              "sources": {
+                "axa": ["5-i", "5-j", "5-l", "5-m"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 298.67636772552635,
+                    "y1": 336.3306796790121,
+                    "x2": 419.73869847343667,
+                    "y2": 385.32983491721257,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 5
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "ProBTP offers basic coverage of €1,100, less than AXA&#39;s €1,400. However, ProBTP can cover coverage of up to €1,500 through its partner network, Sévéane."
+        },
+        {
+          "row_number": 4,
+          "leaf_id": "aides_auditives_prothese_auditive_pour_les_beneficiaires_de_moins_20_ans",
+          "leaf_path": [
+            "Hearing aids",
+            "Hearing aid",
+            "For beneficiaries aged ≤ 20"
+          ],
+          "leaf_description": "Reimbursement of hearing aids for beneficiaries under 20 years of age.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", "B3", null, null, null, null],
+          "cells": [
+            {
+              "id": "A4",
+              "ref": "A2"
+            },
+            {
+              "id": "B4",
+              "ref": "B3"
+            },
+            {
+              "id": "C4",
+              "value": "For beneficiaries aged ≤ 20",
+              "type": "dimension"
+            },
+            {
+              "id": "D4",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E4",
+              "value": "1400€ (every 4 years) [one device per ear]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "1400€",
+              "frequency": "every 4 years",
+              "cap": "one device per ear",
+              "age_restriction": "≤ 20 years",
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Reimbursement of one device per four-year period, limited to one device per ear per beneficiary (according to notes 18 and 19).",
+              "display_value": "1400€/4 years",
+              "is_best": false,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "≤ 20 years"
+              },
+              "sources": {
+                "probtp": ["2-60", "2-5U"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 475.8434290584418,
+                    "y1": 652.1361563720146,
+                    "x2": 512.1104642710943,
+                    "y2": 660.4996427323211,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                },
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 111.47987594589343,
+                    "y1": 652.1361563720146,
+                    "x2": 294.92346668018797,
+                    "y2": 668.7726190517284,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F4",
+              "value": "1700 Euros-MR (every 4 years)",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "1700 Euros-MR",
+              "frequency": "every 4 years",
+              "cap": null,
+              "age_restriction": "≤ 20 years",
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "1700€/4 years",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "≤ 20 years"
+              },
+              "sources": {
+                "axa": ["5-o", "5-p", "5-r", "5-s"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 298.67636772552635,
+                    "y1": 385.32983491721257,
+                    "x2": 419.73869847343667,
+                    "y2": 422.10650367266516,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 5
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_worse",
+          "rationale": "ProBTP offers a reimbursement of €1,400, which is less than the €1,700 offered by AXA for hearing aids for young people under 20."
+        },
+        {
+          "row_number": 5,
+          "leaf_id": "aides_auditives_accessoires",
+          "leaf_path": ["Hearing aids", "Accessories"],
+          "leaf_description": "Reimbursement of hearing aid accessories.",
+          "securite_sociale_coverage": "100%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A5",
+              "ref": "A2"
+            },
+            {
+              "id": "B5",
+              "value": "Accessories",
+              "type": "dimension"
+            },
+            {
+              "id": "C5",
+              "value": "",
+              "type": "dimension"
+            },
+            {
+              "id": "D5",
+              "value": "100%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "E5",
+              "value": "100% (ear tip: 4 ear tips/year/device for < 2 years; 1 ear tip/year/device for > 2 years)",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "100%",
+              "frequency": "ear tip: 4 ear tips/year/device for < 2 years; 1 ear tip/year/device for > 2 years",
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": "earphone, microphone, ear tip, mercury-free battery",
+              "vendor_conditions": null,
+              "notes": "Details of accessories and specific frequencies for ear tips according to note 20.",
+              "display_value": "100% (earphone, microphone, ear tip, mercury-free battery)",
+              "is_best": true,
+              "metadata": {
+                "document": "probtp",
+                "conditions": "earphone, microphone, ear tip, mercury-free battery"
+              },
+              "sources": {
+                "probtp": ["2-68", "2-62"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 475.8434290584418,
+                    "y1": 660.4996427323211,
+                    "x2": 512.1104642710943,
+                    "y2": 668.7726190517284,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "F5",
+              "value": "300% BR-MR",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "300% BR-MR",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": "covered by Social Security",
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "300% BR-MR (accessories covered by Social Security)",
+              "is_best": false,
+              "metadata": {
+                "document": "axa",
+                "conditions": "supported by Social Security"
+              },
+              "sources": {
+                "axa": ["5-u", "5-v"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 298.67636772552635,
+                    "y1": 422.10650367266516,
+                    "x2": 419.73869847343667,
+                    "y2": 444.20755167203083,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 5
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProBTP details precisely the covered accessories (earphone, microphone, ear tip, mercury-free battery) with specific frequencies, offering a more practical and potentially more complete coverage than the 300% BR of AXA."
+        }
+      ]
+    },
+    {
+      "template_row": [
+        "Category",
+        "Benefit",
+        "Part S.S.",
+        "P5",
+        "Mandatory basis"
+      ],
+      "metadata": {
+        "category": "Additional services",
+        "policy_levels": {
+          "probtp": ["P5"],
+          "axa": ["Base obligatoire"]
+        },
+        "total_columns": 5,
+        "column_labels": ["A", "B", "C", "D", "E"]
+      },
+      "rows": [
+        {
+          "row_number": 1,
+          "inherited_from_above": [null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A1",
+              "value": "Category"
+            },
+            {
+              "id": "B1",
+              "value": "Benefit"
+            },
+            {
+              "id": "C1",
+              "value": "Part S.S."
+            },
+            {
+              "id": "D1",
+              "value": "P5"
+            },
+            {
+              "id": "E1",
+              "value": "Mandatory basis"
+            }
+          ]
+        },
+        {
+          "row_number": 2,
+          "leaf_id": "prestations_complementaires_medecines_douces_agreées",
+          "leaf_path": [
+            "Additional services",
+            "Approved alternative medicines"
+          ],
+          "leaf_description": "Reimbursement of approved alternative medicine sessions.",
+          "securite_sociale_coverage": null,
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": [null, null, null, null, null],
+          "cells": [
+            {
+              "id": "A2",
+              "value": "Additional services",
+              "type": "dimension",
+              "rowspan": 2,
+              "occupies": ["A2", "A3"]
+            },
+            {
+              "id": "B2",
+              "value": "Approved alternative medicines",
+              "type": "dimension"
+            },
+            {
+              "id": "C2",
+              "value": "",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "D2",
+              "value": "4x60€ (per year) [annual family ceiling 450€]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "4x60€",
+              "frequency": "per year",
+              "cap": "annual family ceiling 450€",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "Coverage per session and annual ceiling per family. Approved alternative medicines include osteopaths, chiropractors, acupuncturists, dieticians, psychologists not reimbursed by the Social Security (according to note 21).",
+              "display_value": "4x60€/year (family ceiling 450€)",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-6k"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 512.9507934043277,
+                    "y1": 685.0602033371591,
+                    "x2": 548.9675343970986,
+                    "y2": 709.6140562770341,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "E2",
+              "value": "50 € (per session) [3 sessions per year and per beneficiary]",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "50 €",
+              "frequency": "per session",
+              "cap": "3 sessions per year and per beneficiary",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": "The coverage value '50 €' and frequency 'par séance' are from an untagged table/text in the document. The cap is from cells \"5-8\" and \"5-9\".",
+              "display_value": "3x50€/year",
+              "is_best": false
+            }
+          ],
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProBTP reimburses €60 per session for 4 sessions (€240/year/beneficiary) compared to €50 for 3 sessions (€150/year/beneficiary) at AXA, offering better individual and family coverage."
+        },
+        {
+          "row_number": 3,
+          "leaf_id": "prestations_complementaires_cures_thermales",
+          "leaf_path": ["Additional services", "Thermal cures"],
+          "leaf_description": "Reimbursement of costs related to spa treatments.",
+          "securite_sociale_coverage": "65%",
+          "is_unmappable_probtp_only": false,
+          "is_unmappable_axa_only": false,
+          "inherited_from_above": ["A2", null, null, null, null],
+          "cells": [
+            {
+              "id": "A3",
+              "ref": "A2"
+            },
+            {
+              "id": "B3",
+              "value": "Thermal cures",
+              "type": "dimension"
+            },
+            {
+              "id": "C3",
+              "value": "65%",
+              "type": "ss_coverage"
+            },
+            {
+              "id": "D3",
+              "value": "100% + 300€ (one cure per year) [per beneficiary]",
+              "type": "data",
+              "vendor": "probtp",
+              "coverage": "100% + 300€",
+              "frequency": "one cure per year",
+              "cap": "per beneficiary",
+              "age_restriction": null,
+              "other_universal_conditions": null,
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "100% BR + 300€/year",
+              "is_best": true,
+              "sources": {
+                "probtp": ["2-6s"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #3 - Panorama FMC 2025",
+                  "bounding_box": {
+                    "x1": 476.4207356500333,
+                    "y1": 709.6140562770341,
+                    "x2": 512.9507934043277,
+                    "y2": 731.2364792727459,
+                    "width": 595.2760009765625,
+                    "height": 841.8900146484375
+                  },
+                  "page": 2
+                }
+              ]
+            },
+            {
+              "id": "E3",
+              "value": "300 €",
+              "type": "data",
+              "vendor": "axa",
+              "coverage": "300 €",
+              "frequency": null,
+              "cap": null,
+              "age_restriction": null,
+              "other_universal_conditions": "Frais médicaux, frais de séjour et frais de transport pris en charge par la Sécurité sociale",
+              "vendor_conditions": null,
+              "notes": null,
+              "display_value": "300€/year",
+              "is_best": true,
+              "metadata": {
+                "document": "axa",
+                "conditions": "Medical expenses, accommodation costs and transport costs covered by Social Security"
+              },
+              "sources": {
+                "axa": ["5-E"]
+              },
+              "bounding_boxes": [
+                {
+                  "file_id": "File #1 - Laurent M - Conditions particulières - Socle AXA - SAE",
+                  "bounding_box": {
+                    "x1": 314.66057308648794,
+                    "y1": 482.02094070575515,
+                    "x2": 417.04039099004456,
+                    "y2": 496.9071279118971,
+                    "width": 595.2999877929688,
+                    "height": 841.9000244140625
+                  },
+                  "page": 5
+                }
+              ]
+            }
+          ],
+          "probtp_advantage": "equal",
+          "rationale": "Both contracts offer an additional reimbursement of €300 for spa treatments, in addition to Social Security coverage."
+        }
+      ]
+    }
+  ]
+}

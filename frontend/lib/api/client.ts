@@ -173,6 +173,19 @@ class ApiClient {
   }
 
   /**
+   * PATCH request
+   */
+  async patch<T>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig
+  ): Promise<T> {
+    const normalizedUrl = url.replace(/^\/+/, "");
+    const response = await this.client.patch(normalizedUrl, data, config);
+    return response.data;
+  }
+
+  /**
    * DELETE request
    */
   async delete<T>(url: string, config?: AxiosRequestConfig): Promise<T> {

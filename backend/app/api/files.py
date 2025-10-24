@@ -19,6 +19,8 @@ from app.api.api_models import (
     FileListItem,
     FileListResponse,
     FileStatusResponse,
+    FileUpdateRequest,
+    FileUpdateResponse,
     FileUploadRequest,
     FileUploadResponse,
     PaginationInfo,
@@ -362,6 +364,60 @@ async def get_file_details(
             created_at=file_record.created_at,
             download_url=download_url,
             view_url=view_url
+        )
+
+    except FileUploadError:
+        raise
+    except Exception as e:
+        log_exception(e, user_id=current_user_id, context={"project_id": str(project_id), "file_id": str(file_id)})
+        raise UploadErrors.DATABASE_ERROR
+
+
+@router.patch(
+    "/projects/{project_id}/files/{file_id}",
+    response_model=FileUpdateResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Update file metadata",
+    description="Update file metadata such as filename"
+)
+async def update_file_metadata(
+    project_id: UUID,
+    file_id: UUID,
+    request: FileUpdateRequest,
+    current_user_id: str = Depends(get_current_user_id),
+    db: Session = Depends(get_db_session)
+) -> FileUpdateResponse:
+    """Update file metadata"""
+    try:
+        # Check if user has access to project
+        has_access = await AuthorizationService.check_project_permission(
+            db, current_user_id, project_id
+        )
+        if not has_access:
+            raise UploadErrors.NO_PERMISSION
+
+        # Get file record
+        file_record = db.query(File).filter(
+            and_(
+                File.id == file_id,
+                File.project_id == project_id,
+                File.deleted_at.is_(None)
+            )
+        ).first()
+
+        if not file_record:
+            raise UploadErrors.FILE_NOT_FOUND
+
+        # Update original_name if provided
+        if request.original_name:
+            file_record.original_name = request.original_name
+            db.commit()
+            db.refresh(file_record)
+
+        return FileUpdateResponse(
+            file_id=file_record.id,
+            original_name=file_record.original_name,
+            message="File updated successfully"
         )
 
     except FileUploadError:

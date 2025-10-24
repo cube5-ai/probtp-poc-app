@@ -71,6 +71,29 @@ class FileConfirmResponse(BaseModel):
     message: str = Field(..., description="Confirmation message")
 
 
+class FileUpdateRequest(BaseModel):
+    """Request schema for updating file metadata"""
+
+    original_name: str | None = Field(None, min_length=1, max_length=500, description="New filename")
+
+    @validator('original_name')
+    def validate_filename(cls, v):
+        """Validate filename if provided"""
+        if v:
+            # Ensure no path traversal attempts
+            if '/' in v or '\\' in v:
+                raise ValueError('Filename cannot contain path separators')
+        return v
+
+
+class FileUpdateResponse(BaseModel):
+    """Response schema for file update"""
+
+    file_id: UUID = Field(..., description="File identifier")
+    original_name: str = Field(..., description="Updated filename")
+    message: str = Field(..., description="Update confirmation message")
+
+
 class FileStatusResponse(BaseModel):
     """Response schema for file status check"""
 

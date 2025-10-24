@@ -47,6 +47,7 @@ interface DocumentSidebarProps {
   onToggleCollapse?: () => void;
   className?: string;
   disableUpload?: boolean;
+  projectId?: string;
 }
 
 const ALLOWED_FILE_TYPES = [
@@ -68,6 +69,7 @@ const DocumentSidebar = ({
   onToggleCollapse,
   className,
   disableUpload = false,
+  projectId,
 }: DocumentSidebarProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
@@ -346,6 +348,12 @@ const DocumentSidebar = ({
 
     try {
       setIsRenaming(true);
+
+      // For real files (not temporary), update in backend
+      if (!fileId.startsWith("temp_") && projectId) {
+        await documentService.renameFile(fileId, newName, projectId);
+      }
+
       // Update file name in UI
       const updatedFiles = uploadedFiles.map((file) =>
         file.id === fileId
@@ -370,7 +378,7 @@ const DocumentSidebar = ({
       setFileToRename(null);
       setRenameValue("");
     }
-  }, [fileToRename, renameValue, uploadedFiles, onFilesChange]);
+  }, [fileToRename, renameValue, uploadedFiles, onFilesChange, projectId]);
 
   const handleOpenFile = useCallback(
     async (fileId: string) => {
@@ -563,7 +571,9 @@ const DocumentSidebar = ({
                 {isUploading ? "Uploading..." : "Upload new files"}
               </p>
               <p className="text-xs text-muted-foreground">
-                {isUploading ? "Please wait..." : "Click or drag files to upload"}
+                {isUploading
+                  ? "Please wait..."
+                  : "Click or drag files to upload"}
               </p>
             </label>
           </div>

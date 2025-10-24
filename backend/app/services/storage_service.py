@@ -22,19 +22,22 @@ class StorageService:
         self.settings = get_settings()
         
         # For signed URLs, we need service account credentials with a private key
-        # Check for service account in environment (doesn't interfere with Firebase Auth)
-        service_account_path = os.getenv("FIREBASE_STORAGE_SERVICE_ACCOUNT_KEY")
+        # Try to get from environment variable (for runtime) or settings (from .env file)
+        service_account_key = os.getenv("FIREBASE_STORAGE_SERVICE_ACCOUNT_KEY") or \
+                             getattr(self.settings, 'firebase_storage_service_account_key', None)
         
-        if service_account_path:
-            if os.path.exists(service_account_path):
+        if service_account_key:
+            # Check if it's a file path
+            if os.path.exists(service_account_key):
                 # Load from file
-                credentials = service_account.Credentials.from_service_account_file(service_account_path)
+                credentials = service_account.Credentials.from_service_account_file(service_account_key)
             else:
                 # Try as JSON string
                 try:
-                    credentials_info = json.loads(service_account_path)
+                    credentials_info = json.loads(service_account_key)
                     credentials = service_account.Credentials.from_service_account_info(credentials_info)
-                except (json.JSONDecodeError, Exception):
+                except (json.JSONDecodeError, Exception) as e:
+                    print(f"⚠️  Failed to parse FIREBASE_STORAGE_SERVICE_ACCOUNT_KEY: {e}")
                     # Fallback: use default Firebase Storage (won't support signed URLs)
                     from firebase_admin import storage
                     self.bucket = storage.bucket()
@@ -47,6 +50,7 @@ class StorageService:
             )
             self.bucket = client.bucket(f"{self.settings.firebase_project_id}.firebasestorage.app")
         else:
+            print("⚠️  FIREBASE_STORAGE_SERVICE_ACCOUNT_KEY not set - signed URLs will not work")
             # Fallback: use default Firebase Storage (won't support signed URLs)
             from firebase_admin import storage
             self.bucket = storage.bucket()

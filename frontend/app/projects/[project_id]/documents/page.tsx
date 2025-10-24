@@ -151,6 +151,7 @@ const DocumentManagementPage = () => {
           onFilesChange={handleFilesChange}
           onSelectionChange={handleSelectionChange}
           className="flex-shrink-0"
+          projectId={projectId}
         />
 
         {/* Main Content Area */}

@@ -1,16 +1,12 @@
 """
 Core configuration module for the application
 """
-import os
 from pathlib import Path
 from functools import lru_cache
 from typing import Optional
 
-from dotenv import load_dotenv
 from pydantic import ConfigDict
 from pydantic_settings import BaseSettings
-
-load_dotenv(override=True)
 
 
 class Settings(BaseSettings):
@@ -22,9 +18,8 @@ class Settings(BaseSettings):
     )
 
     # Environment
-    ENVIRONMENT: Optional[str] = "development"
-    environment: str = os.getenv("ENVIRONMENT", "development")  # Keep both for compatibility
-    debug: bool = environment == "development"
+    ENVIRONMENT: str = "development"  # Pydantic will auto-read from env var
+    debug: bool = False  # Will be set in __init__
 
     # API Configuration
     api_v1_prefix: str = "/api/v1"
@@ -35,8 +30,7 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 30
 
     # Database - Development (uses full URL)
-    DATABASE_URL: Optional[str] = None
-    database_url: str = os.getenv("DATABASE_URL", "sqlite:///./probtp_poc.db")  # Fallback to SQLite
+    DATABASE_URL: Optional[str] = None  # Pydantic will auto-read from env var
     
     # Database - Production (separate components for Cloud SQL)
     DB_USER: Optional[str] = None
@@ -45,15 +39,16 @@ class Settings(BaseSettings):
     CLOUD_SQL_CONNECTION_NAME: Optional[str] = None  # Format: project:region:instance
 
     # Redis
-    redis_url: str = os.getenv("REDIS_URL", "redis://localhost:6379")
+    redis_url: str = "redis://localhost:6379"
 
     # Firebase Storage
-    upload_url_expiration_minutes: int = int(os.getenv("UPLOAD_URL_EXPIRATION_MINUTES", "15"))
-    download_url_expiration_minutes: int = int(os.getenv("DOWNLOAD_URL_EXPIRATION_MINUTES", "60"))
-    max_file_size_mb: int = int(os.getenv("MAX_FILE_SIZE_MB", "100"))
+    upload_url_expiration_minutes: int = 15
+    download_url_expiration_minutes: int = 60
+    max_file_size_mb: int = 100
+    firebase_storage_service_account_key: Optional[str] = None  # Path or JSON string
 
     # Firebase
-    firebase_project_id: str = os.getenv("FIREBASE_PROJECT_ID", "probtp-poc-prod")
+    firebase_project_id: str = "probtp-poc-prod"
 
     # CORS
     allowed_origins: list[str] = [
@@ -63,30 +58,38 @@ class Settings(BaseSettings):
     ]
 
     # Parsing Services Configuration
-    mistral_ocr_api_key: str = os.getenv("MISTRAL_OCR_API_KEY", "")
-    mistral_ocr_endpoint: str = os.getenv("MISTRAL_OCR_ENDPOINT", "https://api.mistral-ocr.com/v1")
-    mistral_ocr_timeout: int = int(os.getenv("MISTRAL_OCR_TIMEOUT", "60"))
-    mistral_ocr_max_file_size: int = int(os.getenv("MISTRAL_OCR_MAX_FILE_SIZE", "104857600"))  # 100MB
+    mistral_ocr_api_key: str = ""
+    mistral_ocr_endpoint: str = "https://api.mistral-ocr.com/v1"
+    mistral_ocr_timeout: int = 60
+    mistral_ocr_max_file_size: int = 104857600  # 100MB
 
-    unstructured_api_key: str = os.getenv("UNSTRUCTURED_API_KEY", "")
-    unstructured_endpoint: str = os.getenv("UNSTRUCTURED_ENDPOINT", "https://api.unstructured.io")
-    unstructured_timeout: int = int(os.getenv("UNSTRUCTURED_TIMEOUT", "120"))
+    unstructured_api_key: str = ""
+    unstructured_endpoint: str = "https://api.unstructured.io"
+    unstructured_timeout: int = 120
 
-    llamaparse_api_key: str = os.getenv("LLAMAPARSE_API_KEY", "")
-    llamaparse_endpoint: str = os.getenv("LLAMAPARSE_ENDPOINT", "https://api.llamaindex.ai")
-    llamaparse_timeout: int = int(os.getenv("LLAMAPARSE_TIMEOUT", "300"))
+    llamaparse_api_key: str = ""
+    llamaparse_endpoint: str = "https://api.llamaindex.ai"
+    llamaparse_timeout: int = 300
 
+    def model_post_init(self, __context):
+        """Initialize computed fields after Pydantic loads all values from env vars"""
+        # Set debug flag based on environment
+        self.debug = self.ENVIRONMENT.lower() in ["development", "dev"]
 
     def get_database_url(self) -> str:
         """
         Get the appropriate database URL based on environment.
         Production (Cloud Run) uses Unix socket connections, development uses TCP.
         """
-        if self.ENVIRONMENT == "production" or self.environment == "production":
+        # Check if running in production (accept 'production' or 'prod', case-insensitive)
+        is_production = self.ENVIRONMENT.lower() in ["production", "prod"]
+        
+        if is_production:
             # Build Unix socket connection for Cloud SQL
             if not all([self.DB_USER, self.DB_PASSWORD, self.DB_NAME, self.CLOUD_SQL_CONNECTION_NAME]):
                 raise ValueError(
-                    "Production environment requires: DB_USER, DB_PASSWORD, DB_NAME, CLOUD_SQL_CONNECTION_NAME"
+                    f"Production environment (ENVIRONMENT={self.ENVIRONMENT}) requires: "
+                    f"DB_USER, DB_PASSWORD, DB_NAME, CLOUD_SQL_CONNECTION_NAME"
                 )
             return (
                 f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}"
@@ -94,7 +97,7 @@ class Settings(BaseSettings):
             )
         else:
             # Development - use DATABASE_URL or fallback to SQLite
-            return self.DATABASE_URL or self.database_url
+            return self.DATABASE_URL or "sqlite:///./probtp_poc.db"
 
 
 @lru_cache()

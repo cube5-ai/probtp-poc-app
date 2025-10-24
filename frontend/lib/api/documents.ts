@@ -299,6 +299,23 @@ export class DocumentService {
     await apiClient.delete(`/files/${fileId}`);
   };
 
+  renameFile = async (
+    fileId: string,
+    newName: string,
+    projectId?: string
+  ): Promise<{ file_id: string; original_name: string; message: string }> => {
+    const targetProjectId = projectId || this.defaultProjectId;
+
+    if (!targetProjectId) {
+      throw new Error("No project ID specified");
+    }
+
+    return await apiClient.patch(
+      `/projects/${targetProjectId}/files/${fileId}`,
+      { original_name: newName }
+    );
+  };
+
   parseDocument = async (
     filePath: string,
     serviceName: "mistral_ocr" | "unstructured" | "llamaparse" = "unstructured",

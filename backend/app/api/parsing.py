@@ -31,7 +31,7 @@ def get_parsing_service() -> ParsingService:
         configs = settings.get_parsing_service_configs()
 
         # For testing: if no configs (no API keys), create mock configs
-        if not configs and settings.environment == "development":
+        if not configs and settings.ENVIRONMENT == "development":
             from app.models.parsing_configuration import ParsingConfiguration
             configs = {
                 "mistral_ocr": ParsingConfiguration(

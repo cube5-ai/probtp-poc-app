@@ -1,0 +1,511 @@
+{
+  "leaf_analyses": {
+    "soins_courants": {
+      "category": "Soins courants",
+      "leaf_comparisons": [
+        {
+          "leaf_id": "care_courants_honoraires_medicaux_consultations_et_visites",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure offre une couverture de base plus élevée (200% BR) et la possibilité de remboursement aux frais réels si le médecin est OPTAM, ce qui est nettement supérieur à Competitor (150-170% BR-MR).",
+          "probtp_display_value": "200% BR (Actual expenses si OPTAM)",
+          "axa_display_value": "150-170% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_medicaux_actes_techniques_medicaux",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure propose une meilleure couverture de base (200% BR) et un remboursement aux frais réels si le médecin est OPTAM, surpassant les 150-170% BR-MR d'Competitor.",
+          "probtp_display_value": "200% BR (Actual expenses si OPTAM)",
+          "axa_display_value": "150-170% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_medicaux_radiologie",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure offre une couverture supérieure (200% BR) et la possibilité de frais réels avec OPTAM, tandis qu'Competitor se limite à 150-170% BR-MR.",
+          "probtp_display_value": "200% BR (Actual expenses si OPTAM)",
+          "axa_display_value": "150-170% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_medicaux_care_externes",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure couvre explicitement les care externes à 200% BR (voire frais réels), alors qu'Competitor indique 'Not covered' pour cette ligne spécifique.",
+          "probtp_display_value": "200% BR (Actual expenses si OPTAM)",
+          "axa_display_value": "Not covered"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_paramedicaux_auxiliaires_medicaux_care_infirmiers",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure propose une couverture de 200% BR, ce qui est nettement plus élevé que les 160% BR-MR d'Competitor pour les auxiliaires médicaux.",
+          "probtp_display_value": "200% BR",
+          "axa_display_value": "160% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_paramedicaux_transport",
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats offrent une couverture équivalente à 100% de la Reimbursement Base pour le transport médical.",
+          "probtp_display_value": "100% BR",
+          "axa_display_value": "100% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_paramedicaux_seances_accompagnement_psychologique_remboursees_ss",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure couvre les séances de psychologie remboursées par la SS à 100% BR, tandis qu'Competitor n'offre pas de couverture pour ce type de prestation.",
+          "probtp_display_value": "100% BR",
+          "axa_display_value": "Not covered"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_paramedicaux_analyses_et_examens_de_laboratoires",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure propose une couverture de 200% BR pour les analyses de laboratoire, ce qui est nettement supérieur aux 160% BR-MR d'Competitor.",
+          "probtp_display_value": "200% BR",
+          "axa_display_value": "160% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_medicaments_pharmacie_remboursee_ss",
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats remboursent les médicaments pris en charge par la SS à 100% de la Reimbursement Base.",
+          "probtp_display_value": "100% BR",
+          "axa_display_value": "100% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_medicaments_vaccins_non_rembourses_ss",
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "Competitor offre une couverture bien plus généreuse pour les vaccins non remboursés par la SS (environ 230€/an) comparé aux 60€/an de ProInsure.",
+          "probtp_display_value": "60€/an",
+          "axa_display_value": "6% PMSS/an (env. 230€)"
+        },
+        {
+          "leaf_id": "care_courants_medicaments_contraception_prescrite_non_remboursee_ss",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure propose une couverture légèrement supérieure pour la contraception non remboursée par la SS (60€/an) par rapport aux 50€/an d'Competitor.",
+          "probtp_display_value": "60€/an",
+          "axa_display_value": "50€/an"
+        },
+        {
+          "leaf_id": "care_courants_materiel_medical_appareillages_orthopediques_et_autres_protheses",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure offre une couverture exceptionnellement élevée de 550% BR pour les appareillages orthopédiques, surpassant de loin les 170% BR-MR d'Competitor.",
+          "probtp_display_value": "550% BR",
+          "axa_display_value": "170% BR-MR"
+        },
+        {
+          "leaf_id": "care_courants_honoraires_medicaux_actes_non_rembourses_ss",
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "Competitor propose une prise en charge de 100€ pour certains actes médicaux non remboursés par la SS, une prestation non couverte par ProInsure.",
+          "probtp_display_value": "Not covered",
+          "axa_display_value": "100€"
+        },
+        {
+          "leaf_id": "care_courants_medicaments_homeopathie_non_remboursee_ss",
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "Competitor offre un remboursement de 60€ pour l'homéopathie non remboursée par la SS, une garantie absente chez ProInsure.",
+          "probtp_display_value": "Not covered",
+          "axa_display_value": "60€"
+        }
+      ],
+      "objective_assessment": {
+        "overall_winner": "probtp",
+        "confidence": "high",
+        "reasoning": "ProInsure offre des niveaux de remboursement significativement plus élevés sur la majorité des postes de care courants, notamment les honoraires médicaux (200% BR et frais réels si OPTAM), les actes paramédicaux (200% BR) et les appareillages orthopédiques (550% BR). Ces postes représentent des dépenses fréquentes et potentiellement importantes, ce qui confère à ProInsure un avantage global clair malgré quelques couvertures spécifiques d'Competitor.",
+        "probtp_weaknesses": [
+          "Couverture très faible pour les vaccins non remboursés par la SS (60€ vs ~230€ chez Competitor).",
+          "Ne couvre pas les actes médicaux non remboursés par la SS ni l'homéopathie non remboursée."
+        ],
+        "axa_weaknesses": [
+          "Niveaux de remboursement inférieurs pour les honoraires médicaux (150-170% BR-MR), les actes paramédicaux (160% BR-MR) et les appareillages orthopédiques (170% BR-MR).",
+          "Ne couvre pas les séances de psychologie remboursées par la SS ni explicitement les care externes."
+        ]
+      },
+      "key_differences": "ProInsure se distingue par des taux de remboursement très élevés sur les postes médicaux et paramédicaux essentiels, ainsi que sur les appareillages orthopédiques, offrant une protection maximale contre les dépassements d'honoraires. Competitor, en revanche, propose des couvertures plus modestes sur ces postes mais inclut des garanties spécifiques pour des actes non remboursés par la SS et l'homéopathie.",
+      "concrete_examples": [
+        "Pour une consultation chez un spécialiste OPTAM à 70€ (BR 25€), ProInsure rembourse aux frais réels (70€, reste à charge 0€), tandis qu'Competitor rembourse 170% BR (42.50€, reste à charge 27.50€).",
+        "Pour un appareillage orthopédique coûtant 500€ (BR 100€), ProInsure rembourse 550% BR (550€), couvrant entièrement les 500€ (reste à charge 0€), alors qu'Competitor rembourse 170% BR (170€, reste à charge 330€).",
+        "Pour un vaccin non remboursé par la SS coûtant 80€, ProInsure rembourse 60€ (reste à charge 20€), tandis qu'Competitor rembourse 6% PMSS (environ 230€), couvrant entièrement les 80€ (reste à charge 0€)."
+      ],
+      "critical_thinking": "ProInsure offre une couverture robuste sur les dépenses de santé courantes et potentiellement lourdes (honoraires, appareillages), ce qui réduit considérablement le risque financier pour l'assuré. La possibilité de remboursement aux frais réels avec OPTAM est un atout majeur. Competitor, bien que moins généreux sur les postes principaux, propose des garanties de niche qui peuvent être intéressantes pour des becare spécifiques (médecines douces, actes non remboursés SS), mais leur impact financier global est moindre. ProInsure convient mieux aux personnes recherchant une couverture maximale sur les care essentiels et une protection contre les dépassements d'honoraires.",
+      "best_coverage": "Le niveau S4 de ProInsure excelle dans la catégorie des Soins courants en offrant une protection financière inégalée sur les postes de dépenses les plus fréquents et les plus coûteux. Avec des remboursements à 200% de la BR pour les consultations, actes techniques, radiologies et care paramédicaux, et même les frais réels si le professionnel est OPTAM, ProInsure garantit une prise en charge optimale. L'avantage est particulièrement frappant pour les appareillages orthopédiques avec 550% de la BR, assurant une tranquillité d'esprit face à des dépenses souvent élevées. Ces garanties supérieures minimisent le reste à charge de nos adhérents, faisant de ProInsure le choix évident pour une couverture complète et performante.",
+      "salesperson_talking_points": [
+        "ProInsure vous offre une couverture de 200% de la BR sur toutes vos consultations médicales, actes techniques et radiologies, et même les frais réels si votre médecin est OPTAM, là où Competitor se limite à 150-170%.",
+        "Pour les appareillages orthopédiques, ProInsure est imbattable avec 550% de la BR, vous protégeant ainsi des dépenses les plus importantes, bien au-delà des 170% d'Competitor.",
+        "Nous couvrons explicitement les care externes et les séances de psychologie remboursées par la SS, des prestations importantes pour votre bien-être que l'offre Competitor ne prend pas en charge.",
+        "Bien qu'Competitor propose une meilleure couverture sur les vaccins non remboursés par la SS, les dépenses liées aux consultations, actes et appareillages sont bien plus fréquentes et coûteuses, et c'est là que ProInsure fait toute la différence.",
+        "Choisissez ProInsure pour une tranquillité d'esprit maximale sur vos dépenses de santé courantes, avec des remboursements qui réduisent drastiquement votre reste à charge."
+      ]
+    },
+    "hospitalisation": {
+      "category": "Hospitalisation",
+      "leaf_comparisons": [
+        {
+          "leaf_id": "hospitalisation_honoraires_frais_de_sejour",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure offre 200% BR et la prise en charge en frais réels si le praticien adhère à l'OPTAM, ce qui est un avantage significatif par rapport à la couverture plus complexe et plafonnée d'Competitor pour les frais de séjour.",
+          "probtp_display_value": "200% BR (Actual expenses si OPTAM)",
+          "axa_display_value": "Jusqu'à 480% BR-MR (DPTAM), plafonné à 500% BR pour frais de séjour"
+        },
+        {
+          "leaf_id": "hospitalisation_honoraires_chambre_particuliere",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "Competitor offre un remboursement légèrement supérieur pour la chambre particulière, avec 85€ par jour contre 80€ pour ProInsure.",
+          "probtp_display_value": "80 €/jour",
+          "axa_display_value": "85 €/jour"
+        },
+        {
+          "leaf_id": "hospitalisation_honoraires_lit_accompagnant_enfants_ou_beneficiaires_plus_70_ans",
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "Competitor rembourse près du double par jour (40€ vs 23€) et couvre les enfants jusqu'à 16 ans, contre 12 ans pour ProInsure, offrant une meilleure prise en charge globale.",
+          "probtp_display_value": "23 €/jour (enfants -12 ans ou +70 ans)",
+          "axa_display_value": "40 €/jour (enfants -16 ans ou +70 ans), plafonné à 30 jours"
+        },
+        {
+          "leaf_id": "hospitalisation_honoraires_participation_forfaitaire_actes_superieurs_120",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure prend en charge 100% de la participation forfaitaire pour les actes supérieurs à 120€, tandis qu'Competitor ne la couvre pas du tout.",
+          "probtp_display_value": "100% du forfait",
+          "axa_display_value": "Not covered"
+        },
+        {
+          "leaf_id": "hospitalisation_forfait_journalier_et_forfait_urgences_etablissement_hospitalier",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure couvre explicitement et sans limitation le forfait journalier et le forfait urgences, alors qu'Competitor ne mentionne pas clairement la prise en charge du forfait urgences.",
+          "probtp_display_value": "Yes (sans limitation de durée pour le forfait journalier, sans limitation de nombre pour le forfait urgences)",
+          "axa_display_value": "100% du forfait journalier (forfait urgences non mentionné)"
+        }
+      ],
+      "objective_assessment": {
+        "overall_winner": "probtp",
+        "confidence": "high",
+        "reasoning": "ProInsure offre une meilleure couverture sur des postes de dépenses hospitalières potentiellement très élevés, notamment les honoraires et frais de séjour avec la possibilité de 'Actual expenses' en cas d'OPTAM, et prend en charge la participation forfaitaire pour les actes lourds, ce qu'Competitor ne fait pas. Les avantages d'Competitor sont sur des postes moins impactants financièrement.",
+        "probtp_weaknesses": [
+          "Remboursement légèrement inférieur pour la chambre particulière",
+          "Remboursement inférieur pour le lit accompagnant et restriction d'âge plus stricte pour les enfants"
+        ],
+        "axa_weaknesses": [
+          "Ne couvre pas la participation forfaitaire pour les actes supérieurs à 120€",
+          "Couverture des honoraires/frais de séjour plus complexe et potentiellement moins avantageuse sans OPTAM",
+          "Absence de mention explicite pour le forfait urgences"
+        ]
+      },
+      "key_differences": "ProInsure se distingue par une couverture plus généreuse et explicite sur les postes de dépenses hospitalières majeures, notamment les honoraires médicaux et la prise en charge des forfaits légaux. Competitor, bien que compétitive sur certains suppléments comme le lit accompagnant, présente des lacunes sur des garanties essentielles comme la participation forfaitaire.",
+      "concrete_examples": [
+        "Pour une hospitalisation avec des honoraires de 2000€ (dont dépassements) chez un praticien OPTAM, ProInsure rembourse 2000€ (reste à charge 0€), tandis qu'Competitor rembourse environ 1800€ (reste à charge 200€).",
+        "Pour une hospitalisation de 5 jours incluant un acte lourd (participation forfaitaire de 24€) et un forfait journalier de 100€, ProInsure rembourse 124€ (reste à charge 0€), alors qu'Competitor rembourse 100€ (reste à charge 24€)."
+      ],
+      "critical_thinking": "La couverture hospitalière de ProInsure S4 offre une excellente protection contre les risques financiers les plus importants liés à l'hospitalisation, notamment les dépassements d'honoraires des praticiens OPTAM et les participations forfaitaires pour actes lourds. Ces postes peuvent représenter des sommes considérables et imprévues. Bien qu'Competitor propose un meilleur remboursement pour le lit accompagnant, cette dépense est généralement moins fréquente et moins élevée que les frais médicaux ou de séjour. ProInsure est donc plus adaptée aux clients recherchant une sécurité maximale face aux coûts imprévus et potentiellement très élevés de l'hospitalisation.",
+      "best_coverage": "Le niveau S4 de ProInsure se positionne comme une solution de choix pour l'hospitalisation, offrant une tranquillité d'esprit inégalée face aux dépenses les plus lourdes. Notre garantie 'Actual expenses si OPTAM' pour les honoraires et frais de séjour est un atout majeur, permettant une prise en charge intégrale des dépassements d'honoraires des praticiens conventionnés. De plus, la couverture à 100% de la participation forfaitaire pour les actes supérieurs à 120€ et la prise en charge explicite et illimitée du forfait journalier et du forfait urgences, garantissent que nos adhérents ne seront pas pénalisés par des frais administratifs ou des restes à charge inattendus. Ces éléments démontrent notre engagement à protéger nos adhérents contre les coûts les plus significatifs de l'hospitalisation, là où d'autres contrats peuvent laisser des lacunes.",
+      "salesperson_talking_points": [
+        "Avec ProInsure S4, vos honoraires et frais de séjour peuvent être remboursés en 'Actual expenses' si votre praticien est OPTAM, vous assurant une couverture maximale sans surprise.",
+        "Nous couvrons intégralement la participation forfaitaire pour les actes lourds (>120€), une dépense que beaucoup d'autres mutuelles ne prennent pas en charge, vous évitant un reste à charge de 24€ par acte.",
+        "Le forfait journalier et le forfait urgences sont pris en charge sans limitation de durée ni de nombre, une garantie essentielle pour une hospitalisation sereine.",
+        "Bien qu'Competitor offre un peu plus pour le lit accompagnant, nos garanties couvrent les risques financiers les plus importants en hospitalisation, là où les coûts peuvent s'envoler.",
+        "Choisissez ProInsure pour une protection robuste et prévisible face aux dépenses hospitalières les plus critiques."
+      ]
+    },
+    "optique": {
+      "category": "Optique",
+      "leaf_comparisons": [
+        {
+          "leaf_id": "optique_equipement_100_sante",
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats couvrent intégralement les équipements 100% Santé, ce qui est une obligation légale et assure un reste à charge zéro.",
+          "probtp_display_value": "Actual expenses",
+          "axa_display_value": "100% PLV (tous les 2 ans)"
+        },
+        {
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_combinant_verres_100_sante_et_monture_libre",
+          "probtp_advantage": "equal",
+          "rationale": "La couverture pour les verres 100% Santé est intégrale pour les deux, et la monture libre est remboursée à 100€ dans les deux cas, rendant les offres équivalentes.",
+          "probtp_display_value": "Verres: Actual expenses, Monture: 100€",
+          "axa_display_value": "Verres: 100% PLV, Monture: 100€ (tous les 2 ans)"
+        },
+        {
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_libre_equipement_a_verres_unifocaux",
+          "probtp_advantage": "equal",
+          "rationale": "ProInsure offre 300€ (400€ avec réseau Sévéane) pour l'équipement. Competitor propose une fourchette de 262€ à 434€ hors réseau (en incluant 100€ pour la monture) et un remboursement intégral via son réseau Itelis, ce qui équilibre les offres.",
+          "probtp_display_value": "300€ (400€ si partenaire Sévéane)",
+          "axa_display_value": "De 81€ à 167€/verre (Remboursement intégral si réseau Itelis)"
+        },
+        {
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_libre_equipement_a_verres_progressifs",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "Competitor offre un remboursement de base potentiellement plus élevé pour les verres progressifs hors réseau (528€ à 634€ pour l'équipement) et un remboursement intégral via son réseau, surpassant les 500€ (ou 600€ avec réseau) de ProInsure.",
+          "probtp_display_value": "500€ (600€ si partenaire Sévéane)",
+          "axa_display_value": "De 214€ à 267€/verre (Remboursement intégral si réseau Itelis)"
+        },
+        {
+          "leaf_id": "optique_autre_equipement_optique_verres_et_monture_equipement_libre_supplement_forte_correction",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "Competitor intègre le supplément forte correction dans ses montants de remboursement de verres, ce qui peut être plus avantageux que le supplément fixe de 50€/verre de ProInsure, surtout pour les corrections élevées.",
+          "probtp_display_value": "+ 50€/verre",
+          "axa_display_value": "Inclus dans les montants des verres (niveaux Élevé et Très élevé)"
+        },
+        {
+          "leaf_id": "optique_lentilles_remboursees_par_la_ss",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure offre 100% de la Reimbursement Base de la Social Security en plus des 200€, ce qui est légèrement plus avantageux que les 200€ seuls d'Competitor.",
+          "probtp_display_value": "100% BR + 200€/an",
+          "axa_display_value": "200€/an"
+        },
+        {
+          "leaf_id": "optique_lentilles_non_remboursees_par_la_ss",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "Competitor propose un remboursement de 200€ par an pour les lentilles non remboursées par la SS, contre 175€ pour ProInsure.",
+          "probtp_display_value": "175€/an",
+          "axa_display_value": "200€/an"
+        },
+        {
+          "leaf_id": "optique_chirurgie_refractive_de_la_vue",
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "Competitor rembourse 800€ par œil pour la chirurgie réfractive, ce qui est nettement supérieur aux 500€ par œil offerts par ProInsure.",
+          "probtp_display_value": "500€/an/œil",
+          "axa_display_value": "800€/an/œil"
+        }
+      ],
+      "objective_assessment": {
+        "overall_winner": "axa",
+        "confidence": "high",
+        "reasoning": "Competitor offre une couverture optique globalement plus avantageuse, notamment pour les équipements à verres progressifs et la chirurgie réfractive, qui représentent des postes de dépenses importants. Son réseau de partenaires offrant un remboursement intégral pour les équipements libres est un atout majeur. ProInsure est compétitif sur les équipements 100% Santé et les lentilles remboursées par la SS, mais moins performant sur les postes à fort coût.",
+        "probtp_weaknesses": [
+          "Remboursement inférieur pour les équipements à verres progressifs hors réseau",
+          "Remboursement inférieur pour les lentilles non remboursées par la SS",
+          "Remboursement nettement inférieur pour la chirurgie réfractive de la vue",
+          "Bonus réseau moins avantageux que le remboursement intégral d'Competitor"
+        ],
+        "axa_weaknesses": [
+          "Remboursement de base pour les équipements libres (unifocaux et progressifs) est une fourchette, moins clair que le montant fixe de ProInsure",
+          "Nécessite l'utilisation du réseau partenaire pour bénéficier des meilleurs remboursements sur les équipements libres"
+        ]
+      },
+      "key_differences": "Competitor se distingue par une couverture très forte sur les postes optiques coûteux comme les verres progressifs et la chirurgie réfractive, surtout via son réseau partenaire offrant un remboursement intégral. ProInsure propose des montants fixes et clairs, mais moins élevés sur ces mêmes postes, tout en étant compétitif sur les lentilles remboursées par la SS.",
+      "concrete_examples": [
+        "Pour un équipement à verres progressifs et monture libre coûtant 800€ (hors réseau), ProInsure rembourse 500€ (reste à charge 300€), tandis qu'Competitor pourrait rembourser entre 528€ et 634€ (reste à charge entre 166€ et 272€). Si le client utilise le réseau Competitor, le remboursement est intégral (reste à charge 0€).",
+        "Pour une chirurgie réfractive de la vue coûtant 2000€ pour les deux yeux, ProInsure rembourse 1000€ (500€/œil, reste à charge 1000€), alors qu'Competitor rembourse 1600€ (800€/œil, reste à charge 400€).",
+        "Pour des lentilles non remboursées par la SS coûtant 250€ par an, ProInsure rembourse 175€ (reste à charge 75€), tandis qu'Competitor rembourse 200€ (reste à charge 50€)."
+      ],
+      "critical_thinking": "La catégorie Optique représente des dépenses potentiellement très élevées. Competitor, avec son remboursement intégral via le réseau pour les équipements libres et sa couverture supérieure pour la chirurgie réfractive, offre une meilleure protection contre les risques financiers majeurs. ProInsure est plus adapté aux clients recherchant des montants fixes et prévisibles, mais qui pourraient être déçus par les remboursements sur les postes les plus chers. L'accès et l'utilisation du réseau partenaire sont cruciaux pour maximiser la valeur chez Competitor.",
+      "best_coverage": "Du point de vue de ProInsure, notre offre P5 en Optique assure une excellente prise en charge des équipements 100% Santé, garantissant un reste à charge zéro, et propose un montant clair de 300€ pour les verres unifocaux (400€ avec notre réseau Sévéane). Nous offrons également une couverture légèrement supérieure pour les lentilles remboursées par la Social Security. Pour les clients qui privilégient la simplicité et la prévisibilité des remboursements sans nécessairement passer par un réseau spécifique pour chaque dépense, ProInsure P5 représente une solution solide et fiable, couvrant efficacement les becare optiques courants.",
+      "salesperson_talking_points": [
+        "Mettez en avant le remboursement intégral des équipements 100% Santé, une garantie essentielle pour tous nos adhérents.",
+        "Soulignez la clarté et la générosité de nos forfaits pour les équipements à verres unifocaux (300€, et jusqu'à 400€ avec notre réseau Sévéane), offrant une excellente visibilité sur le reste à charge.",
+        "Insistez sur notre avantage pour les lentilles remboursées par la SS (100% BR + 200€), un petit plus qui fait la différence au quotidien.",
+        "Pour les verres progressifs et la chirurgie réfractive, positionnez ProInsure comme une couverture solide et fiable, tout en reconnaissant que d'autres offres peuvent avoir des montants plus élevés sur ces postes très spécifiques et coûteux, souvent conditionnés par l'utilisation de réseaux."
+      ]
+    },
+    "dentaire": {
+      "category": "Dentaire",
+      "leaf_comparisons": [
+        {
+          "leaf_id": "dentaire_care_et_protheses_100_sante",
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats assurent une prise en charge intégrale des care et prothèses relevant du 100% Santé, garantissant un reste à charge zéro.",
+          "probtp_display_value": "Actual expenses",
+          "axa_display_value": "100% PLV-MR"
+        },
+        {
+          "leaf_id": "dentaire_care_dentaires_inlay_onlay_par_acte",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure couvre les inlays/onlays à 250% de la BR, tandis qu'Competitor ne les couvre pas spécifiquement sous cette catégorie, ce qui représente un avantage significatif pour ProInsure.",
+          "probtp_display_value": "250% BR",
+          "axa_display_value": "Not covered"
+        },
+        {
+          "leaf_id": "dentaire_care_dentaires_autres_care_dentaires_pris_en_charge_par_la_ss",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure offre une meilleure couverture avec 300% de la BR contre 200% pour Competitor, réduisant potentiellement le reste à charge pour les care courants.",
+          "probtp_display_value": "300% BR",
+          "axa_display_value": "200% BR-MR"
+        },
+        {
+          "leaf_id": "dentaire_care_dentaires_parodontologie_non_prise_en_charge_par_la_ss",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure propose une prise en charge annuelle supérieure de 50€ pour la parodontologie non remboursée par la SS.",
+          "probtp_display_value": "350€/an/bénéficiaire",
+          "axa_display_value": "300€/an/bénéficiaire"
+        },
+        {
+          "leaf_id": "dentaire_protheses_dentaires_protheses_a_honoraires_maitrises",
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats couvrent intégralement les prothèses dentaires à honoraires maîtrisés, assurant un reste à charge zéro pour l'assuré.",
+          "probtp_display_value": "Actual expenses",
+          "axa_display_value": "370% BR-MR (100% PLV-MR)"
+        },
+        {
+          "leaf_id": "dentaire_protheses_dentaires_autres_protheses",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure offre une couverture nettement supérieure avec 550% de la BR contre 370% pour Competitor, ce qui est crucial pour les prothèses à honoraires libres.",
+          "probtp_display_value": "550% BR",
+          "axa_display_value": "370% BR-MR"
+        },
+        {
+          "leaf_id": "dentaire_orthodontie_orthodontie_acceptee_par_la_ss_par_semestre",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure propose un taux de remboursement plus élevé (425% BR) que Competitor (370% BR) pour l'orthodontie acceptée par la SS, sans mention de limitation de durée.",
+          "probtp_display_value": "425% BR/semestre",
+          "axa_display_value": "370% BR-MR/semestre (max 4 semestres)"
+        },
+        {
+          "leaf_id": "dentaire_orthodontie_orthodontie_adulte_non_prise_en_charge_par_la_ss_par_semestre",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure offre une prise en charge de 500€ par semestre pour l'orthodontie adulte non remboursée par la SS, soit 200€ de plus qu'Competitor, et sans limitation explicite de durée.",
+          "probtp_display_value": "500€/semestre",
+          "axa_display_value": "300€/semestre (max 4 semestres)"
+        },
+        {
+          "leaf_id": "dentaire_implants_implants_dentaires",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "Competitor offre une couverture de 800€ par implant (jusqu'à 3 par an), soit potentiellement 2400€, tandis que ProInsure plafonne à 500€/an (1000€ avec réseau), ce qui est moins avantageux pour plusieurs implants.",
+          "probtp_display_value": "500€/an (1000€ avec réseau Sévéane)",
+          "axa_display_value": "800€/acte (max 3 actes/an)"
+        },
+        {
+          "leaf_id": "dentaire_actes_de_prevention",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure inclut explicitement la prise en charge d'actes de prévention spécifiques (détartrage annuel, scellement prophylactique enfant), non couverts de manière explicite par Competitor.",
+          "probtp_display_value": "Yes (Détartrage annuel, scellement enfant)",
+          "axa_display_value": "Not covered"
+        },
+        {
+          "leaf_id": "dentaire_protheses_dentaires_non_prises_en_charge_par_la_ss",
+          "probtp_advantage": "probtp_much_worse",
+          "rationale": "Competitor propose une prise en charge de 300€ pour certaines prothèses non remboursées par la SS, ce que ProInsure ne couvre pas spécifiquement.",
+          "probtp_display_value": "Not covered",
+          "axa_display_value": "300€"
+        },
+        {
+          "leaf_id": "dentaire_implants_faux_moignon_implantaire",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "Competitor détaille une prise en charge spécifique de 184€ pour le faux-moignon implantaire, un élément non explicitement mentionné ou couvert séparément par ProInsure.",
+          "probtp_display_value": "Non spécifié (inclus dans implant?)",
+          "axa_display_value": "184€"
+        }
+      ],
+      "objective_assessment": {
+        "overall_winner": "probtp",
+        "confidence": "medium",
+        "reasoning": "ProInsure offre des taux de remboursement significativement plus élevés pour les care dentaires courants, les prothèses à honoraires libres et l'orthodontie, ce qui peut entraîner un reste à charge plus faible pour un large éventail de becare. Bien qu'Competitor soit plus avantageux pour les implants multiples et certaines prothèses non SS, la couverture globale de ProInsure est plus généreuse sur des postes de dépenses fréquents.",
+        "probtp_weaknesses": [
+          "Couverture des implants dentaires moins avantageuse que Competitor si le réseau partenaire n'est pas utilisé ou pour des becare de plusieurs implants.",
+          "Absence de couverture spécifique pour certaines prothèses non prises en charge par la Social Security, contrairement à Competitor."
+        ],
+        "axa_weaknesses": [
+          "Taux de remboursement inférieurs pour les care dentaires courants et les prothèses à honoraires libres.",
+          "Couverture moins généreuse pour l'orthodontie, notamment pour les adultes, et avec des limitations de durée.",
+          "Absence de prise en charge explicite pour les inlays/onlays sous la catégorie des care dentaires."
+        ]
+      },
+      "key_differences": "ProInsure se distingue par des taux de remboursement plus élevés sur les care dentaires courants, les prothèses à honoraires libres et l'orthodontie, offrant une meilleure protection contre les dépenses élevées. Competitor, quant à elle, propose une couverture plus détaillée et potentiellement plus avantageuse pour les implants dentaires multiples et certaines prothèses non remboursées par la SS.",
+      "concrete_examples": [
+        "Pour une couronne dentaire à honoraires libres coûtant 750€ (BR 107,50€), ProInsure rembourse 550% de la BR (591,25€), laissant un reste à charge de 158,75€. Competitor rembourse 370% de la BR (397,75€), laissant un reste à charge de 352,25€.",
+        "Pour un traitement d'orthodontie adulte non remboursé par la SS coûtant 1000€ par semestre, ProInsure rembourse 500€ par semestre (reste à charge 500€), tandis qu'Competitor rembourse 300€ par semestre (reste à charge 700€).",
+        "Pour la pose d'un implant dentaire coûtant 1500€, ProInsure rembourse 500€ (reste à charge 1000€), ou 1000€ si utilisation du réseau Sévéane (reste à charge 500€). Competitor rembourse 800€ (reste à charge 700€)."
+      ],
+      "critical_thinking": "ProInsure offre une couverture dentaire solide, particulièrement avantageuse pour les dépenses fréquentes et coûteuses comme les prothèses à honoraires libres et l'orthodontie, qui représentent un risque financier important. La prise en charge des implants est un point faible si le réseau n'est pas utilisé ou pour des becare multiples. Competitor, bien que moins généreuse sur les pourcentages, offre une bonne base pour les implants. ProInsure convient mieux aux clients recherchant une couverture globale élevée pour les care et prothèses courants, tandis qu'Competitor pourrait être préférée par ceux anticipant des becare importants en implants dentaires multiples.",
+      "best_coverage": "Le niveau P5 de ProInsure excelle dans la couverture dentaire en offrant des remboursements très compétitifs sur les postes clés. Nos clients bénéficient d'une prise en charge de 550% de la BR pour les prothèses à honoraires libres et de 500€ par semestre pour l'orthodontie adulte, des garanties bien supérieures à celles d'Competitor. De plus, ProInsure inclut des actes de prévention spécifiques, un avantage non négligeable pour la santé bucco-dentaire. Ces garanties réduisent significativement le reste à charge sur des care souvent onéreux, positionnant ProInsure comme un choix de premier ordre pour une protection dentaire complète.",
+      "salesperson_talking_points": [
+        "Mettez en avant nos 550% de la BR pour les prothèses à honoraires libres, un avantage majeur face aux 370% d'Competitor, qui se traduit par des centaines d'euros d'économies pour le client.",
+        "Soulignez notre couverture de 500€ par semestre pour l'orthodontie adulte non remboursée par la SS, soit 200€ de plus qu'Competitor, un atout clé pour les familles.",
+        "Insistez sur la prise en charge explicite des inlays/onlays à 250% de la BR, un soin courant non couvert spécifiquement par Competitor.",
+        "Mentionnez nos actes de prévention inclus, comme le détartrage annuel et le scellement pour enfants, qui démontrent notre engagement pour la santé bucco-dentaire de nos adhérents.",
+        "Pour les implants, expliquez que notre couverture de 1000€/an via le réseau Sévéane est très compétitive pour un implant, et que notre objectif est de couvrir au mieux les becare les plus fréquents."
+      ]
+    },
+    "aides_auditives": {
+      "category": "Aides auditives",
+      "leaf_comparisons": [
+        {
+          "leaf_id": "aides_auditives_equipements_auditifs_100_sante",
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats assurent un remboursement intégral des équipements auditifs 100% Santé, garantissant un reste à charge zéro avec la même fréquence de renouvellement.",
+          "probtp_display_value": "Actual expenses (100% Santé)",
+          "axa_display_value": "100% PLV-MR (100% Santé)"
+        },
+        {
+          "leaf_id": "aides_auditives_prothese_auditive_pour_les_beneficiaires_de_plus_20_ans",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "ProInsure offre une couverture de base de 1100€, inférieure aux 1400€ d'Competitor. Cependant, ProInsure peut atteindre 1500€ via son réseau partenaire Sévéane.",
+          "probtp_display_value": "1100€/4 ans (1500€ si réseau Sévéane)",
+          "axa_display_value": "1400€/4 ans"
+        },
+        {
+          "leaf_id": "aides_auditives_prothese_auditive_pour_les_beneficiaires_de_moins_20_ans",
+          "probtp_advantage": "probtp_worse",
+          "rationale": "ProInsure propose un remboursement de 1400€, ce qui est inférieur aux 1700€ offerts par Competitor pour les prothèses auditives des jeunes de moins de 20 ans.",
+          "probtp_display_value": "1400€/4 ans",
+          "axa_display_value": "1700€/4 ans"
+        },
+        {
+          "leaf_id": "aides_auditives_accessoires",
+          "probtp_advantage": "probtp_better",
+          "rationale": "ProInsure détaille précisément les accessoires couverts (écouteur, microphone, embout auriculaire, piles sans mercure) avec des fréquences spécifiques, offrant une couverture plus pratique et potentiellement plus complète que le 300% BR d'Competitor.",
+          "probtp_display_value": "100% (écouteur, microphone, embout auriculaire, piles sans mercure)",
+          "axa_display_value": "300% BR-MR (accessoires pris en charge par SS)"
+        }
+      ],
+      "objective_assessment": {
+        "overall_winner": "axa",
+        "confidence": "high",
+        "reasoning": "Competitor offre des remboursements de base significativement supérieurs pour les prothèses auditives hors 100% Santé, tant pour les adultes que pour les jeunes, réduisant ainsi le reste à charge sur des dépenses très coûteuses. L'avantage de ProInsure pour les adultes dépend de l'utilisation de son réseau partenaire, ce qui n'est pas garanti.",
+        "probtp_weaknesses": [
+          "Remboursement de base inférieur pour les prothèses auditives hors 100% Santé pour les adultes (> 20 ans)",
+          "Remboursement inférieur pour les prothèses auditives des jeunes (≤ 20 ans)"
+        ],
+        "axa_weaknesses": [
+          "Couverture moins détaillée et potentiellement moins pratique pour les accessoires",
+          "Absence de bonus réseau pour les prothèses auditives"
+        ]
+      },
+      "key_differences": "Competitor privilégie des remboursements plus élevés pour les prothèses auditives hors 100% Santé, offrant une meilleure couverture de base pour les appareils coûteux. ProInsure propose une couverture de base inférieure mais peut dépasser Competitor pour les adultes via son réseau de partenaires Sévéane, et offre une couverture plus détaillée pour les accessoires.",
+      "concrete_examples": [
+        "Pour une prothèse auditive hors 100% Santé pour un adulte (> 20 ans) coûtant 1800€, ProInsure rembourse 1100€ (reste à charge 700€), tandis qu'Competitor rembourse 1400€ (reste à charge 400€). Avec le réseau Sévéane, ProInsure rembourserait 1500€ (reste à charge 300€).",
+        "Pour une prothèse auditive hors 100% Santé pour un jeune (≤ 20 ans) coûtant 2000€, ProInsure rembourse 1400€ (reste à charge 600€), alors qu'Competitor rembourse 1700€ (reste à charge 300€)."
+      ],
+      "critical_thinking": "Le dispositif 100% Santé assure un reste à charge zéro pour les équipements de classe I, ce qui est un avantage majeur pour tous les assurés, et sur lequel les deux contrats sont équivalents. La différence se joue sur les équipements de classe II (hors 100% Santé). Pour ces derniers, Competitor offre une meilleure protection financière de base, réduisant significativement le reste à charge pour des dépenses qui peuvent être très élevées (plusieurs milliers d'euros par appareil). Le réseau Sévéane de ProInsure est un atout, mais il dépend de la disponibilité et du choix du professionnel. Les accessoires, bien que moins coûteux, sont des dépenses récurrentes où ProInsure semble offrir une couverture plus pratique. Les clients ayant besoin d'appareils auditifs de classe II et ne souhaitant pas être contraints par un réseau trouveront Competitor plus avantageux.",
+      "best_coverage": "ProInsure P5 offre une excellente couverture pour les équipements auditifs 100% Santé, garantissant un reste à charge zéro, tout comme Competitor. Notre contrat se distingue par une prise en charge très spécifique et pratique des accessoires essentiels (écouteurs, microphones, embouts auriculaires, piles sans mercure), avec des fréquences de renouvellement claires, ce qui assure un confort au quotidien. De plus, pour les prothèses auditives hors 100% Santé pour les adultes, ProInsure P5 offre un avantage significatif avec un remboursement pouvant atteindre 1500€ par appareil si le client choisit un audioprothésiste partenaire Sévéane, dépassant ainsi la couverture d'Competitor. Cela permet à nos adhérents de bénéficier d'une qualité de service supérieure et d'un reste à charge réduit s'ils optent pour notre réseau de care.",
+      "salesperson_talking_points": [
+        "Mettez en avant le remboursement intégral des équipements 100% Santé, une garantie essentielle partagée par ProInsure.",
+        "Soulignez la couverture détaillée et pratique des accessoires (écouteurs, piles, embouts) chez ProInsure, qui assure un confort quotidien et des économies récurrentes.",
+        "Insistez sur l'avantage du réseau Sévéane pour les prothèses auditives adultes hors 100% Santé : 1500€ de remboursement, soit 100€ de plus qu'Competitor, pour un reste à charge minimal.",
+        "Positionnez ProInsure comme un choix offrant une flexibilité et des avantages concrets pour les clients prêts à utiliser notre réseau de partenaires pour optimiser leurs remboursements."
+      ]
+    },
+    "prestations_complementaires": {
+      "category": "Prestations complémentaires",
+      "leaf_comparisons": [
+        {
+          "leaf_id": "prestations_complementaires_medecines_douces_agreées",
+          "probtp_advantage": "probtp_much_better",
+          "rationale": "ProInsure rembourse 60€ par séance pour 4 séances (240€/an/bénéficiaire) contre 50€ pour 3 séances (150€/an/bénéficiaire) chez Competitor, offrant une meilleure couverture individuelle et familiale.",
+          "probtp_display_value": "4x60€/an (plafond familial 450€)",
+          "axa_display_value": "3x50€/an"
+        },
+        {
+          "leaf_id": "prestations_complementaires_cures_thermales",
+          "probtp_advantage": "equal",
+          "rationale": "Les deux contrats proposent un remboursement complémentaire de 300€ pour les cures thermales, en plus de la prise en charge de la Social Security.",
+          "probtp_display_value": "100% BR + 300€/an",
+          "axa_display_value": "300€/an"
+        }
+      ],
+      "objective_assessment": {
+        "overall_winner": "probtp",
+        "confidence": "medium",
+        "reasoning": "ProInsure offre une couverture nettement supérieure pour les médecines douces agréées, un poste de dépense de plus en plus courant. Pour les cures thermales, les deux contrats sont équivalents sur le complément forfaitaire.",
+        "probtp_weaknesses": [],
+        "axa_weaknesses": [
+          "Couverture significativement inférieure pour les médecines douces agréées."
+        ]
+      },
+      "key_differences": "ProInsure se distingue par une meilleure prise en charge des médecines douces, offrant un remboursement plus élevé par séance et un nombre de séances supérieur. Les deux contrats sont comparables pour les cures thermales.",
+      "concrete_examples": [
+        "Pour 4 séances d'ostéopathie à 60€ chacune (coût total 240€), ProInsure rembourse 240€ (reste à charge 0€), tandis qu'Competitor ne rembourse que 150€ pour 3 séances (reste à charge 90€ pour 4 séances).",
+        "Pour une cure thermale dont les frais non pris en charge par la Social Security et la Reimbursement Base s'élèvent à 500€, ProInsure rembourse 300€ (reste à charge 200€), tout comme Competitor qui rembourse également 300€ (reste à charge 200€)."
+      ],
+      "critical_thinking": "Les médecines douces sont de plus en plus utilisées, et la couverture supérieure de ProInsure représente un avantage financier direct et fréquent pour les adhérents. Les cures thermales, bien que moins fréquentes, peuvent générer des coûts importants, et les deux contrats offrent une aide appréciable. L'avantage de ProInsure sur les médecines douces est particulièrement pertinent pour les familles grâce à son plafond familial.",
+      "best_coverage": "ProInsure se positionne comme un acteur majeur pour la prise en charge des prestations complémentaires, notamment en ce qui concerne les médecines douces. Avec un remboursement de 60€ par séance et jusqu'à 4 séances par an par bénéficiaire, ProInsure offre une couverture bien supérieure à celle d'Competitor, qui se limite à 50€ pour 3 séances. Cette différence est cruciale pour nos adhérents qui privilégient de plus en plus ces approches thérapeutiques. Pour les cures thermales, ProInsure assure une prise en charge solide avec un forfait de 300€ en complément de la Social Security, garantissant une tranquillité d'esprit pour ces dépenses importantes.",
+      "salesperson_talking_points": [
+        "ProInsure vous offre une couverture bien plus généreuse pour les médecines douces : 60€ par séance et jusqu'à 4 séances par an, soit 240€ par bénéficiaire, contre seulement 150€ chez Competitor. C'est un avantage concret pour votre bien-être au quotidien.",
+        "Notre plafond familial de 450€ pour les médecines douces permet une flexibilité unique pour toute votre famille, assurant que chacun puisse bénéficier des care dont il a besoin.",
+        "Pour les cures thermales, ProInsure vous garantit un complément de 300€ en plus de la prise en charge de la Social Security, vous assurant une aide financière significative pour ces traitements essentiels.",
+        "En choisissant ProInsure, vous optez pour une mutuelle qui comprend l'importance des approches complémentaires et vous offre une protection supérieure là où d'autres se contentent du minimum."
+      ]
+    }
+  }
+}

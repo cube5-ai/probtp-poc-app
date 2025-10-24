@@ -16,7 +16,7 @@ export default function AuthenticationPage() {
   useEffect(() => {
     // Redirect to home if already authenticated
     if (user && !loading) {
-      router.push('/');
+      router.push("/");
     }
   }, [user, loading, router]);
 
@@ -59,11 +59,19 @@ export default function AuthenticationPage() {
       <SigninForm />
       <p className="px-8 text-center text-xs text-muted-foreground">
         By signing in, you agree to our{" "}
-        <Link href="#" className="underline underline-offset-4 hover:text-primary" target="_blank">
+        <Link
+          href="#"
+          className="underline underline-offset-4 hover:text-primary"
+          target="_blank"
+        >
           Terms of Service
         </Link>{" "}
         and{" "}
-        <Link href="#" className="underline underline-offset-4 hover:text-primary" target="_blank">
+        <Link
+          href="#"
+          className="underline underline-offset-4 hover:text-primary"
+          target="_blank"
+        >
           Privacy Policy
         </Link>
         .

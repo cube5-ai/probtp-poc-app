@@ -43,7 +43,7 @@ async def get_current_user(
 
         except Exception as e:
             # In development mode, allow fallback if token verification fails
-            if settings.environment == "development" and settings.debug:
+            if settings.ENVIRONMENT == "development" and settings.debug:
                 print(f"⚠️  Token verification failed in dev mode: {e}")
                 print(f"⚠️  Falling back to dev user")
                 return {
@@ -63,7 +63,7 @@ async def get_current_user(
                 )
     
     # No credentials provided
-    if settings.environment == "development" and settings.debug:
+    if settings.ENVIRONMENT == "development" and settings.debug:
         # Return mock user for development when no token
         return {
             'user_id': 'dev-user-123',

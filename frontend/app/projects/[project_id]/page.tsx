@@ -236,6 +236,7 @@ const ProjectDashboard = () => {
           onFilesChange={handleFilesChange}
           onSelectionChange={handleSelectionChange}
           className="flex-shrink-0"
+          projectId={projectId}
         />
 
         {/* Right Side - Selected Documents & Comparison History */}

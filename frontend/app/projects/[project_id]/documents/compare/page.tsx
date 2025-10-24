@@ -63,6 +63,7 @@ const ProjectDocumentComparePage = () => {
               preview: "",
               category: "All",
               status: "completed",
+              fileSize: file.file_size, // Store actual file size from backend
             })
           );
           setUploadedFiles(existingFiles);

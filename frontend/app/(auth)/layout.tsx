@@ -15,7 +15,7 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
         href="/"
         className={cn(
           buttonVariants({ variant: "ghost" }),
-          "absolute left-4 top-4 h-9 text-muted-foreground sm:left-8 sm:top-8",
+          "absolute left-4 top-4 h-9 text-muted-foreground sm:left-8 sm:top-8"
         )}
       >
         <ArrowLeftIcon className="h-4 w-4" />
@@ -38,13 +38,15 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
               >
                 <path d="M15 6v12a3 3 0 1 0 3-3H6a3 3 0 1 0 3 3V6a3 3 0 1 0-3 3h12a3 3 0 1 0-3-3" />
               </svg>
-              ProBTP
+              ProInsure
             </div>
           </div>
         </div>
       </section>
       <section className="justify-center px-4 md:flex md:w-2/3 md:border-r md:px-0">
-        <div className="mx-auto flex w-full min-w-min flex-col justify-center gap-8 sm:max-w-[450px]">{children}</div>
+        <div className="mx-auto flex w-full min-w-min flex-col justify-center gap-8 sm:max-w-[450px]">
+          {children}
+        </div>
       </section>
     </main>
   );

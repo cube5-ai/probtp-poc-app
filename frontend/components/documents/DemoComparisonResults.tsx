@@ -10,7 +10,7 @@ import { toast } from "sonner";
 import { Download, Share, Trophy } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { documentService } from "@/lib/api/documents";
-import demoComparison from "@/fixtures/comparison_report_new_2.json";
+import demoComparison from "@/fixtures/comparison_report_new_2.en.json";
 import { makeIsGreen } from "@/lib/report/isBest";
 import { CustomHighlight } from "../pdf/types";
 import {
@@ -84,21 +84,32 @@ const DemoComparisonResults = ({
 
   const {
     analyses,
+    leaf_analyses,
     general_summary: generalSummary,
     comparison_tables: comparisonTables,
   } = data;
 
-  const categorySummary = useMemo(
-    () =>
-      analyses.map((analysis) => ({
+  const categorySummary = useMemo(() => {
+    if (leaf_analyses) {
+      // Use leaf_analyses if available (translated content)
+      return Object.values(leaf_analyses).map((analysis) => ({
         category: analysis.category,
         winner: analysis.objective_assessment.overall_winner,
         confidence: analysis.objective_assessment.confidence,
         keyDifferences: toArray(analysis.key_differences),
         talkingPoints: toArray(analysis.salesperson_talking_points),
-      })),
-    [analyses]
-  );
+      }));
+    } else {
+      // Fallback to analyses (original content)
+      return analyses.map((analysis) => ({
+        category: analysis.category,
+        winner: analysis.objective_assessment.overall_winner,
+        confidence: analysis.objective_assessment.confidence,
+        keyDifferences: toArray(analysis.key_differences),
+        talkingPoints: toArray(analysis.salesperson_talking_points),
+      }));
+    }
+  }, [analyses, leaf_analyses]);
 
   const isGreen = useMemo(() => makeIsGreen(data), [data]);
 
@@ -330,7 +341,7 @@ const DemoComparisonResults = ({
                   <div className="grid gap-4 md:grid-cols-2">
                     <div>
                       <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-                        ProBTP Strengths
+                        ProInsure Strengths
                       </h3>
                       <ul className="mt-2 space-y-1 text-sm list-disc pl-4">
                         {toArray(generalSummary.probtp_overall_strengths).map(
@@ -342,7 +353,7 @@ const DemoComparisonResults = ({
                     </div>
                     <div>
                       <h3 className="text-sm font-semibold uppercase text-muted-foreground">
-                        AXA Strengths
+                        Competitor&apos;s Strengths
                       </h3>
                       <ul className="mt-2 space-y-1 text-sm list-disc pl-4">
                         {toArray(generalSummary.axa_overall_strengths).map(
@@ -462,11 +473,11 @@ const DemoComparisonResults = ({
                           <CardTitle className="flex flex-wrap items-center justify-between gap-2 text-lg">
                             <span>{table.displayCategory}</span>
                             <span className="text-sm font-normal text-muted-foreground">
-                              ProBTP:{" "}
+                              ProInsure:{" "}
                               {table.metadata?.policy_levels?.probtp?.join(
                                 ", "
                               ) ?? "N/A"}{" "}
-                              · AXA:{" "}
+                              · Competitor:{" "}
                               {table.metadata?.policy_levels?.axa?.join(", ") ??
                                 "N/A"}
                             </span>
