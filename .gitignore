@@ -10,11 +10,13 @@
 !.yarn/releases
 !.yarn/versions
 
+/frontend/.next/
+/frontend/node_modules/
 # testing
 /coverage
 
 # next.js
-/.next/
+*/.next/
 /out/
 
 # alembic
